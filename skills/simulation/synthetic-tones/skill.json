@@ -1,0 +1,52 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "synthetic-tones",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "simulation",
+  "summary": "Seeded multi-tone signals in white Gaussian noise.",
+  "capabilities": ["signal.generate-tones", "simulation.seeded-signal"],
+  "entrypoint": "run.py",
+  "determinism": "seeded",
+  "inputs": {
+    "type": "object",
+    "required": ["fs", "n", "tones", "noise_std", "realizations"],
+    "additionalProperties": false,
+    "properties": {
+      "fs": {"type": "number", "exclusiveMinimum": 0},
+      "n": {"type": "integer", "minimum": 16, "maximum": 4194304},
+      "tones": {
+        "type": "array",
+        "maxItems": 64,
+        "items": {
+          "type": "object",
+          "required": ["frequency_hz", "amplitude", "phase_rad"],
+          "additionalProperties": false,
+          "properties": {
+            "frequency_hz": {"type": "number", "exclusiveMinimum": 0},
+            "amplitude": {"type": "number", "minimum": 0},
+            "phase_rad": {"type": "number"}
+          }
+        }
+      },
+      "noise_std": {"type": "number", "minimum": 0},
+      "realizations": {"type": "integer", "minimum": 1, "maximum": 10000}
+    }
+  },
+  "outputs": {
+    "type": "object",
+    "required": ["signals", "fs", "n", "realizations"],
+    "properties": {
+      "signals": {"type": "object", "required": ["$artifact"]},
+      "fs": {"type": "number"},
+      "n": {"type": "integer"},
+      "realizations": {"type": "integer"},
+      "sha256_per_realization": {"type": "array", "items": {"type": "string"}}
+    }
+  },
+  "permissions": {"network": false, "subprocess": false, "read": ["inputs"], "write": ["outputs"]},
+  "limits": {"timeout_s": 120, "memory_mb": 2048},
+  "requires": {"python": ">=3.11", "packages": {"numpy": ">=2.0", "rain-atlas": ">=0.1"}},
+  "examples": [{"name": "nyquist-safe-tone", "seed": 7, "tolerance": {"abs": 0}}],
+  "limitations": ["White Gaussian noise only", "Ideal sampling"]
+}

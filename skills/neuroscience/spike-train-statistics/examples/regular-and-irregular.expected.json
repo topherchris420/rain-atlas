@@ -1,0 +1,7 @@
+{
+  "$comment": "train 1: perfectly regular 10 Hz (CV 0, Fano 0); train 2: hand-computed ISIs 0.0015, 0.3985, 1.5 s, window counts [3, 0, 1, 0]",
+  "trains": [
+    {"spikes": 40, "rate_hz": 10.0, "isi_mean_s": 0.1, "isi_cv": 0.0, "fano_factor": 0.0, "windows": 4, "refractory_violations": 0},
+    {"spikes": 4, "rate_hz": 1.0, "isi_mean_s": 0.6333333333333333, "isi_cv": 1.2258323250741416, "fano_factor": 2.0, "windows": 4, "refractory_violations": 1}
+  ]
+}

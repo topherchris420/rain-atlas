@@ -1,0 +1,34 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "tone-presence-test",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "statistics",
+  "summary": "Regression F-test for claimed tones on independent replicates.",
+  "capabilities": ["statistics.tone-presence-test", "falsification.replicate-test"],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "required": ["signals", "fs", "frequencies_hz"],
+    "additionalProperties": false,
+    "properties": {
+      "signals": {"type": "object", "required": ["$artifact"]},
+      "fs": {"type": "number", "exclusiveMinimum": 0},
+      "frequencies_hz": {"type": "array", "items": {"type": "number", "exclusiveMinimum": 0}},
+      "alpha": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1, "default": 0.01},
+      "min_fraction": {"type": "number", "minimum": 0, "maximum": 1, "default": 0.8},
+      "max_fraction_contradict": {"type": "number", "minimum": 0, "maximum": 1, "default": 0.2}
+    }
+  },
+  "outputs": {
+    "type": "object",
+    "required": ["tests"],
+    "properties": {"tests": {"type": "array", "items": {"type": "object"}}}
+  },
+  "permissions": {"network": false, "subprocess": false, "read": ["inputs"], "write": ["outputs"]},
+  "limits": {"timeout_s": 300, "memory_mb": 2048},
+  "requires": {"python": ">=3.11", "packages": {"numpy": ">=2.0", "scipy": ">=1.13", "rain-atlas": ">=0.1"}},
+  "examples": [{"name": "present-and-absent"}],
+  "limitations": ["White Gaussian residuals assumed"]
+}

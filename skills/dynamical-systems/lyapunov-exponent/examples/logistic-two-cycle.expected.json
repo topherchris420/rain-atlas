@@ -1,0 +1,1 @@
+{"$comment": "stable 2-cycle: exponent = 0.5 ln|4 + 2r - r^2| = 0.5 ln 0.16 at r = 3.2", "system": "logistic", "exponent": -0.9162907318741551}

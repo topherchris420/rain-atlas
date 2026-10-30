@@ -1,0 +1,6 @@
+{
+  "$comment": "period_s = 4 sqrt(L/g) K(sin^2(theta0/2)) (complete elliptic integral), computed independently with scipy.special.ellipk",
+  "period_s": 2.139137600558689,
+  "small_angle_period_s": 2.006066680710647,
+  "crossings": 21
+}

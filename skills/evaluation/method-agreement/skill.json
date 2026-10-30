@@ -1,0 +1,31 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "method-agreement",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "evaluation",
+  "summary": "Per-item agreement between two independent estimators.",
+  "capabilities": ["evaluation.method-agreement"],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "required": ["estimates_a", "estimates_b", "tolerance_hz"],
+    "additionalProperties": false,
+    "properties": {
+      "estimates_a": {"type": "array", "items": {"type": "array", "items": {"type": "number"}}},
+      "estimates_b": {"type": "array", "items": {"type": "array", "items": {"type": "number"}}},
+      "tolerance_hz": {"type": "number", "exclusiveMinimum": 0},
+      "min_fraction": {"type": "number", "minimum": 0, "maximum": 1, "default": 0.9}
+    }
+  },
+  "outputs": {
+    "type": "object",
+    "required": ["items", "per_realization"],
+    "properties": {"items": {"type": "array"}, "per_realization": {"type": "array"}}
+  },
+  "permissions": {"network": false, "subprocess": false, "read": ["inputs"], "write": ["outputs"]},
+  "limits": {"timeout_s": 60, "memory_mb": 512},
+  "requires": {"python": ">=3.11", "packages": {"numpy": ">=2.0", "rain-atlas": ">=0.1"}},
+  "examples": [{"name": "one-agrees-one-not", "tolerance": {"abs": 1e-9}}]
+}

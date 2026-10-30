@@ -1,0 +1,26 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "echo",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "mathematics",
+  "summary": "Test fixture: sum and mean of numbers.",
+  "capabilities": ["test.echo"],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "required": ["values"],
+    "additionalProperties": false,
+    "properties": {"values": {"type": "array", "items": {"type": "number"}, "minItems": 1}}
+  },
+  "outputs": {
+    "type": "object",
+    "required": ["sum", "mean", "array"],
+    "properties": {"sum": {"type": "number"}, "mean": {"type": "number"}, "array": {"type": "object"}}
+  },
+  "permissions": {"network": false, "subprocess": false, "read": ["inputs"], "write": ["outputs"]},
+  "limits": {"timeout_s": 60, "memory_mb": 512},
+  "requires": {"python": ">=3.11", "packages": {"numpy": ">=2.0"}},
+  "examples": [{"name": "three", "tolerance": {"abs": 1e-12}}]
+}

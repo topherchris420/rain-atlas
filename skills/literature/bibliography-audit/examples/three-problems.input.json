@@ -1,0 +1,4 @@
+{
+  "current_year": 2026,
+  "bibtex": "@article{welch1967,\n  author = {Welch, P. D.},\n  title = {The use of fast {F}ourier transform for the estimation of power spectra},\n  journal = {IEEE Transactions on Audio and Electroacoustics},\n  year = 1967,\n  doi = {10.1109/TAU.1967.1161901}\n}\n\n@article{missing-journal,\n  author = {Doe, Jane},\n  title = {A paper without a venue},\n  year = {2020}\n}\n\n@book{bad-doi,\n  author = {Roe, R.},\n  title = {A Book},\n  publisher = {Press},\n  year = {2019},\n  doi = {10.12/abc}\n}\n\n@article{welch-again,\n  author = {Welch, P.},\n  title = {The Use of Fast Fourier Transform for the Estimation of Power Spectra},\n  journal = {IEEE Trans. Audio Electroacoust.},\n  year = {1967}\n}\n"
+}

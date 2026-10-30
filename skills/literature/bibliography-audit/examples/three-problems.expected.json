@@ -1,0 +1,8 @@
+{
+  "summary": {"entries": 4, "problems": 3, "by_kind": {"missing-field": 1, "malformed-doi": 1, "duplicate": 1}},
+  "problems": [
+    {"key": "missing-journal", "kind": "missing-field", "detail": "journal"},
+    {"key": "bad-doi", "kind": "malformed-doi"},
+    {"key": "welch-again", "kind": "duplicate", "detail": "same title and year as welch1967"}
+  ]
+}

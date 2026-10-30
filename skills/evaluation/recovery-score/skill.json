@@ -1,0 +1,113 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "recovery-score",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "evaluation",
+  "summary": "Recovery rate, bias, spread and false detections versus known truth.",
+  "capabilities": [
+    "evaluation.recovery-score"
+  ],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "required": [
+      "estimates",
+      "truth_hz",
+      "tolerance_hz"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "estimates": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        }
+      },
+      "truth_hz": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        }
+      },
+      "tolerance_hz": {
+        "type": "number",
+        "exclusiveMinimum": 0
+      },
+      "amplitudes": {
+        "type": "array",
+        "items": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "noise_std": {
+        "type": "number",
+        "minimum": 0
+      },
+      "n": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "fs": {
+        "type": "number",
+        "exclusiveMinimum": 0
+      }
+    }
+  },
+  "outputs": {
+    "type": "object",
+    "required": [
+      "tones",
+      "all_recovered_rate",
+      "false_detections_total"
+    ],
+    "properties": {
+      "tones": {
+        "type": "array"
+      },
+      "all_recovered_rate": {
+        "type": "number"
+      },
+      "false_detections_total": {
+        "type": "integer"
+      }
+    }
+  },
+  "permissions": {
+    "network": false,
+    "subprocess": false,
+    "read": [
+      "inputs"
+    ],
+    "write": [
+      "outputs"
+    ]
+  },
+  "limits": {
+    "timeout_s": 60,
+    "memory_mb": 512
+  },
+  "requires": {
+    "python": ">=3.11",
+    "packages": {
+      "numpy": ">=2.0",
+      "rain-atlas": ">=0.1"
+    }
+  },
+  "examples": [
+    {
+      "name": "known-errors",
+      "tolerance": {
+        "abs": 1e-12
+      }
+    }
+  ],
+  "references": [
+    "Rife, D. C. & Boorstyn, R. R. (1974). Single-tone parameter estimation from discrete-time observations. IEEE Trans. Information Theory 20(5), 591-598."
+  ]
+}

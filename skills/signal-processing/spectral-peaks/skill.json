@@ -1,0 +1,44 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "spectral-peaks",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "signal-processing",
+  "summary": "Welch PSD with chi-square, Bonferroni-controlled line detection.",
+  "capabilities": ["spectral.psd", "spectral.peak-frequencies"],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "required": ["signals", "fs", "nperseg"],
+    "additionalProperties": false,
+    "properties": {
+      "signals": {"type": "object", "required": ["$artifact"]},
+      "fs": {"type": "number", "exclusiveMinimum": 0},
+      "nperseg": {"type": "integer", "minimum": 8},
+      "overlap": {"type": "number", "minimum": 0, "exclusiveMaximum": 1, "default": 0.5},
+      "alpha": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1, "default": 0.01},
+      "min_separation_hz": {"type": "number", "exclusiveMinimum": 0},
+      "fmin": {"type": "number", "minimum": 0, "default": 0},
+      "fmax": {"type": "number", "exclusiveMinimum": 0}
+    }
+  },
+  "outputs": {
+    "type": "object",
+    "required": ["peaks", "detection", "mean_psd"],
+    "properties": {
+      "peaks": {"type": "array", "items": {"type": "array"}},
+      "detection": {"type": "object"},
+      "mean_psd": {"type": "object", "required": ["$artifact"]}
+    }
+  },
+  "permissions": {"network": false, "subprocess": false, "read": ["inputs"], "write": ["outputs"]},
+  "limits": {"timeout_s": 300, "memory_mb": 2048},
+  "requires": {"python": ">=3.11", "packages": {"numpy": ">=2.0", "scipy": ">=1.13", "rain-atlas": ">=0.1"}},
+  "examples": [{"name": "two-tones", "tolerance": {"abs": 0.05}}],
+  "references": [
+    "Welch, P. D. (1967). The use of fast Fourier transform for the estimation of power spectra. IEEE Trans. Audio Electroacoustics 15(2), 70-73.",
+    "Percival, D. B. & Walden, A. T. (1993). Spectral Analysis for Physical Applications. Cambridge University Press."
+  ],
+  "limitations": ["Assumes locally white noise", "Lines closer than ~2 bins merge"]
+}

@@ -1,0 +1,135 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "lyapunov-exponent",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "dynamical-systems",
+  "summary": "Lyapunov exponents of the logistic map and the Lorenz system.",
+  "capabilities": [
+    "dynamics.lyapunov-exponent",
+    "dynamics.chaos-indicator"
+  ],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "required": [
+      "system"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "system": {
+        "enum": [
+          "logistic",
+          "lorenz"
+        ]
+      },
+      "r": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 4
+      },
+      "x0": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "exclusiveMaximum": 1,
+        "default": 0.2
+      },
+      "steps": {
+        "type": "integer",
+        "minimum": 100,
+        "maximum": 10000000,
+        "default": 100000
+      },
+      "transient": {
+        "type": "integer",
+        "minimum": 0,
+        "default": 1000
+      },
+      "sigma": {
+        "type": "number",
+        "default": 10.0
+      },
+      "rho": {
+        "type": "number",
+        "default": 28.0
+      },
+      "beta": {
+        "type": "number",
+        "default": 2.6666666666666665
+      },
+      "duration": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "default": 200.0
+      },
+      "renormalize_every": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "default": 1.0
+      }
+    }
+  },
+  "outputs": {
+    "type": "object",
+    "required": [
+      "exponent",
+      "system"
+    ],
+    "properties": {
+      "exponent": {
+        "type": "number"
+      },
+      "system": {
+        "type": "string"
+      },
+      "running": {
+        "type": "array"
+      }
+    }
+  },
+  "permissions": {
+    "network": false,
+    "subprocess": false,
+    "read": [
+      "inputs"
+    ],
+    "write": [
+      "outputs"
+    ]
+  },
+  "limits": {
+    "timeout_s": 300,
+    "memory_mb": 1024
+  },
+  "requires": {
+    "python": ">=3.11",
+    "packages": {
+      "numpy": ">=2.0",
+      "scipy": ">=1.13",
+      "rain-atlas": ">=0.1"
+    }
+  },
+  "examples": [
+    {
+      "name": "logistic-chaotic",
+      "tolerance": {
+        "abs": 0.01
+      }
+    },
+    {
+      "name": "logistic-two-cycle",
+      "tolerance": {
+        "abs": 1e-06
+      }
+    }
+  ],
+  "references": [
+    "Benettin, G., Galgani, L., Giorgilli, A. & Strelcyn, J.-M. (1980). Lyapunov characteristic exponents for smooth dynamical systems and for Hamiltonian systems; a method for computing all of them. Part 1: Theory. Meccanica 15, 9-20.",
+    "Strogatz, S. H. (2015). Nonlinear Dynamics and Chaos, 2nd ed. Westview Press (logistic map, section 10.5)."
+  ],
+  "limitations": [
+    "Finite-time estimate",
+    "Lorenz value depends on duration and renormalisation interval"
+  ]
+}

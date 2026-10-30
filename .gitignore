@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+dist/
+build/
+# Local research data (ledger, runs, registry); never commit by accident.
+atlas-data/
+.atlas/
+node_modules/
+web/dist/

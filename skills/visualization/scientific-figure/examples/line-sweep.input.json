@@ -1,0 +1,8 @@
+{
+  "kind": "lines",
+  "name": "line-sweep",
+  "title": "Example sweep",
+  "series": [{"label": "rate", "x": [-20, -10, 0], "y": [0.2, 0.9, 1.0], "yerr": [0.1, 0.05, 0.0]}],
+  "xlabel": "SNR (dB)",
+  "ylabel": "Recovery rate"
+}

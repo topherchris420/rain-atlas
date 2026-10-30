@@ -1,0 +1,104 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "sinusoid-fit",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "mathematics",
+  "summary": "Nonlinear least-squares sinusoid estimation with BIC model order.",
+  "capabilities": [
+    "spectral.sinusoid-fit",
+    "optimization.nonlinear-least-squares"
+  ],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "required": [
+      "signals",
+      "fs"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "signals": {
+        "type": "object",
+        "required": [
+          "$artifact"
+        ]
+      },
+      "fs": {
+        "type": "number",
+        "exclusiveMinimum": 0
+      },
+      "max_tones": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 32,
+        "default": 8
+      },
+      "pad": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 64,
+        "default": 8
+      },
+      "fmin": {
+        "type": "number",
+        "minimum": 0,
+        "default": 0
+      }
+    }
+  },
+  "outputs": {
+    "type": "object",
+    "required": [
+      "fits"
+    ],
+    "properties": {
+      "fits": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "permissions": {
+    "network": false,
+    "subprocess": false,
+    "read": [
+      "inputs"
+    ],
+    "write": [
+      "outputs"
+    ]
+  },
+  "limits": {
+    "timeout_s": 600,
+    "memory_mb": 2048
+  },
+  "requires": {
+    "python": ">=3.11",
+    "packages": {
+      "numpy": ">=2.0",
+      "scipy": ">=1.13",
+      "rain-atlas": ">=0.1"
+    }
+  },
+  "examples": [
+    {
+      "name": "two-tones",
+      "tolerance": {
+        "abs": 0.01
+      }
+    }
+  ],
+  "references": [
+    "Golub, G. & Pereyra, V. (2003). Separable nonlinear least squares: the variable projection method and its applications. Inverse Problems 19(2), R1-R26.",
+    "Schwarz, G. (1978). Estimating the dimension of a model. Annals of Statistics 6(2), 461-464."
+  ],
+  "limitations": [
+    "Greedy order selection",
+    "Asymptotic standard errors",
+    "About 2% of pure white-noise realizations yield a spurious tone (BIC ignores the frequency search)"
+  ]
+}

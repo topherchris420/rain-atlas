@@ -1,0 +1,1 @@
+{"caption": "Example sweep", "$files": {"png": {"min_bytes": 10000, "magic": "89504e47"}, "svg": {"min_bytes": 2000, "contains": ["Example sweep", "Recovery rate"]}}}

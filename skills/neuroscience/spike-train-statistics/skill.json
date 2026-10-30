@@ -1,0 +1,41 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "spike-train-statistics",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "neuroscience",
+  "summary": "Rate, ISI CV, Fano factor and refractory violations of spike trains.",
+  "capabilities": ["neuro.spike-train-statistics", "neuro.spike-sorting-qc"],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "required": ["trains", "duration_s"],
+    "additionalProperties": false,
+    "properties": {
+      "trains": {
+        "anyOf": [
+          {"type": "array", "items": {"type": "array", "items": {"type": "number", "minimum": 0}}},
+          {"type": "object", "required": ["$artifact"]}
+        ]
+      },
+      "duration_s": {"type": "number", "exclusiveMinimum": 0},
+      "window_s": {"type": "number", "exclusiveMinimum": 0, "default": 1.0},
+      "refractory_s": {"type": "number", "minimum": 0, "default": 0.002}
+    }
+  },
+  "outputs": {
+    "type": "object",
+    "required": ["trains"],
+    "properties": {"trains": {"type": "array", "items": {"type": "object"}}}
+  },
+  "permissions": {"network": false, "subprocess": false, "read": ["inputs"], "write": ["outputs"]},
+  "limits": {"timeout_s": 120, "memory_mb": 1024},
+  "requires": {"python": ">=3.11", "packages": {"numpy": ">=2.0", "rain-atlas": ">=0.1"}},
+  "examples": [{"name": "regular-and-irregular", "tolerance": {"abs": 1e-9}}],
+  "references": [
+    "Dayan, P. & Abbott, L. F. (2001). Theoretical Neuroscience, ch. 1. MIT Press.",
+    "Hill, D. N., Mehta, S. B. & Kleinfeld, D. (2011). Quality metrics to accompany spike sorting of extracellular signals. J. Neurosci. 31(24), 8699-8705."
+  ],
+  "limitations": ["Assumes stationarity", "Biased for short trains", "Descriptive only; no physiological inference"]
+}

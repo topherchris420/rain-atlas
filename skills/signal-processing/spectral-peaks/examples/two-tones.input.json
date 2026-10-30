@@ -1,0 +1,1 @@
+{"signals": {"$artifact": "signals.npy"}, "fs": 1000.0, "nperseg": 1024, "alpha": 0.01}

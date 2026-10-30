@@ -1,0 +1,31 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "bibliography-audit",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "literature",
+  "summary": "Offline BibTeX audit: required fields, DOI and year syntax, duplicates.",
+  "capabilities": ["literature.bibliography-audit"],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "required": ["bibtex"],
+    "additionalProperties": false,
+    "properties": {
+      "bibtex": {"anyOf": [{"type": "string", "maxLength": 5000000}, {"type": "object", "required": ["$artifact"]}]},
+      "current_year": {"type": "integer", "minimum": 1900, "maximum": 3000}
+    }
+  },
+  "outputs": {
+    "type": "object",
+    "required": ["entries", "problems", "summary"],
+    "properties": {"entries": {"type": "array"}, "problems": {"type": "array"}, "summary": {"type": "object"}}
+  },
+  "permissions": {"network": false, "subprocess": false, "read": ["inputs"], "write": ["outputs"]},
+  "limits": {"timeout_s": 60, "memory_mb": 512},
+  "requires": {"python": ">=3.11", "packages": {"rain-atlas": ">=0.1"}},
+  "examples": [{"name": "three-problems"}],
+  "references": ["Patashnik, O. (1988). BibTeXing. Documentation for general BibTeX users."],
+  "limitations": ["Offline syntax checks only", "No @string expansion"]
+}

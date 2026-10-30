@@ -1,0 +1,6 @@
+{
+  "items": [
+    {"frequency_hz": 10.0, "detected_by_a_fraction": 1.0, "agreement_fraction": 1.0, "agrees": true},
+    {"frequency_hz": 50.0, "detected_by_a_fraction": 1.0, "agreement_fraction": 0.0, "agrees": false}
+  ]
+}

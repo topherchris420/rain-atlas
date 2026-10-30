@@ -1,0 +1,7 @@
+{
+  "tests": [
+    {"frequency_hz": 50.0, "outcome": "corroborated", "fraction_significant": 1.0},
+    {"frequency_hz": 137.5, "outcome": "corroborated", "fraction_significant": 1.0},
+    {"frequency_hz": 300.0, "outcome": "contradicted"}
+  ]
+}

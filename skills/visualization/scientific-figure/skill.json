@@ -1,0 +1,57 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "scientific-figure",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "visualization",
+  "summary": "Deterministic PNG/SVG spectrum and line figures from recorded data.",
+  "capabilities": ["visualization.spectrum-figure", "visualization.line-figure"],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "required": ["kind", "title", "name"],
+    "additionalProperties": false,
+    "properties": {
+      "kind": {"enum": ["spectrum", "lines"]},
+      "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"},
+      "title": {"type": "string", "maxLength": 200},
+      "psd": {"type": "object", "required": ["$artifact"]},
+      "markers": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["label", "frequencies_hz"],
+          "properties": {"label": {"type": "string"}, "frequencies_hz": {"type": "array", "items": {"type": "number"}}, "style": {"enum": ["solid", "dashed", "dotted"]}}
+        }
+      },
+      "fmax": {"type": "number", "exclusiveMinimum": 0},
+      "series": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["label", "x", "y"],
+          "properties": {
+            "label": {"type": "string"},
+            "x": {"type": "array", "items": {"type": "number"}},
+            "y": {"type": "array", "items": {"type": ["number", "null"]}},
+            "yerr": {"type": "array", "items": {"type": ["number", "null"]}}
+          }
+        }
+      },
+      "xlabel": {"type": "string"},
+      "ylabel": {"type": "string"},
+      "ylog": {"type": "boolean"},
+      "caption": {"type": "string", "maxLength": 2000}
+    }
+  },
+  "outputs": {
+    "type": "object",
+    "required": ["png", "svg", "caption"],
+    "properties": {"png": {"type": "object"}, "svg": {"type": "object"}, "caption": {"type": "string"}}
+  },
+  "permissions": {"network": false, "subprocess": false, "read": ["inputs", "system-fonts"], "write": ["outputs"]},
+  "limits": {"timeout_s": 180, "memory_mb": 1536},
+  "requires": {"python": ">=3.11", "packages": {"numpy": ">=2.0", "matplotlib": ">=3.9", "rain-atlas": ">=0.1"}},
+  "examples": [{"name": "line-sweep"}]
+}

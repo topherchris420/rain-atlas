@@ -1,0 +1,44 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "pendulum-period",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "computational-physics",
+  "summary": "Period and energy drift of the nonlinear pendulum by high-order ODE integration.",
+  "capabilities": ["physics.pendulum-period", "physics.ode-integration"],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "required": ["theta0_rad"],
+    "additionalProperties": false,
+    "properties": {
+      "theta0_rad": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 3.14159},
+      "g": {"type": "number", "exclusiveMinimum": 0, "default": 9.81},
+      "length_m": {"type": "number", "exclusiveMinimum": 0, "default": 1.0},
+      "damping_per_s": {"type": "number", "minimum": 0, "default": 0.0},
+      "periods": {"type": "integer", "minimum": 2, "maximum": 1000, "default": 20},
+      "rtol": {"type": "number", "exclusiveMinimum": 0, "maximum": 1e-3, "default": 1e-11}
+    }
+  },
+  "outputs": {
+    "type": "object",
+    "required": ["period_s", "small_angle_period_s", "crossings"],
+    "properties": {
+      "period_s": {"type": "number"},
+      "period_std_s": {"type": "number"},
+      "small_angle_period_s": {"type": "number"},
+      "crossings": {"type": "integer"},
+      "relative_energy_drift": {"type": ["number", "null"]}
+    }
+  },
+  "permissions": {"network": false, "subprocess": false, "read": ["inputs"], "write": ["outputs"]},
+  "limits": {"timeout_s": 120, "memory_mb": 1024},
+  "requires": {"python": ">=3.11", "packages": {"numpy": ">=2.0", "scipy": ">=1.13", "rain-atlas": ">=0.1"}},
+  "examples": [{"name": "one-radian", "tolerance": {"rel": 1e-7}}],
+  "references": [
+    "Hairer, E., Norsett, S. P. & Wanner, G. (1993). Solving Ordinary Differential Equations I. Springer (DOP853).",
+    "Exact period T = 4 sqrt(L/g) K(sin^2(theta0/2)), K the complete elliptic integral of the first kind."
+  ],
+  "limitations": ["Needs two or more oscillations", "theta0 in (0, pi)"]
+}

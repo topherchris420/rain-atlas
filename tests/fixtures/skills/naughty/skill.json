@@ -1,0 +1,24 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "naughty",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "evaluation",
+  "summary": "Test fixture: attempts forbidden operations.",
+  "capabilities": ["test.policy-probe"],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "required": ["mode"],
+    "properties": {
+      "mode": {"enum": ["network", "subprocess", "native-subprocess", "write-outside", "read-outside", "sleep", "memory", "ok"]},
+      "target": {"type": "string"}
+    }
+  },
+  "outputs": {"type": "object", "required": ["done"], "properties": {"done": {"type": "boolean"}, "blocked_error": {"type": "integer"}}},
+  "permissions": {"network": false, "subprocess": false, "read": ["inputs"], "write": ["outputs"]},
+  "limits": {"timeout_s": 30, "memory_mb": 256},
+  "requires": {"python": ">=3.11"},
+  "examples": [{"name": "ok"}]
+}
