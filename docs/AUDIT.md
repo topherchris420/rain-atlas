@@ -71,3 +71,12 @@ repairs **138 passed, 1 skipped, 887.71 s**. Includes all seven original slow
 spectral acceptance tests. JUnit: local `atlas-data/validation/stage1-py312.xml`.
 The skip requires Windows symlink privilege. Python 3.11 and final-branch
 results are recorded in `STATUS.md` after execution completes.
+
+## Follow-up — hosted CI executed (2026-11-04)
+
+The account-level block later cleared. Run `41914048887` executed every job:
+Python 3.12 passed on Ubuntu and Windows, and the offline viewer passed. Both
+Python 3.11 jobs failed at `mypy` because the lock resolves NumPy 2.4.6 for
+3.11, whose stubs differ from NumPy 2.5's. That is now fixed, mypy covers the
+whole package, and `scripts/check.py` type-checks with every CI Python. Linux
+results are recorded in `STATUS.md` and `VALIDATION.md`.

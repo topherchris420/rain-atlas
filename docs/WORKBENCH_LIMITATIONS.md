@@ -14,9 +14,9 @@ is not declared complete merely because these pieces work.
 | Skepticism | Nulls, perturbation/noise/phase-lag shifts, independent replicate intervals, multiplicity correction, exact-identity leakage rejection | General power analysis, posterior calibration, semantic leakage/selection-bias detection, general uncertainty propagation |
 | Ledger | Artifact dependencies, source/lock snapshots, SQLite search, non-destructive torn-tail recovery | External authenticity, signed witnesses, automatic checkpoint resume, concurrent experiment-budget transactions |
 | Integrations | Verified R.A.I.N. schema export, Luca shape recognition with quarantine | Live host acceptance, HTTP submission, authenticated Luca evidence promotion |
-| Benchmarks | Executed classical spectral failure suite, counts/intervals, runtime and memory records | Population reliability, broad skill reliability scoring, Linux consistency, general error-detection sensitivity |
-| Developer tooling | Locked source setup, lint/format, targeted scientific API types, Python and DOM tests | Standalone catalog-bearing wheel distribution, whole-core strict types |
-| Security | Policy guard, portable artifacts, bounds, process cleanup, POSIX limits, Windows Job Objects | Secure hostile-code isolation, hardened containers, POSIX validation on a real Linux runner |
+| Benchmarks | Executed classical spectral failure suite, counts/intervals, runtime and memory records; Linux and Windows give identical counts | Population reliability, broad skill reliability scoring, general error-detection sensitivity |
+| Developer tooling | Locked source setup, lint/format, whole-package mypy on every CI Python, SHA-pinned CI actions, Python and DOM tests | Standalone catalog-bearing wheel distribution, `--strict` typing (fully annotated signatures) |
+| Security | Policy guard, portable artifacts, bounds, process cleanup, POSIX limits (tests executed on hosted Ubuntu and local Linux), Windows Job Objects | Secure hostile-code isolation, hardened containers, POSIX process-count limit |
 
 Budgets are checked before each run, charging the declared timeout against
 remaining time. Registered proposal budgets survive a lab restart by counting

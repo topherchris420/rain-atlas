@@ -13,11 +13,16 @@ Subsequent changes are documentation and recorded review artifacts.
 |---|---|
 | Local Windows, CPython 3.11.9 x64 | Full pytest: **194 passed, 1 skipped**, 280.38 s |
 | Local Windows, CPython 3.12.15 x64 | Full pytest: **194 passed, 1 skipped**, 322.02 s |
+| Local Linux x86_64, CPython 3.11.18 | Full pytest: **194 passed, 1 skipped**, 143.27 s (after the 3.11 type fix) |
+| Local Linux x86_64, CPython 3.12.3 | Full pytest: **194 passed, 1 skipped**, 143.83 s |
+| Local Linux x86_64, CPython 3.13.18 | Full pytest: **194 passed, 1 skipped**, 146.15 s |
 | Node 24.22.1, jsdom | **3 interaction tests passed**, six viewer sections, filters, safe text rendering, proposal/report downloads |
 | Ruff | Lint and formatting passed, 79 Python files formatted consistently |
-| mypy | Passed for resonance and uncertainty public numerical APIs (2 modules) |
-| Hosted Linux 3.11 / 3.12 | **Not executed**: account payment/spending-limit block |
-| Hosted Windows 3.11 / 3.12 | **Not executed**: same external block |
+| mypy | Whole package (49 modules): passed on Python 3.11, 3.12 and 3.13 for the `linux`, `win32` and `darwin` platform targets. Before the type fix, 3.11 failed (see below) |
+| Hosted Linux 3.12 / Windows 3.12 | Run `41914048887` at `8978d26`: **passed** every step including the full suite |
+| Hosted Linux 3.11 / Windows 3.11 | Run `41914048887`: **failed at mypy** (`np.fft.rfftfreq` typed `floating[Any]` under NumPy 2.4.6); tests did not run. Fixed in the follow-up |
+| Linux acceptance commands | Local dry run of the CI acceptance job: spectral A1–A7 7/7, synchronization S1–S5 pass, three ledgers verified |
+| Linux vs Windows benchmark | 12-trial benchmark: identical counts and intervals to the committed Windows result; NLS/BIC RMSE within 1.4×10⁻¹⁰ Hz |
 | Interactive browser visual/CSP enforcement | **Not executed**: CUA providers unavailable |
 
 The single Windows skip requires symlink privileges absent from the account.
@@ -28,7 +33,9 @@ claim follows from the Windows results. The numerical figure was inspected
 as an actual generated artifact; the UI has DOM tests, not a visual screenshot.
 
 Original GitHub workflow run [41103222445](https://github.com/topherchris420/rain-atlas/actions/runs/41103222445)
-never started any matrix job. Check annotations identify the account-level
+never started any matrix job. The later run
+[41914048887](https://github.com/topherchris420/rain-atlas/actions/runs/41914048887)
+executed; its only failure was the Python 3.11 type check described above. Check annotations identify the account-level
 block; missing logs are not Python errors. Billing was not changed. The revised
 workflow runs full tests on the four declared environments, uploads JUnit,
 checks lint/format/types, exercises the viewer and runs demonstrations when
