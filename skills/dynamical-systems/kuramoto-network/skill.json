@@ -1,0 +1,146 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "kuramoto-network",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "dynamical-systems",
+  "summary": "Globally coupled phase oscillators with RK4 or additive-noise Euler-Maruyama integration.",
+  "capabilities": [
+    "resonance.kuramoto"
+  ],
+  "entrypoint": "run.py",
+  "determinism": "seeded",
+  "inputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "omega_rad_s": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 1,
+        "maxItems": 32768
+      },
+      "theta0_rad": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 1,
+        "maxItems": 32768
+      },
+      "coupling": {
+        "type": "number",
+        "minimum": 0
+      },
+      "dt": {
+        "type": "number",
+        "exclusiveMinimum": 0
+      },
+      "steps": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 100000
+      },
+      "diffusion": {
+        "type": "number",
+        "minimum": 0,
+        "default": 0
+      },
+      "phase_lag": {
+        "type": "number",
+        "default": 0
+      }
+    },
+    "required": [
+      "omega_rad_s",
+      "theta0_rad",
+      "coupling",
+      "dt",
+      "steps"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "phases": {
+        "type": "object",
+        "required": [
+          "$artifact",
+          "sha256"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "$artifact": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        }
+      },
+      "end_order": {
+        "type": "number"
+      },
+      "final_phases_rad": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 1,
+        "maxItems": 32768
+      },
+      "unit": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "phases",
+      "end_order",
+      "final_phases_rad",
+      "unit"
+    ]
+  },
+  "permissions": {
+    "network": false,
+    "subprocess": false,
+    "read": [
+      "inputs"
+    ],
+    "write": [
+      "outputs"
+    ]
+  },
+  "limits": {
+    "timeout_s": 120,
+    "memory_mb": 1024
+  },
+  "requires": {
+    "python": ">=3.11",
+    "packages": {
+      "numpy": ">=2.0",
+      "scipy": ">=1.13",
+      "rain-atlas": ">=0.1"
+    }
+  },
+  "examples": [
+    {
+      "name": "analytical",
+      "seed": 17,
+      "tolerance": {
+        "abs": 1e-06,
+        "rel": 1e-06
+      }
+    }
+  ],
+  "references": [
+    "docs/RESONANCE.md"
+  ],
+  "limitations": [
+    "All-to-all K/N coupling excluding self; frequencies and K in rad/s, diffusion in rad squared/s.",
+    "No amplitude dynamics, delays or inferred causal coupling. Finite populations and time windows cannot establish a thermodynamic transition.",
+    "Stochastic convergence requires coupled Wiener increments; fixed seed alone is not a convergence test."
+  ]
+}

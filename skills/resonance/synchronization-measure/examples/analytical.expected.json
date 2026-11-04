@@ -1,0 +1,12 @@
+{
+  "rows": [
+    {
+      "outcome": "corroborated",
+      "interval": {
+        "mean": 1
+      },
+      "mean_order": 1
+    }
+  ],
+  "method": "phase"
+}

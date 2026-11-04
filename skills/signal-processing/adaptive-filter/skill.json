@@ -1,0 +1,151 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "adaptive-filter",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "signal-processing",
+  "summary": "Causal LMS and normalized LMS adaptive filtering with recorded residuals.",
+  "capabilities": [
+    "signal.adaptive-filter"
+  ],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "reference": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 1,
+        "maxItems": 32768
+      },
+      "desired": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 1,
+        "maxItems": 32768
+      },
+      "taps": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 1024
+      },
+      "step_size": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "exclusiveMaximum": 2
+      },
+      "normalized": {
+        "type": "boolean",
+        "default": false
+      }
+    },
+    "required": [
+      "reference",
+      "desired",
+      "taps",
+      "step_size"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "coefficients": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        }
+      },
+      "mse": {
+        "type": "number"
+      },
+      "prediction": {
+        "type": "object",
+        "required": [
+          "$artifact",
+          "sha256"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "$artifact": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        }
+      },
+      "errors": {
+        "type": "object",
+        "required": [
+          "$artifact",
+          "sha256"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "$artifact": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        }
+      },
+      "unit": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "coefficients",
+      "mse",
+      "prediction",
+      "errors",
+      "unit"
+    ]
+  },
+  "permissions": {
+    "network": false,
+    "subprocess": false,
+    "read": [
+      "inputs"
+    ],
+    "write": [
+      "outputs"
+    ]
+  },
+  "limits": {
+    "timeout_s": 120,
+    "memory_mb": 1024
+  },
+  "requires": {
+    "python": ">=3.11",
+    "packages": {
+      "numpy": ">=2.0",
+      "scipy": ">=1.13",
+      "rain-atlas": ">=0.1"
+    }
+  },
+  "examples": [
+    {
+      "name": "analytical",
+      "seed": 17,
+      "tolerance": {
+        "abs": 1e-06,
+        "rel": 1e-06
+      }
+    }
+  ],
+  "references": [
+    "docs/RESONANCE.md"
+  ],
+  "limitations": [
+    "Plain LMS stability depends on input covariance and step size; correlated references can remove desired signal.",
+    "Weights are estimates, not calibrated uncertainties. Divergence is an explicit error."
+  ]
+}

@@ -1,0 +1,152 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "morlet-wavelet",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "signal-processing",
+  "summary": "Corrected complex Morlet multiscale analysis with explicit edge mask.",
+  "capabilities": [
+    "spectral.wavelet"
+  ],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "x": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 1,
+        "maxItems": 32768
+      },
+      "fs": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "unit": "Hz"
+      },
+      "frequencies_hz": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 1,
+        "maxItems": 32768
+      },
+      "omega0": {
+        "type": "number",
+        "minimum": 5,
+        "maximum": 12,
+        "default": 6
+      }
+    },
+    "required": [
+      "x",
+      "fs",
+      "frequencies_hz"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "coefficients": {
+        "type": "object",
+        "required": [
+          "$artifact",
+          "sha256"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "$artifact": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        }
+      },
+      "edge_valid": {
+        "type": "object",
+        "required": [
+          "$artifact",
+          "sha256"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "$artifact": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        }
+      },
+      "dominant_hz": {
+        "type": [
+          "number",
+          "null"
+        ]
+      },
+      "frequency_hz": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 1,
+        "maxItems": 32768
+      },
+      "unit": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "coefficients",
+      "edge_valid",
+      "dominant_hz",
+      "frequency_hz",
+      "unit"
+    ]
+  },
+  "permissions": {
+    "network": false,
+    "subprocess": false,
+    "read": [
+      "inputs"
+    ],
+    "write": [
+      "outputs"
+    ]
+  },
+  "limits": {
+    "timeout_s": 120,
+    "memory_mb": 1024
+  },
+  "requires": {
+    "python": ">=3.11",
+    "packages": {
+      "numpy": ">=2.0",
+      "scipy": ">=1.13",
+      "rain-atlas": ">=0.1"
+    }
+  },
+  "examples": [
+    {
+      "name": "analytical",
+      "seed": 17,
+      "tolerance": {
+        "abs": 1e-06,
+        "rel": 1e-06
+      }
+    }
+  ],
+  "references": [
+    "docs/RESONANCE.md"
+  ],
+  "limitations": [
+    "Coefficients use discrete L2 normalization, not a PSD. Frequencies are nominal centers.",
+    "Zero extension biases edges; mask excludes sqrt(2) scales. Reject frequencies above fs/4."
+  ]
+}

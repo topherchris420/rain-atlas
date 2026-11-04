@@ -1,0 +1,169 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "cross-spectral",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "signal-processing",
+  "summary": "Welch multichannel cross PSD and magnitude-squared coherence with undefined-bin mask.",
+  "capabilities": [
+    "spectral.multichannel"
+  ],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "channels": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 1,
+          "maxItems": 32768
+        },
+        "minItems": 1,
+        "maxItems": 32768
+      },
+      "fs": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "unit": "Hz"
+      },
+      "nperseg": {
+        "type": "integer",
+        "minimum": 8,
+        "default": 128
+      }
+    },
+    "required": [
+      "channels",
+      "fs"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "cross_psd": {
+        "type": "object",
+        "required": [
+          "$artifact",
+          "sha256"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "$artifact": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        }
+      },
+      "coherence": {
+        "type": "object",
+        "required": [
+          "$artifact",
+          "sha256"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "$artifact": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        }
+      },
+      "undefined_bins": {
+        "type": "object",
+        "required": [
+          "$artifact",
+          "sha256"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "$artifact": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        }
+      },
+      "frequency_hz": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 1,
+        "maxItems": 32768
+      },
+      "peak_hz": {
+        "type": "number"
+      },
+      "peak_coherence": {
+        "type": "number"
+      },
+      "segments": {
+        "type": "integer"
+      },
+      "unit": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "cross_psd",
+      "coherence",
+      "undefined_bins",
+      "frequency_hz",
+      "peak_hz",
+      "peak_coherence",
+      "segments",
+      "unit"
+    ]
+  },
+  "permissions": {
+    "network": false,
+    "subprocess": false,
+    "read": [
+      "inputs"
+    ],
+    "write": [
+      "outputs"
+    ]
+  },
+  "limits": {
+    "timeout_s": 120,
+    "memory_mb": 1024
+  },
+  "requires": {
+    "python": ">=3.11",
+    "packages": {
+      "numpy": ">=2.0",
+      "scipy": ">=1.13",
+      "rain-atlas": ">=0.1"
+    }
+  },
+  "examples": [
+    {
+      "name": "analytical",
+      "seed": 17,
+      "tolerance": {
+        "abs": 1e-06,
+        "rel": 1e-06
+      }
+    }
+  ],
+  "references": [
+    "docs/RESONANCE.md"
+  ],
+  "limitations": [
+    "Stationary uniformly sampled channels and >=3 segments; coherence has finite-sample bias.",
+    "CSD convention conj(X)*Y. Common drive and leakage are not causal interaction; zero-power bins are explicitly undefined."
+  ]
+}

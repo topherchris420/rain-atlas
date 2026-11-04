@@ -1,0 +1,143 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "stft-analysis",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "signal-processing",
+  "summary": "Hann short-time Fourier power density with complete frames and explicit resolution.",
+  "capabilities": [
+    "spectral.time-frequency"
+  ],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "x": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 1,
+        "maxItems": 32768
+      },
+      "fs": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "unit": "Hz"
+      },
+      "nperseg": {
+        "type": "integer",
+        "minimum": 4,
+        "default": 128
+      },
+      "hop": {
+        "type": "integer",
+        "minimum": 1,
+        "default": 64
+      }
+    },
+    "required": [
+      "x",
+      "fs"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "power": {
+        "type": "object",
+        "required": [
+          "$artifact",
+          "sha256"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "$artifact": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        }
+      },
+      "frequency_hz": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 1,
+        "maxItems": 32768
+      },
+      "time_s": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 1,
+        "maxItems": 32768
+      },
+      "peak_hz": {
+        "type": [
+          "number",
+          "null"
+        ]
+      },
+      "resolution_hz": {
+        "type": "number"
+      },
+      "unit": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "power",
+      "frequency_hz",
+      "time_s",
+      "peak_hz",
+      "resolution_hz",
+      "unit"
+    ]
+  },
+  "permissions": {
+    "network": false,
+    "subprocess": false,
+    "read": [
+      "inputs"
+    ],
+    "write": [
+      "outputs"
+    ]
+  },
+  "limits": {
+    "timeout_s": 120,
+    "memory_mb": 1024
+  },
+  "requires": {
+    "python": ">=3.11",
+    "packages": {
+      "numpy": ">=2.0",
+      "scipy": ">=1.13",
+      "rain-atlas": ">=0.1"
+    }
+  },
+  "examples": [
+    {
+      "name": "analytical",
+      "seed": 17,
+      "tolerance": {
+        "abs": 1e-06,
+        "rel": 1e-06
+      }
+    }
+  ],
+  "references": [
+    "docs/RESONANCE.md"
+  ],
+  "limitations": [
+    "Uniform sampling; no padding or detrending. Window length trades temporal and spectral resolution.",
+    "Density units are input units squared/Hz; visual ridges are not significance tests."
+  ]
+}

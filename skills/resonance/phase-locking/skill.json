@@ -1,0 +1,104 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "phase-locking",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "resonance",
+  "summary": "Pairwise temporal phase-locking values and instantaneous Kuramoto order.",
+  "capabilities": [
+    "resonance.phase-locking"
+  ],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "phases_rad": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 1,
+          "maxItems": 32768
+        },
+        "minItems": 1,
+        "maxItems": 32768
+      }
+    },
+    "required": [
+      "phases_rad"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "plv": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 1,
+          "maxItems": 32768
+        },
+        "minItems": 1,
+        "maxItems": 32768
+      },
+      "mean_order": {
+        "type": "number"
+      },
+      "unit": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "plv",
+      "mean_order",
+      "unit"
+    ]
+  },
+  "permissions": {
+    "network": false,
+    "subprocess": false,
+    "read": [
+      "inputs"
+    ],
+    "write": [
+      "outputs"
+    ]
+  },
+  "limits": {
+    "timeout_s": 120,
+    "memory_mb": 1024
+  },
+  "requires": {
+    "python": ">=3.11",
+    "packages": {
+      "numpy": ">=2.0",
+      "scipy": ">=1.13",
+      "rain-atlas": ">=0.1"
+    }
+  },
+  "examples": [
+    {
+      "name": "analytical",
+      "seed": 17,
+      "tolerance": {
+        "abs": 1e-06,
+        "rel": 1e-06
+      }
+    }
+  ],
+  "references": [
+    "docs/RESONANCE.md"
+  ],
+  "limitations": [
+    "Requires meaningful input phases in radians. No phase extraction from arbitrary broadband signals.",
+    "PLV is biased with finite samples and autocorrelation; common drive and identical uncoupled frequencies give high PLV."
+  ]
+}

@@ -1,0 +1,243 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "synchronization-measure",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "resonance",
+  "summary": "Two-oscillator synchronization measurement with independent replicate intervals.",
+  "capabilities": [
+    "resonance.synchronization-measure"
+  ],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "phases": {
+        "type": "object",
+        "required": [
+          "$artifact",
+          "sha256"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "$artifact": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        }
+      },
+      "conditions": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 64,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "coupling": {
+              "type": "number"
+            },
+            "diffusion": {
+              "type": "number"
+            },
+            "phase_lag": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "coupling",
+            "diffusion",
+            "phase_lag"
+          ]
+        }
+      },
+      "dt": {
+        "type": "number",
+        "exclusiveMinimum": 0
+      },
+      "burn_s": {
+        "type": "number",
+        "minimum": 0
+      },
+      "method": {
+        "enum": [
+          "phase",
+          "frequency"
+        ]
+      }
+    },
+    "required": [
+      "phases",
+      "conditions",
+      "dt",
+      "burn_s",
+      "method"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "rows": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "condition": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "coupling": {
+                  "type": "number"
+                },
+                "diffusion": {
+                  "type": "number"
+                },
+                "phase_lag": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "coupling",
+                "diffusion",
+                "phase_lag"
+              ]
+            },
+            "metric": {
+              "type": "string"
+            },
+            "unit": {
+              "type": "string"
+            },
+            "interval": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "mean": {
+                  "type": "number"
+                },
+                "low": {
+                  "type": "number"
+                },
+                "high": {
+                  "type": "number"
+                },
+                "se": {
+                  "type": "number"
+                },
+                "n": {
+                  "type": "integer"
+                },
+                "alpha": {
+                  "type": "number"
+                },
+                "method": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "mean",
+                "low",
+                "high",
+                "se",
+                "n",
+                "alpha",
+                "method"
+              ]
+            },
+            "values": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 1,
+              "maxItems": 32768
+            },
+            "outcome": {
+              "enum": [
+                "corroborated",
+                "contradicted",
+                "inconclusive"
+              ]
+            },
+            "mean_order": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "condition",
+            "metric",
+            "unit",
+            "interval",
+            "values",
+            "outcome",
+            "mean_order"
+          ]
+        }
+      },
+      "method": {
+        "type": "string"
+      },
+      "interval_assumption": {
+        "type": "string"
+      },
+      "samples_per_replicate": {
+        "type": "integer"
+      },
+      "replicates": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "rows",
+      "method",
+      "interval_assumption",
+      "samples_per_replicate",
+      "replicates"
+    ]
+  },
+  "permissions": {
+    "network": false,
+    "subprocess": false,
+    "read": [
+      "inputs"
+    ],
+    "write": [
+      "outputs"
+    ]
+  },
+  "limits": {
+    "timeout_s": 180,
+    "memory_mb": 1024
+  },
+  "requires": {
+    "python": ">=3.11",
+    "packages": {
+      "numpy": ">=2.0",
+      "scipy": ">=1.13",
+      "rain-atlas": ">=0.1"
+    }
+  },
+  "examples": [
+    {
+      "name": "analytical",
+      "seed": 17,
+      "tolerance": {
+        "abs": 1e-10
+      }
+    }
+  ],
+  "limitations": [
+    "Two phase oscillators, synthetic data only; finite-window locking, not a thermodynamic phase transition.",
+    "Approximate Student-t intervals over independent simulations; no calibrated probability of physical truth.",
+    "PLV and time-domain frequency analysis share raw data; replication uses new seeded trajectories."
+  ],
+  "references": [
+    "docs/RESONANCE.md"
+  ]
+}

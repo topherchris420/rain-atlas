@@ -1,0 +1,14 @@
+{
+  "couplings": [
+    0
+  ],
+  "diffusions": [
+    0
+  ],
+  "phase_lags": [
+    0
+  ],
+  "dt": 0.05,
+  "duration_s": 1,
+  "replicates": 3
+}

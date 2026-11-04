@@ -1,0 +1,146 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "fir-identification",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "dynamical-systems",
+  "summary": "Least-squares FIR system identification, residual diagnostics and conditional covariance.",
+  "capabilities": [
+    "dynamics.system-identification"
+  ],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "reference": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 1,
+        "maxItems": 32768
+      },
+      "response": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 1,
+        "maxItems": 32768
+      },
+      "taps": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 1024
+      }
+    },
+    "required": [
+      "reference",
+      "response",
+      "taps"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "coefficients": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        }
+      },
+      "covariance": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 1,
+          "maxItems": 32768
+        },
+        "minItems": 1,
+        "maxItems": 32768
+      },
+      "residual_variance": {
+        "type": "number"
+      },
+      "condition_number": {
+        "type": "number"
+      },
+      "residuals": {
+        "type": "object",
+        "required": [
+          "$artifact",
+          "sha256"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "$artifact": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        }
+      },
+      "dof": {
+        "type": "integer"
+      },
+      "unit": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "coefficients",
+      "covariance",
+      "residual_variance",
+      "condition_number",
+      "residuals",
+      "dof",
+      "unit"
+    ]
+  },
+  "permissions": {
+    "network": false,
+    "subprocess": false,
+    "read": [
+      "inputs"
+    ],
+    "write": [
+      "outputs"
+    ]
+  },
+  "limits": {
+    "timeout_s": 120,
+    "memory_mb": 1024
+  },
+  "requires": {
+    "python": ">=3.11",
+    "packages": {
+      "numpy": ">=2.0",
+      "scipy": ">=1.13",
+      "rain-atlas": ">=0.1"
+    }
+  },
+  "examples": [
+    {
+      "name": "analytical",
+      "seed": 17,
+      "tolerance": {
+        "abs": 1e-06,
+        "rel": 1e-06
+      }
+    }
+  ],
+  "references": [
+    "docs/RESONANCE.md"
+  ],
+  "limitations": [
+    "Linear time-invariant causal FIR, persistently exciting noise-free input; IID response residuals for covariance.",
+    "Rank deficiency and condition number >1e10 are rejected; errors in variables and colored residuals invalidate covariance."
+  ]
+}
