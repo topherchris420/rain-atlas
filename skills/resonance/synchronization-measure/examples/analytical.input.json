@@ -1,0 +1,16 @@
+{
+  "phases": {
+    "$artifact": "phases.npy",
+    "sha256": "sha256:31884d751c107f44224d5820e0346a08204472985aab037bb5ea9e226fb1efdb"
+  },
+  "conditions": [
+    {
+      "coupling": 2,
+      "diffusion": 0,
+      "phase_lag": 0
+    }
+  ],
+  "dt": 0.1,
+  "burn_s": 0,
+  "method": "phase"
+}

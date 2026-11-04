@@ -6,12 +6,11 @@ import json
 from pathlib import Path
 
 import pytest
+from conftest import BUILTIN
 
 from rain_atlas.experiments import spectral_recovery as sr
 from rain_atlas.ledger.store import Ledger
 from rain_atlas.skills.registry import Registry
-
-from conftest import BUILTIN
 
 pytestmark = pytest.mark.slow
 
@@ -19,7 +18,9 @@ pytestmark = pytest.mark.slow
 @pytest.fixture(scope="module")
 def fixed(tmp_path_factory):
     root = tmp_path_factory.mktemp("spectral-recovery-fixed")
-    summary = sr.run(root, sr.Settings(mode="fixed"), registry=Registry(home=root / "home", builtin_root=BUILTIN))
+    summary = sr.run(
+        root, sr.Settings(mode="fixed"), registry=Registry(home=root / "home", builtin_root=BUILTIN)
+    )
     return root, summary
 
 
@@ -110,11 +111,16 @@ def test_report_and_bundle(fixed):
 
 def test_fixed_mode_is_exactly_reproducible(fixed, tmp_path):
     _, first = fixed
-    again = sr.run(tmp_path, sr.Settings(mode="fixed", figures=False, bundle=False),
-                   registry=Registry(home=tmp_path / "home", builtin_root=BUILTIN))
+    again = sr.run(
+        tmp_path,
+        sr.Settings(mode="fixed", figures=False, bundle=False),
+        registry=Registry(home=tmp_path / "home", builtin_root=BUILTIN),
+    )
     for a, b in zip(first["datasets"], again["datasets"]):
         assert a["scores"] == b["scores"]
-        assert [(f["value_hz"], f["verdict"]) for f in a["findings"]] == [(f["value_hz"], f["verdict"]) for f in b["findings"]]
+        assert [(f["value_hz"], f["verdict"]) for f in a["findings"]] == [
+            (f["value_hz"], f["verdict"]) for f in b["findings"]
+        ]
 
 
 def test_blinded_mode_integrity(tmp_path):

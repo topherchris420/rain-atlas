@@ -1,0 +1,579 @@
+{
+  "protocol": "atlas.spectral-stress/v1",
+  "trials_per_case": 12,
+  "seed": 20261104,
+  "fs": 128.0,
+  "n": 1024,
+  "nperseg": 256,
+  "tolerance_hz": 0.08,
+  "alpha": 0.01,
+  "rows": [
+    {
+      "case": "separated",
+      "truth_hz": [
+        12.0,
+        28.0
+      ],
+      "truth_status": "known synthetic",
+      "methods": {
+        "welch": {
+          "false_positive_trial_rate": {
+            "rate": 0.0,
+            "low": 0.0,
+            "high": 0.24249400665524085,
+            "n": 12,
+            "successes": 0,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "false_negative_trial_rate": {
+            "rate": 0.0,
+            "low": 0.0,
+            "high": 0.24249400665524085,
+            "n": 12,
+            "successes": 0,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "all_recovered_rate": {
+            "rate": 1.0,
+            "low": 0.7575059933447592,
+            "high": 1.0,
+            "n": 12,
+            "successes": 12,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "conditional_matched_rmse_hz": 0.004718280289641615,
+          "matched_samples": 24,
+          "detection_counts": [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          "runtime_total_s": 0.009791200049221516,
+          "runtime_median_s": 0.000760149909183383
+        },
+        "nls-bic": {
+          "false_positive_trial_rate": {
+            "rate": 0.0,
+            "low": 0.0,
+            "high": 0.24249400665524085,
+            "n": 12,
+            "successes": 0,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "false_negative_trial_rate": {
+            "rate": 0.0,
+            "low": 0.0,
+            "high": 0.24249400665524085,
+            "n": 12,
+            "successes": 0,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "all_recovered_rate": {
+            "rate": 1.0,
+            "low": 0.7575059933447592,
+            "high": 1.0,
+            "n": 12,
+            "successes": 12,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "conditional_matched_rmse_hz": 0.001466206976917869,
+          "matched_samples": 24,
+          "detection_counts": [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+          ],
+          "runtime_total_s": 0.5385723998770118,
+          "runtime_median_s": 0.03881704993546009
+        }
+      },
+      "method_disagreement": {
+        "rate": 0.0,
+        "low": 0.0,
+        "high": 0.24249400665524085,
+        "n": 12,
+        "successes": 0,
+        "alpha": 0.05,
+        "method": "Wilson score"
+      }
+    },
+    {
+      "case": "close",
+      "truth_hz": [
+        12.0,
+        12.125
+      ],
+      "truth_status": "known synthetic",
+      "methods": {
+        "welch": {
+          "false_positive_trial_rate": {
+            "rate": 0.08333333333333333,
+            "low": 0.014865094404917095,
+            "high": 0.35387991114111694,
+            "n": 12,
+            "successes": 1,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "false_negative_trial_rate": {
+            "rate": 1.0,
+            "low": 0.7575059933447592,
+            "high": 1.0,
+            "n": 12,
+            "successes": 12,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "all_recovered_rate": {
+            "rate": 0.0,
+            "low": 0.0,
+            "high": 0.24249400665524085,
+            "n": 12,
+            "successes": 0,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "conditional_matched_rmse_hz": 0.05824851102654661,
+          "matched_samples": 12,
+          "detection_counts": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "runtime_total_s": 0.008436600444838405,
+          "runtime_median_s": 0.000688950065523386
+        },
+        "nls-bic": {
+          "false_positive_trial_rate": {
+            "rate": 0.4166666666666667,
+            "low": 0.19326031365875665,
+            "high": 0.6804886874504503,
+            "n": 12,
+            "successes": 5,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "false_negative_trial_rate": {
+            "rate": 0.4166666666666667,
+            "low": 0.19326031365875665,
+            "high": 0.6804886874504503,
+            "n": 12,
+            "successes": 5,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "all_recovered_rate": {
+            "rate": 0.5833333333333334,
+            "low": 0.31951131254954973,
+            "high": 0.8067396863412435,
+            "n": 12,
+            "successes": 7,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "conditional_matched_rmse_hz": 0.027389875257409744,
+          "matched_samples": 19,
+          "detection_counts": [
+            3,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            3,
+            3,
+            2,
+            2
+          ],
+          "runtime_total_s": 1.0021628006361425,
+          "runtime_median_s": 0.07486470008734614
+        }
+      },
+      "method_disagreement": {
+        "rate": 1.0,
+        "low": 0.7575059933447592,
+        "high": 1.0,
+        "n": 12,
+        "successes": 12,
+        "alpha": 0.05,
+        "method": "Wilson score"
+      }
+    },
+    {
+      "case": "white-null",
+      "truth_hz": [],
+      "truth_status": "known synthetic",
+      "methods": {
+        "welch": {
+          "false_positive_trial_rate": {
+            "rate": 0.0,
+            "low": 0.0,
+            "high": 0.24249400665524085,
+            "n": 12,
+            "successes": 0,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "false_negative_trial_rate": null,
+          "all_recovered_rate": null,
+          "conditional_matched_rmse_hz": null,
+          "matched_samples": 0,
+          "detection_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "runtime_total_s": 0.00885400059632957,
+          "runtime_median_s": 0.000660850084386766
+        },
+        "nls-bic": {
+          "false_positive_trial_rate": {
+            "rate": 0.0,
+            "low": 0.0,
+            "high": 0.24249400665524085,
+            "n": 12,
+            "successes": 0,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "false_negative_trial_rate": null,
+          "all_recovered_rate": null,
+          "conditional_matched_rmse_hz": null,
+          "matched_samples": 0,
+          "detection_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "runtime_total_s": 0.13921450008638203,
+          "runtime_median_s": 0.010797000024467707
+        }
+      },
+      "method_disagreement": {
+        "rate": 0.0,
+        "low": 0.0,
+        "high": 0.24249400665524085,
+        "n": 12,
+        "successes": 0,
+        "alpha": 0.05,
+        "method": "Wilson score"
+      }
+    },
+    {
+      "case": "colored-null",
+      "truth_hz": [],
+      "truth_status": "known synthetic",
+      "methods": {
+        "welch": {
+          "false_positive_trial_rate": {
+            "rate": 1.0,
+            "low": 0.7575059933447592,
+            "high": 1.0,
+            "n": 12,
+            "successes": 12,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "false_negative_trial_rate": null,
+          "all_recovered_rate": null,
+          "conditional_matched_rmse_hz": null,
+          "matched_samples": 0,
+          "detection_counts": [
+            8,
+            7,
+            10,
+            9,
+            8,
+            9,
+            9,
+            8,
+            9,
+            8,
+            9,
+            7
+          ],
+          "runtime_total_s": 0.011731300037354231,
+          "runtime_median_s": 0.0009258999489247799
+        },
+        "nls-bic": {
+          "false_positive_trial_rate": {
+            "rate": 1.0,
+            "low": 0.7575059933447592,
+            "high": 1.0,
+            "n": 12,
+            "successes": 12,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "false_negative_trial_rate": null,
+          "all_recovered_rate": null,
+          "conditional_matched_rmse_hz": null,
+          "matched_samples": 0,
+          "detection_counts": [
+            4,
+            4,
+            3,
+            4,
+            4,
+            4,
+            3,
+            4,
+            4,
+            4,
+            2,
+            4
+          ],
+          "runtime_total_s": 1.4052112000063062,
+          "runtime_median_s": 0.09525825001765043
+        }
+      },
+      "method_disagreement": {
+        "rate": 1.0,
+        "low": 0.7575059933447592,
+        "high": 1.0,
+        "n": 12,
+        "successes": 12,
+        "alpha": 0.05,
+        "method": "Wilson score"
+      }
+    },
+    {
+      "case": "chirp",
+      "truth_hz": null,
+      "truth_status": "unavailable for stationary-tone scoring",
+      "methods": {
+        "welch": {
+          "false_positive_trial_rate": null,
+          "false_negative_trial_rate": null,
+          "all_recovered_rate": null,
+          "conditional_matched_rmse_hz": null,
+          "matched_samples": 0,
+          "detection_counts": [
+            7,
+            7,
+            7,
+            8,
+            7,
+            7,
+            7,
+            7,
+            8,
+            7,
+            7,
+            7
+          ],
+          "runtime_total_s": 0.010394600220024586,
+          "runtime_median_s": 0.0008419000077992678
+        },
+        "nls-bic": {
+          "false_positive_trial_rate": null,
+          "false_negative_trial_rate": null,
+          "all_recovered_rate": null,
+          "conditional_matched_rmse_hz": null,
+          "matched_samples": 0,
+          "detection_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "runtime_total_s": 0.3035219004377723,
+          "runtime_median_s": 0.018865450052544475
+        }
+      },
+      "method_disagreement": {
+        "rate": 1.0,
+        "low": 0.7575059933447592,
+        "high": 1.0,
+        "n": 12,
+        "successes": 12,
+        "alpha": 0.05,
+        "method": "Wilson score"
+      }
+    },
+    {
+      "case": "amplitude-modulated",
+      "truth_hz": [
+        11.5,
+        12.0,
+        12.5
+      ],
+      "truth_status": "known synthetic",
+      "methods": {
+        "welch": {
+          "false_positive_trial_rate": {
+            "rate": 0.0,
+            "low": 0.0,
+            "high": 0.24249400665524085,
+            "n": 12,
+            "successes": 0,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "false_negative_trial_rate": {
+            "rate": 1.0,
+            "low": 0.7575059933447592,
+            "high": 1.0,
+            "n": 12,
+            "successes": 12,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "all_recovered_rate": {
+            "rate": 0.0,
+            "low": 0.0,
+            "high": 0.24249400665524085,
+            "n": 12,
+            "successes": 0,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "conditional_matched_rmse_hz": 0.006463010699405632,
+          "matched_samples": 12,
+          "detection_counts": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "runtime_total_s": 0.011930900160223246,
+          "runtime_median_s": 0.0009315500501543283
+        },
+        "nls-bic": {
+          "false_positive_trial_rate": {
+            "rate": 0.08333333333333333,
+            "low": 0.014865094404917095,
+            "high": 0.35387991114111694,
+            "n": 12,
+            "successes": 1,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "false_negative_trial_rate": {
+            "rate": 0.0,
+            "low": 0.0,
+            "high": 0.24249400665524085,
+            "n": 12,
+            "successes": 0,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "all_recovered_rate": {
+            "rate": 1.0,
+            "low": 0.7575059933447592,
+            "high": 1.0,
+            "n": 12,
+            "successes": 12,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "conditional_matched_rmse_hz": 0.003154457222114328,
+          "matched_samples": 36,
+          "detection_counts": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            4,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "runtime_total_s": 0.9866035003215075,
+          "runtime_median_s": 0.07773370004724711
+        }
+      },
+      "method_disagreement": {
+        "rate": 1.0,
+        "low": 0.7575059933447592,
+        "high": 1.0,
+        "n": 12,
+        "successes": 12,
+        "alpha": 0.05,
+        "method": "Wilson score"
+      }
+    }
+  ],
+  "calibration": "No calibrated posterior; nominal Welch alpha relies on white stationary noise and is stress-tested here.",
+  "limitations": [
+    "Fixed small synthetic suite, not a population benchmark.",
+    "Conditional RMSE excludes misses; detection rates must be considered alongside it.",
+    "Wilson intervals use independent trials within each case; no aggregation across heterogeneous cases.",
+    "Truth-unavailable chirp cases retain detections without labelling them true or false.",
+    "Both baselines are classical methods; no unexecuted external system or LLM comparison.",
+    "Process peak memory and environment are recorded by the executor; POSIX memory is an upper bound over host children."
+  ]
+}

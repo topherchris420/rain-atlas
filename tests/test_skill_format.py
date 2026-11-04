@@ -2,13 +2,12 @@ import json
 import shutil
 
 import pytest
+from conftest import BUILTIN, FIXTURES
 
 from rain_atlas.skills.catalog import discover, load_catalog, load_source
 from rain_atlas.skills.frontmatter import FrontmatterError, parse_skill_md, spec_problems
 from rain_atlas.skills.manifest import DOMAINS, manifest_problems
 from rain_atlas.skills.versions import parse_version, satisfies
-
-from conftest import BUILTIN, FIXTURES
 
 GOOD = """---
 name: demo-skill
@@ -70,8 +69,15 @@ def test_builtin_catalog_is_valid_and_covers_domains():
         assert src.manifest.domain in DOMAINS
         assert src.manifest.examples, f"{src.name} has no examples"
     names = {src.name for src in catalog}
-    assert {"synthetic-tones", "spectral-peaks", "sinusoid-fit", "tone-presence-test", "method-agreement",
-            "recovery-score", "scientific-figure"} <= names
+    assert {
+        "synthetic-tones",
+        "spectral-peaks",
+        "sinusoid-fit",
+        "tone-presence-test",
+        "method-agreement",
+        "recovery-score",
+        "scientific-figure",
+    } <= names
 
 
 def test_manifest_problems_reported():

@@ -9,10 +9,11 @@ evidence ledger, and has separate research roles check each other's work with
 independent methods. It reports what it found, what failed, and how to
 reproduce it.
 
-> Status: **v0.1, the smallest end-to-end slice.** The skills engine, ledger,
-> roles and the Phase 10 reference experiment work and are tested. The web lab,
-> resonance module, most science domains and the agent adapters are not built
-> yet. See [`docs/STATUS.md`](docs/STATUS.md) for exactly what is done.
+> **Scientific workbench, v0.1 (unreleased).** Includes an offline observatory,
+> 22 executable skills, synchronization and spectral experiments, a classical
+> stress benchmark, source provenance and validated local proposal intake.
+> See [`docs/STATUS.md`](docs/STATUS.md) for executed tests and remaining limits.
+> The executor enforces policy; it is not a security sandbox.
 
 ATLAS is an independent Vers3Dynamics project. It is not affiliated with or
 endorsed by the U.S. Department of Energy or the Genesis Mission.
@@ -20,15 +21,39 @@ endorsed by the U.S. Department of Energy or the Genesis Mission.
 ## Quick start
 
 ```sh
-uv sync
+uv sync --locked --python 3.12                # one-command development setup from this checkout
 uv run atlas skills list
 uv run atlas skills test                      # run every skill's examples in the executor
 uv run atlas experiment run spectral-recovery # the reference experiment (~10 min on a laptop)
 uv run atlas ledger verify atlas-data/spectral-recovery/ledger
+uv run atlas observatory export atlas-data/spectral-recovery/ledger --out atlas-data/spectral-view
 ```
 
 The experiment writes `atlas-data/spectral-recovery/reports/<id>/report.md`,
 figures (PNG and SVG), `summary.json` and a zip bundle of the ledger.
+
+Open `atlas-data/spectral-view/index.html` directly. No server, account, model,
+external assets or execution endpoint is required. The viewer contains six
+views: experiments, claim dependencies, scientific timeline, skills, reports
+and a proposal composer. Scientific free text must be reviewed before sharing.
+
+For the new resonance demonstration and benchmark:
+
+```sh
+uv run atlas experiment run synchronization --root atlas-data/sync-001 --replicates 12
+uv run atlas ledger verify atlas-data/sync-001/ledger
+uv run atlas benchmark --root atlas-data/bench-001 --trials 12
+```
+
+Open `atlas-data/sync-001/observatory/index.html`. The study compares temporal
+phase locking with relative-frequency drift, independent seeded replication,
+and an analytical deterministic reference. Noise and phase-lag uncertainty
+produce unresolved and negative results. This is simulated two-oscillator
+locking, not experimental proof of a physical or infinite-population transition.
+
+Start with the [end-to-end tutorial](docs/TUTORIAL.md),
+[numerical methods and assumptions](docs/RESONANCE.md),
+[benchmark protocol](docs/BENCHMARKS.md), and [offline viewer](docs/OBSERVATORY.md).
 
 ## The reference experiment
 
@@ -67,6 +92,17 @@ exactly; it is not blind. `--mode blinded` draws a new truth from OS entropy.
 | `lyapunov-exponent` | dynamical systems | Lyapunov exponents (logistic map, Lorenz system) |
 | `spike-train-statistics` | neuroscience | Firing rate, ISI CV, Fano factor, refractory violations |
 | `bibliography-audit` | literature | Offline BibTeX audit (fields, DOI/year syntax, duplicates) |
+| `stft-analysis` | signal processing | Hann time-frequency density with explicit normalization |
+| `morlet-wavelet` | signal processing | Multiscale complex Morlet transform and edge-validity mask |
+| `phase-locking` | resonance | Multichannel temporal PLV and instantaneous order parameter |
+| `kuramoto-network` | dynamics | RK4 / Euler-Maruyama coupled phase oscillators |
+| `adaptive-filter` | signal processing | LMS / normalized LMS causal filtering |
+| `fir-identification` | dynamics | FIR least squares with conditioning and residual uncertainty |
+| `plate-eigenmode` | computational physics | Simply supported thin-plate modes; explicit physical assumptions |
+| `cross-spectral` | signal processing | Welch cross-spectrum and magnitude-squared coherence |
+| `synchronization-sweep` | resonance | Reproducible noisy phase-lag sweeps |
+| `synchronization-measure` | resonance | Phase/frequency observables and replicate intervals |
+| `spectral-stress-benchmark` | evaluation | False detections, misses, disagreement and unknown-truth cases |
 
 Each skill has `SKILL.md` (Agent Skills format), `skill.json` (typed manifest,
 permissions, limits) and examples with known answers.
@@ -86,7 +122,7 @@ permissions, limits) and examples with known answers.
 - [`docs/STATUS.md`](docs/STATUS.md): what is implemented and tested, failures,
   limitations, remaining work
 - [`docs/INTEGRATION.md`](docs/INTEGRATION.md): how ATLAS will connect to other
-  R.A.I.N. Lab projects
+  R.A.I.N. Lab projects, verified export contract and quarantined Luca intake
 - [`docs/adr/`](docs/adr/): decision records
 - [`SECURITY.md`](SECURITY.md), [`RESPONSIBLE_AI.md`](RESPONSIBLE_AI.md),
   [`CONTRIBUTING.md`](CONTRIBUTING.md), [`NOTICE.md`](NOTICE.md)

@@ -93,8 +93,13 @@ class Peak:
     threshold: float
 
 
-def detect_peaks(welch: WelchResult, alpha: float = 0.01, min_separation_hz: float | None = None,
-                 fmin: float = 0.0, fmax: float | None = None) -> tuple[list[Peak], dict]:
+def detect_peaks(
+    welch: WelchResult,
+    alpha: float = 0.01,
+    min_separation_hz: float | None = None,
+    fmin: float = 0.0,
+    fmax: float | None = None,
+) -> tuple[list[Peak], dict]:
     """Detect spectral lines above a white-noise floor.
 
     Under the white-noise null each ordinate is ``floor * chi2(edof)/edof``.
@@ -115,9 +120,7 @@ def detect_peaks(welch: WelchResult, alpha: float = 0.01, min_separation_hz: flo
     threshold = floor * factor
     sep_bins = max(1, int(np.ceil((min_separation_hz or 2.0 * welch.resolution_hz) / welch.resolution_hz)))
 
-    candidates = [
-        i for i in band if psd[i] > threshold and psd[i] >= psd[i - 1] and psd[i] >= psd[i + 1]
-    ]
+    candidates = [i for i in band if psd[i] > threshold and psd[i] >= psd[i - 1] and psd[i] >= psd[i + 1]]
     candidates.sort(key=lambda i: psd[i], reverse=True)
     kept: list[int] = []
     for i in candidates:
@@ -196,8 +199,16 @@ def fit_sinusoids(x: np.ndarray, fs: float, initial_hz: np.ndarray) -> SinusoidF
     k = f0.size
     if k == 0:
         rss = float(np.sum((x - x.mean()) ** 2))
-        return SinusoidFit(np.array([]), np.array([]), np.array([]), np.array([]),
-                           float(np.sqrt(rss / max(1, n - 1))), rss, n * np.log(rss / n) + np.log(n), True)
+        return SinusoidFit(
+            np.array([]),
+            np.array([]),
+            np.array([]),
+            np.array([]),
+            float(np.sqrt(rss / max(1, n - 1))),
+            rss,
+            n * np.log(rss / n) + np.log(n),
+            True,
+        )
 
     def residual(freqs: np.ndarray) -> np.ndarray:
         design = _design(t, freqs)
@@ -206,8 +217,13 @@ def fit_sinusoids(x: np.ndarray, fs: float, initial_hz: np.ndarray) -> SinusoidF
 
     step = fs / n
     result = optimize.least_squares(
-        residual, f0, bounds=(np.maximum(f0 - 2 * step, 1e-9), np.minimum(f0 + 2 * step, fs / 2)),
-        x_scale=step, xtol=1e-12, ftol=1e-12, method="trf",
+        residual,
+        f0,
+        bounds=(np.maximum(f0 - 2 * step, 1e-9), np.minimum(f0 + 2 * step, fs / 2)),
+        x_scale=step,
+        xtol=1e-12,
+        ftol=1e-12,
+        method="trf",
     )
     freqs = result.x
     design = _design(t, freqs)
@@ -236,8 +252,9 @@ def fit_sinusoids(x: np.ndarray, fs: float, initial_hz: np.ndarray) -> SinusoidF
     )
 
 
-def bic_sinusoid_search(x: np.ndarray, fs: float, max_tones: int = 6, pad: int = 8,
-                        fmin: float = 0.0) -> tuple[SinusoidFit, list[dict]]:
+def bic_sinusoid_search(
+    x: np.ndarray, fs: float, max_tones: int = 6, pad: int = 8, fmin: float = 0.0
+) -> tuple[SinusoidFit, list[dict]]:
     """Greedy model-order selection by BIC.
 
     Adds one tone at a time at the largest residual periodogram peak, refits
@@ -285,8 +302,13 @@ def tone_f_test(x: np.ndarray, fs: float, frequency_hz: float, nuisance_hz: np.n
     rss0, rss1 = float(r0 @ r0), float(r1 @ r1)
     df1, df2 = 2, n - d1.shape[1]
     f_stat = ((rss0 - rss1) / df1) / (rss1 / df2)
-    return {"frequency_hz": float(frequency_hz), "F": float(f_stat), "df1": df1, "df2": int(df2),
-            "p_value": float(stats.f.sf(f_stat, df1, df2))}
+    return {
+        "frequency_hz": float(frequency_hz),
+        "F": float(f_stat),
+        "df1": df1,
+        "df2": int(df2),
+        "p_value": float(stats.f.sf(f_stat, df1, df2)),
+    }
 
 
 def crlb_frequency_std_hz(amplitude: float, noise_std: float, n: int, fs: float) -> float:

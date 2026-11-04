@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -13,20 +14,30 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-24.04, windows-2022]
         python: ["3.11", "3.12"]
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
         with:
           python-version: ${{ matrix.python }}
       - run: uv sync --locked
+      - run: uv run ruff check src tests scripts
+      - run: uv run ruff format --check src tests scripts
+      - run: uv run mypy
       - run: uv run atlas skills validate skills
-      - run: uv run pytest -m "not slow" -q
+      - run: uv run pytest --junitxml=test-results.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tests-${{ matrix.os }}-${{ matrix.python }}
+          path: test-results.xml
 
   acceptance:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     needs: test
     steps:
       - uses: actions/checkout@v4
@@ -36,8 +47,23 @@ jobs:
       - run: uv sync --locked
       - run: uv run pytest -m slow -q
       - run: uv run atlas experiment run spectral-recovery --mode fixed --root atlas-data/ci
+      - run: uv run atlas experiment run synchronization --root atlas-data/sync --replicates 12
+      - run: uv run atlas benchmark --root atlas-data/bench --trials 12
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: spectral-recovery-report
           path: atlas-data/ci/reports/
+
+  offline-viewer:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: tests/web/package-lock.json
+      - run: npm ci --prefix tests/web
+      - run: npm test --prefix tests/web

@@ -20,7 +20,11 @@ def _git_commit(root: Path) -> str | None:
         return None
     try:
         out = subprocess.run(
-            ["git", "-C", str(root), "rev-parse", "HEAD"], capture_output=True, text=True, timeout=10, check=False
+            ["git", "-C", str(root), "rev-parse", "HEAD"],
+            capture_output=True,
+            text=True,
+            timeout=10,
+            check=False,
         )
     except (OSError, subprocess.SubprocessError):
         return None
@@ -29,7 +33,10 @@ def _git_commit(root: Path) -> str | None:
         return None
     dirty = subprocess.run(
         ["git", "-C", str(root), "status", "--porcelain", "--untracked-files=no"],
-        capture_output=True, text=True, timeout=10, check=False,
+        capture_output=True,
+        text=True,
+        timeout=10,
+        check=False,
     ).stdout.strip()
     return commit + ("-dirty" if dirty else "")
 

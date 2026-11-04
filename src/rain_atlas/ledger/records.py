@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from ..canonical import sha256_bytes, canonical_bytes
+from ..canonical import canonical_bytes, sha256_bytes
 
 if TYPE_CHECKING:
     from .store import Entry, Ledger
@@ -16,7 +16,16 @@ VERDICTS = ("supported", "contradicted", "unresolved")
 GENERATIONS = ("scripted", "model", "human")
 
 REQUIRED = {
-    "preregistration": ("title", "question", "hypothesis", "null_hypothesis", "design", "acceptance", "created_by"),
+    "recovery": ("source_log_hash", "discarded_tail_hash", "recovered_records", "reason", "author"),
+    "preregistration": (
+        "title",
+        "question",
+        "hypothesis",
+        "null_hypothesis",
+        "design",
+        "acceptance",
+        "created_by",
+    ),
     "seal": ("label", "commitment"),
     "unseal": ("commitment", "salt", "value", "after"),
     "dataset": ("experiment", "name", "origin", "media_type", "object", "provenance"),
@@ -27,7 +36,14 @@ REQUIRED = {
     "approval": ("experiment", "scope", "operator", "attestation", "identity_verified", "digest_prefix"),
     "report": ("experiment", "findings", "limitations", "reproduction", "author"),
     "note": ("experiment", "text", "author"),
-    "reproduction": ("experiment", "original_run", "reproduction_run", "outputs_match", "artifacts_match", "author"),
+    "reproduction": (
+        "experiment",
+        "original_run",
+        "reproduction_run",
+        "outputs_match",
+        "artifacts_match",
+        "author",
+    ),
     "verdict": ("experiment", "target", "verdict", "reasons", "evidence", "author"),
 }
 
@@ -58,6 +74,51 @@ def record_problems(ledger: "Ledger", entry: "Entry", record: dict, seq_of: dict
             return None
         return ledger.get_json(ref)
 
+    # Object dependencies are distinct from record references: artifacts need
+    # not have a log entry, but their bytes must exist and match their address.
+    from .store import LedgerError
+
+    def verify_object(ref: str, label: str) -> None:
+        try:
+            ledger.get_bytes(ref)
+        except (LedgerError, OSError) as exc:
+            problems.append(f"{label}: {exc}")
+
+    if kind == "dataset":
+        verify_object(record["object"], "dataset artifact")
+    if kind == "run":
+        for field in ("engine_source_object", "skill_source_object", "lockfile_object"):
+            if record.get(field):
+                verify_object(record[field], field)
+        if "inputs_object" in record:
+            verify_object(record["inputs_object"], "inputs")
+            if record["inputs_object"] != record["inputs_hash"]:
+                problems.append("inputs object differs from inputs_hash")
+
+            def check_input(value):
+                if isinstance(value, dict):
+                    if "$artifact" in value and "sha256" in value:
+                        verify_object(value["sha256"], "input artifact")
+                    for child in value.values():
+                        check_input(child)
+                elif isinstance(value, list):
+                    for child in value:
+                        check_input(child)
+
+            check_input(ledger.get_json(record["inputs_object"]))
+        if record.get("sealed", {}).get("public_object"):
+            verify_object(record["sealed"]["public_object"], "sealed public inputs")
+        for name, meta in record.get("artifacts", {}).items():
+            verify_object(meta.get("object", meta["sha256"]), f"artifact {name}")
+            if meta.get("object", meta["sha256"]) != meta["sha256"]:
+                problems.append(f"artifact {name}: object/hash disagreement")
+    if kind == "report":
+        if record.get("report_object"):
+            verify_object(record["report_object"], "report")
+        for formats in record.get("figure_objects", {}).values():
+            for ref in formats.values():
+                verify_object(ref, "figure")
+
     if "experiment" in record and kind not in {"preregistration", "seal", "unseal"}:
         prereg = earlier(record["experiment"], "experiment")
         if prereg is not None and "hypothesis" not in prereg:
@@ -86,7 +147,11 @@ def record_problems(ledger: "Ledger", entry: "Entry", record: dict, seq_of: dict
 
     if kind in {"claim", "challenge", "note", "report", "revision", "reproduction", "verdict"}:
         author = record["author"]
-        if not isinstance(author, dict) or author.get("generation") not in GENERATIONS or not author.get("role"):
+        if (
+            not isinstance(author, dict)
+            or author.get("generation") not in GENERATIONS
+            or not author.get("role")
+        ):
             problems.append("author must give a role and generation (scripted|model|human)")
 
     if kind == "dataset" and record["origin"] not in ORIGINS:

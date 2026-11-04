@@ -17,11 +17,16 @@ def outcome_from_fraction(fraction: float, corroborate_at: float, contradict_bel
     return "inconclusive"
 
 
-def verdict(independent: str | None, falsification: str | None, reproduced: bool | None) -> tuple[str, list[str]]:
+def verdict(
+    independent: str | None, falsification: str | None, reproduced: bool | None
+) -> tuple[str, list[str]]:
     reasons: list[str] = []
     if reproduced is not True:
-        reasons.append("the primary computation did not reproduce exactly" if reproduced is False
-                       else "no reproduction run was performed")
+        reasons.append(
+            "the primary computation did not reproduce exactly"
+            if reproduced is False
+            else "no reproduction run was performed"
+        )
         return "unresolved", reasons
     if independent is None or falsification is None:
         reasons.append("an independent check is missing")
@@ -33,7 +38,11 @@ def verdict(independent: str | None, falsification: str | None, reproduced: bool
     if reasons:
         return "contradicted", reasons
     if independent == "corroborated" and falsification == "corroborated":
-        return "supported", ["independent estimator agrees", "replicate test rejects absence", "reproduced exactly"]
+        return "supported", [
+            "independent estimator agrees",
+            "replicate test rejects absence",
+            "reproduced exactly",
+        ]
     if independent == "inconclusive":
         reasons.append("the independent estimator agrees only in some realizations")
     if falsification == "inconclusive":

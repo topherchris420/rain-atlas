@@ -1,0 +1,8 @@
+{
+  "results": {
+    "protocol": "atlas.spectral-stress/v1",
+    "fs": 128,
+    "n": 1024,
+    "trials_per_case": 3
+  }
+}

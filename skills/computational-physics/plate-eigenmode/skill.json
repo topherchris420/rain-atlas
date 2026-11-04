@@ -1,0 +1,162 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "plate-eigenmode",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "computational-physics",
+  "summary": "Simply supported rectangular thin-plate eigenmodes with material-derived frequencies.",
+  "capabilities": [
+    "resonance.plate-mode"
+  ],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "m": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "n": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "a_m": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "default": 1
+      },
+      "b_m": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "default": 1
+      },
+      "thickness_m": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "default": 0.001
+      },
+      "young_pa": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "default": 200000000000.0
+      },
+      "density_kg_m3": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "default": 7800
+      },
+      "poisson": {
+        "type": "number",
+        "exclusiveMinimum": -1,
+        "exclusiveMaximum": 0.5,
+        "default": 0.3
+      },
+      "grid": {
+        "type": "integer",
+        "minimum": 8,
+        "maximum": 512,
+        "default": 65
+      }
+    },
+    "required": [
+      "m",
+      "n"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "x_m": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 1,
+        "maxItems": 32768
+      },
+      "y_m": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 1,
+        "maxItems": 32768
+      },
+      "displacement": {
+        "type": "object",
+        "required": [
+          "$artifact",
+          "sha256"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "$artifact": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        }
+      },
+      "frequency_hz": {
+        "type": "number"
+      },
+      "rigidity_nm": {
+        "type": "number"
+      },
+      "unit": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "x_m",
+      "y_m",
+      "displacement",
+      "frequency_hz",
+      "rigidity_nm",
+      "unit"
+    ]
+  },
+  "permissions": {
+    "network": false,
+    "subprocess": false,
+    "read": [
+      "inputs"
+    ],
+    "write": [
+      "outputs"
+    ]
+  },
+  "limits": {
+    "timeout_s": 120,
+    "memory_mb": 1024
+  },
+  "requires": {
+    "python": ">=3.11",
+    "packages": {
+      "numpy": ">=2.0",
+      "scipy": ">=1.13",
+      "rain-atlas": ">=0.1"
+    }
+  },
+  "examples": [
+    {
+      "name": "analytical",
+      "seed": 17,
+      "tolerance": {
+        "abs": 1e-06,
+        "rel": 1e-06
+      }
+    }
+  ],
+  "references": [
+    "docs/RESONANCE.md"
+  ],
+  "limitations": [
+    "Kirchhoff-Love thin, homogeneous isotropic plate; small displacement, simply supported edges.",
+    "Not free-edge Chladni plates, fluid cymatics, granular transport, damping or nonlinear response. Nodal plots alone do not validate those phenomena."
+  ]
+}
