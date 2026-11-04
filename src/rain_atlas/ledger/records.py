@@ -159,8 +159,8 @@ def record_problems(ledger: "Ledger", entry: "Entry", record: dict, seq_of: dict
 
     if kind == "claim":
         category = record["category"]
-        evidence = [earlier(ref, "evidence") for ref in _refs(record["evidence"])]
-        evidence = [e for e in evidence if e is not None]
+        cited = [earlier(ref, "evidence") for ref in _refs(record["evidence"])]
+        evidence = [e for e in cited if e is not None]
         if category not in CATEGORIES:
             problems.append(f"category must be one of {CATEGORIES}")
         elif category == "COMPUTED":

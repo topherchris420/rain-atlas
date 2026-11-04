@@ -112,7 +112,7 @@ def finish(
     error: dict | None = None,
     extra: dict | None = None,
 ) -> int:
-    payload = {"status": status, "log": ctx.messages}
+    payload: dict[str, Any] = {"status": status, "log": ctx.messages}
     if outputs is not None:
         payload["outputs"] = to_jsonable(outputs)
     if error is not None:

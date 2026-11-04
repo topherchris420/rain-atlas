@@ -1,5 +1,7 @@
 # R.A.I.N. ATLAS
 
+[![ci](https://github.com/topherchris420/rain-atlas/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/topherchris420/rain-atlas/actions/workflows/ci.yml)
+
 **The open scientific intelligence engine from Vers3Dynamics.** Local-first,
 MIT-licensed.
 
@@ -19,6 +21,9 @@ ATLAS is an independent Vers3Dynamics project. It is not affiliated with or
 endorsed by the U.S. Department of Energy or the Genesis Mission.
 
 ## Quick start
+
+Requires [uv](https://docs.astral.sh/uv/) and Python 3.11, 3.12 or 3.13 (all
+three are tested in CI on Linux; 3.11 and 3.12 also on Windows).
 
 ```sh
 uv sync --locked --python 3.12                # one-command development setup from this checkout

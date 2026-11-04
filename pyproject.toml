@@ -14,8 +14,12 @@ dependencies = [
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering",
+    "Typing :: Typed",
 ]
 
 [project.scripts]
@@ -52,7 +56,9 @@ select = ["E4", "E7", "E9", "F", "I"]
 
 [tool.mypy]
 python_version = "3.11"
-files = ["src/rain_atlas/science/resonance.py", "src/rain_atlas/science/uncertainty.py"]
+files = ["src/rain_atlas"]
 ignore_missing_imports = true
-follow_imports = "silent"
 check_untyped_defs = true
+strict_equality = true
+warn_redundant_casts = true
+warn_unused_ignores = true

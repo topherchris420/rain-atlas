@@ -199,6 +199,8 @@ def main(spec_path: str) -> int:
         import importlib.util  # noqa: PLC0415
 
         module_spec = importlib.util.spec_from_file_location("atlas_skill_entry", spec["entrypoint"])
+        if module_spec is None or module_spec.loader is None:
+            raise ImportError(f"cannot load skill entrypoint {spec['entrypoint']!r}")
         module = importlib.util.module_from_spec(module_spec)
         module_spec.loader.exec_module(module)
         with open(spec["inputs_path"], encoding="utf-8") as fh:

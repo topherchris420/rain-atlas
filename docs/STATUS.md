@@ -15,7 +15,7 @@ for implemented boundaries and explicitly planned work.
 | Proposals | Strict closed action schema, offline model identity/parameters/prompt and proposal hashes, approval gate, persistent registered budgets; no live model provider |
 | Integrations | R.A.I.N. local submission export against inspected schema; Luca records always quarantined, no path following or external state writes |
 | Benchmark | Welch versus NLS/BIC on separated/close tones, white/colored nulls, chirp and amplitude modulation |
-| Developer experience | Locked setup, tutorial, working skill templates, lint/format, targeted scientific API typing, adversarial and regression tests |
+| Developer experience | Locked setup, tutorial, working skill templates, lint/format, whole-package mypy (49 modules, Python 3.11–3.13, Linux and Windows), adversarial and regression tests |
 
 ## Validation record
 
@@ -31,11 +31,36 @@ for implemented boundaries and explicitly planned work.
   comparisons, null controls and deterministic/stochastic convergence cases.
 - Offline viewer DOM interactions: **3 passed**. CUA browser/native providers
   were unavailable; no browser-rendered visual or CSP-enforcement test is claimed.
-- Ruff lint/format and mypy (two scientific API modules): exercised locally.
-- Hosted matrix: **blocked before execution**. GitHub run `41103222445`
-  annotations report failed account payments / spending limit. Logs do not
-  exist. No Linux/POSIX test result or hosted Python result is claimed; billing
-  was not changed. Workflow corrections cannot repair an account-level block.
+- Ruff lint/format: passed. mypy now covers the whole package (49 modules) and
+  passes for Python 3.11, 3.12 and 3.13, each against the Linux, Windows and
+  macOS platform targets. Before this it covered two scientific modules.
+- Hosted matrix, first run `41103222445` (2026-10-30): **blocked before
+  execution** by account payment / spending-limit annotations. Logs do not
+  exist; billing was not changed.
+- Hosted matrix, run `41914048887` (2026-11-04, `8978d26`): **executed**.
+  Ubuntu 24.04 and Windows 2022 on Python 3.12 passed every step, including
+  the full suite; the offline-viewer job passed. Both Python 3.11 jobs stopped
+  at `mypy`: the lock resolves NumPy 2.4.6 for 3.11, whose stubs type
+  `np.fft.rfftfreq` as `floating[Any]` rather than `float64`
+  (`science/resonance.py`). The acceptance job was skipped as a result. The
+  fix is an explicit float64 frequency axis; `scripts/check.py` now
+  type-checks with every CI Python so a single-interpreter pass cannot hide
+  this again.
+- Local Linux (x86_64 container, 4 CPUs) after the fix: ruff, mypy, skill
+  validation and the full suite, slow tests included: **194 passed,
+  1 skipped** on CPython 3.11.18 (143.27 s), 3.12.3 (143.83 s) and 3.13.18
+  (146.15 s). The skip is the Windows-only job-object test; the symlink test
+  that Windows skips passes on Linux. This is the first local execution of the
+  POSIX executor paths (rlimits, process groups, timeout, cancellation, memory
+  cap).
+- Local Linux acceptance-job dry run (CPython 3.12.3): fixed-mode spectral
+  recovery A1–A7 **7/7 pass**, 179 ledger records verified (43 s);
+  synchronization (12 replicates) S1–S5 pass with **5 supported,
+  10 unresolved** of 30 conditions, matching Windows, 140 records verified;
+  benchmark (12 trials) ledger verified. Compared with the committed Windows
+  `docs/demonstration/benchmark.json`, every count, detection list and Wilson
+  interval is identical; NLS/BIC conditional RMSE differs by at most
+  1.4×10⁻¹⁰ Hz.
 
 The Windows skip requires symlink privileges absent from this account. Local
 interpreters are x64 on an ARM64 Windows host. Python 3.11 resolves NumPy 2.4.6 /

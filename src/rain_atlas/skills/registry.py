@@ -133,7 +133,7 @@ class Registry:
 
     def _ref(self, listing: Listing) -> SkillRef:
         src = load_source(listing.path)
-        if src.problems or not src.manifest:
+        if src.problems or not src.manifest or src.content_hash is None:
             raise RegistryError(f"{listing.name}@{listing.version} is invalid: {'; '.join(src.problems)}")
         if src.content_hash != listing.content_hash:
             raise RegistryError(f"{listing.name}@{listing.version} changed on disk")

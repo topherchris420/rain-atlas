@@ -133,9 +133,11 @@ def recovery(
             errors[j].append(row[i] - truth[j])
         false_per_rep.append(len(only_est))
         all_found += len(matched) == len(truth)
-    with_bound = amplitudes is not None and noise_std is not None and n is not None and fs is not None
-    if with_bound and len(amplitudes) != len(truth):
-        raise ValueError("amplitudes must be parallel to truth")
+    bound_inputs: tuple[list[float], float, int, float] | None = None
+    if amplitudes is not None and noise_std is not None and n is not None and fs is not None:
+        if len(amplitudes) != len(truth):
+            raise ValueError("amplitudes must be parallel to truth")
+        bound_inputs = (amplitudes, noise_std, n, fs)
     tones = []
     for j, f in enumerate(truth):
         e = np.array(errors[j])
@@ -147,10 +149,11 @@ def recovery(
             "rmse_hz": float(np.sqrt(np.mean(e**2))) if e.size else None,
             "max_abs_error_hz": float(np.max(np.abs(e))) if e.size else None,
         }
-        if with_bound:
+        if bound_inputs is not None:
             from .spectral import crlb_frequency_std_hz  # noqa: PLC0415
 
-            bound = crlb_frequency_std_hz(amplitudes[j], noise_std, n, fs) if noise_std > 0 else 0.0
+            amps, sigma, n_samples, rate = bound_inputs
+            bound = crlb_frequency_std_hz(amps[j], sigma, n_samples, rate) if sigma > 0 else 0.0
             tone["crlb_std_hz"] = float(bound)
             tone["std_over_crlb"] = (
                 (tone["std_hz"] / bound) if tone["std_hz"] is not None and bound > 0 else None
@@ -162,5 +165,5 @@ def recovery(
         "tones": tones,
         "all_recovered_rate": all_found / reps if reps else 0.0,
         "false_detections_total": int(sum(false_per_rep)),
-        "realizations_with_false_detection": int(sum(1 for n in false_per_rep if n)),
+        "realizations_with_false_detection": int(sum(1 for count in false_per_rep if count)),
     }

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import time
+from dataclasses import dataclass, field
 
 import numpy as np
 from scipy import signal
@@ -12,6 +13,18 @@ from ..science.spectral import bic_sinusoid_search, detect_peaks, welch_psd
 from ..science.uncertainty import wilson
 
 CASES = ("separated", "close", "white-null", "colored-null", "chirp", "amplitude-modulated")
+
+
+@dataclass
+class _MethodTally:
+    """Per-method event counts and samples accumulated over one case's trials."""
+
+    false_trials: int = 0
+    miss_trials: int = 0
+    all_recovered: int = 0
+    error_hz: list[float] = field(default_factory=list)
+    runtime_s: list[float] = field(default_factory=list)
+    counts: list[int] = field(default_factory=list)
 
 
 def evaluate(trials: int = 12, seed: int = 20261104) -> dict:
@@ -37,17 +50,7 @@ def evaluate(trials: int = 12, seed: int = 20261104) -> dict:
             "chirp": None,
             "amplitude-modulated": [11.5, 12.0, 12.5],
         }[case]
-        metrics = {
-            method: {
-                "false_trials": 0,
-                "miss_trials": 0,
-                "all_recovered": 0,
-                "error_hz": [],
-                "runtime_s": [],
-                "counts": [],
-            }
-            for method in ("welch", "nls-bic")
-        }
+        metrics = {method: _MethodTally() for method in ("welch", "nls-bic")}
         disagree = 0
         for trial in range(trials):
             rng = np.random.default_rng([seed, case_index, trial])
@@ -64,7 +67,7 @@ def evaluate(trials: int = 12, seed: int = 20261104) -> dict:
                     (np.cos(2 * np.pi * f * t + rng.uniform(-np.pi, np.pi)) for f in truth or []),
                     start=np.zeros(n),
                 )
-            estimates = {}
+            estimates: dict[str, list[float]] = {}
             for method in metrics:
                 start = time.perf_counter()
                 if method == "welch":
@@ -74,30 +77,30 @@ def evaluate(trials: int = 12, seed: int = 20261104) -> dict:
                     fit, _ = bic_sinusoid_search(x, fs, max_tones=4, fmin=1)
                     est = fit.frequencies_hz.tolist()
                 m = metrics[method]
-                m["runtime_s"].append(time.perf_counter() - start)
-                m["counts"].append(len(est))
+                m.runtime_s.append(time.perf_counter() - start)
+                m.counts.append(len(est))
                 estimates[method] = est
                 if truth is not None:
                     pairs, extra, missing = match(est, truth, 0.08)
-                    m["false_trials"] += bool(extra)
-                    m["miss_trials"] += bool(missing)
-                    m["all_recovered"] += not missing
-                    m["error_hz"].extend(est[i] - truth[j] for i, j in pairs)
+                    m.false_trials += bool(extra)
+                    m.miss_trials += bool(missing)
+                    m.all_recovered += not missing
+                    m.error_hz.extend(est[i] - truth[j] for i, j in pairs)
             _, a, b = match(estimates["welch"], estimates["nls-bic"], 0.08)
             disagree += bool(a or b)
         output = {}
         for method, m in metrics.items():
             output[method] = {
-                "false_positive_trial_rate": wilson(m["false_trials"], trials) if truth is not None else None,
-                "false_negative_trial_rate": wilson(m["miss_trials"], trials) if truth else None,
-                "all_recovered_rate": wilson(m["all_recovered"], trials) if truth else None,
-                "conditional_matched_rmse_hz": float(np.sqrt(np.mean(np.square(m["error_hz"]))))
-                if m["error_hz"]
+                "false_positive_trial_rate": wilson(m.false_trials, trials) if truth is not None else None,
+                "false_negative_trial_rate": wilson(m.miss_trials, trials) if truth else None,
+                "all_recovered_rate": wilson(m.all_recovered, trials) if truth else None,
+                "conditional_matched_rmse_hz": float(np.sqrt(np.mean(np.square(m.error_hz))))
+                if m.error_hz
                 else None,
-                "matched_samples": len(m["error_hz"]),
-                "detection_counts": m["counts"],
-                "runtime_total_s": sum(m["runtime_s"]),
-                "runtime_median_s": float(np.median(m["runtime_s"])),
+                "matched_samples": len(m.error_hz),
+                "detection_counts": m.counts,
+                "runtime_total_s": sum(m.runtime_s),
+                "runtime_median_s": float(np.median(m.runtime_s)),
             }
         rows.append(
             {
