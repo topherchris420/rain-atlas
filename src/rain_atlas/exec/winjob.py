@@ -99,7 +99,10 @@ class Job:
         info.JobMemoryLimit = memory_mb * 1024 * 1024
         _check(
             _kernel32.SetInformationJobObject(
-                self.handle, JOB_OBJECT_EXTENDED_LIMIT_INFORMATION_CLASS, ctypes.byref(info), ctypes.sizeof(info)
+                self.handle,
+                JOB_OBJECT_EXTENDED_LIMIT_INFORMATION_CLASS,
+                ctypes.byref(info),
+                ctypes.sizeof(info),
             ),
             "SetInformationJobObject",
         )
@@ -110,7 +113,9 @@ class Job:
         flags = popen_kwargs.pop("creationflags", 0) | CREATE_SUSPENDED | CREATE_NO_WINDOW
         proc = subprocess.Popen(args, creationflags=flags, **popen_kwargs)
         try:
-            _check(_kernel32.AssignProcessToJobObject(self.handle, int(proc._handle)), "AssignProcessToJobObject")
+            _check(
+                _kernel32.AssignProcessToJobObject(self.handle, int(proc._handle)), "AssignProcessToJobObject"
+            )
             status = _ntdll.NtResumeProcess(int(proc._handle))
             if status != 0:
                 raise OSError(f"NtResumeProcess failed with status {status:#x}")
@@ -123,7 +128,11 @@ class Job:
     def peak_memory_mb(self) -> float | None:
         info = _ExtendedLimits()
         ok = _kernel32.QueryInformationJobObject(
-            self.handle, JOB_OBJECT_EXTENDED_LIMIT_INFORMATION_CLASS, ctypes.byref(info), ctypes.sizeof(info), None
+            self.handle,
+            JOB_OBJECT_EXTENDED_LIMIT_INFORMATION_CLASS,
+            ctypes.byref(info),
+            ctypes.sizeof(info),
+            None,
         )
         return info.PeakJobMemoryUsed / (1024 * 1024) if ok else None
 

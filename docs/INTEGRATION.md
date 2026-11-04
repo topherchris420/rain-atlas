@@ -6,9 +6,33 @@ lop-nur-twin `origin/main` @ `0ad3609`, james_library (archived, GitHub), James
 vers3dynamics-cymatics and james-library-showcase. "Read" means confirmed in
 source; "inferred" means a design conclusion, not a fact about those projects.
 
-**Status (v0.1): no adapter is implemented yet.** Everything below is the
-audit and the plan; `rain_atlas.adapters` is an empty package. ATLAS does not
-read from, write to, or call any of these projects today.
+**Implemented boundary, 2026-11-04:** `rain_atlas.adapters.rain` exports a
+local `rain-experiment-submission/v1` JSON file for a completed synthetic study.
+It has been contract-tested against the inspected upstream schema, blob
+`f4e3c298713efe6d8269e42a3e52e591cb5f926e`, and validator source blob
+`72f61083464ad7ede19efd8d3a2084ccd02234ad`. The schema fixture is in
+`tests/contracts/`. No live submission or runtime acceptance is claimed.
+The operator supplies a registered host ID/version; the host owns its verdict.
+Only aggregate measurements and artifact hashes are exported, so a host that
+requires domain-specific measurements needs a reviewed mapping extension.
+
+```sh
+uv run atlas integration rain-export LEDGER EXPERIMENT_SHA256 --rain-id V3D-EXP-0001 --rain-version 1 --out atlas-data/submission.json
+uv run atlas integration luca-quarantine PATH_TO_RESULTS_JSON --out atlas-data/luca-review-001
+```
+
+`rain_atlas.adapters.luca` recognizes the result shape produced by
+`observatory/experiments/run_experiments.py` at Luca commit
+`cef9276538807043a91e5b4c44c12309ad47d0c7`, schema
+`luca.observatory.experiments/1`. It copies the explicitly selected bounded
+file into a fresh local quarantine. It never follows imported paths, executes
+code, contacts Luca, or admits these records as empirical evidence. Authenticity
+and artifact verification remain **unimplemented**. Unknown records stay
+quarantined. Tests use declared fixtures, not an executed Luca experiment.
+
+The following original audit and broader integration plan remain useful;
+unimplemented portions are plans. No adapter writes another project's state,
+resets simulations, or adopts James, Jasmine, Elena or Luca identities.
 
 Rules for every adapter:
 

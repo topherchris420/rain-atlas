@@ -3,11 +3,10 @@ import threading
 from pathlib import Path
 
 import pytest
+from conftest import REPO, fixture_ref
 
 from rain_atlas.exec.policy import HostPolicy
 from rain_atlas.exec.runner import run_skill
-
-from conftest import REPO, fixture_ref
 
 
 def test_echo_runs_and_records_everything(runs_dir):
@@ -37,8 +36,9 @@ def test_invalid_inputs_are_refused_before_execution(runs_dir):
 
 
 def test_host_policy_refuses_escalation(runs_dir):
-    result = run_skill(fixture_ref("naughty"), {"mode": "ok"}, seed=1, runs_dir=runs_dir,
-                       host=HostPolicy(max_memory_mb=64))
+    result = run_skill(
+        fixture_ref("naughty"), {"mode": "ok"}, seed=1, runs_dir=runs_dir, host=HostPolicy(max_memory_mb=64)
+    )
     assert result.status == "refused"
     assert "memory" in result.error["message"]
 
@@ -52,15 +52,20 @@ def test_network_and_subprocess_are_blocked(runs_dir, mode):
 
 def test_writes_outside_the_run_are_blocked(runs_dir, tmp_path):
     target = tmp_path / "OUTSIDE.txt"
-    result = run_skill(fixture_ref("naughty"), {"mode": "write-outside", "target": str(target)}, seed=1,
-                       runs_dir=runs_dir)
+    result = run_skill(
+        fixture_ref("naughty"), {"mode": "write-outside", "target": str(target)}, seed=1, runs_dir=runs_dir
+    )
     assert result.status == "error"
     assert not target.exists()
 
 
 def test_reads_outside_the_skill_and_inputs_are_blocked(runs_dir):
-    result = run_skill(fixture_ref("naughty"), {"mode": "read-outside", "target": str(REPO / "pyproject.toml")},
-                       seed=1, runs_dir=runs_dir)
+    result = run_skill(
+        fixture_ref("naughty"),
+        {"mode": "read-outside", "target": str(REPO / "pyproject.toml")},
+        seed=1,
+        runs_dir=runs_dir,
+    )
     assert result.status == "error"
     assert result.policy_denials
 
@@ -83,7 +88,9 @@ def test_cancellation(runs_dir):
     timer = threading.Timer(2.0, cancel.set)
     timer.start()
     try:
-        result = run_skill(fixture_ref("naughty"), {"mode": "sleep"}, seed=1, runs_dir=runs_dir, cancel=cancel)
+        result = run_skill(
+            fixture_ref("naughty"), {"mode": "sleep"}, seed=1, runs_dir=runs_dir, cancel=cancel
+        )
     finally:
         timer.cancel()
     assert result.status == "cancelled"
@@ -102,4 +109,6 @@ def test_runs_are_deterministic_given_seed(runs_dir):
     a = run_skill(ref, {"values": [1, 2]}, seed=5, runs_dir=runs_dir)
     b = run_skill(ref, {"values": [1, 2]}, seed=5, runs_dir=runs_dir)
     assert a.outputs == b.outputs
-    assert {k: v["sha256"] for k, v in a.artifacts.items()} == {k: v["sha256"] for k, v in b.artifacts.items()}
+    assert {k: v["sha256"] for k, v in a.artifacts.items()} == {
+        k: v["sha256"] for k, v in b.artifacts.items()
+    }

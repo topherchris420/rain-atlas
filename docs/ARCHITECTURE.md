@@ -1,6 +1,7 @@
 # R.A.I.N. ATLAS — Architecture Specification
 
-Status: **Phase 0 deliverable** (design). Sections describe intended behaviour;
+Status: **evolving design**. The implementation boundary below is current;
+later sections retain the original long-term specification. Sections describe intended behaviour;
 the implementation status of each part lives in [`STATUS.md`](STATUS.md) and is
 only updated when the part's acceptance tests have actually run.
 
@@ -10,6 +11,50 @@ Genesis Mission, or the Genesis Skills project. It studies those projects as
 public references only (see [`docs/REFERENCES.md`](REFERENCES.md)).
 
 > Resonance as substrate. Intelligence as a layer. Evidence as the foundation.
+
+## Implemented workbench boundary (2026-11-04)
+
+The original registry, executor, ledger and scripted roles remain intact.
+New numerical methods are ordinary functions under `rain_atlas.science`;
+thin typed skill wrappers run through the same engineer and executor.
+`rain_atlas.observatory` exports standalone HTML/CSS/JS. It is not a service.
+
+```mermaid
+flowchart LR
+  Q[Question or validated proposal] --> P[PI preregistration]
+  P --> A[Approval and persistent declared budget]
+  A --> E[Engineer / policy executor]
+  E --> S[Versioned scientific skill]
+  S --> L[Append-only evidence ledger]
+  L --> C[Scientist claim]
+  C --> K[Skeptic: different observable and new data]
+  K --> V[Computed verdict]
+  E --> R[Exact reproduction]
+  R --> V
+  V --> L
+  L --> O[Offline observatory / report]
+  O --> D[Proposal download only]
+  L --> X[Local R.A.I.N. export]
+```
+
+Runs retain deterministic ZIP snapshots of engine and skill sources, a source
+tree digest, dependency lockfile, inputs and output objects. Exact reproduction
+refuses changed engine or skill source. The ZIP is inspectable, never executed
+or extracted automatically. A derived SQLite index accelerates search after
+source verification. Torn final appends can be recovered into a new store;
+the original ledger and sealed vault remain untouched.
+
+Proposals use a closed JSON action schema and record generation identity and
+hashes. Imported model proposals cannot approve or execute themselves. There
+is no live model provider, generic proposal scheduler, checkpoint-resume engine,
+authenticated execution server or hardened container executor. External code
+marked `untrusted` remains disabled even after registry approval.
+
+The offline export excludes raw inputs, logs, vault contents and operator
+identities; it is a review projection, not a lossless research bundle or a
+universal privacy filter. Free text and scientific figures may be sensitive.
+Hash-chain verification demonstrates internal consistency, not authenticity,
+correct numerical methods or scientific truth.
 
 ---
 
@@ -32,7 +77,7 @@ Five components, each usable on its own:
 | Science library | `atlas.science` | Numerical routines the built-in skills call (spectral, wavelet, dynamics, statistics, resonance). |
 
 Plus three consumers: the `atlas` CLI, the benchmark suite (`atlas.bench`), and
-the read-only web laboratory (`web/`), which renders exported ledger data and
+the read-only web laboratory (`rain_atlas.observatory`), which renders exported ledger data and
 never executes anything.
 
 ## 2. Design principles (and what they rule out)

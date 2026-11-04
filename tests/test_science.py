@@ -40,7 +40,9 @@ def test_detects_tones_with_small_error():
 def test_false_alarm_rate_is_controlled():
     rng = np.random.default_rng(3)
     trials = 200
-    alarms = sum(bool(detect_peaks(welch_psd(rng.normal(size=N), FS, 2048), alpha=0.05)[0]) for _ in range(trials))
+    alarms = sum(
+        bool(detect_peaks(welch_psd(rng.normal(size=N), FS, 2048), alpha=0.05)[0]) for _ in range(trials)
+    )
     # Family-wise alpha 0.05: expect about 10 of 200; allow sampling error.
     assert alarms <= 22
 
@@ -58,7 +60,12 @@ def test_nls_false_tone_rate_in_noise_is_low():
     # 6 of 300 realizations (2.0%) when measured during development.
     trials = 40
     false = sum(
-        len(bic_sinusoid_search(np.random.default_rng([5, r]).normal(size=N), FS, max_tones=3)[0].frequencies_hz) > 0
+        len(
+            bic_sinusoid_search(np.random.default_rng([5, r]).normal(size=N), FS, max_tones=3)[
+                0
+            ].frequencies_hz
+        )
+        > 0
         for r in range(trials)
     )
     assert false <= 5

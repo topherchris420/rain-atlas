@@ -18,8 +18,8 @@ from __future__ import annotations
 
 import json
 import os
-import secrets
 import re
+import secrets
 import sys
 import time
 from contextlib import contextmanager
@@ -47,7 +47,14 @@ class Entry:
     hash: str
 
     def to_dict(self) -> dict:
-        return {"seq": self.seq, "at": self.at, "kind": self.kind, "object": self.object, "prev": self.prev, "hash": self.hash}
+        return {
+            "seq": self.seq,
+            "at": self.at,
+            "kind": self.kind,
+            "object": self.object,
+            "prev": self.prev,
+            "hash": self.hash,
+        }
 
 
 def _hex(ref: str) -> str:
@@ -165,7 +172,9 @@ class Ledger:
                     try:
                         entry = Entry(**json.loads(line))
                     except (ValueError, TypeError) as exc:
-                        raise LedgerError(f"malformed log line {number}; preserve history and recover in a new ledger") from exc
+                        raise LedgerError(
+                            f"malformed log line {number}; preserve history and recover in a new ledger"
+                        ) from exc
                     if kind is None or entry.kind == kind:
                         yield entry
 
@@ -213,7 +222,9 @@ class Ledger:
 
         salt = secrets.token_hex(32)
         commitment = sha256_bytes(salt.encode("ascii") + canonical_bytes(value))
-        _atomic_write(self.vault / f"{_hex(commitment)}.json", canonical_bytes({"salt": salt, "value": value}))
+        _atomic_write(
+            self.vault / f"{_hex(commitment)}.json", canonical_bytes({"salt": salt, "value": value})
+        )
         entry = self.append("seal", {"label": label, "commitment": commitment, "context": context or {}})
         return entry, commitment
 
@@ -228,7 +239,12 @@ class Ledger:
             raise LedgerError("vault entry does not match its commitment")
         entry = self.append(
             "unseal",
-            {"commitment": commitment, "salt": stored["salt"], "value": stored["value"], "after": after or []},
+            {
+                "commitment": commitment,
+                "salt": stored["salt"],
+                "value": stored["value"],
+                "after": after or [],
+            },
         )
         return entry, stored["value"]
 

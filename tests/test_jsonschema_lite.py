@@ -19,7 +19,12 @@ SCHEMA = {
 
 
 def test_valid_document():
-    assert validate({"n": 3, "tag": "a", "x": 0.5, "name": "abc", "items": [1, 2.5], "either": 4, "one": 7}, SCHEMA) == []
+    assert (
+        validate(
+            {"n": 3, "tag": "a", "x": 0.5, "name": "abc", "items": [1, 2.5], "either": 4, "one": 7}, SCHEMA
+        )
+        == []
+    )
 
 
 @pytest.mark.parametrize(

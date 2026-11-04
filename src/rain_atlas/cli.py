@@ -18,8 +18,9 @@ def _print_json(value) -> None:
 def _registry(args):
     from .skills.registry import Registry  # noqa: PLC0415
 
-    return Registry(home=Path(args.home) if args.home else None,
-                    builtin_root=Path(args.builtin) if args.builtin else None)
+    return Registry(
+        home=Path(args.home) if args.home else None, builtin_root=Path(args.builtin) if args.builtin else None
+    )
 
 
 def cmd_skills_list(args) -> int:
@@ -37,14 +38,20 @@ def cmd_skills_list(args) -> int:
             flags.append("unapproved")
         if item.problems:
             flags.append(f"{len(item.problems)} problem(s)")
-        print(f"{item.name:<22} {item.version:<8} {item.trust:<9} {item.domain or '-':<20} "
-              f"{', '.join(item.capabilities)}{'  [' + ', '.join(flags) + ']' if flags else ''}")
+        print(
+            f"{item.name:<22} {item.version:<8} {item.trust:<9} {item.domain or '-':<20} "
+            f"{', '.join(item.capabilities)}{'  [' + ', '.join(flags) + ']' if flags else ''}"
+        )
     return 0
 
 
 def cmd_skills_inspect(args) -> int:
     reg = _registry(args)
-    matches = [i for i in reg.listings() if i.name == args.name and (args.version is None or i.version == args.version)]
+    matches = [
+        i
+        for i in reg.listings()
+        if i.name == args.name and (args.version is None or i.version == args.version)
+    ]
     if not matches:
         print(f"no skill named {args.name}", file=sys.stderr)
         return 1
@@ -52,12 +59,20 @@ def cmd_skills_inspect(args) -> int:
 
     for item in matches:
         src = load_source(item.path)
-        _print_json({
-            "name": item.name, "version": item.version, "trust": item.trust, "enabled": item.enabled,
-            "active": item.active, "approved": item.approved, "path": str(item.path),
-            "content_hash": item.content_hash, "problems": item.problems,
-            "manifest": src.manifest.raw if src.manifest else None,
-        })
+        _print_json(
+            {
+                "name": item.name,
+                "version": item.version,
+                "trust": item.trust,
+                "enabled": item.enabled,
+                "active": item.active,
+                "approved": item.approved,
+                "path": str(item.path),
+                "content_hash": item.content_hash,
+                "problems": item.problems,
+                "manifest": src.manifest.raw if src.manifest else None,
+            }
+        )
     return 0
 
 
@@ -89,9 +104,9 @@ def _example_check(runs_dir: Path):
 
 
 def cmd_skills_test(args) -> int:
+    from .exec.runner import SkillRef  # noqa: PLC0415
     from .skills.catalog import load_source  # noqa: PLC0415
     from .skills.examples import run_example  # noqa: PLC0415
-    from .exec.runner import SkillRef  # noqa: PLC0415
 
     reg = _registry(args)
     runs_dir = Path(args.runs_dir)
@@ -103,15 +118,19 @@ def cmd_skills_test(args) -> int:
             if not src.ok:
                 print(f"INVALID {src.name}: {'; '.join(src.problems)}")
                 return 1
-            targets.append(SkillRef(src.name, src.manifest.version, src.path, src.manifest, src.content_hash, "local"))
+            targets.append(
+                SkillRef(src.name, src.manifest.version, src.path, src.manifest, src.content_hash, "local")
+            )
         else:
             targets.append(reg.get(name))
     failed = 0
     for ref in targets:
         for example in ref.manifest.examples:
             result, problems = run_example(ref, example, runs_dir)
-            print(f"{'PASS' if not problems else 'FAIL'} {ref.name}@{ref.version} {example['name']} "
-                  f"({result.status}, {result.wall_s:.1f}s)")
+            print(
+                f"{'PASS' if not problems else 'FAIL'} {ref.name}@{ref.version} {example['name']} "
+                f"({result.status}, {result.wall_s:.1f}s)"
+            )
             for problem in problems:
                 print(f"     - {problem}")
             failed += bool(problems)
@@ -125,8 +144,13 @@ def cmd_skills_install(args) -> int:
 
 def cmd_skills_upgrade(args) -> int:
     reg = _registry(args)
-    print(reg.upgrade(Path(args.path), check=_example_check(Path(args.runs_dir)),
-                      trust="untrusted" if args.untrusted else "local"))
+    print(
+        reg.upgrade(
+            Path(args.path),
+            check=_example_check(Path(args.runs_dir)),
+            trust="untrusted" if args.untrusted else "local",
+        )
+    )
     return 0
 
 
@@ -178,15 +202,41 @@ def cmd_run(args) -> int:
 def cmd_experiment_run(args) -> int:
     from .experiments import spectral_recovery  # noqa: PLC0415
 
+    if args.name == "synchronization":
+        from .experiments import synchronization
+
+        summary = synchronization.run(
+            Path(args.root),
+            synchronization.Settings(
+                replicates=args.replicates if args.replicates is not None else 12, figures=not args.no_figures
+            ),
+            registry=_registry(args),
+            progress=lambda message: print(message, flush=True),
+        )
+        for item in summary["acceptance"]:
+            print(f"{item['id']} {'PASS' if item['passed'] else 'FAIL'} {item['criterion']}")
+        print(f"report: {summary['report_path']}")
+        print(f"observatory: {summary['observatory_path']}")
+        return 0 if all(a["passed"] for a in summary["acceptance"]) else 1
     if args.name != "spectral-recovery":
-        print(f"unknown experiment {args.name!r}; available: spectral-recovery", file=sys.stderr)
+        print(
+            f"unknown experiment {args.name!r}; available: spectral-recovery, synchronization",
+            file=sys.stderr,
+        )
         return 2
     settings = spectral_recovery.Settings(
-        mode=args.mode, realizations=args.realizations, replicates=args.replicates,
-        figures=not args.no_figures, bundle=not args.no_bundle,
+        mode=args.mode,
+        realizations=args.realizations,
+        replicates=args.replicates if args.replicates is not None else 10,
+        figures=not args.no_figures,
+        bundle=not args.no_bundle,
     )
-    summary = spectral_recovery.run(Path(args.root), settings, registry=_registry(args),
-                                    progress=lambda message: print(message, flush=True))
+    summary = spectral_recovery.run(
+        Path(args.root),
+        settings,
+        registry=_registry(args),
+        progress=lambda message: print(message, flush=True),
+    )
     print()
     print(summary["answer"])
     for item in summary["acceptance"]:
@@ -206,12 +256,12 @@ def cmd_ledger_verify(args) -> int:
         return 2
     ledger = Ledger(path)
     problems = ledger.verify()
-    count = sum(1 for _ in ledger.entries())
     if problems:
-        print(f"{len(problems)} problem(s) in {count} record(s):")
+        print(f"{len(problems)} problem(s):")
         for problem in problems:
             print(f"  - {problem}")
         return 1
+    count = sum(1 for _ in ledger.entries())
     print(f"ok: {count} record(s); chain, object hashes and record rules verified")
     return 0
 
@@ -221,9 +271,15 @@ def cmd_ledger_show(args) -> int:
 
     ledger = Ledger(Path(args.path))
     entries = [e for e in ledger.entries(args.kind)]
-    for entry in entries[-args.limit:] if args.limit else entries:
+    for entry in entries[-args.limit :] if args.limit else entries:
         record = ledger.get_json(entry.object)
-        text = record.get("statement") or record.get("text") or record.get("purpose") or record.get("label") or ""
+        text = (
+            record.get("statement")
+            or record.get("text")
+            or record.get("purpose")
+            or record.get("label")
+            or ""
+        )
         print(f"{entry.seq:>5} {entry.kind:<15} {entry.object[7:19]}  {str(text)[:100]}")
         if args.full:
             _print_json(from_jsonable(record))
@@ -234,19 +290,169 @@ def cmd_env(args) -> int:
     from .exec import environment  # noqa: PLC0415
     from .exec.policy import HostPolicy  # noqa: PLC0415
 
-    _print_json({"environment": environment.describe(), "host_policy": HostPolicy().__dict__,
-                 "isolation": "Windows job object" if sys.platform == "win32" else "setrlimit + process group",
-                 "guard": "Python audit hooks (policy enforcement, not an OS sandbox)"})
+    _print_json(
+        {
+            "environment": environment.describe(),
+            "host_policy": HostPolicy().__dict__,
+            "isolation": "Windows job object" if sys.platform == "win32" else "setrlimit + process group",
+            "guard": "Python audit hooks (policy enforcement, not an OS sandbox)",
+        }
+    )
+    return 0
+
+
+def cmd_observatory(args) -> int:
+    from .observatory.export import export
+
+    print(export(Path(args.ledger), Path(args.out), registry=_registry(args)))
+    return 0
+
+
+def cmd_proposal(args) -> int:
+    from .agents.proposals import load_proposal, register, validate_proposal
+    from .ledger.store import Ledger
+
+    registry = _registry(args)
+    data = load_proposal(Path(args.file), registry)
+    if args.command == "inspect":
+        _print_json(
+            {
+                "digest": validate_proposal(data, registry),
+                "proposal": data,
+                "execution": "none",
+                "approval": "required",
+            }
+        )
+    else:
+        print(register(data, Ledger(Path(args.ledger)), registry))
+        print("Registered only. No execution or approval has occurred.")
+    return 0
+
+
+def cmd_benchmark(args) -> int:
+    from .bench.lab import run
+
+    result = run(Path(args.root), args.trials, registry=_registry(args))
+    print(result["path"])
+    return 0
+
+
+def cmd_ledger_search(args) -> int:
+    from .ledger.index import search
+    from .ledger.store import Ledger
+
+    if not (Path(args.path) / "log.jsonl").is_file():
+        raise ValueError("not a ledger (no log.jsonl)")
+    _print_json(search(Ledger(Path(args.path)), args.query, kind=args.kind, limit=args.limit))
+    return 0
+
+
+def cmd_recover(args) -> int:
+    from .ledger.recovery import recover
+
+    print(recover(Path(args.path), Path(args.out)).root)
+    return 0
+
+
+def cmd_approve(args) -> int:
+    from .agents.lab import Lab
+    from .ledger.store import Ledger
+
+    if not (Path(args.ledger) / "log.jsonl").is_file():
+        raise ValueError("not a ledger (no log.jsonl)")
+    ledger = Ledger(Path(args.ledger))
+    if ledger.verify():
+        raise ValueError("approval requires a verified ledger")
+    if not any(e.object == args.experiment for e in ledger.entries("preregistration")):
+        raise ValueError("experiment must identify a preregistration")
+    if len(args.digest) < 8 or not args.experiment.removeprefix("sha256:").startswith(args.digest):
+        raise ValueError("--digest must match at least 8 hex digits of the reviewed preregistration")
+    if args.scope != "all":
+        _registry(args).get(args.scope)
+    print(
+        Lab(ledger, _registry(args), ledger.root.parent / "runs")
+        .approve(args.experiment, args.operator, args.scope)
+        .object
+    )
+    return 0
+
+
+def cmd_integration(args) -> int:
+    if args.command == "luca-quarantine":
+        from .adapters.luca import quarantine
+
+        print(quarantine(Path(args.file), Path(args.out)))
+    else:
+        from .adapters.rain import export
+        from .ledger.store import Ledger
+
+        if not (Path(args.ledger) / "log.jsonl").is_file():
+            raise ValueError("not a ledger (no log.jsonl)")
+        print(
+            export(
+                Ledger(Path(args.ledger)), args.experiment, args.rain_id, args.rain_version, Path(args.out)
+            )
+        )
     return 0
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="atlas", description="R.A.I.N. ATLAS: local-first scientific skills, "
-                                     "bounded execution and an append-only evidence ledger.")
+    parser = argparse.ArgumentParser(
+        prog="atlas",
+        description="R.A.I.N. ATLAS: local-first scientific skills, "
+        "bounded execution and an append-only evidence ledger.",
+    )
     parser.add_argument("--version", action="version", version=f"rain-atlas {__version__}")
-    parser.add_argument("--home", help="ATLAS home for installed skills (default: $ATLAS_HOME or ~/.rain-atlas)")
+    parser.add_argument(
+        "--home", help="ATLAS home for installed skills (default: $ATLAS_HOME or ~/.rain-atlas)"
+    )
     parser.add_argument("--builtin", help="built-in skills directory (default: the repository's skills/)")
     sub = parser.add_subparsers(dest="group", required=True)
+
+    p = sub.add_parser("benchmark", help="execute the classical spectral stress benchmark")
+    p.add_argument("--root", required=True)
+    p.add_argument("--trials", type=int, default=12)
+    p.set_defaults(func=cmd_benchmark)
+
+    p = sub.add_parser("approve", help="append a local operator attestation; never executes a proposal")
+    p.add_argument("ledger")
+    p.add_argument("experiment")
+    p.add_argument("--digest", required=True)
+    p.add_argument("--operator", required=True)
+    p.add_argument("--scope", default="all")
+    p.set_defaults(func=cmd_approve)
+
+    adapters = sub.add_parser(
+        "integration", help="local export or quarantine; never contacts external runtimes"
+    )
+    asub = adapters.add_subparsers(dest="command", required=True)
+    p = asub.add_parser("rain-export")
+    p.add_argument("ledger")
+    p.add_argument("experiment")
+    p.add_argument("--rain-id", required=True)
+    p.add_argument("--rain-version", type=int, required=True)
+    p.add_argument("--out", required=True)
+    p.set_defaults(func=cmd_integration)
+    p = asub.add_parser("luca-quarantine")
+    p.add_argument("file")
+    p.add_argument("--out", required=True)
+    p.set_defaults(func=cmd_integration)
+
+    obs = sub.add_parser("observatory", help="export a verified offline read-only research view")
+    osub = obs.add_subparsers(dest="command", required=True)
+    p = osub.add_parser("export")
+    p.add_argument("ledger", help="explicit source ledger directory")
+    p.add_argument("--out", required=True, help="new output directory; never overwrites")
+    p.set_defaults(func=cmd_observatory)
+
+    proposal = sub.add_parser("proposal", help="inspect or register a proposal; never executes it")
+    psub = proposal.add_subparsers(dest="command", required=True)
+    for command in ("inspect", "register"):
+        p = psub.add_parser(command)
+        p.add_argument("file")
+        if command == "register":
+            p.add_argument("--ledger", required=True)
+        p.set_defaults(func=cmd_proposal)
 
     skills = sub.add_parser("skills", help="list, validate, test, install and manage skills")
     ssub = skills.add_subparsers(dest="command", required=True)
@@ -303,17 +509,27 @@ def build_parser() -> argparse.ArgumentParser:
     exp = sub.add_parser("experiment", help="run registered experiments")
     esub = exp.add_subparsers(dest="command", required=True)
     p = esub.add_parser("run", help="execute an experiment end to end")
-    p.add_argument("name", help="spectral-recovery")
+    p.add_argument("name", help="spectral-recovery or synchronization")
     p.add_argument("--mode", choices=("fixed", "blinded"), default="fixed")
     p.add_argument("--root", default="atlas-data/spectral-recovery")
     p.add_argument("--realizations", type=int, default=20)
-    p.add_argument("--replicates", type=int, default=10)
+    p.add_argument("--replicates", type=int, help="default: 10 spectral, 12 synchronization")
     p.add_argument("--no-figures", action="store_true")
     p.add_argument("--no-bundle", action="store_true")
     p.set_defaults(func=cmd_experiment_run)
 
     ledger = sub.add_parser("ledger", help="inspect and verify evidence ledgers")
     lsub = ledger.add_subparsers(dest="command", required=True)
+    p = lsub.add_parser("search", help="search a verified ledger through a disposable local index")
+    p.add_argument("path")
+    p.add_argument("query")
+    p.add_argument("--kind")
+    p.add_argument("--limit", type=int, default=50)
+    p.set_defaults(func=cmd_ledger_search)
+    p = lsub.add_parser("recover", help="recover a torn final append into a fresh ledger")
+    p.add_argument("path")
+    p.add_argument("--out", required=True)
+    p.set_defaults(func=cmd_recover)
     p = lsub.add_parser("verify", help="recompute the hash chain, object hashes and record rules")
     p.add_argument("path")
     p.set_defaults(func=cmd_ledger_verify)
@@ -338,7 +554,7 @@ def main(argv: list[str] | None = None) -> int:
         from .ledger.store import LedgerError  # noqa: PLC0415
         from .skills.registry import RegistryError  # noqa: PLC0415
 
-        if isinstance(exc, (RegistryError, LedgerError, PolicyRefused, FileNotFoundError, ValueError)):
+        if isinstance(exc, (RegistryError, LedgerError, PolicyRefused, OSError, ValueError, RuntimeError)):
             print(f"error: {exc}", file=sys.stderr)
             return 1
         raise

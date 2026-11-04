@@ -102,18 +102,33 @@ class Registry:
                 src = load_source(self._skill_dir(name, version))
                 if src.content_hash != meta["content_hash"]:
                     src.problems.append("installed files no longer match the recorded content hash")
-                out.append(self._listing(src, meta["trust"], name not in disabled, version == info["active"],
-                                         meta.get("approved", meta["trust"] != "untrusted")))
+                out.append(
+                    self._listing(
+                        src,
+                        meta["trust"],
+                        name not in disabled,
+                        version == info["active"],
+                        meta.get("approved", meta["trust"] != "untrusted"),
+                    )
+                )
         return out
 
     @staticmethod
     def _listing(src: SkillSource, trust: str, enabled: bool, active: bool, approved: bool) -> Listing:
         m = src.manifest
         return Listing(
-            name=src.name, version=m.version if m else "?", trust=trust, path=src.path,
-            content_hash=src.content_hash, enabled=enabled, active=active, approved=approved,
-            problems=list(src.problems), capabilities=m.capabilities if m else (),
-            domain=m.domain if m else None, summary=m.summary if m else "",
+            name=src.name,
+            version=m.version if m else "?",
+            trust=trust,
+            path=src.path,
+            content_hash=src.content_hash,
+            enabled=enabled,
+            active=active,
+            approved=approved,
+            problems=list(src.problems),
+            capabilities=m.capabilities if m else (),
+            domain=m.domain if m else None,
+            summary=m.summary if m else "",
         )
 
     def _ref(self, listing: Listing) -> SkillRef:
@@ -122,11 +137,14 @@ class Registry:
             raise RegistryError(f"{listing.name}@{listing.version} is invalid: {'; '.join(src.problems)}")
         if src.content_hash != listing.content_hash:
             raise RegistryError(f"{listing.name}@{listing.version} changed on disk")
-        return SkillRef(src.name, src.manifest.version, src.path, src.manifest, src.content_hash, listing.trust)
+        return SkillRef(
+            src.name, src.manifest.version, src.path, src.manifest, src.content_hash, listing.trust
+        )
 
     def get(self, name: str, version: str | None = None) -> SkillRef:
         candidates = [
-            item for item in self.listings()
+            item
+            for item in self.listings()
             if item.name == name and (item.version == version if version else item.active)
         ]
         if not candidates:
@@ -139,7 +157,9 @@ class Registry:
         return self._ref(item)
 
     # selection --------------------------------------------------------------
-    def select(self, capability: str, *, allow_trust: tuple[str, ...] = ("builtin", "local")) -> list[SkillRef]:
+    def select(
+        self, capability: str, *, allow_trust: tuple[str, ...] = ("builtin", "local")
+    ) -> list[SkillRef]:
         """Enabled, approved, valid skills providing *capability*, best first.
 
         Ranking: trust (builtin before local before untrusted), then
@@ -149,9 +169,14 @@ class Registry:
 
         det_rank = {"deterministic": 0, "seeded": 1, "stochastic": 2}
         items = [
-            item for item in self.listings()
-            if capability in item.capabilities and item.enabled and item.active and item.approved
-            and not item.problems and item.trust in allow_trust
+            item
+            for item in self.listings()
+            if capability in item.capabilities
+            and item.enabled
+            and item.active
+            and item.approved
+            and not item.problems
+            and item.trust in allow_trust
         ]
         refs = [self._ref(item) for item in items]
         refs.sort(key=lambda r: (TRUST_LEVELS.index(r.trust), det_rank[r.manifest.determinism], r.name))
@@ -168,8 +193,12 @@ class Registry:
                 if dep in chain:
                     raise RegistryError(f"dependency cycle: {' -> '.join(chain + (dep,))}")
                 options = [
-                    item for item in self.listings()
-                    if item.name == dep and item.enabled and item.approved and not item.problems
+                    item
+                    for item in self.listings()
+                    if item.name == dep
+                    and item.enabled
+                    and item.approved
+                    and not item.problems
                     and satisfies(parse_version(item.version), spec)
                 ]
                 if not options:
@@ -232,7 +261,9 @@ class Registry:
             raise RegistryError(f"{name}@{version} is not installed")
         digest = meta["content_hash"].split(":", 1)[1]
         if len(hash_prefix) < 8 or not digest.startswith(hash_prefix.lower()):
-            raise RegistryError("give at least the first 8 hex digits of the skill's content hash to approve it")
+            raise RegistryError(
+                "give at least the first 8 hex digits of the skill's content hash to approve it"
+            )
         meta["approved"] = True
         self._write_index(index)
         return f"approved {name}@{version} pinned to {meta['content_hash']}"
@@ -247,8 +278,9 @@ class Registry:
         self._write_index(index)
         return f"{'enabled' if enabled else 'disabled'} {name}"
 
-    def upgrade(self, source_dir: Path, *, check: Callable[[SkillRef], list[str]] | None = None,
-                trust: str = "local") -> str:
+    def upgrade(
+        self, source_dir: Path, *, check: Callable[[SkillRef], list[str]] | None = None, trust: str = "local"
+    ) -> str:
         """Install a newer version, run *check* on it, then make it active."""
 
         src = load_source(Path(source_dir))
@@ -263,8 +295,11 @@ class Registry:
             raise RegistryError(f"{version} is not newer than the active version {entry['active']}")
         message = self.install(source_dir, trust=trust)
         if check is not None:
-            problems = check(self.get(name, version) if trust != "untrusted" else self._ref(
-                next(i for i in self.listings() if i.name == name and i.version == version)))
+            problems = check(
+                self.get(name, version)
+                if trust != "untrusted"
+                else self._ref(next(i for i in self.listings() if i.name == name and i.version == version))
+            )
             if problems:
                 return f"{message}; NOT activated because its examples failed: {'; '.join(problems)}"
         index = self._read_index()
@@ -272,12 +307,15 @@ class Registry:
         self._write_index(index)
         return f"{message}; active version is now {version} (previous versions kept)"
 
-    def remove(self, name: str, version: str, *, referenced: Callable[[str], bool] | None = None,
-               force: bool = False) -> str:
+    def remove(
+        self, name: str, version: str, *, referenced: Callable[[str], bool] | None = None, force: bool = False
+    ) -> str:
         index = self._read_index()
         entry = index["installed"].get(name)
         if not entry or version not in entry["versions"]:
-            raise RegistryError(f"{name}@{version} is not installed (built-in skills cannot be removed; disable them)")
+            raise RegistryError(
+                f"{name}@{version} is not installed (built-in skills cannot be removed; disable them)"
+            )
         content_hash = entry["versions"][version]["content_hash"]
         if referenced and referenced(content_hash) and not force:
             raise RegistryError(

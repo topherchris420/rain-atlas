@@ -6,10 +6,21 @@ every contribution needs tests that actually run.
 ## Setup
 
 ```sh
-uv sync              # Python 3.11+; creates .venv with numpy, scipy, matplotlib, pytest
+uv sync --locked --python 3.12 # one-command development setup
+uv run python scripts/check.py # lint, formatting, scientific API types, manifests, full tests
 uv run pytest -m "not slow"
 uv run pytest -m slow      # Phase 10 acceptance (several minutes)
 ```
+
+For offline viewer interaction tests (Node 24; test-only dependency):
+
+```sh
+npm ci --prefix tests/web
+npm test --prefix tests/web
+```
+
+Use [docs/TUTORIAL.md](docs/TUTORIAL.md) for the scientific workflow and
+[docs/SKILL_AUTHORING.md](docs/SKILL_AUTHORING.md) for a tested reusable template.
 
 ## Adding a skill
 

@@ -205,12 +205,16 @@ def main(spec_path: str) -> int:
             inputs = json.load(fh)
         outputs = module.run(inputs, ctx)
     except BaseException as exc:  # noqa: BLE001 - every failure is recorded
-        return finish(ctx, status="error", error={
-            "type": type(exc).__name__,
-            "message": str(exc),
-            "traceback": traceback.format_exc(limit=20),
-            "policy_denials": guard.denials,
-        })
+        return finish(
+            ctx,
+            status="error",
+            error={
+                "type": type(exc).__name__,
+                "message": str(exc),
+                "traceback": traceback.format_exc(limit=20),
+                "policy_denials": guard.denials,
+            },
+        )
     return finish(ctx, status="ok", outputs=outputs, extra={"policy_denials": guard.denials})
 
 

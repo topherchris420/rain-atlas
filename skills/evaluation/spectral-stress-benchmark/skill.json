@@ -1,0 +1,553 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "spectral-stress-benchmark",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "evaluation",
+  "summary": "Measure classical spectral failure rates under violated assumptions.",
+  "capabilities": [
+    "benchmark.spectral-stress"
+  ],
+  "entrypoint": "run.py",
+  "determinism": "stochastic",
+  "inputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "trials": {
+        "type": "integer",
+        "minimum": 3,
+        "maximum": 200
+      }
+    },
+    "required": [
+      "trials"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "results": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "protocol": {
+            "type": "string"
+          },
+          "trials_per_case": {
+            "type": "integer"
+          },
+          "seed": {
+            "type": "integer"
+          },
+          "fs": {
+            "type": "number"
+          },
+          "n": {
+            "type": "integer"
+          },
+          "nperseg": {
+            "type": "integer"
+          },
+          "tolerance_hz": {
+            "type": "number"
+          },
+          "alpha": {
+            "type": "number"
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "case": {
+                  "type": "string"
+                },
+                "truth_hz": {
+                  "type": [
+                    "array",
+                    "null"
+                  ],
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "truth_status": {
+                  "type": "string"
+                },
+                "methods": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "welch": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "false_positive_trial_rate": {
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "additionalProperties": false,
+                              "properties": {
+                                "rate": {
+                                  "type": "number"
+                                },
+                                "low": {
+                                  "type": "number"
+                                },
+                                "high": {
+                                  "type": "number"
+                                },
+                                "n": {
+                                  "type": "integer"
+                                },
+                                "successes": {
+                                  "type": "integer"
+                                },
+                                "alpha": {
+                                  "type": "number"
+                                },
+                                "method": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "rate",
+                                "low",
+                                "high",
+                                "n",
+                                "successes",
+                                "alpha",
+                                "method"
+                              ]
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "false_negative_trial_rate": {
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "additionalProperties": false,
+                              "properties": {
+                                "rate": {
+                                  "type": "number"
+                                },
+                                "low": {
+                                  "type": "number"
+                                },
+                                "high": {
+                                  "type": "number"
+                                },
+                                "n": {
+                                  "type": "integer"
+                                },
+                                "successes": {
+                                  "type": "integer"
+                                },
+                                "alpha": {
+                                  "type": "number"
+                                },
+                                "method": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "rate",
+                                "low",
+                                "high",
+                                "n",
+                                "successes",
+                                "alpha",
+                                "method"
+                              ]
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "all_recovered_rate": {
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "additionalProperties": false,
+                              "properties": {
+                                "rate": {
+                                  "type": "number"
+                                },
+                                "low": {
+                                  "type": "number"
+                                },
+                                "high": {
+                                  "type": "number"
+                                },
+                                "n": {
+                                  "type": "integer"
+                                },
+                                "successes": {
+                                  "type": "integer"
+                                },
+                                "alpha": {
+                                  "type": "number"
+                                },
+                                "method": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "rate",
+                                "low",
+                                "high",
+                                "n",
+                                "successes",
+                                "alpha",
+                                "method"
+                              ]
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "conditional_matched_rmse_hz": {
+                          "type": [
+                            "number",
+                            "null"
+                          ]
+                        },
+                        "matched_samples": {
+                          "type": "integer"
+                        },
+                        "detection_counts": {
+                          "type": "array",
+                          "items": {
+                            "type": "number"
+                          }
+                        },
+                        "runtime_total_s": {
+                          "type": "number"
+                        },
+                        "runtime_median_s": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "false_positive_trial_rate",
+                        "false_negative_trial_rate",
+                        "all_recovered_rate",
+                        "conditional_matched_rmse_hz",
+                        "matched_samples",
+                        "detection_counts",
+                        "runtime_total_s",
+                        "runtime_median_s"
+                      ]
+                    },
+                    "nls-bic": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "false_positive_trial_rate": {
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "additionalProperties": false,
+                              "properties": {
+                                "rate": {
+                                  "type": "number"
+                                },
+                                "low": {
+                                  "type": "number"
+                                },
+                                "high": {
+                                  "type": "number"
+                                },
+                                "n": {
+                                  "type": "integer"
+                                },
+                                "successes": {
+                                  "type": "integer"
+                                },
+                                "alpha": {
+                                  "type": "number"
+                                },
+                                "method": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "rate",
+                                "low",
+                                "high",
+                                "n",
+                                "successes",
+                                "alpha",
+                                "method"
+                              ]
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "false_negative_trial_rate": {
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "additionalProperties": false,
+                              "properties": {
+                                "rate": {
+                                  "type": "number"
+                                },
+                                "low": {
+                                  "type": "number"
+                                },
+                                "high": {
+                                  "type": "number"
+                                },
+                                "n": {
+                                  "type": "integer"
+                                },
+                                "successes": {
+                                  "type": "integer"
+                                },
+                                "alpha": {
+                                  "type": "number"
+                                },
+                                "method": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "rate",
+                                "low",
+                                "high",
+                                "n",
+                                "successes",
+                                "alpha",
+                                "method"
+                              ]
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "all_recovered_rate": {
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "additionalProperties": false,
+                              "properties": {
+                                "rate": {
+                                  "type": "number"
+                                },
+                                "low": {
+                                  "type": "number"
+                                },
+                                "high": {
+                                  "type": "number"
+                                },
+                                "n": {
+                                  "type": "integer"
+                                },
+                                "successes": {
+                                  "type": "integer"
+                                },
+                                "alpha": {
+                                  "type": "number"
+                                },
+                                "method": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "rate",
+                                "low",
+                                "high",
+                                "n",
+                                "successes",
+                                "alpha",
+                                "method"
+                              ]
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "conditional_matched_rmse_hz": {
+                          "type": [
+                            "number",
+                            "null"
+                          ]
+                        },
+                        "matched_samples": {
+                          "type": "integer"
+                        },
+                        "detection_counts": {
+                          "type": "array",
+                          "items": {
+                            "type": "number"
+                          }
+                        },
+                        "runtime_total_s": {
+                          "type": "number"
+                        },
+                        "runtime_median_s": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "false_positive_trial_rate",
+                        "false_negative_trial_rate",
+                        "all_recovered_rate",
+                        "conditional_matched_rmse_hz",
+                        "matched_samples",
+                        "detection_counts",
+                        "runtime_total_s",
+                        "runtime_median_s"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "welch",
+                    "nls-bic"
+                  ]
+                },
+                "method_disagreement": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "rate": {
+                      "type": "number"
+                    },
+                    "low": {
+                      "type": "number"
+                    },
+                    "high": {
+                      "type": "number"
+                    },
+                    "n": {
+                      "type": "integer"
+                    },
+                    "successes": {
+                      "type": "integer"
+                    },
+                    "alpha": {
+                      "type": "number"
+                    },
+                    "method": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "rate",
+                    "low",
+                    "high",
+                    "n",
+                    "successes",
+                    "alpha",
+                    "method"
+                  ]
+                }
+              },
+              "required": [
+                "case",
+                "truth_hz",
+                "truth_status",
+                "methods",
+                "method_disagreement"
+              ]
+            }
+          },
+          "calibration": {
+            "type": "string"
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "protocol",
+          "trials_per_case",
+          "seed",
+          "fs",
+          "n",
+          "nperseg",
+          "tolerance_hz",
+          "alpha",
+          "rows",
+          "calibration",
+          "limitations"
+        ]
+      },
+      "artifact": {
+        "type": "object",
+        "required": [
+          "$artifact",
+          "sha256"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "$artifact": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "required": [
+      "results",
+      "artifact"
+    ]
+  },
+  "permissions": {
+    "network": false,
+    "subprocess": false,
+    "read": [
+      "inputs"
+    ],
+    "write": [
+      "outputs"
+    ]
+  },
+  "limits": {
+    "timeout_s": 600,
+    "memory_mb": 1024
+  },
+  "requires": {
+    "python": ">=3.11",
+    "packages": {
+      "numpy": ">=2.0",
+      "scipy": ">=1.13",
+      "rain-atlas": ">=0.1"
+    }
+  },
+  "examples": [
+    {
+      "name": "configuration",
+      "seed": 42,
+      "tolerance": {
+        "abs": 1e-12
+      }
+    }
+  ],
+  "limitations": [
+    "Seeded scientific quantities; runtime measurements are intentionally nondeterministic.",
+    "Small fixed synthetic suite; intervals concern trial events, not calibrated physical truth.",
+    "A chirp has no stationary tone truth; its detections are explicitly unscored."
+  ],
+  "references": [
+    "docs/BENCHMARKS.md"
+  ]
+}

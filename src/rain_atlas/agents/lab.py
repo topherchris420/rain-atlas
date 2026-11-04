@@ -26,7 +26,9 @@ class BudgetExceeded(RuntimeError):
 class ApprovalRequired(RuntimeError):
     def __init__(self, experiment: str, reason: str):
         prefix = experiment.split(":", 1)[1][:8]
-        super().__init__(f"{reason}. Approve with: atlas approve {prefix}")
+        super().__init__(
+            f"{reason}. Inspect the proposal, then use: atlas approve LEDGER {experiment} --digest {prefix} --operator NAME"
+        )
         self.experiment = experiment
         self.prefix = prefix
 
@@ -65,8 +67,14 @@ class Lab:
     budget: Budget = field(default_factory=Budget)
     approval_mode: str = "auto-builtin"  # or "require"
 
-    def approved(self, experiment: str) -> bool:
-        return any(r["experiment"] == experiment for _, r in self.ledger.records("approval"))
+    def approved(self, experiment: str, skill: str | None = None) -> bool:
+        return any(
+            r["experiment"] == experiment
+            and r.get("attestation") == "local-operator"
+            and r.get("identity_verified") is False
+            and (skill is None or r["scope"] in {"all", skill})
+            for _, r in self.ledger.records("approval")
+        )
 
     def approve(self, experiment: str, operator: str, scope: str) -> Entry:
         return self.ledger.append(
@@ -92,7 +100,9 @@ class Lab:
         return None
 
     def note(self, experiment: str, role: str, text: str, **data: Any) -> Entry:
-        return self.ledger.append("note", {"experiment": experiment, "text": text, "author": author(role), **data})
+        return self.ledger.append(
+            "note", {"experiment": experiment, "text": text, "author": author(role), **data}
+        )
 
     def artifact_path(self, ref: dict) -> Path:
         return self.ledger._object_path(ref["sha256"])
@@ -136,23 +146,60 @@ class Engineer:
         part and the commitment, and the run's input copy is deleted.
         """
 
-        reason = self.lab.needs_approval(skill)
-        if reason and not self.lab.approved(experiment):
+        prereg = self.lab.ledger.get_json(experiment)
+        reason = (
+            "this proposal requires operator approval"
+            if prereg.get("approval_required")
+            else self.lab.needs_approval(skill)
+        )
+        if reason and not self.lab.approved(experiment, skill.name):
             raise ApprovalRequired(experiment, reason)
+        declared = prereg.get("design", {}).get("budget")
+        if declared:
+            previous = [r for _, r in self.lab.ledger.records("run") if r["experiment"] == experiment]
+            committed = Budget(
+                max_runs=declared["max_runs"],
+                max_seconds=declared["max_seconds"],
+                runs=len(previous),
+                seconds=sum(r.get("wall_s", 0) for r in previous),
+            )
+            committed.check(float(skill.manifest.limits["timeout_s"]))
         self.lab.budget.check(float(skill.manifest.limits["timeout_s"]))
-        result = run_skill(skill, inputs, seed=seed, runs_dir=self.lab.runs_dir, host=self.lab.host, files=files)
+        from ..provenance import capture
+
+        provenance = capture(self.lab.ledger, skill)
+        result = run_skill(
+            skill, inputs, seed=seed, runs_dir=self.lab.runs_dir, host=self.lab.host, files=files
+        )
         self.lab.budget.charge(result)
         record = result.record()
+        record.update(provenance)
+        record["environment"]["atlas_source_hash"] = provenance["engine_source_hash"]
         for name, meta in record["artifacts"].items():
             meta["object"] = self.lab.ledger.put_file(result.run_dir / "output" / name)
-        record.update({
-            "experiment": experiment,
-            "role": self.role,
-            "purpose": purpose,
-            "approval": "operator" if reason else self.lab.approval_mode,
-        })
+        record.update(
+            {
+                "experiment": experiment,
+                "role": self.role,
+                "purpose": purpose,
+                "approval": "operator" if reason else self.lab.approval_mode,
+            }
+        )
         if sealed:
-            record["inputs_hash"] = sha256_json({"commitment": sealed["commitment"], "public": sealed["public"]})
+            # Tracebacks and logs can echo private generator parameters.
+            record.update(log=[], stdout_tail="", stderr_tail="", policy_denials=[])
+            result.log, result.stdout_tail, result.stderr_tail, result.policy_denials = [], "", "", []
+            if result.error:
+                result.error = {
+                    "type": result.status,
+                    "message": "sealed run failed; private diagnostics withheld",
+                }
+                record["error"] = result.error
+            for name in ("stdout.txt", "stderr.txt", "output/_result.json"):
+                (result.run_dir / name).unlink(missing_ok=True)
+            record["inputs_hash"] = sha256_json(
+                {"commitment": sealed["commitment"], "public": sealed["public"]}
+            )
             record["sealed"] = {
                 "commitment": sealed["commitment"],
                 "public_object": self.lab.ledger.put_json(sealed["public"]),
@@ -173,7 +220,14 @@ class Engineer:
         record = self.lab.ledger.get_json(original.object)
         skill = self.lab.registry.get(record["skill"]["name"], record["skill"]["version"])
         if skill.content_hash != record["skill"]["content_hash"]:
-            raise ValueError("the skill's files changed since the original run; reproduction would not be exact")
+            raise ValueError(
+                "the skill's files changed since the original run; reproduction would not be exact"
+            )
+        if record.get("engine_source_hash"):
+            from ..provenance import engine_root, source_snapshot
+
+            if source_snapshot(engine_root())[1] != record["engine_source_hash"]:
+                raise ValueError("engine source changed since the original run; use a linked reanalysis")
         if record.get("sealed"):
             if inputs is None:
                 raise ValueError("sealed runs are reproduced after unsealing, from the unsealed value")
@@ -185,7 +239,11 @@ class Engineer:
         refs = _artifact_refs(inputs)
         files = {ref["$artifact"]: self.lab.ledger._object_path(ref["sha256"]) for ref in refs}
         entry, result = self.execute(
-            experiment, skill, inputs, seed=record["seed"], files=files,
+            experiment,
+            skill,
+            inputs,
+            seed=record["seed"],
+            files=files,
             purpose=f"reproduction of run {record['run_id']}",
         )
         same_outputs = result.ok and sha256_json(result.outputs) == sha256_json(record["outputs"])

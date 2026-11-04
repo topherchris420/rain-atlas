@@ -201,7 +201,9 @@ def _child_env(tmp: Path, threads: int) -> dict[str, str]:
             {
                 "SYSTEMROOT": system_root,
                 "WINDIR": system_root,
-                "PATH": os.pathsep.join([str(Path(_interpreter()).parent), os.path.join(system_root, "System32")]),
+                "PATH": os.pathsep.join(
+                    [str(Path(_interpreter()).parent), os.path.join(system_root, "System32")]
+                ),
                 "USERPROFILE": str(tmp),
                 "LOCALAPPDATA": os.environ.get("LOCALAPPDATA", str(tmp)),
             }
@@ -209,17 +211,6 @@ def _child_env(tmp: Path, threads: int) -> dict[str, str]:
     else:
         env.update({"PATH": "/usr/bin:/bin", "LANG": "C.UTF-8"})
     return env
-
-
-def _posix_limits(memory_mb: int):
-    def apply() -> None:  # pragma: no cover - runs in the forked child
-        import resource  # noqa: PLC0415
-
-        limit = memory_mb * 1024 * 1024
-        resource.setrlimit(resource.RLIMIT_AS, (limit, limit))
-        resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
-
-    return apply
 
 
 def _tail(path: Path) -> str:
@@ -275,7 +266,9 @@ def run_skill(
     if skill.manifest.kind != "executable":
         return refuse("refused", f"{skill.name} is a guidance skill and cannot be executed")
     if skill.trust == "untrusted":
-        return refuse("refused", "untrusted code requires a hardened executor; this backend is policy enforcement only")
+        return refuse(
+            "refused", "untrusted code requires a hardened executor; this backend is policy enforcement only"
+        )
     problems = requirement_problems(skill.manifest)
     if problems:
         return refuse("refused", "environment does not meet the skill's requirements", problems=problems)
@@ -334,7 +327,12 @@ def run_skill(
             proc = job.start(cmd, stdout=out, stderr=err, stdin=subprocess.DEVNULL, cwd=tmp_dir, env=env)
         else:
             proc = subprocess.Popen(
-                cmd, stdout=out, stderr=err, stdin=subprocess.DEVNULL, cwd=tmp_dir, env=env,
+                cmd,
+                stdout=out,
+                stderr=err,
+                stdin=subprocess.DEVNULL,
+                cwd=tmp_dir,
+                env=env,
                 start_new_session=True,
             )
         deadline = clock + policy.timeout_s
@@ -387,7 +385,10 @@ def run_skill(
     result_path = output_dir / RESULT_FILE
     if not result_path.is_file():
         base.status = "crashed"
-        base.error = {"type": "crashed", "message": f"child exited with code {proc.returncode} without a result"}
+        base.error = {
+            "type": "crashed",
+            "message": f"child exited with code {proc.returncode} without a result",
+        }
         return _collect_artifacts(base, output_dir)
     if result_path.is_symlink() or result_path.stat().st_size > 16 * 1024 * 1024:
         return refuse("invalid-output", "result must be a regular file no larger than 16 MiB")
@@ -398,7 +399,9 @@ def run_skill(
     except (ValueError, UnicodeError) as exc:
         return refuse("invalid-output", str(exc))
     base.log = payload.get("log", [])
-    base.policy_denials = payload.get("policy_denials") or (payload.get("error") or {}).get("policy_denials", [])
+    base.policy_denials = payload.get("policy_denials") or (payload.get("error") or {}).get(
+        "policy_denials", []
+    )
     if payload.get("status") != "ok":
         base.status = "error"
         base.error = payload.get("error")
@@ -408,7 +411,11 @@ def run_skill(
     base.outputs = outputs
     if errors:
         base.status = "invalid-output"
-        base.error = {"type": "invalid-output", "message": "outputs do not match the output schema", "problems": errors}
+        base.error = {
+            "type": "invalid-output",
+            "message": "outputs do not match the output schema",
+            "problems": errors,
+        }
     else:
         base.status = "ok"
     return _collect_artifacts(base, output_dir)
@@ -439,4 +446,14 @@ def _collect_artifacts(result: RunResult, output_dir: Path) -> RunResult:
             continue
         if path.is_file() and path.name != RESULT_FILE:
             result.artifacts[path.name] = {"sha256": sha256_file(path), "bytes": path.stat().st_size}
+    if result.ok:
+        for ref in _artifact_refs(result.outputs):
+            meta = result.artifacts.get(ref.get("$artifact"))
+            if not meta or ref.get("sha256") != meta["sha256"]:
+                result.status = "invalid-output"
+                result.error = {
+                    "type": "invalid-output",
+                    "message": "output artifact missing or hash mismatch",
+                }
+                break
     return result

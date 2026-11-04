@@ -2,10 +2,9 @@ import json
 import shutil
 
 import pytest
+from conftest import FIXTURES
 
 from rain_atlas.skills.registry import RegistryError
-
-from conftest import FIXTURES
 
 
 def copy_skill(tmp_path, name="echo", version=None, tweak=None):

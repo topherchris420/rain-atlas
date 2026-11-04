@@ -95,7 +95,9 @@ def _example_problems(skill_dir: Path, manifest: Manifest) -> list[str]:
             if label == "expected":
                 # Expected files may list only the fields they assert on.
                 continue
-            problems.extend(f"example {example['name']!r}: {err}" for err in jsonschema_lite.validate(data, schema))
+            problems.extend(
+                f"example {example['name']!r}: {err}" for err in jsonschema_lite.validate(data, schema)
+            )
     return problems
 
 

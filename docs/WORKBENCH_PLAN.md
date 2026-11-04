@@ -10,7 +10,7 @@ is needed.
 1. Audit and integrity repair: `exec/{context,runner,child,policy}.py`,
    `ledger/{store,records}.py`, spectral bundle export, regression tests and
    CI configuration. Reproduce the baseline before editing.
-2. Observatory: `observatory/{export,viewer}.py` and packaged HTML/CSS/JS;
+2. Observatory: `observatory/export.py` and packaged HTML/CSS/JS;
    verified, explicitly selected ledger export, experiment/evidence/timeline/
    skills/report views and a browser-only proposal composer. No execution
    endpoint. Export tests include injection, missing data and sealed truth.

@@ -5,7 +5,9 @@ from __future__ import annotations
 import numpy as np
 
 
-def match(a: list[float], b: list[float], tolerance: float) -> tuple[list[tuple[int, int]], list[int], list[int]]:
+def match(
+    a: list[float], b: list[float], tolerance: float
+) -> tuple[list[tuple[int, int]], list[int], list[int]]:
     """Greedy one-to-one matching of the closest pairs within *tolerance*."""
 
     pairs = sorted(
@@ -45,12 +47,14 @@ def cluster(estimates: list[list[float]], tolerance: float) -> list[dict]:
     out = []
     for members in clusters:
         freqs = [v for v, _ in members]
-        out.append({
-            "frequency_hz": float(np.median(freqs)),
-            "fraction": len({r for _, r in members}) / reps,
-            "count": len(members),
-            "spread_hz": float(np.std(freqs)) if len(freqs) > 1 else 0.0,
-        })
+        out.append(
+            {
+                "frequency_hz": float(np.median(freqs)),
+                "fraction": len({r for _, r in members}) / reps,
+                "count": len(members),
+                "spread_hz": float(np.std(freqs)) if len(freqs) > 1 else 0.0,
+            }
+        )
     return out
 
 
@@ -62,11 +66,13 @@ def agreement(a: list[list[float]], b: list[list[float]], tolerance: float, min_
     per_realization = []
     for row_a, row_b in zip(a, b):
         matched, only_a, only_b = match(row_a, row_b, tolerance)
-        per_realization.append({
-            "matched": [[row_a[i], row_b[j]] for i, j in matched],
-            "only_a": [row_a[i] for i in only_a],
-            "only_b": [row_b[j] for j in only_b],
-        })
+        per_realization.append(
+            {
+                "matched": [[row_a[i], row_b[j]] for i, j in matched],
+                "only_a": [row_a[i] for i in only_a],
+                "only_b": [row_b[j] for j in only_b],
+            }
+        )
     items = []
     for c in cluster(a, tolerance):
         detected = agreed = 0
@@ -82,20 +88,34 @@ def agreement(a: list[list[float]], b: list[list[float]], tolerance: float, min_
                 agreed += 1
                 diffs.append(min(close, key=lambda g: abs(g - fa)) - fa)
         fraction = agreed / detected if detected else 0.0
-        items.append({
-            "frequency_hz": c["frequency_hz"],
-            "detected_by_a_fraction": c["fraction"],
-            "agreement_fraction": fraction,
-            "mean_difference_hz": float(np.mean(diffs)) if diffs else None,
-            "max_abs_difference_hz": float(np.max(np.abs(diffs))) if diffs else None,
-            "agrees": fraction >= min_fraction,
-        })
-    return {"per_realization": per_realization, "items": items, "tolerance_hz": tolerance, "min_fraction": min_fraction}
+        items.append(
+            {
+                "frequency_hz": c["frequency_hz"],
+                "detected_by_a_fraction": c["fraction"],
+                "agreement_fraction": fraction,
+                "mean_difference_hz": float(np.mean(diffs)) if diffs else None,
+                "max_abs_difference_hz": float(np.max(np.abs(diffs))) if diffs else None,
+                "agrees": fraction >= min_fraction,
+            }
+        )
+    return {
+        "per_realization": per_realization,
+        "items": items,
+        "tolerance_hz": tolerance,
+        "min_fraction": min_fraction,
+    }
 
 
-def recovery(estimates: list[list[float]], truth: list[float], tolerance: float, *,
-             amplitudes: list[float] | None = None, noise_std: float | None = None,
-             n: int | None = None, fs: float | None = None) -> dict:
+def recovery(
+    estimates: list[list[float]],
+    truth: list[float],
+    tolerance: float,
+    *,
+    amplitudes: list[float] | None = None,
+    noise_std: float | None = None,
+    n: int | None = None,
+    fs: float | None = None,
+) -> dict:
     """Score estimates against known frequencies.
 
     With *amplitudes*, *noise_std*, *n* and *fs* each tone also gets the
@@ -132,7 +152,9 @@ def recovery(estimates: list[list[float]], truth: list[float], tolerance: float,
 
             bound = crlb_frequency_std_hz(amplitudes[j], noise_std, n, fs) if noise_std > 0 else 0.0
             tone["crlb_std_hz"] = float(bound)
-            tone["std_over_crlb"] = (tone["std_hz"] / bound) if tone["std_hz"] is not None and bound > 0 else None
+            tone["std_over_crlb"] = (
+                (tone["std_hz"] / bound) if tone["std_hz"] is not None and bound > 0 else None
+            )
         tones.append(tone)
     return {
         "realizations": reps,

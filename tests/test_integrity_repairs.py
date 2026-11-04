@@ -1,18 +1,19 @@
-import json
 import zipfile
 from pathlib import Path
 
 import pytest
-
 from conftest import fixture_ref
+from test_ledger import prereg
+
 from rain_atlas.exec.context import valid_artifact_name
 from rain_atlas.exec.runner import run_skill
 from rain_atlas.experiments.spectral_recovery import _bundle
 from rain_atlas.ledger.store import Ledger, LedgerError
-from test_ledger import prereg
 
 
-@pytest.mark.parametrize("name", ["../secret", "..\\secret", "/etc/passwd", "C:\\x", "x:y", "NUL", "con.txt", "x.", "", ".."])
+@pytest.mark.parametrize(
+    "name", ["../secret", "..\\secret", "/etc/passwd", "C:\\x", "x:y", "NUL", "con.txt", "x.", "", ".."]
+)
 def test_portable_artifact_names(name):
     assert not valid_artifact_name(name)
 
@@ -33,8 +34,17 @@ def test_missing_and_tampered_artifact_are_detected(tmp_path):
     ledger = Ledger(tmp_path)
     exp = prereg(ledger)
     artifact = ledger.put_bytes(b"data")
-    ledger.append("dataset", {"experiment": exp, "name": "sample", "origin": "synthetic",
-                             "media_type": "text/plain", "object": artifact, "provenance": {}})
+    ledger.append(
+        "dataset",
+        {
+            "experiment": exp,
+            "name": "sample",
+            "origin": "synthetic",
+            "media_type": "text/plain",
+            "object": artifact,
+            "provenance": {},
+        },
+    )
     assert ledger.verify() == []
     ledger._object_path(artifact).write_bytes(b"edited")
     assert any("hash check" in p for p in ledger.verify())

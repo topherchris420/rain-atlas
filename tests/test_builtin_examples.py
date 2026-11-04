@@ -1,12 +1,11 @@
 """Every built-in skill's declared examples pass in the bounded executor."""
 
 import pytest
+from conftest import BUILTIN
 
 from rain_atlas.skills.catalog import load_catalog
 from rain_atlas.skills.examples import compare, run_example
 from rain_atlas.skills.registry import Registry
-
-from conftest import BUILTIN
 
 CASES = [(src.name, ex["name"]) for src in load_catalog(BUILTIN) for ex in src.manifest.examples]
 

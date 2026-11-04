@@ -17,11 +17,20 @@ RESULT_FILE = "_result.json"
 
 def valid_artifact_name(name: object) -> bool:
     """Portable single file name; reject traversal, devices and Windows streams."""
-    return (isinstance(name, str) and bool(re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,199}", name))
-            and not name.endswith((".", " "))
-            and name.split(".")[0].upper() not in
-            {"CON", "PRN", "AUX", "NUL", *(f"COM{i}" for i in range(1, 10)),
-             *(f"LPT{i}" for i in range(1, 10))})
+    return (
+        isinstance(name, str)
+        and bool(re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,199}", name))
+        and not name.endswith((".", " "))
+        and name.split(".")[0].upper()
+        not in {
+            "CON",
+            "PRN",
+            "AUX",
+            "NUL",
+            *(f"COM{i}" for i in range(1, 10)),
+            *(f"LPT{i}" for i in range(1, 10)),
+        }
+    )
 
 
 def _sha256(data: bytes) -> str:
@@ -95,8 +104,14 @@ class SkillContext:
         return self.write_bytes(name, text.encode("utf-8"))
 
 
-def finish(ctx: SkillContext, *, status: str, outputs: Any = None, error: dict | None = None,
-           extra: dict | None = None) -> int:
+def finish(
+    ctx: SkillContext,
+    *,
+    status: str,
+    outputs: Any = None,
+    error: dict | None = None,
+    extra: dict | None = None,
+) -> int:
     payload = {"status": status, "log": ctx.messages}
     if outputs is not None:
         payload["outputs"] = to_jsonable(outputs)
