@@ -22,7 +22,11 @@ for implemented boundaries and explicitly planned work.
 - Baseline Windows Python 3.12: **112 passed, 1 skipped, 7 deselected** (non-slow).
 - Repair-stage full suite: **138 passed, 1 skipped** on Windows Python 3.12.15
   (887.71 s) and **138 passed, 1 skipped** on Windows Python 3.11.9 (849.72 s).
-- Expanded final full suites: **running; results not yet asserted**.
+- Expanded full suites at implementation `77b98c5`: **194 passed, 1 skipped**
+  on Windows Python 3.12.15 (322.02 s) and **194 passed, 1 skipped** on Windows
+  Python 3.11.9 (280.38 s). Both include all slow fixed/blinded spectral and
+  synchronization acceptance tests. JUnit output is retained locally under
+  `atlas-data/validation/final-py312.xml` and `final-py311.xml`.
 - Numerical resonance checks: **18 passed**; independent formulas, SciPy
   comparisons, null controls and deterministic/stochastic convergence cases.
 - Offline viewer DOM interactions: **3 passed**. CUA browser/native providers
@@ -42,8 +46,7 @@ replicates and produced **5 supported, 10 unresolved, 15 contradicted** operatio
 locking claims. All five acceptance checks passed, including exact generator
 and analysis reproduction and ledger verification. This is synthetic evidence,
 not a general synchronization or physical-validation claim. Final source-pinned
-demonstration and benchmark results are recorded in the validation report when
-their executions finish.
+demonstration and benchmark results are recorded in [VALIDATION.md](VALIDATION.md).
 
 ## Historical status from 2026-10-30 (retained for context)
 
