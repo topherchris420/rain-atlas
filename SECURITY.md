@@ -47,3 +47,16 @@ repository's private vulnerability reporting (GitHub Security Advisories)
 rather than in a public issue. Include the ATLAS version, platform, and a
 minimal reproduction. We will acknowledge reports and credit reporters who
 wish to be named.
+# Workbench boundary update (2026-11-04)
+
+The default executor refuses `trust=untrusted` even after hash approval. Such
+code needs a hardened executor, which is not implemented. Local and built-in
+code still runs under policy enforcement, **not secure isolation**. POSIX CPU,
+address-space, core and file-size limits and process-group cleanup do not stop
+native syscalls or processes that escape their group. Windows Job Objects
+remain the platform mechanism. Do not relabel unknown code as local merely to
+bypass this boundary.
+
+Research bundles exclude sealed vault files. Original ledger bundles may
+contain local paths and sensitive research; offline observatory projections
+omit raw inputs/logs/operators and must still be reviewed before sharing.

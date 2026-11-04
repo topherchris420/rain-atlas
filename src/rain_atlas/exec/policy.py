@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
+import math
 
 from ..skills.manifest import Manifest
 
@@ -61,6 +62,8 @@ def effective_policy(
         raise PolicyRefused(f"{manifest.name} requests system fonts, which the host policy denies")
     timeout = float(timeout_s if timeout_s is not None else manifest.limits["timeout_s"])
     memory = int(memory_mb if memory_mb is not None else manifest.limits["memory_mb"])
+    if not math.isfinite(timeout) or timeout <= 0 or memory < 64 or host.threads < 1:
+        raise PolicyRefused("limits require a finite positive timeout, memory >= 64 MB and threads >= 1")
     if timeout > host.max_timeout_s:
         raise PolicyRefused(f"timeout {timeout}s exceeds the host maximum {host.max_timeout_s}s")
     if memory > host.max_memory_mb:

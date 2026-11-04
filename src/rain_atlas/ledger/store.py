@@ -19,6 +19,7 @@ from __future__ import annotations
 import json
 import os
 import secrets
+import re
 import sys
 import time
 from contextlib import contextmanager
@@ -50,7 +51,7 @@ class Entry:
 
 
 def _hex(ref: str) -> str:
-    if not ref.startswith(HASH_PREFIX) or len(ref) != len(HASH_PREFIX) + 64:
+    if not isinstance(ref, str) or not re.fullmatch(r"sha256:[0-9a-f]{64}", ref):
         raise LedgerError(f"not a sha256 reference: {ref!r}")
     return ref[len(HASH_PREFIX) :]
 
@@ -139,6 +140,8 @@ class Ledger:
 
     def get_bytes(self, ref: str) -> bytes:
         path = self._object_path(ref)
+        if path.is_symlink():
+            raise LedgerError(f"object {ref} is a symlink")
         if not path.exists():
             raise LedgerError(f"object {ref} not found")
         data = path.read_bytes()
@@ -157,9 +160,12 @@ class Ledger:
         if not self.log_path.exists():
             return
         with self.log_path.open(encoding="utf-8") as fh:
-            for line in fh:
+            for number, line in enumerate(fh, 1):
                 if line.strip():
-                    entry = Entry(**json.loads(line))
+                    try:
+                        entry = Entry(**json.loads(line))
+                    except (ValueError, TypeError) as exc:
+                        raise LedgerError(f"malformed log line {number}; preserve history and recover in a new ledger") from exc
                     if kind is None or entry.kind == kind:
                         yield entry
 
@@ -236,7 +242,11 @@ class Ledger:
         prev = GENESIS
         seq_of: dict[str, int] = {}
         expected_seq = 0
-        for entry in self.entries():
+        try:
+            entries = list(self.entries())
+        except (LedgerError, UnicodeError) as exc:
+            return [str(exc)]
+        for entry in entries:
             body = entry.to_dict()
             claimed = body.pop("hash")
             if entry.seq != expected_seq:
@@ -247,11 +257,15 @@ class Ledger:
                 problems.append(f"seq {entry.seq}: entry hash mismatch (log line edited)")
             try:
                 record = self.get_json(entry.object)
-            except LedgerError as exc:
+            except (LedgerError, ValueError, UnicodeError, OSError) as exc:
                 problems.append(f"seq {entry.seq}: {exc}")
                 record = None
             if record is not None:
-                problems.extend(f"seq {entry.seq} ({entry.kind}): {p}" for p in record_problems(self, entry, record, seq_of))
+                try:
+                    found = record_problems(self, entry, record, seq_of)
+                except (ValueError, TypeError, KeyError, AttributeError, OSError, LedgerError) as exc:
+                    found = [f"invalid record or dependency: {exc}"]
+                problems.extend(f"seq {entry.seq} ({entry.kind}): {p}" for p in found)
             seq_of.setdefault(entry.object, entry.seq)
             prev = claimed
             expected_seq += 1

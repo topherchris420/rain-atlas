@@ -766,7 +766,8 @@ def _bundle(root: Path, report_dir: Path, experiment: str) -> Path:
     with zipfile.ZipFile(path, "x", compression=zipfile.ZIP_DEFLATED) as zf:
         for base in (root / "ledger", report_dir):
             for file in sorted(base.rglob("*")):
-                if file.is_file() and file != path and file.name != "log.lock":
+                if (file.is_file() and not file.is_symlink() and file != path
+                        and file.name != "log.lock" and "vault" not in file.relative_to(root).parts):
                     zf.write(file, file.relative_to(root).as_posix())
     return path
 

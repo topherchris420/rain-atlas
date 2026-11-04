@@ -7,11 +7,21 @@ import io
 import json
 import os
 import random
+import re
 from typing import Any
 
 from ..canonical import from_jsonable, to_jsonable
 
 RESULT_FILE = "_result.json"
+
+
+def valid_artifact_name(name: object) -> bool:
+    """Portable single file name; reject traversal, devices and Windows streams."""
+    return (isinstance(name, str) and bool(re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,199}", name))
+            and not name.endswith((".", " "))
+            and name.split(".")[0].upper() not in
+            {"CON", "PRN", "AUX", "NUL", *(f"COM{i}" for i in range(1, 10)),
+             *(f"LPT{i}" for i in range(1, 10))})
 
 
 def _sha256(data: bytes) -> str:
@@ -51,7 +61,7 @@ class SkillContext:
     # artifacts ----------------------------------------------------------
     def _input_path(self, ref: dict) -> str:
         name = ref["$artifact"]
-        if os.path.basename(name) != name:
+        if not valid_artifact_name(name):
             raise ValueError(f"artifact names may not contain directories: {name!r}")
         return os.path.join(self.input_dir, name)
 
@@ -68,7 +78,7 @@ class SkillContext:
         return np.load(io.BytesIO(self.read_bytes(ref)), allow_pickle=False)
 
     def write_bytes(self, name: str, data: bytes) -> dict:
-        if os.path.basename(name) != name or name == RESULT_FILE:
+        if not valid_artifact_name(name) or name == RESULT_FILE:
             raise ValueError(f"invalid artifact name {name!r}")
         with open(os.path.join(self.output_dir, name), "wb") as fh:
             fh.write(data)

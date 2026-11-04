@@ -22,7 +22,7 @@ from ..canonical import from_jsonable, sha256_file, sha256_json, to_jsonable
 from ..skills.manifest import Manifest
 from ..skills.versions import loose_version, satisfies
 from . import environment
-from .context import RESULT_FILE
+from .context import RESULT_FILE, valid_artifact_name
 from .policy import HostPolicy, Policy, PolicyRefused, effective_policy
 
 CHILD_SCRIPT = Path(__file__).with_name("child.py")
@@ -225,8 +225,9 @@ def _posix_limits(memory_mb: int):
 def _tail(path: Path) -> str:
     if not path.exists():
         return ""
-    text = path.read_text(encoding="utf-8", errors="replace")
-    return text[-TAIL_CHARS:]
+    with path.open("rb") as fh:
+        fh.seek(max(0, path.stat().st_size - TAIL_CHARS * 4))
+        return fh.read().decode("utf-8", errors="replace")[-TAIL_CHARS:]
 
 
 def run_skill(
@@ -273,6 +274,8 @@ def run_skill(
 
     if skill.manifest.kind != "executable":
         return refuse("refused", f"{skill.name} is a guidance skill and cannot be executed")
+    if skill.trust == "untrusted":
+        return refuse("refused", "untrusted code requires a hardened executor; this backend is policy enforcement only")
     problems = requirement_problems(skill.manifest)
     if problems:
         return refuse("refused", "environment does not meet the skill's requirements", problems=problems)
@@ -289,10 +292,12 @@ def run_skill(
     for directory in (input_dir, output_dir, tmp_dir / "mpl"):
         directory.mkdir(parents=True, exist_ok=False)
     for name, source in (files or {}).items():
-        if Path(name).name != name:
+        if not valid_artifact_name(name):
             return refuse("invalid-input", f"input file name {name!r} may not contain directories")
         shutil.copyfile(source, input_dir / name)
     for ref in _artifact_refs(inputs):
+        if not valid_artifact_name(ref["$artifact"]):
+            return refuse("invalid-input", "artifact must have a portable single-file name")
         target = input_dir / ref["$artifact"]
         if not target.is_file():
             return refuse("invalid-input", f"artifact {ref['$artifact']!r} was not supplied")
@@ -330,7 +335,7 @@ def run_skill(
         else:
             proc = subprocess.Popen(
                 cmd, stdout=out, stderr=err, stdin=subprocess.DEVNULL, cwd=tmp_dir, env=env,
-                start_new_session=True, preexec_fn=_posix_limits(policy.memory_mb),
+                start_new_session=True,
             )
         deadline = clock + policy.timeout_s
         try:
@@ -355,6 +360,9 @@ def run_skill(
                 base.peak_memory_mb = job.peak_memory_mb()
                 base.peak_memory_note = "Windows job object peak committed memory (all processes)"
                 job.close()
+            else:
+                # Also reap descendants when the main child exits normally.
+                _kill(proc, None)
     if sys.platform != "win32":
         import resource  # noqa: PLC0415
 
@@ -381,7 +389,14 @@ def run_skill(
         base.status = "crashed"
         base.error = {"type": "crashed", "message": f"child exited with code {proc.returncode} without a result"}
         return _collect_artifacts(base, output_dir)
-    payload = json.loads(result_path.read_text(encoding="utf-8"))
+    if result_path.is_symlink() or result_path.stat().st_size > 16 * 1024 * 1024:
+        return refuse("invalid-output", "result must be a regular file no larger than 16 MiB")
+    try:
+        payload = json.loads(result_path.read_text(encoding="utf-8"))
+        if not isinstance(payload, dict):
+            raise ValueError("result is not an object")
+    except (ValueError, UnicodeError) as exc:
+        return refuse("invalid-output", str(exc))
     base.log = payload.get("log", [])
     base.policy_denials = payload.get("policy_denials") or (payload.get("error") or {}).get("policy_denials", [])
     if payload.get("status") != "ok":
@@ -418,6 +433,10 @@ def _kill(proc: subprocess.Popen, job) -> None:
 
 def _collect_artifacts(result: RunResult, output_dir: Path) -> RunResult:
     for path in sorted(output_dir.iterdir()) if output_dir.exists() else []:
+        if path.is_symlink() or (path.name != RESULT_FILE and not valid_artifact_name(path.name)):
+            result.status = "invalid-output"
+            result.error = {"type": "invalid-output", "message": "unsafe output artifact"}
+            continue
         if path.is_file() and path.name != RESULT_FILE:
             result.artifacts[path.name] = {"sha256": sha256_file(path), "bytes": path.stat().st_size}
     return result

@@ -58,6 +58,36 @@ def record_problems(ledger: "Ledger", entry: "Entry", record: dict, seq_of: dict
             return None
         return ledger.get_json(ref)
 
+    # Object dependencies are distinct from record references: artifacts need
+    # not have a log entry, but their bytes must exist and match their address.
+    from .store import LedgerError
+
+    def verify_object(ref: str, label: str) -> None:
+        try:
+            ledger.get_bytes(ref)
+        except (LedgerError, OSError) as exc:
+            problems.append(f"{label}: {exc}")
+
+    if kind == "dataset":
+        verify_object(record["object"], "dataset artifact")
+    if kind == "run":
+        if "inputs_object" in record:
+            verify_object(record["inputs_object"], "inputs")
+            if record["inputs_object"] != record["inputs_hash"]:
+                problems.append("inputs object differs from inputs_hash")
+        if record.get("sealed", {}).get("public_object"):
+            verify_object(record["sealed"]["public_object"], "sealed public inputs")
+        for name, meta in record.get("artifacts", {}).items():
+            verify_object(meta.get("object", meta["sha256"]), f"artifact {name}")
+            if meta.get("object", meta["sha256"]) != meta["sha256"]:
+                problems.append(f"artifact {name}: object/hash disagreement")
+    if kind == "report":
+        if record.get("report_object"):
+            verify_object(record["report_object"], "report")
+        for formats in record.get("figure_objects", {}).values():
+            for ref in formats.values():
+                verify_object(ref, "figure")
+
     if "experiment" in record and kind not in {"preregistration", "seal", "unseal"}:
         prereg = earlier(record["experiment"], "experiment")
         if prereg is not None and "hypothesis" not in prereg:

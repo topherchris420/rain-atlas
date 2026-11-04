@@ -164,6 +164,18 @@ def main(spec_path: str) -> int:
     sys.dont_write_bytecode = True
 
     policy = spec["policy"]
+    if sys.platform != "win32":
+        # Apply in the fresh interpreter, never in preexec_fn (unsafe with
+        # threaded hosts). These are resource bounds, not syscall isolation.
+        import math
+        import resource
+
+        memory = policy["memory_mb"] * 1024 * 1024
+        cpu = max(1, math.ceil(policy["timeout_s"]))
+        resource.setrlimit(resource.RLIMIT_AS, (memory, memory))
+        resource.setrlimit(resource.RLIMIT_CPU, (cpu, cpu + 1))
+        resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+        resource.setrlimit(resource.RLIMIT_FSIZE, (64 * 1024 * 1024, 64 * 1024 * 1024))
     read_roots = [spec["skill_dir"], spec["input_dir"]] + spec["interpreter_roots"]
     if "system-fonts" in policy["read"]:
         read_roots += _system_font_dirs()
