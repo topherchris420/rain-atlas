@@ -265,6 +265,9 @@ def run_skill(
 
     if skill.manifest.kind != "executable":
         return refuse("refused", f"{skill.name} is a guidance skill and cannot be executed")
+    entrypoint = skill.manifest.entrypoint
+    if not entrypoint:
+        return refuse("refused", f"{skill.name} declares no entrypoint")
     if skill.trust == "untrusted":
         return refuse(
             "refused", "untrusted code requires a hardened executor; this backend is policy enforcement only"
@@ -303,7 +306,7 @@ def run_skill(
         "sys_path": _child_sys_path(),
         "interpreter_roots": _interpreter_roots(),
         "skill_dir": str(Path(skill.path).resolve()),
-        "entrypoint": str((Path(skill.path) / skill.manifest.entrypoint).resolve()),
+        "entrypoint": str((Path(skill.path) / entrypoint).resolve()),
         "input_dir": str(input_dir.resolve()),
         "output_dir": str(output_dir.resolve()),
         "tmp_dir": str(tmp_dir.resolve()),
@@ -424,6 +427,8 @@ def run_skill(
 def _kill(proc: subprocess.Popen, job) -> None:
     if job is not None:
         job.kill()
+    elif sys.platform == "win32":
+        proc.kill()
     else:
         import signal  # noqa: PLC0415
 
@@ -448,7 +453,8 @@ def _collect_artifacts(result: RunResult, output_dir: Path) -> RunResult:
             result.artifacts[path.name] = {"sha256": sha256_file(path), "bytes": path.stat().st_size}
     if result.ok:
         for ref in _artifact_refs(result.outputs):
-            meta = result.artifacts.get(ref.get("$artifact"))
+            name = ref.get("$artifact")
+            meta = result.artifacts.get(name) if isinstance(name, str) else None
             if not meta or ref.get("sha256") != meta["sha256"]:
                 result.status = "invalid-output"
                 result.error = {

@@ -9,27 +9,27 @@ from . import resonance as r
 
 def run_method(method: str, inputs: dict, ctx) -> dict:
     if method == "stft":
-        result = r.stft(**inputs)
-        power = result.power_density.mean(axis=1)
+        tf = r.stft(**inputs)
+        mean_power = tf.power_density.mean(axis=1)
         return {
-            "power": ctx.save_array("stft-density.npy", result.power_density),
-            "frequency_hz": result.frequency_hz.tolist(),
-            "time_s": result.time_s.tolist(),
-            "peak_hz": float(result.frequency_hz[np.argmax(power)]) if np.any(power > 0) else None,
+            "power": ctx.save_array("stft-density.npy", tf.power_density),
+            "frequency_hz": tf.frequency_hz.tolist(),
+            "time_s": tf.time_s.tolist(),
+            "peak_hz": float(tf.frequency_hz[np.argmax(mean_power)]) if np.any(mean_power > 0) else None,
             "unit": "input units squared / Hz",
-            "resolution_hz": result.resolution_hz,
+            "resolution_hz": tf.resolution_hz,
         }
     if method == "morlet_cwt":
-        result = r.morlet_cwt(**inputs)
-        power = [
-            float(np.mean(np.abs(c[m]) ** 2)) if m.any() else 0
-            for c, m in zip(result.coefficients, result.edge_valid)
+        cwt = r.morlet_cwt(**inputs)
+        scale_power = [
+            float(np.mean(np.abs(c[m]) ** 2)) if m.any() else 0.0
+            for c, m in zip(cwt.coefficients, cwt.edge_valid, strict=True)
         ]
         return {
-            "coefficients": ctx.save_array("morlet-coefficients.npy", result.coefficients),
-            "edge_valid": ctx.save_array("morlet-edge-mask.npy", result.edge_valid),
-            "dominant_hz": float(result.frequency_hz[np.argmax(power)]) if max(power) > 0 else None,
-            "frequency_hz": result.frequency_hz.tolist(),
+            "coefficients": ctx.save_array("morlet-coefficients.npy", cwt.coefficients),
+            "edge_valid": ctx.save_array("morlet-edge-mask.npy", cwt.edge_valid),
+            "dominant_hz": float(cwt.frequency_hz[np.argmax(scale_power)]) if max(scale_power) > 0 else None,
+            "frequency_hz": cwt.frequency_hz.tolist(),
             "unit": "L2 normalized coefficient; not PSD",
         }
     if method == "phase_locking":

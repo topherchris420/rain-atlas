@@ -7,10 +7,16 @@ every contribution needs tests that actually run.
 
 ```sh
 uv sync --locked --python 3.12 # one-command development setup
-uv run python scripts/check.py # lint, formatting, scientific API types, manifests, full tests
+uv run python scripts/check.py # lint, formatting, types on every CI Python, manifests, full tests
 uv run pytest -m "not slow"
 uv run pytest -m slow      # Phase 10 acceptance (several minutes)
 ```
+
+`scripts/check.py` type-checks with each Python version in the CI matrix
+(3.11, 3.12, 3.13), each in a throwaway environment built from `uv.lock`. The
+lock resolves different NumPy releases per Python version, and their type stubs
+differ, so a clean result on one interpreter does not carry over to another.
+Extra arguments go to pytest, for example `scripts/check.py -m "not slow"`.
 
 For offline viewer interaction tests (Node 24; test-only dependency):
 

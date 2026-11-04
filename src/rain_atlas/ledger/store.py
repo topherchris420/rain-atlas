@@ -196,7 +196,7 @@ class Ledger:
         ref = self.put_json(record)
         with _locked(self.lock_path):
             last = self._last()
-            body = {
+            body: dict[str, Any] = {
                 "seq": 0 if last is None else last.seq + 1,
                 "at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
                 "kind": kind,

@@ -43,7 +43,7 @@ def _git_commit(root: Path) -> str | None:
 
 @lru_cache(maxsize=1)
 def describe() -> dict:
-    packages = {}
+    packages: dict[str, str | None] = {}
     for name in TRACKED_PACKAGES:
         try:
             packages[name] = metadata.version(name)

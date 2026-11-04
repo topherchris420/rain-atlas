@@ -8,7 +8,12 @@ from __future__ import annotations
 
 import ctypes
 import subprocess
+import sys
 from ctypes import wintypes
+
+# Windows-only module, imported by the runner only on win32. The assertion also
+# tells type checkers on other platforms to skip the Win32 API below.
+assert sys.platform == "win32"
 
 CREATE_SUSPENDED = 0x00000004
 CREATE_NO_WINDOW = 0x08000000
@@ -82,6 +87,12 @@ def _check(ok: int, what: str) -> None:
         raise ctypes.WinError(ctypes.get_last_error(), what)
 
 
+def _process_handle(proc: subprocess.Popen) -> int:
+    """Win32 process handle; CPython keeps it in the private ``Popen._handle``."""
+
+    return int(getattr(proc, "_handle"))
+
+
 class Job:
     def __init__(self, *, memory_mb: int, max_processes: int | None):
         self.handle = _kernel32.CreateJobObjectW(None, None)
@@ -114,9 +125,10 @@ class Job:
         proc = subprocess.Popen(args, creationflags=flags, **popen_kwargs)
         try:
             _check(
-                _kernel32.AssignProcessToJobObject(self.handle, int(proc._handle)), "AssignProcessToJobObject"
+                _kernel32.AssignProcessToJobObject(self.handle, _process_handle(proc)),
+                "AssignProcessToJobObject",
             )
-            status = _ntdll.NtResumeProcess(int(proc._handle))
+            status = _ntdll.NtResumeProcess(_process_handle(proc))
             if status != 0:
                 raise OSError(f"NtResumeProcess failed with status {status:#x}")
         except BaseException:

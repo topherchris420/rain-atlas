@@ -115,7 +115,7 @@ def cmd_skills_test(args) -> int:
         path = Path(name)
         if path.is_dir():
             src = load_source(path)
-            if not src.ok:
+            if not src.ok or src.manifest is None or src.content_hash is None:
                 print(f"INVALID {src.name}: {'; '.join(src.problems)}")
                 return 1
             targets.append(

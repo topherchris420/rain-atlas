@@ -120,7 +120,9 @@ def detect_peaks(
     threshold = floor * factor
     sep_bins = max(1, int(np.ceil((min_separation_hz or 2.0 * welch.resolution_hz) / welch.resolution_hz)))
 
-    candidates = [i for i in band if psd[i] > threshold and psd[i] >= psd[i - 1] and psd[i] >= psd[i + 1]]
+    candidates = [
+        i for i in map(int, band) if psd[i] > threshold and psd[i] >= psd[i - 1] and psd[i] >= psd[i + 1]
+    ]
     candidates.sort(key=lambda i: psd[i], reverse=True)
     kept: list[int] = []
     for i in candidates:

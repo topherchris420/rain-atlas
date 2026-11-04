@@ -49,7 +49,7 @@ it cannot count as evidence or approve execution.
 - `atlas observatory export …` opens directly as a local HTML file; no
   requests, external assets or execution routes; all displayed results come
   from recorded data. Missing results and test status remain unknown.
-- Formatting, lint and public scientific API type checks run in CI. Hosted
+- Formatting, lint and whole-package type checks run in CI. Hosted
   matrix results are reported only if the jobs actually execute.
 
 ## Initial environment evidence

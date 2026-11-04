@@ -236,7 +236,7 @@ def tones_for(truth: dict, label: str) -> list[dict]:
 class DatasetState:
     spec: dict
     data: dict = field(default_factory=dict)  # part -> {"ref", "run", "dataset", "public"}
-    primary: dict | None = None
+    primary: dict = field(default_factory=dict)  # set by the analyse stage before any later stage
     independent: list[list[float]] | None = None
     independent_run: Entry | None = None
     agreement: dict = field(default_factory=dict)
@@ -898,12 +898,13 @@ def evaluate_acceptance(summary: dict, ledger_problems: list[str]) -> list[dict]
         ),
     )
 
-    supported = [f for d in datasets for f in d["findings"] if f["verdict"] == "supported"]
-    false = [f for f in supported if not f["matches_truth"]]
+    supported_findings = [f for d in datasets for f in d["findings"] if f["verdict"] == "supported"]
+    false_findings = [f for f in supported_findings if not f["matches_truth"]]
     add(
         "A5",
-        not false,
-        f"{len(supported)} supported finding(s), {len(false)} not within tolerance of a true tone",
+        not false_findings,
+        f"{len(supported_findings)} supported finding(s), "
+        f"{len(false_findings)} not within tolerance of a true tone",
     )
 
     primary_ok = [d["reproduced"] for d in datasets]
@@ -928,7 +929,7 @@ def _figures(
     summary: dict,
     out_dir: Path,
 ) -> list[dict]:
-    figures = []
+    figures: list[dict] = []
     tone_sets = sorted(
         (d for d in summary["datasets"] if not d["is_control"]), key=lambda d: -d["snr_ref_db"]
     )

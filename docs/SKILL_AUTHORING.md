@@ -43,5 +43,6 @@ definitions and inputs; it never learns expected answers from a run. Existing
 skills remain the canonical inspectable files and are versioned in Git.
 
 The public scientific APIs are documented by docstrings and
-`docs/RESONANCE.md`. Current mypy coverage is explicitly limited to resonance
-and uncertainty primitives; full-core strict typing remains planned.
+`docs/RESONANCE.md`. mypy checks the whole `rain_atlas` package (with
+`check_untyped_defs`, not `--strict`) on every CI Python version and on both
+Linux and Windows. Fully annotated signatures (`--strict`) remain planned.
