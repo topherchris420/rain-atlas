@@ -62,7 +62,7 @@ def stft(x: ArrayLike, fs: float, nperseg: int = 128, hop: int = 64) -> TimeFreq
     density[:, 1 : -1 if nperseg % 2 == 0 else None] *= 2
     return TimeFrequency(
         np.asarray((starts + (nperseg - 1) / 2) / fs, dtype=np.float64),
-        np.fft.rfftfreq(nperseg, 1 / fs),
+        np.asarray(np.fft.rfftfreq(nperseg, 1 / fs), dtype=np.float64),
         density.T,
         fs / nperseg,
     )
