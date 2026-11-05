@@ -6,6 +6,32 @@ All notable changes are recorded here. Versions follow semantic versioning.
 
 First end-to-end slice.
 
+### Fixed (follow-up review and module audit, 2026-11-05)
+
+- **Peak memory missed result serialization.** `VmHWM` was read before the
+  outputs were converted and encoded. It is now read after encoding, and the
+  reading is written without copying the payload. For a probe returning 3e6
+  zeros, the recorded excess rose from 22.9 to 63.0 MiB, the predicted total.
+- **The SQLite extension test failed on CPython builds without loadable
+  extension support.** It now skips there and keeps its assertion elsewhere.
+- **`Registry.get` returned installed skills whose files changed after
+  installation**, so `atlas run` could execute them. `select` already refused
+  them; `get` now does too.
+- **The R.A.I.N. export took its commit and dirty flag from the first run
+  only.** A study continued from a modified tree was exported as clean. Every
+  run now counts, and runs from different commits are refused.
+- **The schema validator followed Python semantics, not JSON Schema's.**
+  `enum`/`const` treated `true` as `1`, and `pattern`'s `$` also matched before
+  a final newline, so `^sha256:…$` admitted `"sha256:…\n"`. Both now follow
+  JSON Schema.
+- **Example comparison:** an infinite expected value never matched itself,
+  `1` satisfied an expected `true`, and canonical `{"$float": …}` expectations
+  were not decoded.
+- **The skeptic paired falsification tests with claims by position.** A
+  reordered response from a capability-selected skill would have attached
+  verdicts to the wrong claims, and a short one left claims unchallenged.
+  Tests are now matched by the frequency they report.
+
 ### Fixed (first Linux validation, 2026-11-05)
 
 - **Skill and evidence hashes now match on every OS.** Content hashes and
