@@ -34,9 +34,17 @@ def submission(ledger: Ledger, experiment: str, experiment_id: str, version: int
         raise ValueError("adapter only exports explicitly synthetic studies")
     if not runs or not reports:
         raise ValueError("completed runs and a report are required")
-    commit = runs[0].get("environment", {}).get("atlas_commit") or ""
-    if not re.fullmatch(r"[0-9a-f]{7,64}(?:-dirty)?", commit):
+    # Provenance must describe every run, not the first: a study continued
+    # from a modified tree is dirty, and one commit field cannot name two.
+    commits = {r.get("environment", {}).get("atlas_commit") or "" for r in runs}
+    if any(not re.fullmatch(r"[0-9a-f]{7,64}(?:-dirty)?", c) for c in commits):
         raise ValueError("a recorded source commit is required for R.A.I.N. provenance")
+    bases = sorted({c.removesuffix("-dirty") for c in commits})
+    if len(bases) > 1:
+        raise ValueError(
+            f"runs span more than one source commit ({', '.join(bases)}); export a study recorded from one commit"
+        )
+    commit, dirty = bases[0], any(c.endswith("-dirty") for c in commits)
     artifacts = {}
     for r in runs:
         for name, meta in r.get("artifacts", {}).items():
@@ -82,8 +90,8 @@ def submission(ledger: Ledger, experiment: str, experiment_id: str, version: int
         "provenance": {
             "producer": "R.A.I.N. ATLAS / Vers3Dynamics",
             "repository": "https://github.com/topherchris420/rain-atlas",
-            "commit": commit.removesuffix("-dirty"),
-            "dirty": commit.endswith("-dirty"),
+            "commit": commit,
+            "dirty": dirty,
             "atlas_experiment": experiment,
             "source_head": list(ledger.entries())[-1].hash,
             "adapter_version": "1.0.0",
