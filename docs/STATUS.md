@@ -1,4 +1,4 @@
-# Current workbench status — 2026-11-04
+# Current workbench status — 2026-11-05
 
 This update supersedes the historical v0.1 status retained below. The complete
 specification is **not** claimed complete. See [WORKBENCH_LIMITATIONS.md](WORKBENCH_LIMITATIONS.md)
@@ -7,7 +7,7 @@ for implemented boundaries and explicitly planned work.
 | Priority | Implemented and exercised |
 |---|---|
 | Audit / CI repair | Reproduced baseline, inspected workflow annotations, repaired artifact/ledger/process handling; pinned four-job matrix with JUnit artifacts |
-| Offline observatory | Experiment/evidence/timeline/skill/report/composer views, standalone CSP-restricted HTML, source verification, privacy projection; Python and DOM interaction tests |
+| Offline observatory | Experiment/evidence/timeline/skill/report/composer views, standalone CSP-restricted HTML, source verification, privacy projection; Python, DOM and real-browser (Chromium, CSS/CSP active) tests |
 | Resonance | STFT, Morlet CWT, PLV/order parameter, noisy Kuramoto, LMS/NLMS, FIR identification, supported thin-plate modes, multichannel cross spectra; 22 total executable skills |
 | Demonstration | Two-oscillator synchronization sweep with analytical reference, new-data replication, independent phase/frequency observables, exact reproduction, reports and figures |
 | Scientific skepticism | Noise/phase-lag shifts, independent replicate intervals, Bonferroni and Holm utilities, Wilson error-rate intervals, exact-identity leakage check, preserved unknown truth |
@@ -19,6 +19,16 @@ for implemented boundaries and explicitly planned work.
 
 ## Validation record
 
+- **Linux, 2026-11-05, first POSIX execution** at `3e770cb`: full suites
+  **235 passed, 1 skipped** on CPython 3.12.3 (207.46 s) and on CPython 3.11.18
+  (202.10 s), including all slow acceptance tests. Lint, format, types and skill
+  validation pass. Chromium renders the fresh and published observatories with
+  CSS and CSP active, with no console messages, network requests or overflow.
+  This execution found and fixed five defects: OS-dependent skill hashes,
+  inherited POSIX peak memory, SQLite and extended-attribute guard gaps,
+  two-segment coherence, and report overflow. The regenerated demonstration
+  reaches the same 30 verdicts as Windows, with byte-identical reports. See
+  [VALIDATION.md](VALIDATION.md).
 - Baseline Windows Python 3.12: **112 passed, 1 skipped, 7 deselected** (non-slow).
 - Repair-stage full suite: **138 passed, 1 skipped** on Windows Python 3.12.15
   (887.71 s) and **138 passed, 1 skipped** on Windows Python 3.11.9 (849.72 s).
@@ -29,13 +39,13 @@ for implemented boundaries and explicitly planned work.
   `atlas-data/validation/final-py312.xml` and `final-py311.xml`.
 - Numerical resonance checks: **18 passed**; independent formulas, SciPy
   comparisons, null controls and deterministic/stochastic convergence cases.
-- Offline viewer DOM interactions: **3 passed**. CUA browser/native providers
-  were unavailable; no browser-rendered visual or CSP-enforcement test is claimed.
+- Offline viewer DOM interactions: **3 passed**. Browser-rendered checks were
+  added on 2026-11-05 (see the Linux record below).
 - Ruff lint/format and mypy (two scientific API modules): exercised locally.
 - Hosted matrix: **blocked before execution**. GitHub run `41103222445`
   annotations report failed account payments / spending limit. Logs do not
-  exist. No Linux/POSIX test result or hosted Python result is claimed; billing
-  was not changed. Workflow corrections cannot repair an account-level block.
+  exist. No hosted Python result is claimed; local Linux results are recorded
+  below. Billing was not changed. Workflow corrections cannot repair an account-level block.
 
 The Windows skip requires symlink privileges absent from this account. Local
 interpreters are x64 on an ARM64 Windows host. Python 3.11 resolves NumPy 2.4.6 /

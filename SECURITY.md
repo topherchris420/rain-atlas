@@ -12,8 +12,16 @@ ATLAS runs each skill in a separate Python process with:
 - a Python audit-hook guard that denies network access, subprocess creation,
   writes outside the run's output and temp directories, and reads outside the
   skill directory, the run's inputs, the interpreter's directories and the
-  `rain_atlas` package (plus system fonts when a skill declares it);
+  `rain_atlas` package (plus system fonts when a skill declares it). The same
+  rules apply to SQLite databases, which SQLite opens natively. In-memory
+  databases are allowed anywhere. Files are allowed only in the output or temp
+  directories, or in the read roots for read-only URIs. Native SQLite
+  extensions are refused. Extended-attribute changes count as writes and
+  extended-attribute reads count as reads;
 - a minimal environment with no inherited secrets.
+
+The guard can only act on operations that raise a Python audit event.
+`os.mkfifo` and `os.mknod` raise none, so they are not restricted.
 
 **The audit-hook guard is policy enforcement, not a sandbox.** Native code
 (C extensions, `ctypes`) can bypass audit hooks. On POSIX there is no process

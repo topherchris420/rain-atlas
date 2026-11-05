@@ -27,6 +27,27 @@ based Content Security Policy blocks connections, forms and external assets.
 research. This projection is privacy-conscious, not an automatic declassifier.
 Full original reproducibility bundles still contain environment details.
 
+Reports summarize each acceptance criterion, finding and negative result the way
+a reviewer reads it: pass/fail or verdict tag, claim statement, recorded detail.
+The full projected record stays under "Inspect recorded item", and the Markdown
+download uses the same lines.
+
+## Browser verification
+
+The jsdom interaction tests in `tests/web` remove the CSS and the CSP. The real
+exported file is checked separately in Chromium, with both active:
+
+```sh
+node tests/web/browser-check.cjs atlas-data/view-001/index.html --assert
+```
+
+It loads the file from `file://` at 1440 px and 390 px and visits all six views.
+It fails on any of the following: a missing CSP directive, a blocked stylesheet,
+console messages, network requests, horizontal overflow, a figure that does not
+load, or a scripted `fetch` that is not refused. `pytest` runs it on a fresh
+export and on `docs/demonstration/index.html`, and skips where Node.js with
+Playwright and Chromium is unavailable.
+
 Skill execution counts refer only to selected recorded runs with matching
 content hashes. A declared example is not a passing test: test status remains
 unknown when no test result accompanies the export.
