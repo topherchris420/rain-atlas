@@ -6,6 +6,18 @@ All notable changes are recorded here. Versions follow semantic versioning.
 
 First end-to-end slice.
 
+### Fixed (ledger corruption handling, 2026-11-05)
+
+- Ledger verification rejects non-object records, including JSON `null`, which
+  previously passed without scientific record checks.
+- Log metadata now validates sequence types, record kinds and digest references;
+  malformed values and duplicate JSON keys produce verification diagnostics.
+- An unterminated final record blocks further appends even when its JSON is
+  complete. Previously, the next append could concatenate two records and
+  corrupt the log. Failed parsing leaves both history and objects unchanged.
+- Added 22 regression cases for malformed metadata, non-object records,
+  interrupted appends, duplicate keys and empty-ledger compatibility.
+
 ### Fixed (follow-up review and module audit, 2026-11-05)
 
 - **Peak memory missed result serialization.** `VmHWM` was read before the

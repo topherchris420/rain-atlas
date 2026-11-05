@@ -97,3 +97,10 @@ unterminated final JSON append with a valid complete prefix. It never edits the
 original, never repairs tampered completed records and never unblinds a vault.
 The new recovery record retains source and discarded-tail hashes. Operator
 inspection is still required before continuing scientific work.
+
+Verification and further appends reject an unterminated final log line, even
+when it contains complete JSON. In that case recovery refuses to discard the
+record: preserve the original and inspect it manually. Malformed metadata,
+duplicate log keys and non-object records also fail verification. These checks
+establish internal consistency, not external authenticity; run `atlas ledger
+verify LEDGER` before relying on imported evidence.

@@ -46,6 +46,16 @@ class Entry:
     prev: str
     hash: str
 
+    def __post_init__(self) -> None:
+        if type(self.seq) is not int or self.seq < 0:
+            raise ValueError("seq must be a nonnegative integer")
+        if not isinstance(self.at, str) or not self.at:
+            raise ValueError("at must be a nonempty timestamp string")
+        if not isinstance(self.kind, str) or not self.kind or not self.kind.replace("-", "").isalnum():
+            raise ValueError("invalid record kind")
+        for ref in (self.object, self.prev, self.hash):
+            _hex(ref)
+
     def to_dict(self) -> dict:
         return {
             "seq": self.seq,
@@ -61,6 +71,15 @@ def _hex(ref: str) -> str:
     if not isinstance(ref, str) or not re.fullmatch(r"sha256:[0-9a-f]{64}", ref):
         raise LedgerError(f"not a sha256 reference: {ref!r}")
     return ref[len(HASH_PREFIX) :]
+
+
+def _unique_object(pairs: list[tuple[str, Any]]) -> dict:
+    result: dict = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError(f"duplicate JSON key: {key}")
+        result[key] = value
+    return result
 
 
 def _atomic_write(path: Path, data: bytes) -> None:
@@ -168,10 +187,14 @@ class Ledger:
             return
         with self.log_path.open(encoding="utf-8") as fh:
             for number, line in enumerate(fh, 1):
+                if not line.endswith("\n"):
+                    raise LedgerError(
+                        f"malformed log line {number} (unterminated); preserve history and inspect before recovery"
+                    )
                 if line.strip():
                     try:
-                        entry = Entry(**json.loads(line))
-                    except (ValueError, TypeError) as exc:
+                        entry = Entry(**json.loads(line, object_pairs_hook=_unique_object))
+                    except (ValueError, TypeError, LedgerError) as exc:
                         raise LedgerError(
                             f"malformed log line {number}; preserve history and recover in a new ledger"
                         ) from exc
@@ -191,11 +214,13 @@ class Ledger:
     def append(self, kind: str, record: dict) -> Entry:
         """Store *record* and append it to the chain; returns the new entry."""
 
-        if not kind or not kind.replace("-", "").isalnum():
+        if not isinstance(kind, str) or not kind or not kind.replace("-", "").isalnum():
             raise LedgerError(f"invalid record kind {kind!r}")
-        ref = self.put_json(record)
+        if not isinstance(record, dict):
+            raise LedgerError("record must be a JSON object")
         with _locked(self.lock_path):
             last = self._last()
+            ref = self.put_json(record)
             body = {
                 "seq": 0 if last is None else last.seq + 1,
                 "at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
@@ -260,7 +285,7 @@ class Ledger:
         expected_seq = 0
         try:
             entries = list(self.entries())
-        except (LedgerError, UnicodeError) as exc:
+        except (LedgerError, UnicodeError, OSError) as exc:
             return [str(exc)]
         for entry in entries:
             body = entry.to_dict()
@@ -273,6 +298,8 @@ class Ledger:
                 problems.append(f"seq {entry.seq}: entry hash mismatch (log line edited)")
             try:
                 record = self.get_json(entry.object)
+                if not isinstance(record, dict):
+                    raise LedgerError("record must be a JSON object")
             except (LedgerError, ValueError, UnicodeError, OSError) as exc:
                 problems.append(f"seq {entry.seq}: {exc}")
                 record = None
