@@ -80,9 +80,12 @@ def morlet_cwt(x: ArrayLike, fs: float, frequencies_hz: ArrayLike, omega0: float
     """Corrected complex Morlet correlation, discrete L2 unit-norm kernels.
 
     Scale = omega0*fs/(2*pi*f). Frequencies are nominal center frequencies;
-    coefficients are not a PSD. Zero extension biases edges; mask excludes
-    sqrt(2)*scale from each edge (Gaussian e-folding cone). No significance
-    inference is supplied. Frequencies above fs/4 are rejected for sampling.
+    coefficients are not a PSD. With L2 normalization the modulus ridge of a
+    stationary tone at f lies at f*2*omega0/(omega0+sqrt(omega0**2+2)), 1.35%
+    low for omega0=6 (Torrence & Compo 1998); divide a ridge frequency by that
+    factor to estimate a tone frequency. Zero extension biases edges; mask
+    excludes sqrt(2)*scale from each edge (Gaussian e-folding cone). No
+    significance inference is supplied. Frequencies above fs/4 are rejected.
     """
     a, frequencies = _array(x, 1), _array(frequencies_hz, 1)
     _positive(fs, "fs")
@@ -299,14 +302,13 @@ def cross_spectrum(channels: ArrayLike, fs: float, nperseg: int = 128) -> dict:
     """
     x = _array(channels, 2)
     _positive(fs, "fs")
-    if (
-        not isinstance(nperseg, int)
-        or nperseg < 8
-        or x.shape[0] < 2 * nperseg
-        or x.shape[1] < 2
-        or x.shape[1] > 32
-    ):
-        raise ValueError("require nperseg>=8, n>=2*nperseg and 2..32 channels")
+    if not isinstance(nperseg, int) or nperseg < 8 or x.shape[1] < 2 or x.shape[1] > 32:
+        raise ValueError("require nperseg>=8 and 2..32 channels")
+    # Count segments explicitly: n >= 2*nperseg gives only two for odd
+    # nperseg, where the coherence of independent noise averages about 0.5.
+    segments = 1 + (x.shape[0] - nperseg) // (nperseg - nperseg // 2) if x.shape[0] >= nperseg else 0
+    if segments < 3:
+        raise ValueError("require at least three complete Welch segments (50% overlap)")
     spectra = []
     for i in range(x.shape[1]):
         row = []
@@ -332,5 +334,5 @@ def cross_spectrum(channels: ArrayLike, fs: float, nperseg: int = 128) -> dict:
         "cross_imag": cs.imag.tolist(),
         "coherence": np.clip(coherence, 0, 1).tolist(),
         "undefined_bins": (denom <= 0).tolist(),
-        "segments": 1 + (x.shape[0] - nperseg) // (nperseg - nperseg // 2),
+        "segments": segments,
     }

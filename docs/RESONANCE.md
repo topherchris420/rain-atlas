@@ -10,13 +10,13 @@ not empirical validation of physical or biological claims.
 | Capability | Definition / units | Numerical check | Failure conditions |
 |---|---|---|---|
 | STFT | Periodic Hann, complete frames, one-sided density in input²/Hz; no detrending or padding | SciPy spectrogram, Parseval, even/odd frames, chirp ridge and zero control | Irregular sampling, aliasing, insufficient duration; resolution is not zero-padding spacing |
-| Morlet CWT | Corrected complex Morlet, discrete L2 unit norm, nominal f=omega0 fs/(2 pi scale) | Known tone, translation, zero control, explicit edge mask | Zero-extension edges; fs/4 ceiling; scalogram is not PSD or significance |
+| Morlet CWT | Corrected complex Morlet, discrete L2 unit norm, nominal f=omega0 fs/(2 pi scale) | Known tone, translation, zero control, explicit edge mask; a tone's modulus ridge lies at f·2ω0/(ω0+√(ω0²+2)) (1.35% low at ω0=6), as L2 normalization predicts | Zero-extension edges; fs/4 ceiling; scalogram is not PSD or significance; nominal centers are not ridge frequencies |
 | PLV | abs(mean(exp(i phase difference))) over time; dimensionless | Constant offset=1, full-circle drift=0 | Finite-sample bias, autocorrelation, ambiguous broadband phase, common drive; PLV is not causality |
 | Kuramoto | All-to-all K/N, self excluded; omega,K rad/s, D rad²/s | Exact uncoupled solution, pair fixed point, RK4 order against DOP853-style adaptive reference, coupled Wiener refinement | Phase-only reduction; no delays/amplitude physics; stiffness/coarse dt; finite N |
 | LMS / NLMS | Causal FIR adaptation w+=mu e x (NLMS normalized by input energy) | Known FIR weights, residual reduction | Plain LMS step bound depends on input covariance; divergence rejected; adaptive cancellation can remove desired signal |
 | FIR identification | Least squares; coefficient covariance conditional on IID output residuals and noise-free input | Known coefficients, unrelated-output control, rank-deficiency refusal | Errors in variables, coloured residuals, nonlinearity, insufficient excitation |
 | Plate eigenmode | Simply supported rectangular Kirchhoff–Love sin(m pi x/a) sin(n pi y/b), material-derived Hz | Boundary zeros, thickness scaling, second-order spatial convergence | Not a free-edge Chladni plate; no sand, fluid, damping or nonlinear response |
-| Cross spectra | Welch CSD conj(X)Y in input²/Hz; magnitude-squared coherence | Independent SciPy agreement and unrelated-noise negative control | <3 segments, zero power (mask), nonstationarity, common input, bias |
+| Cross spectra | Welch CSD conj(X)Y in input²/Hz; magnitude-squared coherence | Independent SciPy agreement and unrelated-noise negative control; at least three segments enforced for odd and even nperseg | <3 segments (independent noise then averages about 0.5 coherence; refused), zero power (mask), nonstationarity, common input, bias |
 
 Arrays are float64/complex128. Kernel precision is tested to stated tolerances,
 not advertised as arbitrary precision. Where uncertainty is absent, outputs

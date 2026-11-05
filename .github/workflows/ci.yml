@@ -57,7 +57,7 @@ jobs:
 
   offline-viewer:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -67,3 +67,9 @@ jobs:
           cache-dependency-path: tests/web/package-lock.json
       - run: npm ci --prefix tests/web
       - run: npm test --prefix tests/web
+      - name: Real-browser check of the published observatory (CSS and CSP active)
+        working-directory: tests/web
+        run: |
+          npm install --no-save playwright@1.63.0
+          npx playwright install --with-deps chromium
+          npm run test:browser

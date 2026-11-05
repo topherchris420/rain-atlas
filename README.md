@@ -12,8 +12,12 @@ reproduce it.
 > **Scientific workbench, v0.1 (unreleased).** Includes an offline observatory,
 > 22 executable skills, synchronization and spectral experiments, a classical
 > stress benchmark, source provenance and validated local proposal intake.
-> See [`docs/STATUS.md`](docs/STATUS.md) for executed tests and remaining limits.
-> The executor enforces policy; it is not a security sandbox.
+> Validated locally on Windows and Linux. The synchronization demonstration
+> reaches identical verdicts with byte-identical reports on both. Skill hashes
+> are now independent of the OS, which a pinned golden test checks; Windows has
+> not been re-run since that fix. See [`docs/STATUS.md`](docs/STATUS.md) for
+> executed tests and remaining limits. The executor enforces policy; it is not
+> a security sandbox.
 
 ATLAS is an independent Vers3Dynamics project. It is not affiliated with or
 endorsed by the U.S. Department of Energy or the Genesis Mission.
@@ -24,7 +28,7 @@ endorsed by the U.S. Department of Energy or the Genesis Mission.
 uv sync --locked --python 3.12                # one-command development setup from this checkout
 uv run atlas skills list
 uv run atlas skills test                      # run every skill's examples in the executor
-uv run atlas experiment run spectral-recovery # the reference experiment (~10 min on a laptop)
+uv run atlas experiment run spectral-recovery # the reference experiment (57 s on Linux x86-64, 96 s on Windows)
 uv run atlas ledger verify atlas-data/spectral-recovery/ledger
 uv run atlas observatory export atlas-data/spectral-recovery/ledger --out atlas-data/spectral-view
 ```
@@ -36,6 +40,8 @@ Open `atlas-data/spectral-view/index.html` directly. No server, account, model,
 external assets or execution endpoint is required. The viewer contains six
 views: experiments, claim dependencies, scientific timeline, skills, reports
 and a proposal composer. Scientific free text must be reviewed before sharing.
+
+![The offline observatory's evidence explorer: a claim traced through its run, challenge, reproduction and verdict](docs/demonstration/evidence-explorer.png)
 
 For the new resonance demonstration and benchmark:
 

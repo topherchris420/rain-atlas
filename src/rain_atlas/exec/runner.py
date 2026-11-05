@@ -27,6 +27,9 @@ from .policy import HostPolicy, Policy, PolicyRefused, effective_policy
 
 CHILD_SCRIPT = Path(__file__).with_name("child.py")
 TAIL_CHARS = 4000
+_BOUND_NOTE = (
+    "upper bound: wait4 ru_maxrss, which on Linux also includes the host's RSS when the child was spawned"
+)
 
 
 @dataclass(frozen=True)
@@ -297,7 +300,7 @@ def run_skill(
         if "sha256" in ref and sha256_file(target) != ref["sha256"]:
             return refuse("invalid-input", f"artifact {ref['$artifact']!r} does not match its hash")
     inputs_path = input_dir / "_inputs.json"
-    inputs_path.write_text(json.dumps(inputs, allow_nan=False), encoding="utf-8")
+    inputs_path.write_text(json.dumps(inputs, allow_nan=False), encoding="utf-8", newline="\n")
 
     spec = {
         "sys_path": _child_sys_path(),
@@ -312,7 +315,7 @@ def run_skill(
         "policy": base.policy,
     }
     spec_path = run_dir / "spec.json"
-    spec_path.write_text(json.dumps(spec, indent=2), encoding="utf-8")
+    spec_path.write_text(json.dumps(spec, indent=2), encoding="utf-8", newline="\n")
 
     cmd = [_interpreter(), "-s", "-P", "-B", "-X", "utf8", str(CHILD_SCRIPT), str(spec_path)]
     env = _child_env(tmp_dir.resolve(), policy.threads)
@@ -336,10 +339,11 @@ def run_skill(
                 start_new_session=True,
             )
         deadline = clock + policy.timeout_s
+        usage = None
         try:
             while True:
                 try:
-                    proc.wait(timeout=0.05)
+                    usage = _reap(proc, 0.05)
                     break
                 except subprocess.TimeoutExpired:
                     if cancel is not None and cancel.is_set():
@@ -348,7 +352,7 @@ def run_skill(
                         status = "timeout"
                     else:
                         continue
-                    _kill(proc, job)
+                    usage = _kill(proc, job)
                     break
         except BaseException:
             _kill(proc, job)
@@ -359,14 +363,17 @@ def run_skill(
                 base.peak_memory_note = "Windows job object peak committed memory (all processes)"
                 job.close()
             else:
-                # Also reap descendants when the main child exits normally.
-                _kill(proc, None)
+                # Also kill descendants left in the group when the main child exits normally.
+                usage = _kill(proc, None) or usage
+    bound_mb = None
     if sys.platform != "win32":
-        import resource  # noqa: PLC0415
-
-        rss = resource.getrusage(resource.RUSAGE_CHILDREN).ru_maxrss
-        base.peak_memory_mb = rss / (1024 * 1024) if sys.platform == "darwin" else rss / 1024
-        base.peak_memory_note = "max RSS over all children of this host process so far (upper bound)"
+        if usage is not None:
+            rss = usage.ru_maxrss  # bytes on macOS, KiB elsewhere
+            bound_mb = rss / (1024 * 1024) if sys.platform == "darwin" else rss / 1024
+            base.peak_memory_mb = bound_mb
+            base.peak_memory_note = _BOUND_NOTE
+        else:
+            base.peak_memory_note = "unavailable: the child was reaped outside the executor"
 
     base.exit_code = proc.returncode
     base.stdout_tail = _tail(stdout_path)
@@ -398,6 +405,14 @@ def run_skill(
             raise ValueError("result is not an object")
     except (ValueError, UnicodeError) as exc:
         return refuse("invalid-output", str(exc))
+    reported = payload.get("peak_rss_kib")
+    # The bootstrap's VmHWM excludes the host; accept it only if consistent
+    # with the host-measured bound (the bound includes it).
+    if type(reported) is int and 0 < reported and bound_mb is not None and reported / 1024 <= bound_mb + 1:
+        base.peak_memory_mb = reported / 1024
+        base.peak_memory_note = (
+            "peak RSS of the skill process since exec (VmHWM, read by the ATLAS bootstrap)"
+        )
     base.log = payload.get("log", [])
     base.policy_denials = payload.get("policy_denials") or (payload.get("error") or {}).get(
         "policy_denials", []
@@ -421,7 +436,37 @@ def run_skill(
     return _collect_artifacts(base, output_dir)
 
 
-def _kill(proc: subprocess.Popen, job) -> None:
+def _reap(proc: subprocess.Popen, timeout: float):
+    """Wait up to *timeout* s for *proc*; on POSIX also return its own rusage.
+
+    ``RUSAGE_CHILDREN`` is a running maximum over every child the host has
+    ever reaped, so one large run inflated every later run's recorded peak.
+    ``wait4`` reports the usage of exactly this child.
+    """
+    if sys.platform == "win32":
+        proc.wait(timeout=timeout)
+        return None
+    if proc.returncode is not None:
+        return None  # already reaped (and measured) earlier
+    deadline = time.monotonic() + timeout
+    delay = 0.0005
+    while True:
+        try:
+            pid, wait_status, usage = os.wait4(proc.pid, os.WNOHANG)
+        except ChildProcessError:  # reaped elsewhere, for example with SIGCHLD ignored
+            proc.returncode = 0
+            return None
+        if pid:
+            proc.returncode = os.waitstatus_to_exitcode(wait_status)
+            return usage
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise subprocess.TimeoutExpired(proc.args, timeout)
+        time.sleep(min(delay, remaining))
+        delay = min(delay * 2, 0.05)
+
+
+def _kill(proc: subprocess.Popen, job):
     if job is not None:
         job.kill()
     else:
@@ -432,10 +477,10 @@ def _kill(proc: subprocess.Popen, job) -> None:
         except ProcessLookupError:
             pass
     try:
-        proc.wait(timeout=10)
+        return _reap(proc, 10)
     except subprocess.TimeoutExpired:
         proc.kill()
-        proc.wait()
+        return _reap(proc, float("inf"))
 
 
 def _collect_artifacts(result: RunResult, output_dir: Path) -> RunResult:

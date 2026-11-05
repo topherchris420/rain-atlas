@@ -98,14 +98,36 @@ function skills(view) {
   const grid=el("div",null,"skill-grid");
   atlas.skills.filter(matches).forEach(s=>{const p=panel(s.name);add(p,tag(s.domain),tag("v"+s.version),el("p",s.summary),el("small",`${s.successful_runs}/${s.recorded_runs} recorded runs successful · ${s.examples} declared examples`),el("p",s.test_status,"muted"),details("Inputs and outputs",{inputs:s.inputs,outputs:s.outputs}),details("Dependencies and permissions",{requires:s.requires,permissions:s.permissions,limits:s.limits}),details("Assumptions and failure conditions",s.limitations),el("p",s.content_hash,"hash"));add(grid,p);});add(view,grid);
 }
+// Readable summary of a recorded report item. Structured items keep their
+// full projected record behind "Inspect"; raw JSON is never the headline.
+function summarize(x) {
+  if (x === null || typeof x !== "object") return {text: String(x)};
+  if (typeof x.passed === "boolean") return {state: x.passed ? "passed" : "failed", text: [x.id, x.criterion].filter(Boolean).join(" · "), detail: x.detail};
+  const claim = byId.get(x.claim || (x.claims || [])[0]);
+  if (claim) return {state: x.verdict, text: claim.data.statement, detail: x.note};
+  if (x.result) return {text: [x.dataset, x.snr_ref_db != null ? "SNR " + x.snr_ref_db + " dB" : null].filter(Boolean).join(" · ") + ": " + x.result};
+  if (x.case) {
+    const d = x.method_disagreement;
+    return {state: x.truth_hz === null ? "unknown-truth" : null, text: ["Case " + x.case, x.truth_status, d ? `methods disagreed in ${d.successes}/${d.n} trials` : null].filter(Boolean).join(" · ")};
+  }
+  return {state: x.verdict, text: x.statement || x.text || x.name || x.id || "Recorded item"};
+}
+function itemRow(x) {
+  const s = summarize(x), row = el("div", null, "row");
+  if (s.state) add(row, tag(s.state));
+  add(row, el("p", s.text));
+  if (s.detail) add(row, el("small", s.detail));
+  if (x !== null && typeof x === "object") add(row, details("Inspect recorded item", x));
+  return {row, line: "- " + (s.state ? s.state + ": " : "") + s.text + (s.detail ? " (" + s.detail + ")" : "")};
+}
 function reports(view, rows) {
   const reports=rows.filter(r=>r.kind==="report"&&matches(r));
   if(!reports.length)add(view,empty("No completed report in this snapshot."));
   reports.forEach(r=>{const p=panel(byId.get(r.experiment)?.data.title||"Research report");
     const pr=byId.get(r.experiment);const lines=["# "+(pr?.data.title||"Research report"),"",pr?.data.question||"", "", "Derived review export; source head: "+atlas.source_head,"", "## Findings"];
     add(p,el("p",r.data.conclusion||"See findings and limitations below."));
-    (r.data.findings||[]).forEach(f=>{const c=byId.get(f.claim||(f.claims||[])[0]);const row=el("div",null,"row");add(row,tag(f.verdict),el("p",c?.data.statement||JSON.stringify(f)));add(p,row);lines.push("", "- "+f.verdict+": "+(c?.data.statement||JSON.stringify(f)));});
-    ["acceptance","negative_results","limitations"].forEach(key=>{add(p,el("h3",key.replaceAll("_"," ")));const vals=r.data[key]||[];lines.push("","## "+key.replaceAll("_"," "));vals.forEach(x=>{const t=typeof x==="string"?x:JSON.stringify(x);add(p,el("p",t,"muted"));lines.push("",t);});if(!vals.length)add(p,el("small","None recorded in this field."));});
+    (r.data.findings||[]).forEach(f=>{const item=itemRow(f);add(p,item.row);lines.push("",item.line);});
+    [["acceptance","Acceptance criteria"],["negative_results","Negative results"],["limitations","Limitations"]].forEach(([key,title])=>{add(p,el("h3",title));const vals=r.data[key]||[];lines.push("","## "+title);vals.forEach(x=>{const item=itemRow(x);add(p,item.row);lines.push("",item.line);});if(!vals.length)add(p,el("small","None recorded in this field."));});
     add(p,linkDownload("Download review report · Markdown","atlas-report.md",lines.join("\n"),"text/markdown"),linkDownload("Download projected evidence · JSON","atlas-review.json",{source_head:atlas.source_head,records:rows.filter(x=>x.experiment===r.experiment)}));add(view,p);});
   figures(view,$("experiment").value);
 }

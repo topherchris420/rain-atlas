@@ -2,6 +2,13 @@
 
 Expected values come from algebraic cases (not captured implementation output).
 This also demonstrates the small directory template used for new skills.
+
+The committed fixtures are canonical. Example inputs use vectorized NumPy
+sin/cos, whose last-ulp results differ between CPUs and builds (Linux x86-64
+vs the Windows host that first ran this: up to 1.6e-16 relative). Tolerance
+outcomes are unaffected, but the bytes, and so the skill content hashes,
+change. Regenerate only to change a skill deliberately; files are written
+with LF so a Windows run does not also change line endings.
 """
 
 import json
@@ -270,16 +277,18 @@ def main():
             ("examples/analytical.input.json", example),
             ("examples/analytical.expected.json", expected),
         ]:
-            (path / file).write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+            (path / file).write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8", newline="\n")
         (path / "run.py").write_text(
             f'from rain_atlas.science.skill_api import run_method\n\n\ndef run(inputs, ctx):\n    return run_method("{method}", inputs, ctx)\n',
             encoding="utf-8",
+            newline="\n",
         )
         (path / "SKILL.md").write_text(
             f"---\nname: {name}\ndescription: {summary} Use for reproducible numerical studies.\nlicense: MIT\n---\n\n# {name}\n\n{summary}\n\nInputs and outputs are typed in `skill.json`. Run the analytical example with\n`atlas skills test {name}`. Precision and convergence tests are in\n`tests/test_resonance.py`; methods, units and independent references are in\n`docs/RESONANCE.md`. Arrays are reproducible artifacts with SHA-256 digests.\n\n## Assumptions and failure conditions\n\n"
             + "\n".join("- " + x for x in limits)
             + "\n\nNo calibrated uncertainty or empirical validation is implied by a plot.\n",
             encoding="utf-8",
+            newline="\n",
         )
 
 

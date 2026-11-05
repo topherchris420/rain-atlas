@@ -127,7 +127,7 @@ def evaluate(trials: int = 12, seed: int = 20261104) -> dict:
             "Wilson intervals use independent trials within each case; no aggregation across heterogeneous cases.",
             "Truth-unavailable chirp cases retain detections without labelling them true or false.",
             "Both baselines are classical methods; no unexecuted external system or LLM comparison.",
-            "Process peak memory and environment are recorded by the executor; POSIX memory is an upper bound over host children.",
+            "Process peak memory and environment are recorded per run by the executor (Windows job-object peak commit; POSIX peak RSS via wait4).",
         ],
     }
 

@@ -1008,7 +1008,8 @@ def _bundle(root: Path, report_dir: Path, experiment: str) -> Path:
     path = report_dir / f"bundle-{experiment[7:19]}.zip"
     with zipfile.ZipFile(path, "x", compression=zipfile.ZIP_DEFLATED) as zf:
         for base in (root / "ledger", report_dir):
-            for file in sorted(base.rglob("*")):
+            # Component-wise string order is the same on every OS (Path sorting is not).
+            for file in sorted(base.rglob("*"), key=lambda p: p.relative_to(root).parts):
                 if (
                     file.is_file()
                     and not file.is_symlink()

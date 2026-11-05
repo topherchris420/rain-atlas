@@ -119,7 +119,7 @@ def finish(
         payload["error"] = error
     if extra:
         payload.update(extra)
-    with open(os.path.join(ctx.output_dir, RESULT_FILE), "w", encoding="utf-8") as fh:
+    with open(os.path.join(ctx.output_dir, RESULT_FILE), "w", encoding="utf-8", newline="\n") as fh:
         json.dump(payload, fh, allow_nan=False)
     return 0 if status == "ok" else 1
 

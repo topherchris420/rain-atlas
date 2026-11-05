@@ -6,6 +6,41 @@ All notable changes are recorded here. Versions follow semantic versioning.
 
 First end-to-end slice.
 
+### Fixed (first Linux validation, 2026-11-05)
+
+- **Skill and evidence hashes now match on every OS.** Content hashes and
+  source snapshots sorted `pathlib.Path` objects, which Windows compares
+  case-insensitively. Generated skills were also hashed with CRLF bytes that
+  git never committed. As a result, no hash in the Windows-recorded
+  demonstration matched a checkout, Linux refused to reproduce Windows runs, and
+  approvals and proposals did not carry across platforms. Canonical
+  code-point ordering (`canonical.tree_files`) and pinned LF writes fix this.
+  POSIX hashes are unchanged; Windows hashes change to agree with them.
+- **Per-run peak memory on POSIX.** Records used `RUSAGE_CHILDREN`, a running
+  maximum over all children, so later runs inherited earlier peaks. `wait4`
+  alone still includes the host's RSS at spawn, which Linux folds into the
+  child's `maxrss`. Runs now report the child's own `VmHWM`, checked against the
+  `wait4` bound.
+- **Guard bypasses through the standard library.** `sqlite3` could create
+  files anywhere and read databases outside the read roots, native SQLite
+  extensions could load, and extended attributes outside the run could be
+  changed.
+- **Coherence with too few segments.** `cross_spectrum` accepted two Welch
+  segments for odd `nperseg`, where independent noise averages about 0.5
+  coherence. At least three are now enforced, as documented.
+- **Observatory reports.** Structured acceptance and negative-result items
+  were raw JSON, which overflowed the page (by up to 949 px on a phone). They
+  are now readable summaries, with the full record under "Inspect".
+
+### Added (2026-11-05)
+
+- Real-browser verification of exported observatories in Chromium, with CSS
+  and CSP active (`tests/web/browser-check.cjs`).
+- Portability tests: a golden mixed-case tree hash, snapshot/content-hash
+  agreement, LF-only hashed trees, and pinned line endings for text writes.
+- Documented Morlet ridge relation `f·2ω0/(ω0+√(ω0²+2))`, with a test.
+- Linux validation record and a demonstration regenerated on Linux.
+
 ### Added
 
 - Skill format: Agent Skills `SKILL.md` plus typed `skill.json`

@@ -1,4 +1,7 @@
-"""Build typed sweep and measurement manifests without running experiments."""
+"""Build typed sweep and measurement manifests without running experiments.
+
+Committed outputs are canonical; see make_resonance_skills.py on regenerating.
+"""
 
 import json
 from pathlib import Path
@@ -163,16 +166,18 @@ def main():
             ("examples/analytical.input.json", example),
             ("examples/analytical.expected.json", expected),
         ]:
-            (path / file).write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+            (path / file).write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8", newline="\n")
         (path / "run.py").write_text(
             f"from rain_atlas.science.synchronization import {method}\n\n\ndef run(inputs, ctx):\n    return {method}(inputs, ctx)\n",
             encoding="utf-8",
+            newline="\n",
         )
         (path / "SKILL.md").write_text(
             f"---\nname: {name}\ndescription: {m['summary']} Use for the preregistered synchronization experiment.\nlicense: MIT\n---\n\n# {name}\n\nTyped inputs and outputs are in skill.json. Run the known-answer example with\n`atlas skills test {name}`. Methods, convergence checks and limitations are\nin docs/RESONANCE.md and tests/test_synchronization.py.\n\n"
             + "\n".join("- " + x for x in m["limitations"])
             + "\n",
             encoding="utf-8",
+            newline="\n",
         )
 
 

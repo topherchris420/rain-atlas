@@ -40,12 +40,12 @@
   "answer": "5 of 30 conditions supported operational locking; 10 unresolved. This establishes only finite-window behavior of the specified synthetic model.",
   "findings": [
     {
-      "claim": "sha256:a07747d1b8f6cfed346e4fbf194d4924d0372c9b54865451703bea386ced2563",
+      "claim": "sha256:27cfb3b1f2966cfc2650da3ab825cc9c043d3a7f216306faa3491483accbb134",
       "claims": [
-        "sha256:a07747d1b8f6cfed346e4fbf194d4924d0372c9b54865451703bea386ced2563"
+        "sha256:27cfb3b1f2966cfc2650da3ab825cc9c043d3a7f216306faa3491483accbb134"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:29804eae4cc954599b66c116e37d803d1b4d8250f501a671ecde4db9c317a4c5",
+      "verdict_record": "sha256:7a7c9e79993d7a4d7482765ea9c29f3562396b83625bf357053366ca7fb9b21c",
       "condition": {
         "coupling": 0.0,
         "diffusion": 0.0,
@@ -55,7 +55,7 @@
         "mean": 0.04600325487932858,
         "low": 0.046003254879327625,
         "high": 0.04600325487932954,
-        "se": 2.1051905920475772e-16,
+        "se": 2.104436746863849e-16,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -73,7 +73,7 @@
         "mean": 0.046003254879328374,
         "low": 0.046003254879327146,
         "high": 0.0460032548793296,
-        "se": 2.697934016894117e-16,
+        "se": 2.7004880794165407e-16,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -84,12 +84,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:12353e4e418be83b0ef9d3f62fdfe0fe8273014ea149b484cdd879b840e4e93b",
+      "claim": "sha256:0feecc552f6e259c34b4e6c38d69416f35308dc987a137c996fc404557c48b25",
       "claims": [
-        "sha256:12353e4e418be83b0ef9d3f62fdfe0fe8273014ea149b484cdd879b840e4e93b"
+        "sha256:0feecc552f6e259c34b4e6c38d69416f35308dc987a137c996fc404557c48b25"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:e6d1ac557f61f69e835a5c393b1e2fa73fe570f7cf6274941dbb9c193329ad89",
+      "verdict_record": "sha256:f1418f4d0976d9b2dd7ee4d9623ff188a7ff7b26190ec8e66c2f87caf550a2a0",
       "condition": {
         "coupling": 0.6,
         "diffusion": 0.0,
@@ -99,7 +99,7 @@
         "mean": 0.3406491274809765,
         "low": 0.3281006160840332,
         "high": 0.3531976388779198,
-        "se": 0.0027593362240234754,
+        "se": 0.002759336224023476,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -108,7 +108,7 @@
         "mean": 0.792833305745483,
         "low": 0.7805434972000468,
         "high": 0.8051231142909193,
-        "se": 0.002702449145800354,
+        "se": 0.0027024491458003527,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -117,7 +117,7 @@
         "mean": 0.33694246443870907,
         "low": 0.3239666838121797,
         "high": 0.34991824506523844,
-        "se": 0.0028532899548934644,
+        "se": 0.0028532899548934687,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -128,12 +128,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:5d7aa95ca1d925ee5b2842804a8be7746ea4c8d47b21d84bbb6c0b95546510e4",
+      "claim": "sha256:f0b492a2640dfbb3be01aaa80d2186a5e8d94c8696bb66053adc39ea43f6f946",
       "claims": [
-        "sha256:5d7aa95ca1d925ee5b2842804a8be7746ea4c8d47b21d84bbb6c0b95546510e4"
+        "sha256:f0b492a2640dfbb3be01aaa80d2186a5e8d94c8696bb66053adc39ea43f6f946"
       ],
       "verdict": "supported",
-      "verdict_record": "sha256:84dec54f14422850448d7808af374d6f98a9763ff8f90be14a9a90edb3d22b4e",
+      "verdict_record": "sha256:fcb011197f9915cbff6535443ce06ae1a34fd00825817df482133877d0909114",
       "condition": {
         "coupling": 1.0,
         "diffusion": 0.0,
@@ -149,19 +149,19 @@
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
-        "mean": 0.0016925212148399254,
-        "low": 0.0014539462619402937,
-        "high": 0.001931096167739557,
-        "se": 5.246108393709599e-05,
+        "mean": 0.0016925212148399208,
+        "low": 0.0014539462619402909,
+        "high": 0.0019310961677395507,
+        "se": 5.2461083937095614e-05,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
-        "mean": 0.9997630604573865,
-        "low": 0.9994737303789918,
-        "high": 1.0000523905357812,
-        "se": 6.362180666374113e-05,
+        "mean": 0.9997630604573867,
+        "low": 0.9994737303789921,
+        "high": 1.0000523905357814,
+        "se": 6.362180666372283e-05,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -172,31 +172,31 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:b695ebe7ffad444800a6bdc66ee737186f6d69eefcf96eb651f8bc9bf7e02923",
+      "claim": "sha256:9be308ed39a64435a2a8a99eae1305156bbb5cf81b2fdef2eb0b47d5d8c2b96b",
       "claims": [
-        "sha256:b695ebe7ffad444800a6bdc66ee737186f6d69eefcf96eb651f8bc9bf7e02923"
+        "sha256:9be308ed39a64435a2a8a99eae1305156bbb5cf81b2fdef2eb0b47d5d8c2b96b"
       ],
       "verdict": "supported",
-      "verdict_record": "sha256:68cb45abdb7b9edc993f0276c174d25cb34bb0c0e5a02cb7ec7f126552ce6538",
+      "verdict_record": "sha256:9e3daa37415ed8d1553cf55f7e93ed013b2d3371182cf6280f46b246eb61277d",
       "condition": {
         "coupling": 1.4,
         "diffusion": 0.0,
         "phase_lag": 0.0
       },
       "phase": {
-        "mean": 0.9999999999999999,
-        "low": 0.9999999999999997,
+        "mean": 1.0,
+        "low": 0.9999999999999999,
         "high": 1.0000000000000002,
-        "se": 5.2038199669429244e-17,
+        "se": 3.6156574805208936e-17,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
-        "mean": 1.3914555274552493e-10,
-        "low": -1.1918601753125765e-10,
-        "high": 3.974771230223075e-10,
-        "se": 5.680543588996773e-11,
+        "mean": 1.3914555136876025e-10,
+        "low": -1.1918602190390885e-10,
+        "high": 3.974771246414294e-10,
+        "se": 5.680543654874374e-11,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -205,7 +205,7 @@
         "mean": 1.0,
         "low": 0.9999999999999999,
         "high": 1.0,
-        "se": 1.6737241846796126e-17,
+        "se": 2.1607686311362423e-17,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -216,12 +216,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:060cf9e6fc7d5726a361b91cea2797dbb61c8a72af377495b82a09b39c3944ba",
+      "claim": "sha256:3f333fcdc7aa63066e3937661a89e06fb813b9b85498a1f1d83c336a2f3354b7",
       "claims": [
-        "sha256:060cf9e6fc7d5726a361b91cea2797dbb61c8a72af377495b82a09b39c3944ba"
+        "sha256:3f333fcdc7aa63066e3937661a89e06fb813b9b85498a1f1d83c336a2f3354b7"
       ],
       "verdict": "supported",
-      "verdict_record": "sha256:af1f08b4455e18354b38342e2136d7dccb04a92de8905b1f48ca4ea9c9936ad8",
+      "verdict_record": "sha256:04566b6cd21d1a8ef4ff25505067db6007d8dd96cbfd828c5187bb27bd7c12fc",
       "condition": {
         "coupling": 2.0,
         "diffusion": 0.0,
@@ -237,10 +237,10 @@
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
-        "mean": 6.64044685427681e-17,
-        "low": -3.9840493069673e-17,
-        "high": 1.726494301552092e-16,
-        "se": 2.336257759375384e-17,
+        "mean": 6.771905673756876e-17,
+        "low": -3.729093612081915e-17,
+        "high": 1.7272904959595666e-16,
+        "se": 2.3091015978929454e-17,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -248,8 +248,8 @@
       "replicate": {
         "mean": 1.0,
         "low": 0.9999999999999997,
-        "high": 1.0000000000000004,
-        "se": 7.422483998781553e-17,
+        "high": 1.0000000000000002,
+        "se": 7.166458808248765e-17,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -260,12 +260,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:4b423e07f85bae261818f3553b038e9fc60672453715cff51567bf363dfb669d",
+      "claim": "sha256:7b3479ce060887d8fefcb23c593ca1840c483cfc73235ee06e780bba556fadad",
       "claims": [
-        "sha256:4b423e07f85bae261818f3553b038e9fc60672453715cff51567bf363dfb669d"
+        "sha256:7b3479ce060887d8fefcb23c593ca1840c483cfc73235ee06e780bba556fadad"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:103146763d76f58595add7f74d4833dd496f8654901725d6d69b9a3e88977f92",
+      "verdict_record": "sha256:94efc8e8652e15a03870d0071869e7e41b18c980e860cc5dc67fa630ef8de84c",
       "condition": {
         "coupling": 0.0,
         "diffusion": 0.08,
@@ -304,12 +304,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:5cf9148d4bcdc0c91d9ad106a91ab80c070eadd4316840f65d229639676f4370",
+      "claim": "sha256:342cd43fc30586fc3bbd877398ae0a00ac9e1fb01ac6614dc4632ffe83297b69",
       "claims": [
-        "sha256:5cf9148d4bcdc0c91d9ad106a91ab80c070eadd4316840f65d229639676f4370"
+        "sha256:342cd43fc30586fc3bbd877398ae0a00ac9e1fb01ac6614dc4632ffe83297b69"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:44b450ebac37af730c86659e94ec5d6bca1243c9ca0a267f66a6ffc294b4c9a8",
+      "verdict_record": "sha256:08b4a86a1d0fe4df7e8a0c3d2b4738ae593cb47aba62d3fb4d8d05e17fddb4de",
       "condition": {
         "coupling": 0.6,
         "diffusion": 0.08,
@@ -319,7 +319,7 @@
         "mean": 0.3295505953655225,
         "low": 0.2193589786079787,
         "high": 0.4397422121230663,
-        "se": 0.024230421448783783,
+        "se": 0.024230421448783786,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -328,16 +328,16 @@
         "mean": 0.7661338720429852,
         "low": 0.5784106313651289,
         "high": 0.9538571127208415,
-        "se": 0.04127912241603923,
+        "se": 0.04127912241603922,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
-        "mean": 0.3300463247040719,
-        "low": 0.19721117866089957,
+        "mean": 0.33004632470407214,
+        "low": 0.1972111786609,
         "high": 0.4628814707472443,
-        "se": 0.02920958659603711,
+        "se": 0.029209586596037066,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -348,12 +348,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:190c4dddf2ce343dadb4b71f51f17d97ee849dd5541ff90743fde9b5ba3269be",
+      "claim": "sha256:209a41ed5edd20a8433a2ddcb54a3af20c8bc6ea6652274f1356c332da1a965f",
       "claims": [
-        "sha256:190c4dddf2ce343dadb4b71f51f17d97ee849dd5541ff90743fde9b5ba3269be"
+        "sha256:209a41ed5edd20a8433a2ddcb54a3af20c8bc6ea6652274f1356c332da1a965f"
       ],
       "verdict": "unresolved",
-      "verdict_record": "sha256:fcd51f93c6d67cc737a11749aa44209065d00ff03025c491ddc37d748249c254",
+      "verdict_record": "sha256:44171d49fc9b1d238d713a660d25f19c2df525c19286fca6e5d382f5eb470f31",
       "condition": {
         "coupling": 1.0,
         "diffusion": 0.08,
@@ -370,9 +370,9 @@
       },
       "frequency": {
         "mean": 0.48296060637136656,
-        "low": 0.29699585585374866,
-        "high": 0.6689253568889845,
-        "se": 0.04089244184132845,
+        "low": 0.2969958558537487,
+        "high": 0.6689253568889844,
+        "se": 0.040892441841328446,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -381,7 +381,7 @@
         "mean": 0.6217224290492392,
         "low": 0.4658918212181281,
         "high": 0.7775530368803504,
-        "se": 0.03426613941672177,
+        "se": 0.03426613941672176,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -392,30 +392,30 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:81b3f2c6e13d56d45efeeb31dc7917d04f5ceadb93077a4d82bd82699a9dffba",
+      "claim": "sha256:3c1fba8f4c0800b03efa09bc67255efed2b283dec21923009bdc7e4a2218fb84",
       "claims": [
-        "sha256:81b3f2c6e13d56d45efeeb31dc7917d04f5ceadb93077a4d82bd82699a9dffba"
+        "sha256:3c1fba8f4c0800b03efa09bc67255efed2b283dec21923009bdc7e4a2218fb84"
       ],
       "verdict": "unresolved",
-      "verdict_record": "sha256:a8cd3cb13c2f6aece2a452fece05b41ac1de7a6e82a39d555ddc5f8c6b6d9718",
+      "verdict_record": "sha256:3ab9bef33be910dfb0cb2c6c6d3ef04b61b44958463ab48e61083707943e09c3",
       "condition": {
         "coupling": 1.4,
         "diffusion": 0.08,
         "phase_lag": 0.0
       },
       "phase": {
-        "mean": 0.8829312681670013,
-        "low": 0.7944504102547953,
-        "high": 0.9714121260792072,
-        "se": 0.019456366468240692,
+        "mean": 0.8829312681670015,
+        "low": 0.7944504102547957,
+        "high": 0.9714121260792073,
+        "se": 0.019456366468240678,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
-        "mean": 0.1560555087019068,
-        "low": 0.041070256233213406,
-        "high": 0.27104076117060016,
+        "mean": 0.15605550870190674,
+        "low": 0.04107025623321335,
+        "high": 0.2710407611706001,
         "se": 0.02528451083390158,
         "n": 12,
         "alpha": 0.0008333333333333334,
@@ -425,7 +425,7 @@
         "mean": 0.8894827195528601,
         "low": 0.8332181497011861,
         "high": 0.945747289404534,
-        "se": 0.012372213787735894,
+        "se": 0.0123722137877359,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -436,12 +436,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:76c179f6f57922dd0dea5ccedac3fbeaea6e255a7d9a0f447e02167880ac95c3",
+      "claim": "sha256:67aad5bd4236dcb2eac7d4d7ee7e7a7feada9297255f6718c6e845bf8c084f53",
       "claims": [
-        "sha256:76c179f6f57922dd0dea5ccedac3fbeaea6e255a7d9a0f447e02167880ac95c3"
+        "sha256:67aad5bd4236dcb2eac7d4d7ee7e7a7feada9297255f6718c6e845bf8c084f53"
       ],
       "verdict": "unresolved",
-      "verdict_record": "sha256:e3324aa9a4f8d9654076668412d8e05462dcc4f84b47ba94de08c83864fc0072",
+      "verdict_record": "sha256:ed2c4f7a56a1e3c73033d913779d7d31d267f645e90168e6a38c35f906a53b0c",
       "condition": {
         "coupling": 2.0,
         "diffusion": 0.08,
@@ -451,15 +451,15 @@
         "mean": 0.9453116625006565,
         "low": 0.9276865676098405,
         "high": 0.9629367573914724,
-        "se": 0.0038756439904040264,
+        "se": 0.003875643990404024,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
-        "mean": 0.08539039568081667,
-        "low": 0.059743079484727485,
-        "high": 0.11103771187690586,
+        "mean": 0.08539039568081665,
+        "low": 0.05974307948472746,
+        "high": 0.11103771187690584,
         "se": 0.005639678396123676,
         "n": 12,
         "alpha": 0.0008333333333333334,
@@ -469,7 +469,7 @@
         "mean": 0.9508285753645825,
         "low": 0.9386661920755787,
         "high": 0.9629909586535864,
-        "se": 0.002674429158822865,
+        "se": 0.002674429158822871,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -480,12 +480,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:2ae457282369901aac693f933096e434b334d493922a774638a7939d987024a2",
+      "claim": "sha256:64c6f85985c135dcb8d2f14f6abb70c2ee7f7be691b221c637518758b6a6b123",
       "claims": [
-        "sha256:2ae457282369901aac693f933096e434b334d493922a774638a7939d987024a2"
+        "sha256:64c6f85985c135dcb8d2f14f6abb70c2ee7f7be691b221c637518758b6a6b123"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:b8d5ef74e3e1c162dacc493efc9d8b8ccd64d902112932e78961c41b7fd31714",
+      "verdict_record": "sha256:4b1977207b7024b82747e8915c9d5b531d5419b1ee8db438a23a4c75bb591e52",
       "condition": {
         "coupling": 0.0,
         "diffusion": 0.5,
@@ -524,12 +524,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:ae5e9155ec49f42a1eb71c50a6168085cd891a205a7ab2e4c6a37add52ae9e9a",
+      "claim": "sha256:be741a6a132e688bdc30a3c43090fce0352047a67bd8627eb76d300375516ede",
       "claims": [
-        "sha256:ae5e9155ec49f42a1eb71c50a6168085cd891a205a7ab2e4c6a37add52ae9e9a"
+        "sha256:be741a6a132e688bdc30a3c43090fce0352047a67bd8627eb76d300375516ede"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:23aa07a1e4ee486049f04e92d6a1275a47c403147d70a92d9db28f8b350b570d",
+      "verdict_record": "sha256:1408b82bf5602aa0e7aada29f93a97b593554cb98f8d8fdb196e6a5c5b77ce17",
       "condition": {
         "coupling": 0.6,
         "diffusion": 0.5,
@@ -537,9 +537,9 @@
       },
       "phase": {
         "mean": 0.1900838074906631,
-        "low": 0.09004855405691906,
+        "low": 0.09004855405691907,
         "high": 0.2901190609244071,
-        "se": 0.021997103062466605,
+        "se": 0.021997103062466602,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -568,40 +568,40 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:20ecbcb018941a3411c27f7c66f1b27c913bb377123978c6c0c7db916f5f8c79",
+      "claim": "sha256:66aabada70656d38feff5ab484af90a33f097f1d3f63d0ab5e0d8a82ca066e41",
       "claims": [
-        "sha256:20ecbcb018941a3411c27f7c66f1b27c913bb377123978c6c0c7db916f5f8c79"
+        "sha256:66aabada70656d38feff5ab484af90a33f097f1d3f63d0ab5e0d8a82ca066e41"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:c3713dcb0c491e19c3d1d1f1197db6eafad4fb0b3a430abb146d13421de39ba9",
+      "verdict_record": "sha256:b589a93d66956dbe215666c38d7df29db4463dca1b71cb527c43eb2623a0b81d",
       "condition": {
         "coupling": 1.0,
         "diffusion": 0.5,
         "phase_lag": 0.0
       },
       "phase": {
-        "mean": 0.3129377257912385,
-        "low": 0.13132362007882548,
-        "high": 0.49455183150365156,
-        "se": 0.03993576328168787,
+        "mean": 0.31293772579123896,
+        "low": 0.13132362007882672,
+        "high": 0.49455183150365123,
+        "se": 0.039935763281687686,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
-        "mean": 0.9438848800215297,
-        "low": 0.6018376271984442,
-        "high": 1.2859321328446152,
-        "se": 0.07521397121832013,
+        "mean": 0.94388488002153,
+        "low": 0.6018376271984437,
+        "high": 1.2859321328446165,
+        "se": 0.07521397121832031,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
-        "mean": 0.34398453799284034,
-        "low": 0.21231364133346786,
-        "high": 0.4756554346522128,
-        "se": 0.02895357571180597,
+        "mean": 0.3439845379928408,
+        "low": 0.2123136413334681,
+        "high": 0.4756554346522135,
+        "se": 0.02895357571180602,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -612,12 +612,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:e8e577559b70d9dfef94007e4804a81e998ad486fb39df7d70c7f6d66236064f",
+      "claim": "sha256:7129368663ebee828441d8a01f9689df974a9139874e4d4ce38811ab8a40a69d",
       "claims": [
-        "sha256:e8e577559b70d9dfef94007e4804a81e998ad486fb39df7d70c7f6d66236064f"
+        "sha256:7129368663ebee828441d8a01f9689df974a9139874e4d4ce38811ab8a40a69d"
       ],
       "verdict": "unresolved",
-      "verdict_record": "sha256:ab2dba8b0191c3e35bb58bf581e1d820bca78e15419888396b0dc54f5118ea82",
+      "verdict_record": "sha256:c11571a3c6cc3f4afdcd702867611cc58791f7443418a6b887a69830ee6de7c4",
       "condition": {
         "coupling": 1.4,
         "diffusion": 0.5,
@@ -634,18 +634,18 @@
       },
       "frequency": {
         "mean": 0.7307806842956884,
-        "low": 0.400480783977151,
+        "low": 0.4004807839771509,
         "high": 1.061080584614226,
-        "se": 0.07263080463570314,
+        "se": 0.07263080463570315,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
-        "mean": 0.47315385304181107,
-        "low": 0.3729470003840458,
-        "high": 0.5733607056995763,
-        "se": 0.022034836618254852,
+        "mean": 0.4731538530418111,
+        "low": 0.3729470003840459,
+        "high": 0.5733607056995764,
+        "se": 0.022034836618254856,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -656,12 +656,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:12356c683848ff2aa1f559f45f9788ccec05741833d07bf7059e2260954e3ca2",
+      "claim": "sha256:4a9337e592f91020040f4e69c1e74f8a912f486018d913ce816629ee98a0f878",
       "claims": [
-        "sha256:12356c683848ff2aa1f559f45f9788ccec05741833d07bf7059e2260954e3ca2"
+        "sha256:4a9337e592f91020040f4e69c1e74f8a912f486018d913ce816629ee98a0f878"
       ],
       "verdict": "unresolved",
-      "verdict_record": "sha256:61ae477119019aaba52ec07d56f4cada5dbf184f336599c95a70ab5b1da5077a",
+      "verdict_record": "sha256:c990649d4eecceaa1c58dedf700420d4b6a1e32025047c0089877bfc8541ce65",
       "condition": {
         "coupling": 2.0,
         "diffusion": 0.5,
@@ -680,16 +680,16 @@
         "mean": 0.5003008478116001,
         "low": 0.22832974834550318,
         "high": 0.7722719472776971,
-        "se": 0.059804679846495394,
+        "se": 0.05980467984649539,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
         "mean": 0.6150190589999663,
-        "low": 0.5420109387757835,
-        "high": 0.6880271792241491,
-        "se": 0.016054011859248957,
+        "low": 0.5420109387757834,
+        "high": 0.6880271792241492,
+        "se": 0.01605401185924898,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -700,22 +700,22 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:f81786f854779fa49b43a675b23de12679bee9453d6899116251eb25e442ea65",
+      "claim": "sha256:7a0b03ec632aa86ce41e1f40480320aae45f48a1274e03c86161fc40c664264f",
       "claims": [
-        "sha256:f81786f854779fa49b43a675b23de12679bee9453d6899116251eb25e442ea65"
+        "sha256:7a0b03ec632aa86ce41e1f40480320aae45f48a1274e03c86161fc40c664264f"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:49cc1aafb0a3a186c30af44d26059a0653faa9fb7d72b23d6508cdcb897c6eb0",
+      "verdict_record": "sha256:572e7ddeda6cea943696635eaade1680f535506b1b78113957c33453edb6acf6",
       "condition": {
         "coupling": 0.0,
         "diffusion": 0.0,
         "phase_lag": 0.6
       },
       "phase": {
-        "mean": 0.046003254879328714,
-        "low": 0.04600325487932788,
-        "high": 0.04600325487932955,
-        "se": 1.8278242022478825e-16,
+        "mean": 0.04600325487932872,
+        "low": 0.04600325487932789,
+        "high": 0.046003254879329554,
+        "se": 1.8296293232603103e-16,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -733,7 +733,7 @@
         "mean": 0.04600325487932872,
         "low": 0.046003254879327916,
         "high": 0.046003254879329526,
-        "se": 1.762498505554117e-16,
+        "se": 1.771231106413218e-16,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -744,22 +744,22 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:5774b57600da79046743184e4b1835d0fbee1893ce131feada9278bf9a7b5029",
+      "claim": "sha256:7ecac8b7f89d60706415378226d680d1306aecb429c1fe21ade4ae9b7c971df2",
       "claims": [
-        "sha256:5774b57600da79046743184e4b1835d0fbee1893ce131feada9278bf9a7b5029"
+        "sha256:7ecac8b7f89d60706415378226d680d1306aecb429c1fe21ade4ae9b7c971df2"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:3d321d5fe1bfdf4b47678c5e2b0fc938d49caff6b4dc2a4b615dc320f8a21a5f",
+      "verdict_record": "sha256:b6da8ff21d19bc2a85238da099371dad01c437d5d9c55c66956d0612d075223e",
       "condition": {
         "coupling": 0.6,
         "diffusion": 0.0,
         "phase_lag": 0.6
       },
       "phase": {
-        "mean": 0.23020131965694648,
-        "low": 0.19490248070888333,
-        "high": 0.26550015860500964,
-        "se": 0.007761985616802913,
+        "mean": 0.23020131965694654,
+        "low": 0.19490248070888339,
+        "high": 0.2655001586050097,
+        "se": 0.007761985616802911,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -768,16 +768,16 @@
         "mean": 0.8979825064970696,
         "low": 0.869690486610097,
         "high": 0.9262745263840422,
-        "se": 0.0062212315752394765,
+        "se": 0.006221231575239476,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
         "mean": 0.2459539086283398,
-        "low": 0.19724142387725904,
+        "low": 0.19724142387725901,
         "high": 0.2946663933794206,
-        "se": 0.010711559282528945,
+        "se": 0.010711559282528947,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -788,31 +788,31 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:c86c4980e634868924bf039156fcbe36f22f64cafb71489f98a59f9dc86c663b",
+      "claim": "sha256:b783b5fdd94da882e42e4c907ac5a7a12052895f12ef191102ed29943d381fb0",
       "claims": [
-        "sha256:c86c4980e634868924bf039156fcbe36f22f64cafb71489f98a59f9dc86c663b"
+        "sha256:b783b5fdd94da882e42e4c907ac5a7a12052895f12ef191102ed29943d381fb0"
       ],
       "verdict": "unresolved",
-      "verdict_record": "sha256:70eed63d046319a67bd6a2c9972df5e25b9b35ee0b7c2ea12341b98f8dae8f50",
+      "verdict_record": "sha256:2086b96335c6e4713f474ff6348134af6f204b04f4859596bfe6bcfbab4f6199",
       "condition": {
         "coupling": 1.0,
         "diffusion": 0.0,
         "phase_lag": 0.6
       },
       "phase": {
-        "mean": 0.5252119069723532,
-        "low": 0.4634998208163047,
-        "high": 0.5869239931284017,
-        "se": 0.013570087272018725,
+        "mean": 0.5252119069723531,
+        "low": 0.46349982081630453,
+        "high": 0.5869239931284016,
+        "se": 0.013570087272018737,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
-        "mean": 0.5648530997873823,
-        "low": 0.49978256471668053,
-        "high": 0.6299236348580841,
-        "se": 0.014308588394071536,
+        "mean": 0.5648530997873821,
+        "low": 0.4997825647166804,
+        "high": 0.6299236348580837,
+        "se": 0.014308588394071505,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -820,8 +820,8 @@
       "replicate": {
         "mean": 0.5021979327343608,
         "low": 0.4637561351126042,
-        "high": 0.5406397303561172,
-        "se": 0.008453101833268514,
+        "high": 0.5406397303561173,
+        "se": 0.00845310183326852,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -832,12 +832,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:452f65ad774b0e2eb77ced943f03df0b8ebcb44a3e14ee7522f3c9a4fb9320a2",
+      "claim": "sha256:77ddf1e3a9c3e592d4360fd2b26ea570a817648e571f48a7e92592c21db22fdf",
       "claims": [
-        "sha256:452f65ad774b0e2eb77ced943f03df0b8ebcb44a3e14ee7522f3c9a4fb9320a2"
+        "sha256:77ddf1e3a9c3e592d4360fd2b26ea570a817648e571f48a7e92592c21db22fdf"
       ],
       "verdict": "supported",
-      "verdict_record": "sha256:6ffd733a204bc8d0dde1cdbfb8f72b895a9e78e7964355257f7a1cf6725eec9f",
+      "verdict_record": "sha256:7956ec46bb25af1c94e8df45311337cf4421375bcf9938e24e700c938cc0d135",
       "condition": {
         "coupling": 1.4,
         "diffusion": 0.0,
@@ -845,18 +845,18 @@
       },
       "phase": {
         "mean": 0.9999999999988866,
-        "low": 0.9999999999968546,
+        "low": 0.9999999999968545,
         "high": 1.0000000000009186,
-        "se": 4.468145129411543e-13,
+        "se": 4.4682156797286377e-13,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
-        "mean": 1.9407582947424092e-07,
-        "low": 1.2960717298149389e-08,
-        "high": 3.7519094165033245e-07,
-        "se": 3.982603784121363e-08,
+        "mean": 1.9407582946805882e-07,
+        "low": 1.2960717277302584e-08,
+        "high": 3.7519094165881507e-07,
+        "se": 3.9826037844438304e-08,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -865,7 +865,7 @@
         "mean": 0.9999999999981495,
         "low": 0.9999999999944122,
         "high": 1.0000000000018867,
-        "se": 8.21789636396526e-13,
+        "se": 8.217993955179799e-13,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -876,12 +876,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:0e1e526ee85dc9fa79385d4d49b03c70faca5e27c6872dc9f5179bf4b52f061b",
+      "claim": "sha256:a1c55824719bcdaa57dd73400a04974742ea056a38af5814075918b8821a7869",
       "claims": [
-        "sha256:0e1e526ee85dc9fa79385d4d49b03c70faca5e27c6872dc9f5179bf4b52f061b"
+        "sha256:a1c55824719bcdaa57dd73400a04974742ea056a38af5814075918b8821a7869"
       ],
       "verdict": "supported",
-      "verdict_record": "sha256:d1d2d879d0ef45eb07f1ba737f31e675a3937d2856061f0ea19a7e0e41b764e7",
+      "verdict_record": "sha256:e8198203a53ba0227908e9d1aa8eac2721240a175914d024d72c3ccf973a5067",
       "condition": {
         "coupling": 2.0,
         "diffusion": 0.0,
@@ -897,10 +897,10 @@
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
-        "mean": 2.77923609909664e-13,
-        "low": -2.5529707356824594e-13,
-        "high": 8.111442933875739e-13,
-        "se": 1.172517680206718e-13,
+        "mean": 2.7793018285063797e-13,
+        "low": -2.5528878092947627e-13,
+        "high": 8.111491466307521e-13,
+        "se": 1.1725138987028632e-13,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -909,7 +909,7 @@
         "mean": 1.0,
         "low": 0.9999999999999999,
         "high": 1.0000000000000002,
-        "se": 3.0557883033032213e-17,
+        "se": 3.6156574805208936e-17,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -920,12 +920,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:fcdb2f540cc1be51c7967f665196342f4a14dc415e76ba3d0be8a19f74d86ad4",
+      "claim": "sha256:b9728b5da64439096a5958f6918f5b502a46fb23da400f8ad19528934b42d02b",
       "claims": [
-        "sha256:fcdb2f540cc1be51c7967f665196342f4a14dc415e76ba3d0be8a19f74d86ad4"
+        "sha256:b9728b5da64439096a5958f6918f5b502a46fb23da400f8ad19528934b42d02b"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:8e7fa11cdd8b1629c419200f8230073edb971be04d7e94e30f5e4634af85e823",
+      "verdict_record": "sha256:b6bf25fd94d89084d309d6183f02abed7ac6473d5066637e92f14b13ff96363c",
       "condition": {
         "coupling": 0.0,
         "diffusion": 0.08,
@@ -964,31 +964,31 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:5d6aa856bfe44e68d9472b69fc005880ef1943cbb0f0c5acf6cffc0d5e0e8610",
+      "claim": "sha256:8c9146e8019a027bbb45da1aabe3fff544dff2780ed147e73405871a33d2072f",
       "claims": [
-        "sha256:5d6aa856bfe44e68d9472b69fc005880ef1943cbb0f0c5acf6cffc0d5e0e8610"
+        "sha256:8c9146e8019a027bbb45da1aabe3fff544dff2780ed147e73405871a33d2072f"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:44fb3e42406bbef65822baa62f513d2f2f331dc18a6d1336c0497d911ef17139",
+      "verdict_record": "sha256:cbf8fdd4b73be48f166e9c804b5b9438384b6d6c050d6c5ca8c540549105bd66",
       "condition": {
         "coupling": 0.6,
         "diffusion": 0.08,
         "phase_lag": 0.6
       },
       "phase": {
-        "mean": 0.24988219701563072,
+        "mean": 0.24988219701563066,
         "low": 0.19786162348888675,
-        "high": 0.3019027705423747,
-        "se": 0.01143898653682434,
+        "high": 0.3019027705423746,
+        "se": 0.01143898653682433,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
         "mean": 0.8778044172271945,
-        "low": 0.6983347811240187,
+        "low": 0.6983347811240186,
         "high": 1.0572740533303704,
-        "se": 0.03946420833091281,
+        "se": 0.03946420833091283,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -997,7 +997,7 @@
         "mean": 0.24836641672655688,
         "low": 0.12806422160175746,
         "high": 0.3686686118513563,
-        "se": 0.02645367202027327,
+        "se": 0.026453672020273274,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1008,12 +1008,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:5162f1aec9abec6ad9777dbd145b73039d10b54ee5e40a9165088c3cb841fae3",
+      "claim": "sha256:40dbf95792da80e36b6b3275e1d080df110a94354be4246bcda24dc7840ad68c",
       "claims": [
-        "sha256:5162f1aec9abec6ad9777dbd145b73039d10b54ee5e40a9165088c3cb841fae3"
+        "sha256:40dbf95792da80e36b6b3275e1d080df110a94354be4246bcda24dc7840ad68c"
       ],
       "verdict": "unresolved",
-      "verdict_record": "sha256:bdfda40534cef29fc52a9263fe0dd4bc203c9ad6c3f52051c854cc2599efa3b3",
+      "verdict_record": "sha256:b849144bd8a8d154cb935650fe3d7d2acf468bf6f743097624090636cc31175f",
       "condition": {
         "coupling": 1.0,
         "diffusion": 0.08,
@@ -1029,19 +1029,19 @@
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
-        "mean": 0.6290374175539905,
-        "low": 0.42887976772712055,
-        "high": 0.8291950673808604,
-        "se": 0.04401336829619676,
+        "mean": 0.6290374175539903,
+        "low": 0.4288797677271205,
+        "high": 0.8291950673808601,
+        "se": 0.04401336829619675,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
         "mean": 0.4415527511418042,
-        "low": 0.29259645784913857,
-        "high": 0.5905090444344698,
-        "se": 0.03275452225981465,
+        "low": 0.2925964578491387,
+        "high": 0.5905090444344697,
+        "se": 0.03275452225981462,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1052,40 +1052,40 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:ca04954104f17d732cff6f102360abf994716ea94ad493104e43f4eedf49aa1c",
+      "claim": "sha256:8d2fbff56d99efebe7264b41e71cb46843184c976c1a76f8316cacd7a6c99da5",
       "claims": [
-        "sha256:ca04954104f17d732cff6f102360abf994716ea94ad493104e43f4eedf49aa1c"
+        "sha256:8d2fbff56d99efebe7264b41e71cb46843184c976c1a76f8316cacd7a6c99da5"
       ],
       "verdict": "unresolved",
-      "verdict_record": "sha256:03181bb073d42d30362407e4195d1c58721adbac811c0cc2456ca5a212aa3981",
+      "verdict_record": "sha256:086cf743f0bfe69b43f659f04d6c87b03bdb072ab08c42632cd28e8dcb9c6c0f",
       "condition": {
         "coupling": 1.4,
         "diffusion": 0.08,
         "phase_lag": 0.6
       },
       "phase": {
-        "mean": 0.7346486956849082,
-        "low": 0.5845780904971274,
+        "mean": 0.7346486956849083,
+        "low": 0.5845780904971276,
         "high": 0.884719300872689,
-        "se": 0.03299955221434779,
+        "se": 0.03299955221434775,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
-        "mean": 0.3117991254813471,
-        "low": 0.12267500643202323,
-        "high": 0.5009232445306709,
-        "se": 0.04158716647908108,
+        "mean": 0.311799125481347,
+        "low": 0.12267500643202314,
+        "high": 0.5009232445306708,
+        "se": 0.041587166479081075,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
         "mean": 0.7190243187646419,
-        "low": 0.595797712579929,
-        "high": 0.8422509249493548,
-        "se": 0.02709673103470903,
+        "low": 0.5957977125799286,
+        "high": 0.8422509249493552,
+        "se": 0.027096731034709106,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1096,21 +1096,21 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:e3d7548e0e01eb5228afa70484ec1b147e0da7f2d95779590166320f2fb848f3",
+      "claim": "sha256:f519811ff7598d501d94f18a28f41520b20ba50b73ceb48083d25114e39a0b3c",
       "claims": [
-        "sha256:e3d7548e0e01eb5228afa70484ec1b147e0da7f2d95779590166320f2fb848f3"
+        "sha256:f519811ff7598d501d94f18a28f41520b20ba50b73ceb48083d25114e39a0b3c"
       ],
       "verdict": "unresolved",
-      "verdict_record": "sha256:f60ee57e190dfc8ba6ea1c29ed4d70cd8952a059ad73047915ec7a9fd3b9a979",
+      "verdict_record": "sha256:e6733c14a76887b437e50da34ca4dbd0933f6ee3a0984b721e7fbc1f060c6272",
       "condition": {
         "coupling": 2.0,
         "diffusion": 0.08,
         "phase_lag": 0.6
       },
       "phase": {
-        "mean": 0.9181813419470709,
-        "low": 0.873029951364715,
-        "high": 0.9633327325294269,
+        "mean": 0.9181813419470711,
+        "low": 0.8730299513647152,
+        "high": 0.9633327325294271,
         "se": 0.009928497784149568,
         "n": 12,
         "alpha": 0.0008333333333333334,
@@ -1120,16 +1120,16 @@
         "mean": 0.11273816434307739,
         "low": 0.0425386960539398,
         "high": 0.18293763263221496,
-        "se": 0.015436407525165815,
+        "se": 0.015436407525165816,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
         "mean": 0.9400030081572291,
-        "low": 0.921539663165243,
-        "high": 0.9584663531492152,
-        "se": 0.004059969747920846,
+        "low": 0.9215396631652429,
+        "high": 0.9584663531492154,
+        "se": 0.0040599697479208555,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1140,22 +1140,22 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:46813358a923c15c31dc404bb52465cbde2b7bcd578684eec215884cf2d6bae0",
+      "claim": "sha256:0286461eee71bc465614fdf76896f027c84ba746ec6a6639929c5b9e28b7f038",
       "claims": [
-        "sha256:46813358a923c15c31dc404bb52465cbde2b7bcd578684eec215884cf2d6bae0"
+        "sha256:0286461eee71bc465614fdf76896f027c84ba746ec6a6639929c5b9e28b7f038"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:e405bdd055cefaaa30545a551001a659288ddc74667e4403206579c92ee2deac",
+      "verdict_record": "sha256:95059a3e6ac39590168adc895955d0572082235f3492376331ede3ca5b3f0c3e",
       "condition": {
         "coupling": 0.0,
         "diffusion": 0.5,
         "phase_lag": 0.6
       },
       "phase": {
-        "mean": 0.11237808443508975,
-        "low": 0.04250618109558486,
-        "high": 0.1822499877745946,
-        "se": 0.015364378118437768,
+        "mean": 0.11237808443508979,
+        "low": 0.04250618109558489,
+        "high": 0.18224998777459467,
+        "se": 0.015364378118437771,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1184,21 +1184,21 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:fc51ff735b2367642a5b7b528b2675016ab40e75e555708a52cdd460d358198c",
+      "claim": "sha256:f18c70459952bfaaf55e60c798dad79691dd1943ab7d31e2ac43225aa7446c6b",
       "claims": [
-        "sha256:fc51ff735b2367642a5b7b528b2675016ab40e75e555708a52cdd460d358198c"
+        "sha256:f18c70459952bfaaf55e60c798dad79691dd1943ab7d31e2ac43225aa7446c6b"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:9ec0efdc84f397feeeb6acdf95b3cfd982e19aea521629b961195c4432111216",
+      "verdict_record": "sha256:a34652d8c150419da983f581d4e49a557183d90e1fb6d3c78d9422cfeb8a2e6a",
       "condition": {
         "coupling": 0.6,
         "diffusion": 0.5,
         "phase_lag": 0.6
       },
       "phase": {
-        "mean": 0.17055394463269488,
-        "low": 0.07439053229319983,
-        "high": 0.2667173569721899,
+        "mean": 0.1705539446326949,
+        "low": 0.07439053229319986,
+        "high": 0.26671735697218996,
         "se": 0.021145710331721957,
         "n": 12,
         "alpha": 0.0008333333333333334,
@@ -1214,10 +1214,10 @@
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
-        "mean": 0.18277607421689387,
-        "low": 0.04843427059987854,
+        "mean": 0.1827760742168939,
+        "low": 0.04843427059987859,
         "high": 0.3171178778339092,
-        "se": 0.029540890819238996,
+        "se": 0.02954089081923899,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1228,12 +1228,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:16285f35bbcf6ab760b085fd4b7e2eec33a8caa66a60f56a4b1d42bba5cac26c",
+      "claim": "sha256:8cd344b569b40211cfdad15cb07b6e453e1159027202f7b5a5a9d348eab24be5",
       "claims": [
-        "sha256:16285f35bbcf6ab760b085fd4b7e2eec33a8caa66a60f56a4b1d42bba5cac26c"
+        "sha256:8cd344b569b40211cfdad15cb07b6e453e1159027202f7b5a5a9d348eab24be5"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:7295fbf04066ba12ea53ae1c9ce8bf24a8c2e25e151fff8814909bd7c813c823",
+      "verdict_record": "sha256:82f4c505dd9729ba2dbcfad3fb4d24d40da930daf625bad907afbfe20067ecbd",
       "condition": {
         "coupling": 1.0,
         "diffusion": 0.5,
@@ -1241,27 +1241,27 @@
       },
       "phase": {
         "mean": 0.29948124620693917,
-        "low": 0.13812417630465168,
+        "low": 0.13812417630465165,
         "high": 0.46083831610922665,
-        "se": 0.035481372562814556,
+        "se": 0.03548137256281456,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
         "mean": 0.853581277423776,
-        "low": 0.5916722277317664,
+        "low": 0.5916722277317665,
         "high": 1.1154903271157854,
-        "se": 0.05759210039772271,
+        "se": 0.0575921003977227,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
         "mean": 0.26451292244936114,
-        "low": 0.13166136267288578,
-        "high": 0.39736448222583654,
-        "se": 0.029213195869475354,
+        "low": 0.1316613626728858,
+        "high": 0.3973644822258365,
+        "se": 0.02921319586947535,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1272,12 +1272,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:6b5972b005f632232487e9d1f4464cac0926608932e532fc908edcfbdced1ba2",
+      "claim": "sha256:a2d86823b14d770de0c05a5fd985dffb940570aaf4194e28f97b4b2c4b8ca331",
       "claims": [
-        "sha256:6b5972b005f632232487e9d1f4464cac0926608932e532fc908edcfbdced1ba2"
+        "sha256:a2d86823b14d770de0c05a5fd985dffb940570aaf4194e28f97b4b2c4b8ca331"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:0e7f8c8ec806f73b07afeb228bc192b6826c6875ab246146b9ced20a098fa6d1",
+      "verdict_record": "sha256:a2c6cdd5004d00974004dab17e5c4c30e183a14f3633430e50a013a18924281d",
       "condition": {
         "coupling": 1.4,
         "diffusion": 0.5,
@@ -1296,16 +1296,16 @@
         "mean": 0.8641188074002368,
         "low": 0.6248798089710212,
         "high": 1.1033578058294524,
-        "se": 0.05260710323980211,
+        "se": 0.05260710323980212,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
-        "mean": 0.433054405258642,
-        "low": 0.3164291647758978,
-        "high": 0.5496796457413862,
-        "se": 0.025645133555672144,
+        "mean": 0.4330544052586452,
+        "low": 0.3164291647759061,
+        "high": 0.5496796457413843,
+        "se": 0.02564513355567102,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1316,31 +1316,31 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:c08f3d6f8d74774b65b76503948b206660a6d7f867991bf09d1f3058566dfb8e",
+      "claim": "sha256:7718c8aa52c54c2fc40acd6445a6daf258f91bbb322fe84944ec423c95ab2df8",
       "claims": [
-        "sha256:c08f3d6f8d74774b65b76503948b206660a6d7f867991bf09d1f3058566dfb8e"
+        "sha256:7718c8aa52c54c2fc40acd6445a6daf258f91bbb322fe84944ec423c95ab2df8"
       ],
       "verdict": "unresolved",
-      "verdict_record": "sha256:373a74d65b9ba0703bd9fdd067536d2fd55facfb7c938a4e58af8e2f0002a1ee",
+      "verdict_record": "sha256:46652d9da2522a29eaf34340b6b6d5c0a0788cd089d77bbd30767637dd2f0937",
       "condition": {
         "coupling": 2.0,
         "diffusion": 0.5,
         "phase_lag": 0.6
       },
       "phase": {
-        "mean": 0.5589071503632068,
-        "low": 0.43612969327461554,
-        "high": 0.681684607451798,
-        "se": 0.026997966063174814,
+        "mean": 0.5589071503632069,
+        "low": 0.4361296932746156,
+        "high": 0.6816846074517983,
+        "se": 0.026997966063174828,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
         "mean": 0.5212835657909757,
-        "low": 0.1374123723814697,
-        "high": 0.9051547592004816,
-        "se": 0.0844107843414789,
+        "low": 0.13741237238146964,
+        "high": 0.9051547592004817,
+        "se": 0.08441078434147892,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1399,12 +1399,12 @@
   ],
   "negative_results": [
     {
-      "claim": "sha256:a07747d1b8f6cfed346e4fbf194d4924d0372c9b54865451703bea386ced2563",
+      "claim": "sha256:27cfb3b1f2966cfc2650da3ab825cc9c043d3a7f216306faa3491483accbb134",
       "claims": [
-        "sha256:a07747d1b8f6cfed346e4fbf194d4924d0372c9b54865451703bea386ced2563"
+        "sha256:27cfb3b1f2966cfc2650da3ab825cc9c043d3a7f216306faa3491483accbb134"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:29804eae4cc954599b66c116e37d803d1b4d8250f501a671ecde4db9c317a4c5",
+      "verdict_record": "sha256:7a7c9e79993d7a4d7482765ea9c29f3562396b83625bf357053366ca7fb9b21c",
       "condition": {
         "coupling": 0.0,
         "diffusion": 0.0,
@@ -1414,7 +1414,7 @@
         "mean": 0.04600325487932858,
         "low": 0.046003254879327625,
         "high": 0.04600325487932954,
-        "se": 2.1051905920475772e-16,
+        "se": 2.104436746863849e-16,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1432,7 +1432,7 @@
         "mean": 0.046003254879328374,
         "low": 0.046003254879327146,
         "high": 0.0460032548793296,
-        "se": 2.697934016894117e-16,
+        "se": 2.7004880794165407e-16,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1443,12 +1443,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:12353e4e418be83b0ef9d3f62fdfe0fe8273014ea149b484cdd879b840e4e93b",
+      "claim": "sha256:0feecc552f6e259c34b4e6c38d69416f35308dc987a137c996fc404557c48b25",
       "claims": [
-        "sha256:12353e4e418be83b0ef9d3f62fdfe0fe8273014ea149b484cdd879b840e4e93b"
+        "sha256:0feecc552f6e259c34b4e6c38d69416f35308dc987a137c996fc404557c48b25"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:e6d1ac557f61f69e835a5c393b1e2fa73fe570f7cf6274941dbb9c193329ad89",
+      "verdict_record": "sha256:f1418f4d0976d9b2dd7ee4d9623ff188a7ff7b26190ec8e66c2f87caf550a2a0",
       "condition": {
         "coupling": 0.6,
         "diffusion": 0.0,
@@ -1458,7 +1458,7 @@
         "mean": 0.3406491274809765,
         "low": 0.3281006160840332,
         "high": 0.3531976388779198,
-        "se": 0.0027593362240234754,
+        "se": 0.002759336224023476,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1467,7 +1467,7 @@
         "mean": 0.792833305745483,
         "low": 0.7805434972000468,
         "high": 0.8051231142909193,
-        "se": 0.002702449145800354,
+        "se": 0.0027024491458003527,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1476,7 +1476,7 @@
         "mean": 0.33694246443870907,
         "low": 0.3239666838121797,
         "high": 0.34991824506523844,
-        "se": 0.0028532899548934644,
+        "se": 0.0028532899548934687,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1487,12 +1487,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:4b423e07f85bae261818f3553b038e9fc60672453715cff51567bf363dfb669d",
+      "claim": "sha256:7b3479ce060887d8fefcb23c593ca1840c483cfc73235ee06e780bba556fadad",
       "claims": [
-        "sha256:4b423e07f85bae261818f3553b038e9fc60672453715cff51567bf363dfb669d"
+        "sha256:7b3479ce060887d8fefcb23c593ca1840c483cfc73235ee06e780bba556fadad"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:103146763d76f58595add7f74d4833dd496f8654901725d6d69b9a3e88977f92",
+      "verdict_record": "sha256:94efc8e8652e15a03870d0071869e7e41b18c980e860cc5dc67fa630ef8de84c",
       "condition": {
         "coupling": 0.0,
         "diffusion": 0.08,
@@ -1531,12 +1531,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:5cf9148d4bcdc0c91d9ad106a91ab80c070eadd4316840f65d229639676f4370",
+      "claim": "sha256:342cd43fc30586fc3bbd877398ae0a00ac9e1fb01ac6614dc4632ffe83297b69",
       "claims": [
-        "sha256:5cf9148d4bcdc0c91d9ad106a91ab80c070eadd4316840f65d229639676f4370"
+        "sha256:342cd43fc30586fc3bbd877398ae0a00ac9e1fb01ac6614dc4632ffe83297b69"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:44b450ebac37af730c86659e94ec5d6bca1243c9ca0a267f66a6ffc294b4c9a8",
+      "verdict_record": "sha256:08b4a86a1d0fe4df7e8a0c3d2b4738ae593cb47aba62d3fb4d8d05e17fddb4de",
       "condition": {
         "coupling": 0.6,
         "diffusion": 0.08,
@@ -1546,7 +1546,7 @@
         "mean": 0.3295505953655225,
         "low": 0.2193589786079787,
         "high": 0.4397422121230663,
-        "se": 0.024230421448783783,
+        "se": 0.024230421448783786,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1555,16 +1555,16 @@
         "mean": 0.7661338720429852,
         "low": 0.5784106313651289,
         "high": 0.9538571127208415,
-        "se": 0.04127912241603923,
+        "se": 0.04127912241603922,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
-        "mean": 0.3300463247040719,
-        "low": 0.19721117866089957,
+        "mean": 0.33004632470407214,
+        "low": 0.1972111786609,
         "high": 0.4628814707472443,
-        "se": 0.02920958659603711,
+        "se": 0.029209586596037066,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1575,12 +1575,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:190c4dddf2ce343dadb4b71f51f17d97ee849dd5541ff90743fde9b5ba3269be",
+      "claim": "sha256:209a41ed5edd20a8433a2ddcb54a3af20c8bc6ea6652274f1356c332da1a965f",
       "claims": [
-        "sha256:190c4dddf2ce343dadb4b71f51f17d97ee849dd5541ff90743fde9b5ba3269be"
+        "sha256:209a41ed5edd20a8433a2ddcb54a3af20c8bc6ea6652274f1356c332da1a965f"
       ],
       "verdict": "unresolved",
-      "verdict_record": "sha256:fcd51f93c6d67cc737a11749aa44209065d00ff03025c491ddc37d748249c254",
+      "verdict_record": "sha256:44171d49fc9b1d238d713a660d25f19c2df525c19286fca6e5d382f5eb470f31",
       "condition": {
         "coupling": 1.0,
         "diffusion": 0.08,
@@ -1597,9 +1597,9 @@
       },
       "frequency": {
         "mean": 0.48296060637136656,
-        "low": 0.29699585585374866,
-        "high": 0.6689253568889845,
-        "se": 0.04089244184132845,
+        "low": 0.2969958558537487,
+        "high": 0.6689253568889844,
+        "se": 0.040892441841328446,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1608,7 +1608,7 @@
         "mean": 0.6217224290492392,
         "low": 0.4658918212181281,
         "high": 0.7775530368803504,
-        "se": 0.03426613941672177,
+        "se": 0.03426613941672176,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1619,30 +1619,30 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:81b3f2c6e13d56d45efeeb31dc7917d04f5ceadb93077a4d82bd82699a9dffba",
+      "claim": "sha256:3c1fba8f4c0800b03efa09bc67255efed2b283dec21923009bdc7e4a2218fb84",
       "claims": [
-        "sha256:81b3f2c6e13d56d45efeeb31dc7917d04f5ceadb93077a4d82bd82699a9dffba"
+        "sha256:3c1fba8f4c0800b03efa09bc67255efed2b283dec21923009bdc7e4a2218fb84"
       ],
       "verdict": "unresolved",
-      "verdict_record": "sha256:a8cd3cb13c2f6aece2a452fece05b41ac1de7a6e82a39d555ddc5f8c6b6d9718",
+      "verdict_record": "sha256:3ab9bef33be910dfb0cb2c6c6d3ef04b61b44958463ab48e61083707943e09c3",
       "condition": {
         "coupling": 1.4,
         "diffusion": 0.08,
         "phase_lag": 0.0
       },
       "phase": {
-        "mean": 0.8829312681670013,
-        "low": 0.7944504102547953,
-        "high": 0.9714121260792072,
-        "se": 0.019456366468240692,
+        "mean": 0.8829312681670015,
+        "low": 0.7944504102547957,
+        "high": 0.9714121260792073,
+        "se": 0.019456366468240678,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
-        "mean": 0.1560555087019068,
-        "low": 0.041070256233213406,
-        "high": 0.27104076117060016,
+        "mean": 0.15605550870190674,
+        "low": 0.04107025623321335,
+        "high": 0.2710407611706001,
         "se": 0.02528451083390158,
         "n": 12,
         "alpha": 0.0008333333333333334,
@@ -1652,7 +1652,7 @@
         "mean": 0.8894827195528601,
         "low": 0.8332181497011861,
         "high": 0.945747289404534,
-        "se": 0.012372213787735894,
+        "se": 0.0123722137877359,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1663,12 +1663,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:76c179f6f57922dd0dea5ccedac3fbeaea6e255a7d9a0f447e02167880ac95c3",
+      "claim": "sha256:67aad5bd4236dcb2eac7d4d7ee7e7a7feada9297255f6718c6e845bf8c084f53",
       "claims": [
-        "sha256:76c179f6f57922dd0dea5ccedac3fbeaea6e255a7d9a0f447e02167880ac95c3"
+        "sha256:67aad5bd4236dcb2eac7d4d7ee7e7a7feada9297255f6718c6e845bf8c084f53"
       ],
       "verdict": "unresolved",
-      "verdict_record": "sha256:e3324aa9a4f8d9654076668412d8e05462dcc4f84b47ba94de08c83864fc0072",
+      "verdict_record": "sha256:ed2c4f7a56a1e3c73033d913779d7d31d267f645e90168e6a38c35f906a53b0c",
       "condition": {
         "coupling": 2.0,
         "diffusion": 0.08,
@@ -1678,15 +1678,15 @@
         "mean": 0.9453116625006565,
         "low": 0.9276865676098405,
         "high": 0.9629367573914724,
-        "se": 0.0038756439904040264,
+        "se": 0.003875643990404024,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
-        "mean": 0.08539039568081667,
-        "low": 0.059743079484727485,
-        "high": 0.11103771187690586,
+        "mean": 0.08539039568081665,
+        "low": 0.05974307948472746,
+        "high": 0.11103771187690584,
         "se": 0.005639678396123676,
         "n": 12,
         "alpha": 0.0008333333333333334,
@@ -1696,7 +1696,7 @@
         "mean": 0.9508285753645825,
         "low": 0.9386661920755787,
         "high": 0.9629909586535864,
-        "se": 0.002674429158822865,
+        "se": 0.002674429158822871,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1707,12 +1707,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:2ae457282369901aac693f933096e434b334d493922a774638a7939d987024a2",
+      "claim": "sha256:64c6f85985c135dcb8d2f14f6abb70c2ee7f7be691b221c637518758b6a6b123",
       "claims": [
-        "sha256:2ae457282369901aac693f933096e434b334d493922a774638a7939d987024a2"
+        "sha256:64c6f85985c135dcb8d2f14f6abb70c2ee7f7be691b221c637518758b6a6b123"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:b8d5ef74e3e1c162dacc493efc9d8b8ccd64d902112932e78961c41b7fd31714",
+      "verdict_record": "sha256:4b1977207b7024b82747e8915c9d5b531d5419b1ee8db438a23a4c75bb591e52",
       "condition": {
         "coupling": 0.0,
         "diffusion": 0.5,
@@ -1751,12 +1751,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:ae5e9155ec49f42a1eb71c50a6168085cd891a205a7ab2e4c6a37add52ae9e9a",
+      "claim": "sha256:be741a6a132e688bdc30a3c43090fce0352047a67bd8627eb76d300375516ede",
       "claims": [
-        "sha256:ae5e9155ec49f42a1eb71c50a6168085cd891a205a7ab2e4c6a37add52ae9e9a"
+        "sha256:be741a6a132e688bdc30a3c43090fce0352047a67bd8627eb76d300375516ede"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:23aa07a1e4ee486049f04e92d6a1275a47c403147d70a92d9db28f8b350b570d",
+      "verdict_record": "sha256:1408b82bf5602aa0e7aada29f93a97b593554cb98f8d8fdb196e6a5c5b77ce17",
       "condition": {
         "coupling": 0.6,
         "diffusion": 0.5,
@@ -1764,9 +1764,9 @@
       },
       "phase": {
         "mean": 0.1900838074906631,
-        "low": 0.09004855405691906,
+        "low": 0.09004855405691907,
         "high": 0.2901190609244071,
-        "se": 0.021997103062466605,
+        "se": 0.021997103062466602,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1795,40 +1795,40 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:20ecbcb018941a3411c27f7c66f1b27c913bb377123978c6c0c7db916f5f8c79",
+      "claim": "sha256:66aabada70656d38feff5ab484af90a33f097f1d3f63d0ab5e0d8a82ca066e41",
       "claims": [
-        "sha256:20ecbcb018941a3411c27f7c66f1b27c913bb377123978c6c0c7db916f5f8c79"
+        "sha256:66aabada70656d38feff5ab484af90a33f097f1d3f63d0ab5e0d8a82ca066e41"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:c3713dcb0c491e19c3d1d1f1197db6eafad4fb0b3a430abb146d13421de39ba9",
+      "verdict_record": "sha256:b589a93d66956dbe215666c38d7df29db4463dca1b71cb527c43eb2623a0b81d",
       "condition": {
         "coupling": 1.0,
         "diffusion": 0.5,
         "phase_lag": 0.0
       },
       "phase": {
-        "mean": 0.3129377257912385,
-        "low": 0.13132362007882548,
-        "high": 0.49455183150365156,
-        "se": 0.03993576328168787,
+        "mean": 0.31293772579123896,
+        "low": 0.13132362007882672,
+        "high": 0.49455183150365123,
+        "se": 0.039935763281687686,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
-        "mean": 0.9438848800215297,
-        "low": 0.6018376271984442,
-        "high": 1.2859321328446152,
-        "se": 0.07521397121832013,
+        "mean": 0.94388488002153,
+        "low": 0.6018376271984437,
+        "high": 1.2859321328446165,
+        "se": 0.07521397121832031,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
-        "mean": 0.34398453799284034,
-        "low": 0.21231364133346786,
-        "high": 0.4756554346522128,
-        "se": 0.02895357571180597,
+        "mean": 0.3439845379928408,
+        "low": 0.2123136413334681,
+        "high": 0.4756554346522135,
+        "se": 0.02895357571180602,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1839,12 +1839,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:e8e577559b70d9dfef94007e4804a81e998ad486fb39df7d70c7f6d66236064f",
+      "claim": "sha256:7129368663ebee828441d8a01f9689df974a9139874e4d4ce38811ab8a40a69d",
       "claims": [
-        "sha256:e8e577559b70d9dfef94007e4804a81e998ad486fb39df7d70c7f6d66236064f"
+        "sha256:7129368663ebee828441d8a01f9689df974a9139874e4d4ce38811ab8a40a69d"
       ],
       "verdict": "unresolved",
-      "verdict_record": "sha256:ab2dba8b0191c3e35bb58bf581e1d820bca78e15419888396b0dc54f5118ea82",
+      "verdict_record": "sha256:c11571a3c6cc3f4afdcd702867611cc58791f7443418a6b887a69830ee6de7c4",
       "condition": {
         "coupling": 1.4,
         "diffusion": 0.5,
@@ -1861,18 +1861,18 @@
       },
       "frequency": {
         "mean": 0.7307806842956884,
-        "low": 0.400480783977151,
+        "low": 0.4004807839771509,
         "high": 1.061080584614226,
-        "se": 0.07263080463570314,
+        "se": 0.07263080463570315,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
-        "mean": 0.47315385304181107,
-        "low": 0.3729470003840458,
-        "high": 0.5733607056995763,
-        "se": 0.022034836618254852,
+        "mean": 0.4731538530418111,
+        "low": 0.3729470003840459,
+        "high": 0.5733607056995764,
+        "se": 0.022034836618254856,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1883,12 +1883,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:12356c683848ff2aa1f559f45f9788ccec05741833d07bf7059e2260954e3ca2",
+      "claim": "sha256:4a9337e592f91020040f4e69c1e74f8a912f486018d913ce816629ee98a0f878",
       "claims": [
-        "sha256:12356c683848ff2aa1f559f45f9788ccec05741833d07bf7059e2260954e3ca2"
+        "sha256:4a9337e592f91020040f4e69c1e74f8a912f486018d913ce816629ee98a0f878"
       ],
       "verdict": "unresolved",
-      "verdict_record": "sha256:61ae477119019aaba52ec07d56f4cada5dbf184f336599c95a70ab5b1da5077a",
+      "verdict_record": "sha256:c990649d4eecceaa1c58dedf700420d4b6a1e32025047c0089877bfc8541ce65",
       "condition": {
         "coupling": 2.0,
         "diffusion": 0.5,
@@ -1907,16 +1907,16 @@
         "mean": 0.5003008478116001,
         "low": 0.22832974834550318,
         "high": 0.7722719472776971,
-        "se": 0.059804679846495394,
+        "se": 0.05980467984649539,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
         "mean": 0.6150190589999663,
-        "low": 0.5420109387757835,
-        "high": 0.6880271792241491,
-        "se": 0.016054011859248957,
+        "low": 0.5420109387757834,
+        "high": 0.6880271792241492,
+        "se": 0.01605401185924898,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1927,22 +1927,22 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:f81786f854779fa49b43a675b23de12679bee9453d6899116251eb25e442ea65",
+      "claim": "sha256:7a0b03ec632aa86ce41e1f40480320aae45f48a1274e03c86161fc40c664264f",
       "claims": [
-        "sha256:f81786f854779fa49b43a675b23de12679bee9453d6899116251eb25e442ea65"
+        "sha256:7a0b03ec632aa86ce41e1f40480320aae45f48a1274e03c86161fc40c664264f"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:49cc1aafb0a3a186c30af44d26059a0653faa9fb7d72b23d6508cdcb897c6eb0",
+      "verdict_record": "sha256:572e7ddeda6cea943696635eaade1680f535506b1b78113957c33453edb6acf6",
       "condition": {
         "coupling": 0.0,
         "diffusion": 0.0,
         "phase_lag": 0.6
       },
       "phase": {
-        "mean": 0.046003254879328714,
-        "low": 0.04600325487932788,
-        "high": 0.04600325487932955,
-        "se": 1.8278242022478825e-16,
+        "mean": 0.04600325487932872,
+        "low": 0.04600325487932789,
+        "high": 0.046003254879329554,
+        "se": 1.8296293232603103e-16,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1960,7 +1960,7 @@
         "mean": 0.04600325487932872,
         "low": 0.046003254879327916,
         "high": 0.046003254879329526,
-        "se": 1.762498505554117e-16,
+        "se": 1.771231106413218e-16,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1971,22 +1971,22 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:5774b57600da79046743184e4b1835d0fbee1893ce131feada9278bf9a7b5029",
+      "claim": "sha256:7ecac8b7f89d60706415378226d680d1306aecb429c1fe21ade4ae9b7c971df2",
       "claims": [
-        "sha256:5774b57600da79046743184e4b1835d0fbee1893ce131feada9278bf9a7b5029"
+        "sha256:7ecac8b7f89d60706415378226d680d1306aecb429c1fe21ade4ae9b7c971df2"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:3d321d5fe1bfdf4b47678c5e2b0fc938d49caff6b4dc2a4b615dc320f8a21a5f",
+      "verdict_record": "sha256:b6da8ff21d19bc2a85238da099371dad01c437d5d9c55c66956d0612d075223e",
       "condition": {
         "coupling": 0.6,
         "diffusion": 0.0,
         "phase_lag": 0.6
       },
       "phase": {
-        "mean": 0.23020131965694648,
-        "low": 0.19490248070888333,
-        "high": 0.26550015860500964,
-        "se": 0.007761985616802913,
+        "mean": 0.23020131965694654,
+        "low": 0.19490248070888339,
+        "high": 0.2655001586050097,
+        "se": 0.007761985616802911,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -1995,16 +1995,16 @@
         "mean": 0.8979825064970696,
         "low": 0.869690486610097,
         "high": 0.9262745263840422,
-        "se": 0.0062212315752394765,
+        "se": 0.006221231575239476,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
         "mean": 0.2459539086283398,
-        "low": 0.19724142387725904,
+        "low": 0.19724142387725901,
         "high": 0.2946663933794206,
-        "se": 0.010711559282528945,
+        "se": 0.010711559282528947,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -2015,31 +2015,31 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:c86c4980e634868924bf039156fcbe36f22f64cafb71489f98a59f9dc86c663b",
+      "claim": "sha256:b783b5fdd94da882e42e4c907ac5a7a12052895f12ef191102ed29943d381fb0",
       "claims": [
-        "sha256:c86c4980e634868924bf039156fcbe36f22f64cafb71489f98a59f9dc86c663b"
+        "sha256:b783b5fdd94da882e42e4c907ac5a7a12052895f12ef191102ed29943d381fb0"
       ],
       "verdict": "unresolved",
-      "verdict_record": "sha256:70eed63d046319a67bd6a2c9972df5e25b9b35ee0b7c2ea12341b98f8dae8f50",
+      "verdict_record": "sha256:2086b96335c6e4713f474ff6348134af6f204b04f4859596bfe6bcfbab4f6199",
       "condition": {
         "coupling": 1.0,
         "diffusion": 0.0,
         "phase_lag": 0.6
       },
       "phase": {
-        "mean": 0.5252119069723532,
-        "low": 0.4634998208163047,
-        "high": 0.5869239931284017,
-        "se": 0.013570087272018725,
+        "mean": 0.5252119069723531,
+        "low": 0.46349982081630453,
+        "high": 0.5869239931284016,
+        "se": 0.013570087272018737,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
-        "mean": 0.5648530997873823,
-        "low": 0.49978256471668053,
-        "high": 0.6299236348580841,
-        "se": 0.014308588394071536,
+        "mean": 0.5648530997873821,
+        "low": 0.4997825647166804,
+        "high": 0.6299236348580837,
+        "se": 0.014308588394071505,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -2047,8 +2047,8 @@
       "replicate": {
         "mean": 0.5021979327343608,
         "low": 0.4637561351126042,
-        "high": 0.5406397303561172,
-        "se": 0.008453101833268514,
+        "high": 0.5406397303561173,
+        "se": 0.00845310183326852,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -2059,12 +2059,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:fcdb2f540cc1be51c7967f665196342f4a14dc415e76ba3d0be8a19f74d86ad4",
+      "claim": "sha256:b9728b5da64439096a5958f6918f5b502a46fb23da400f8ad19528934b42d02b",
       "claims": [
-        "sha256:fcdb2f540cc1be51c7967f665196342f4a14dc415e76ba3d0be8a19f74d86ad4"
+        "sha256:b9728b5da64439096a5958f6918f5b502a46fb23da400f8ad19528934b42d02b"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:8e7fa11cdd8b1629c419200f8230073edb971be04d7e94e30f5e4634af85e823",
+      "verdict_record": "sha256:b6bf25fd94d89084d309d6183f02abed7ac6473d5066637e92f14b13ff96363c",
       "condition": {
         "coupling": 0.0,
         "diffusion": 0.08,
@@ -2103,31 +2103,31 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:5d6aa856bfe44e68d9472b69fc005880ef1943cbb0f0c5acf6cffc0d5e0e8610",
+      "claim": "sha256:8c9146e8019a027bbb45da1aabe3fff544dff2780ed147e73405871a33d2072f",
       "claims": [
-        "sha256:5d6aa856bfe44e68d9472b69fc005880ef1943cbb0f0c5acf6cffc0d5e0e8610"
+        "sha256:8c9146e8019a027bbb45da1aabe3fff544dff2780ed147e73405871a33d2072f"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:44fb3e42406bbef65822baa62f513d2f2f331dc18a6d1336c0497d911ef17139",
+      "verdict_record": "sha256:cbf8fdd4b73be48f166e9c804b5b9438384b6d6c050d6c5ca8c540549105bd66",
       "condition": {
         "coupling": 0.6,
         "diffusion": 0.08,
         "phase_lag": 0.6
       },
       "phase": {
-        "mean": 0.24988219701563072,
+        "mean": 0.24988219701563066,
         "low": 0.19786162348888675,
-        "high": 0.3019027705423747,
-        "se": 0.01143898653682434,
+        "high": 0.3019027705423746,
+        "se": 0.01143898653682433,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
         "mean": 0.8778044172271945,
-        "low": 0.6983347811240187,
+        "low": 0.6983347811240186,
         "high": 1.0572740533303704,
-        "se": 0.03946420833091281,
+        "se": 0.03946420833091283,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -2136,7 +2136,7 @@
         "mean": 0.24836641672655688,
         "low": 0.12806422160175746,
         "high": 0.3686686118513563,
-        "se": 0.02645367202027327,
+        "se": 0.026453672020273274,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -2147,12 +2147,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:5162f1aec9abec6ad9777dbd145b73039d10b54ee5e40a9165088c3cb841fae3",
+      "claim": "sha256:40dbf95792da80e36b6b3275e1d080df110a94354be4246bcda24dc7840ad68c",
       "claims": [
-        "sha256:5162f1aec9abec6ad9777dbd145b73039d10b54ee5e40a9165088c3cb841fae3"
+        "sha256:40dbf95792da80e36b6b3275e1d080df110a94354be4246bcda24dc7840ad68c"
       ],
       "verdict": "unresolved",
-      "verdict_record": "sha256:bdfda40534cef29fc52a9263fe0dd4bc203c9ad6c3f52051c854cc2599efa3b3",
+      "verdict_record": "sha256:b849144bd8a8d154cb935650fe3d7d2acf468bf6f743097624090636cc31175f",
       "condition": {
         "coupling": 1.0,
         "diffusion": 0.08,
@@ -2168,19 +2168,19 @@
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
-        "mean": 0.6290374175539905,
-        "low": 0.42887976772712055,
-        "high": 0.8291950673808604,
-        "se": 0.04401336829619676,
+        "mean": 0.6290374175539903,
+        "low": 0.4288797677271205,
+        "high": 0.8291950673808601,
+        "se": 0.04401336829619675,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
         "mean": 0.4415527511418042,
-        "low": 0.29259645784913857,
-        "high": 0.5905090444344698,
-        "se": 0.03275452225981465,
+        "low": 0.2925964578491387,
+        "high": 0.5905090444344697,
+        "se": 0.03275452225981462,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -2191,40 +2191,40 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:ca04954104f17d732cff6f102360abf994716ea94ad493104e43f4eedf49aa1c",
+      "claim": "sha256:8d2fbff56d99efebe7264b41e71cb46843184c976c1a76f8316cacd7a6c99da5",
       "claims": [
-        "sha256:ca04954104f17d732cff6f102360abf994716ea94ad493104e43f4eedf49aa1c"
+        "sha256:8d2fbff56d99efebe7264b41e71cb46843184c976c1a76f8316cacd7a6c99da5"
       ],
       "verdict": "unresolved",
-      "verdict_record": "sha256:03181bb073d42d30362407e4195d1c58721adbac811c0cc2456ca5a212aa3981",
+      "verdict_record": "sha256:086cf743f0bfe69b43f659f04d6c87b03bdb072ab08c42632cd28e8dcb9c6c0f",
       "condition": {
         "coupling": 1.4,
         "diffusion": 0.08,
         "phase_lag": 0.6
       },
       "phase": {
-        "mean": 0.7346486956849082,
-        "low": 0.5845780904971274,
+        "mean": 0.7346486956849083,
+        "low": 0.5845780904971276,
         "high": 0.884719300872689,
-        "se": 0.03299955221434779,
+        "se": 0.03299955221434775,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
-        "mean": 0.3117991254813471,
-        "low": 0.12267500643202323,
-        "high": 0.5009232445306709,
-        "se": 0.04158716647908108,
+        "mean": 0.311799125481347,
+        "low": 0.12267500643202314,
+        "high": 0.5009232445306708,
+        "se": 0.041587166479081075,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
         "mean": 0.7190243187646419,
-        "low": 0.595797712579929,
-        "high": 0.8422509249493548,
-        "se": 0.02709673103470903,
+        "low": 0.5957977125799286,
+        "high": 0.8422509249493552,
+        "se": 0.027096731034709106,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -2235,21 +2235,21 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:e3d7548e0e01eb5228afa70484ec1b147e0da7f2d95779590166320f2fb848f3",
+      "claim": "sha256:f519811ff7598d501d94f18a28f41520b20ba50b73ceb48083d25114e39a0b3c",
       "claims": [
-        "sha256:e3d7548e0e01eb5228afa70484ec1b147e0da7f2d95779590166320f2fb848f3"
+        "sha256:f519811ff7598d501d94f18a28f41520b20ba50b73ceb48083d25114e39a0b3c"
       ],
       "verdict": "unresolved",
-      "verdict_record": "sha256:f60ee57e190dfc8ba6ea1c29ed4d70cd8952a059ad73047915ec7a9fd3b9a979",
+      "verdict_record": "sha256:e6733c14a76887b437e50da34ca4dbd0933f6ee3a0984b721e7fbc1f060c6272",
       "condition": {
         "coupling": 2.0,
         "diffusion": 0.08,
         "phase_lag": 0.6
       },
       "phase": {
-        "mean": 0.9181813419470709,
-        "low": 0.873029951364715,
-        "high": 0.9633327325294269,
+        "mean": 0.9181813419470711,
+        "low": 0.8730299513647152,
+        "high": 0.9633327325294271,
         "se": 0.009928497784149568,
         "n": 12,
         "alpha": 0.0008333333333333334,
@@ -2259,16 +2259,16 @@
         "mean": 0.11273816434307739,
         "low": 0.0425386960539398,
         "high": 0.18293763263221496,
-        "se": 0.015436407525165815,
+        "se": 0.015436407525165816,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
         "mean": 0.9400030081572291,
-        "low": 0.921539663165243,
-        "high": 0.9584663531492152,
-        "se": 0.004059969747920846,
+        "low": 0.9215396631652429,
+        "high": 0.9584663531492154,
+        "se": 0.0040599697479208555,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -2279,22 +2279,22 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:46813358a923c15c31dc404bb52465cbde2b7bcd578684eec215884cf2d6bae0",
+      "claim": "sha256:0286461eee71bc465614fdf76896f027c84ba746ec6a6639929c5b9e28b7f038",
       "claims": [
-        "sha256:46813358a923c15c31dc404bb52465cbde2b7bcd578684eec215884cf2d6bae0"
+        "sha256:0286461eee71bc465614fdf76896f027c84ba746ec6a6639929c5b9e28b7f038"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:e405bdd055cefaaa30545a551001a659288ddc74667e4403206579c92ee2deac",
+      "verdict_record": "sha256:95059a3e6ac39590168adc895955d0572082235f3492376331ede3ca5b3f0c3e",
       "condition": {
         "coupling": 0.0,
         "diffusion": 0.5,
         "phase_lag": 0.6
       },
       "phase": {
-        "mean": 0.11237808443508975,
-        "low": 0.04250618109558486,
-        "high": 0.1822499877745946,
-        "se": 0.015364378118437768,
+        "mean": 0.11237808443508979,
+        "low": 0.04250618109558489,
+        "high": 0.18224998777459467,
+        "se": 0.015364378118437771,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -2323,21 +2323,21 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:fc51ff735b2367642a5b7b528b2675016ab40e75e555708a52cdd460d358198c",
+      "claim": "sha256:f18c70459952bfaaf55e60c798dad79691dd1943ab7d31e2ac43225aa7446c6b",
       "claims": [
-        "sha256:fc51ff735b2367642a5b7b528b2675016ab40e75e555708a52cdd460d358198c"
+        "sha256:f18c70459952bfaaf55e60c798dad79691dd1943ab7d31e2ac43225aa7446c6b"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:9ec0efdc84f397feeeb6acdf95b3cfd982e19aea521629b961195c4432111216",
+      "verdict_record": "sha256:a34652d8c150419da983f581d4e49a557183d90e1fb6d3c78d9422cfeb8a2e6a",
       "condition": {
         "coupling": 0.6,
         "diffusion": 0.5,
         "phase_lag": 0.6
       },
       "phase": {
-        "mean": 0.17055394463269488,
-        "low": 0.07439053229319983,
-        "high": 0.2667173569721899,
+        "mean": 0.1705539446326949,
+        "low": 0.07439053229319986,
+        "high": 0.26671735697218996,
         "se": 0.021145710331721957,
         "n": 12,
         "alpha": 0.0008333333333333334,
@@ -2353,10 +2353,10 @@
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
-        "mean": 0.18277607421689387,
-        "low": 0.04843427059987854,
+        "mean": 0.1827760742168939,
+        "low": 0.04843427059987859,
         "high": 0.3171178778339092,
-        "se": 0.029540890819238996,
+        "se": 0.02954089081923899,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -2367,12 +2367,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:16285f35bbcf6ab760b085fd4b7e2eec33a8caa66a60f56a4b1d42bba5cac26c",
+      "claim": "sha256:8cd344b569b40211cfdad15cb07b6e453e1159027202f7b5a5a9d348eab24be5",
       "claims": [
-        "sha256:16285f35bbcf6ab760b085fd4b7e2eec33a8caa66a60f56a4b1d42bba5cac26c"
+        "sha256:8cd344b569b40211cfdad15cb07b6e453e1159027202f7b5a5a9d348eab24be5"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:7295fbf04066ba12ea53ae1c9ce8bf24a8c2e25e151fff8814909bd7c813c823",
+      "verdict_record": "sha256:82f4c505dd9729ba2dbcfad3fb4d24d40da930daf625bad907afbfe20067ecbd",
       "condition": {
         "coupling": 1.0,
         "diffusion": 0.5,
@@ -2380,27 +2380,27 @@
       },
       "phase": {
         "mean": 0.29948124620693917,
-        "low": 0.13812417630465168,
+        "low": 0.13812417630465165,
         "high": 0.46083831610922665,
-        "se": 0.035481372562814556,
+        "se": 0.03548137256281456,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
         "mean": 0.853581277423776,
-        "low": 0.5916722277317664,
+        "low": 0.5916722277317665,
         "high": 1.1154903271157854,
-        "se": 0.05759210039772271,
+        "se": 0.0575921003977227,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
         "mean": 0.26451292244936114,
-        "low": 0.13166136267288578,
-        "high": 0.39736448222583654,
-        "se": 0.029213195869475354,
+        "low": 0.1316613626728858,
+        "high": 0.3973644822258365,
+        "se": 0.02921319586947535,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -2411,12 +2411,12 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:6b5972b005f632232487e9d1f4464cac0926608932e532fc908edcfbdced1ba2",
+      "claim": "sha256:a2d86823b14d770de0c05a5fd985dffb940570aaf4194e28f97b4b2c4b8ca331",
       "claims": [
-        "sha256:6b5972b005f632232487e9d1f4464cac0926608932e532fc908edcfbdced1ba2"
+        "sha256:a2d86823b14d770de0c05a5fd985dffb940570aaf4194e28f97b4b2c4b8ca331"
       ],
       "verdict": "contradicted",
-      "verdict_record": "sha256:0e7f8c8ec806f73b07afeb228bc192b6826c6875ab246146b9ced20a098fa6d1",
+      "verdict_record": "sha256:a2c6cdd5004d00974004dab17e5c4c30e183a14f3633430e50a013a18924281d",
       "condition": {
         "coupling": 1.4,
         "diffusion": 0.5,
@@ -2435,16 +2435,16 @@
         "mean": 0.8641188074002368,
         "low": 0.6248798089710212,
         "high": 1.1033578058294524,
-        "se": 0.05260710323980211,
+        "se": 0.05260710323980212,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "replicate": {
-        "mean": 0.433054405258642,
-        "low": 0.3164291647758978,
-        "high": 0.5496796457413862,
-        "se": 0.025645133555672144,
+        "mean": 0.4330544052586452,
+        "low": 0.3164291647759061,
+        "high": 0.5496796457413843,
+        "se": 0.02564513355567102,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
@@ -2455,31 +2455,31 @@
       "note": "Finite-window criterion and asymptotic reference differ; discrepancy is retained."
     },
     {
-      "claim": "sha256:c08f3d6f8d74774b65b76503948b206660a6d7f867991bf09d1f3058566dfb8e",
+      "claim": "sha256:7718c8aa52c54c2fc40acd6445a6daf258f91bbb322fe84944ec423c95ab2df8",
       "claims": [
-        "sha256:c08f3d6f8d74774b65b76503948b206660a6d7f867991bf09d1f3058566dfb8e"
+        "sha256:7718c8aa52c54c2fc40acd6445a6daf258f91bbb322fe84944ec423c95ab2df8"
       ],
       "verdict": "unresolved",
-      "verdict_record": "sha256:373a74d65b9ba0703bd9fdd067536d2fd55facfb7c938a4e58af8e2f0002a1ee",
+      "verdict_record": "sha256:46652d9da2522a29eaf34340b6b6d5c0a0788cd089d77bbd30767637dd2f0937",
       "condition": {
         "coupling": 2.0,
         "diffusion": 0.5,
         "phase_lag": 0.6
       },
       "phase": {
-        "mean": 0.5589071503632068,
-        "low": 0.43612969327461554,
-        "high": 0.681684607451798,
-        "se": 0.026997966063174814,
+        "mean": 0.5589071503632069,
+        "low": 0.4361296932746156,
+        "high": 0.6816846074517983,
+        "se": 0.026997966063174828,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"
       },
       "frequency": {
         "mean": 0.5212835657909757,
-        "low": 0.1374123723814697,
-        "high": 0.9051547592004816,
-        "se": 0.0844107843414789,
+        "low": 0.13741237238146964,
+        "high": 0.9051547592004817,
+        "se": 0.08441078434147892,
         "n": 12,
         "alpha": 0.0008333333333333334,
         "method": "Student-t over independent replicate summaries"

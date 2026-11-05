@@ -25,6 +25,35 @@ def run(inputs, ctx):
         hog = []
         while True:
             hog.append(bytearray(64 * 1024 * 1024))
+    elif mode == "sqlite-outside":
+        import sqlite3
+
+        sqlite3.connect(inputs["target"]).close()
+    elif mode == "sqlite-read-outside":
+        import sqlite3
+
+        sqlite3.connect(f"file:{inputs['target']}?mode=ro", uri=True).close()
+    elif mode == "sqlite-extension":
+        import sqlite3
+
+        sqlite3.connect(":memory:").enable_load_extension(True)
+    elif mode == "sqlite-inside":
+        import os
+        import sqlite3
+
+        for database in (":memory:", os.path.join(ctx.output_dir, "scratch.sqlite")):
+            con = sqlite3.connect(database)
+            con.execute("create table t (x)")
+            con.close()
+    elif mode == "xattr-outside":
+        import os
+
+        os.setxattr(inputs["target"], "user.atlas", b"x")
+    elif mode == "allocate":
+        # Touch every page: zero-filled allocations may never become resident.
+        block = bytearray(inputs["megabytes"] * 1024 * 1024)
+        block[::4096] = b"\x01" * len(block[::4096])
+        return {"done": bool(block[0])}
     elif mode == "native-subprocess":
         # Bypasses the audit hooks entirely; only the OS process limit can stop it.
         import ctypes

@@ -49,5 +49,5 @@ def quarantine(source: Path, destination: Path) -> Path:
     }
     destination.mkdir(parents=True)
     (destination / "record.json.bin").write_bytes(raw)
-    (destination / "review.json").write_text(json.dumps(status, indent=2), encoding="utf-8")
+    (destination / "review.json").write_text(json.dumps(status, indent=2), encoding="utf-8", newline="\n")
     return destination / "review.json"

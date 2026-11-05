@@ -19,6 +19,17 @@ npm ci --prefix tests/web
 npm test --prefix tests/web
 ```
 
+The jsdom tests strip CSS and CSP, so a real-browser check also loads an export
+with both active. It runs when Node.js can load Playwright with Chromium:
+`pytest tests/test_observatory_browser.py` covers a fresh export and the
+published demonstration, and `npm run test:browser --prefix tests/web` covers
+the demonstration alone. See [docs/OBSERVATORY.md](docs/OBSERVATORY.md).
+
+Evidence must hash identically on every OS. Write text with `newline="\n"`
+(`tests/test_portability.py` enforces this), and never re-run a skill generator
+script casually. Its vectorized math differs at the last ulp across platforms,
+which changes committed fixtures and content hashes.
+
 Use [docs/TUTORIAL.md](docs/TUTORIAL.md) for the scientific workflow and
 [docs/SKILL_AUTHORING.md](docs/SKILL_AUTHORING.md) for a tested reusable template.
 

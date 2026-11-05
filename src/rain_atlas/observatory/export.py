@@ -210,6 +210,6 @@ def export(ledger_path: Path, destination: Path, *, registry: Registry | None = 
     destination.mkdir(parents=True, exist_ok=False)
     (destination / "index.html").write_text(html, encoding="utf-8", newline="\n")
     (destination / "review-data.json").write_text(
-        json.dumps(data, indent=2, ensure_ascii=True), encoding="utf-8"
+        json.dumps(data, indent=2, ensure_ascii=True) + "\n", encoding="utf-8", newline="\n"
     )
     return destination / "index.html"

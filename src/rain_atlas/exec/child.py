@@ -14,9 +14,11 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 import threading
 import traceback
+import urllib.parse
 
 _NETWORK_EVENTS = frozenset(
     {
@@ -64,6 +66,9 @@ _WRITE_PATH_EVENTS = {
     "os.chown": (0,),
     "os.truncate": (0,),
     "os.utime": (0,),
+    "os.setxattr": (0,),
+    "os.removexattr": (0,),
+    "os.chflags": (0,),
     "shutil.rmtree": (0,),
     "shutil.move": (0, 1),
     "shutil.copyfile": (1,),
@@ -71,7 +76,15 @@ _WRITE_PATH_EVENTS = {
     "shutil.copystat": (1,),
     "shutil.copytree": (1,),
 }
-_READ_PATH_EVENTS = {"os.listdir": (0,), "os.scandir": (0,), "glob.glob": (0,)}
+_READ_PATH_EVENTS = {
+    "os.listdir": (0,),
+    "os.scandir": (0,),
+    "glob.glob": (0,),
+    "os.getxattr": (0,),
+    "os.listxattr": (0,),
+}
+# SQLite opens files natively, so the ``open`` event never sees them.
+_SQLITE_NATIVE_CODE = frozenset({"sqlite3.enable_load_extension", "sqlite3.load_extension"})
 _REGISTRY_WRITES = frozenset(
     {"winreg.CreateKey", "winreg.DeleteKey", "winreg.DeleteValue", "winreg.SetValue", "winreg.SaveKey"}
 )
@@ -124,6 +137,11 @@ class Guard:
             self._deny(f"starting or signalling processes ({event}) is not permitted")
         if event in _REGISTRY_WRITES:
             self._deny(f"registry writes ({event}) are not permitted")
+        if event == "sqlite3.connect":
+            self._check_sqlite(args[0] if args else None)
+            return
+        if event in _SQLITE_NATIVE_CODE and (event == "sqlite3.load_extension" or (args[1:] and args[1])):
+            self._deny("loading native SQLite extensions is not permitted")
         if event == "open":
             path, mode, flags = (list(args) + [None, None, None])[:3]
             writing = (isinstance(mode, str) and any(c in mode for c in "wax+")) or (
@@ -143,6 +161,37 @@ class Guard:
                 if index < len(args) and not self._path_ok(args[index] or ".", self.read_roots):
                     self._deny(f"{event} on {args[index]!r} is outside the permitted directories")
 
+    def _check_sqlite(self, database: object) -> None:
+        """In-memory databases anywhere; files only in the output or temp directories.
+
+        A ``file:`` URI is checked both as a URI and as a literal relative name,
+        because the audit event does not say which one ``connect`` will use.
+        Read-only (``mode=ro`` or ``immutable=1``) URIs may also use read roots.
+        """
+        if isinstance(database, bytes):
+            database = os.fsdecode(database)
+        if isinstance(database, os.PathLike):
+            database = os.fspath(database)
+        if not isinstance(database, str):
+            self._deny("unrecognized SQLite database argument")
+        if database in ("", ":memory:"):
+            return
+        roots, candidates = self.write_roots, [database]
+        if database.startswith("file:"):
+            uri = urllib.parse.urlsplit(database)
+            query = urllib.parse.parse_qs(uri.query)
+            if "vfs" in query or uri.netloc not in ("", "localhost"):
+                self._deny("SQLite URIs may not name a VFS or a remote authority")
+            if query.get("mode") == ["memory"]:
+                return
+            path = urllib.parse.unquote(uri.path)
+            candidates.append(path[1:] if re.match(r"/[A-Za-z]:", path) else path)
+            if query.get("mode") == ["ro"] or query.get("immutable") == ["1"]:
+                roots = self.read_roots
+        for candidate in candidates:
+            if not self._path_ok(candidate, roots):
+                self._deny(f"SQLite database {database!r} is outside the permitted directories")
+
 
 def _system_font_dirs() -> list[str]:
     if sys.platform == "win32":
@@ -157,7 +206,36 @@ def _system_font_dirs() -> list[str]:
     return ["/usr/share/fonts", "/usr/local/share/fonts"]
 
 
+def _open_own_status() -> int | None:
+    """Open /proc/self/status before any barrier, so it stays readable later."""
+    if not sys.platform.startswith("linux"):
+        return None
+    try:
+        return os.open("/proc/self/status", os.O_RDONLY | os.O_CLOEXEC)
+    except OSError:
+        return None
+
+
+def _peak_rss_kib(fd: int | None) -> int | None:
+    """This process's RSS high-water mark since exec (VmHWM), in KiB.
+
+    The host cannot use wait4's ru_maxrss for this: Linux folds the pre-exec
+    address space's high-water mark (the host's, after fork/vfork) into it,
+    so a 10 MB skill started by a 400 MB host reports 400 MB.
+    """
+    if fd is None:
+        return None
+    try:
+        os.lseek(fd, 0, os.SEEK_SET)
+        text = os.read(fd, 1 << 16).decode("ascii", "replace")
+    except OSError:
+        return None
+    match = re.search(r"^VmHWM:\s+(\d+) kB$", text, re.MULTILINE)
+    return int(match[1]) if match else None
+
+
 def main(spec_path: str) -> int:
+    status_fd = _open_own_status()
     with open(spec_path, encoding="utf-8") as fh:
         spec = json.load(fh)
     sys.path[:] = spec["sys_path"]
@@ -214,8 +292,14 @@ def main(spec_path: str) -> int:
                 "traceback": traceback.format_exc(limit=20),
                 "policy_denials": guard.denials,
             },
+            extra={"peak_rss_kib": _peak_rss_kib(status_fd)},
         )
-    return finish(ctx, status="ok", outputs=outputs, extra={"policy_denials": guard.denials})
+    return finish(
+        ctx,
+        status="ok",
+        outputs=outputs,
+        extra={"policy_denials": guard.denials, "peak_rss_kib": _peak_rss_kib(status_fd)},
+    )
 
 
 if __name__ == "__main__":

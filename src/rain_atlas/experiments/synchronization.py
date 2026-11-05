@@ -360,7 +360,8 @@ def run(
         "Each finding's full evidence references and intervals are in summary.json and the ledger. A hash chain establishes internal integrity, not authenticity or truth.",
     ]
     text = "\n".join(report) + "\n"
-    (report_dir / "report.md").write_text(text, encoding="utf-8")
+    # LF on every OS: the file must hash to the report object recorded below.
+    (report_dir / "report.md").write_text(text, encoding="utf-8", newline="\n")
     summary = {
         "protocol": PROTOCOL,
         "experiment": exp,
@@ -387,7 +388,9 @@ def run(
     summary["ledger_problems"] = ledger.verify()
     if summary["ledger_problems"]:
         raise ValueError("final ledger verification failed: " + str(summary["ledger_problems"]))
-    (report_dir / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
+    (report_dir / "summary.json").write_text(
+        json.dumps(summary, indent=2) + "\n", encoding="utf-8", newline="\n"
+    )
     summary["observatory_path"] = str(export(root / "ledger", root / "observatory", registry=registry))
     say(conclusion)
     return summary
