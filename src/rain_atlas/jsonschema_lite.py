@@ -13,6 +13,7 @@ manifest can never rely on a check this validator silently skips.
 from __future__ import annotations
 
 import re
+from functools import lru_cache
 from typing import Any
 
 ANNOTATIONS = frozenset({"description", "title", "default", "examples", "$comment", "unit", "$schema", "$id"})
@@ -40,6 +41,56 @@ KEYWORDS = frozenset(
     }
 )
 TYPES = frozenset({"object", "array", "string", "number", "integer", "boolean", "null"})
+
+
+def _json_equal(a: Any, b: Any) -> bool:
+    """JSON Schema equality for ``const``/``enum``.
+
+    Booleans never equal numbers (Python has ``True == 1``); numbers compare
+    mathematically (``1 == 1.0``); arrays and objects compare recursively.
+    """
+    if isinstance(a, bool) or isinstance(b, bool):
+        return isinstance(a, bool) and isinstance(b, bool) and a == b
+    if isinstance(a, (int, float)) and isinstance(b, (int, float)):
+        return a == b
+    if isinstance(a, list) and isinstance(b, list):
+        return len(a) == len(b) and all(_json_equal(x, y) for x, y in zip(a, b))
+    if isinstance(a, dict) and isinstance(b, dict):
+        return a.keys() == b.keys() and all(_json_equal(a[k], b[k]) for k in a)
+    return type(a) is type(b) and a == b
+
+
+@lru_cache(maxsize=256)
+def _pattern(source: str) -> re.Pattern[str]:
+    """Compile *source* with ECMA-262's end anchor: ``$`` matches only at the end.
+
+    Python's ``$`` also matches before a final newline, so ``^[a-z]+$``
+    accepted ``"abc\\n"``. Unescaped ``$`` outside character classes becomes
+    ``\\Z``; other syntax is passed to :mod:`re` unchanged.
+    """
+    out, i, in_class = [], 0, False
+    while i < len(source):
+        c = source[i]
+        if c == "\\":
+            out.append(source[i : i + 2])
+            i += 2
+            continue
+        if in_class:
+            in_class = c != "]"
+        elif c == "[":
+            in_class = True
+            out.append(c)
+            i += 1
+            for literal in "^]":  # "[^" opens a negation; a "]" right after "[" or "[^" is literal
+                if source[i : i + 1] == literal:
+                    out.append(literal)
+                    i += 1
+            continue
+        elif c == "$":
+            c = r"\Z"
+        out.append(c)
+        i += 1
+    return re.compile("".join(out))
 
 
 class SchemaError(ValueError):
@@ -105,8 +156,8 @@ def check_schema(schema: Any, path: str = "#") -> None:
                 raise SchemaError(f"{path}/enum must be an array")
         elif key == "pattern":
             try:
-                re.compile(value)
-            except re.error as exc:
+                _pattern(value)
+            except (re.error, TypeError) as exc:
                 raise SchemaError(f"{path}/pattern: {exc}") from exc
 
 
@@ -124,9 +175,9 @@ def validate(value: Any, schema: Any, path: str = "$") -> list[str]:
         if not any(_type_matches(value, name) for name in names):
             return [f"{path}: expected {' or '.join(names)}, got {type(value).__name__}"]
 
-    if "const" in schema and value != schema["const"]:
+    if "const" in schema and not _json_equal(value, schema["const"]):
         errors.append(f"{path}: must equal {schema['const']!r}")
-    if "enum" in schema and value not in schema["enum"]:
+    if "enum" in schema and not any(_json_equal(value, option) for option in schema["enum"]):
         errors.append(f"{path}: must be one of {schema['enum']!r}")
 
     if isinstance(value, (int, float)) and not isinstance(value, bool):
@@ -144,7 +195,7 @@ def validate(value: Any, schema: Any, path: str = "$") -> list[str]:
             errors.append(f"{path}: shorter than {schema['minLength']} characters")
         if "maxLength" in schema and len(value) > schema["maxLength"]:
             errors.append(f"{path}: longer than {schema['maxLength']} characters")
-        if "pattern" in schema and re.search(schema["pattern"], value) is None:
+        if "pattern" in schema and _pattern(schema["pattern"]).search(value) is None:
             errors.append(f"{path}: does not match {schema['pattern']!r}")
 
     if isinstance(value, list):

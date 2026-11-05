@@ -152,9 +152,14 @@ validator needs 208 rules across five clients' YAML dialects).
 ```
 
 `inputs`/`outputs` are JSON Schema (a documented subset of draft 2020-12:
-`type`, `properties`, `required`, `additionalProperties`, `items`, `enum`,
-`const`, `minimum`/`maximum`, `exclusiveMinimum`/`exclusiveMaximum`,
-`minItems`/`maxItems`, `minLength`/`maxLength`, `default`, `description`).
+`type`, `properties`, `required`, `additionalProperties`, `items`,
+`prefixItems`, `enum`, `const`, `minimum`/`maximum`,
+`exclusiveMinimum`/`exclusiveMaximum`, `minItems`/`maxItems`,
+`minLength`/`maxLength`, `pattern`, `anyOf`, `oneOf`, plus annotations such as
+`default` and `description`; any other keyword is a schema error). `enum` and
+`const` use JSON equality, so `true` never equals `1`. `pattern` uses ECMA-262
+anchors, so `$` matches only at the end of the string, never before a final
+newline.
 ATLAS ships its own validator for that subset, so no compiled dependency is
 needed. Numeric arrays travel as JSON lists for small data and as `.npy`
 artifact references (`{"$artifact": "sha256:…", "media_type": "application/x-npy"}`)

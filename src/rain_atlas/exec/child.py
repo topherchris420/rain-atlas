@@ -292,13 +292,14 @@ def main(spec_path: str) -> int:
                 "traceback": traceback.format_exc(limit=20),
                 "policy_denials": guard.denials,
             },
-            extra={"peak_rss_kib": _peak_rss_kib(status_fd)},
+            measure=lambda: _peak_rss_kib(status_fd),
         )
     return finish(
         ctx,
         status="ok",
         outputs=outputs,
-        extra={"policy_denials": guard.denials, "peak_rss_kib": _peak_rss_kib(status_fd)},
+        extra={"policy_denials": guard.denials},
+        measure=lambda: _peak_rss_kib(status_fd),
     )
 
 

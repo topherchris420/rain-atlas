@@ -8,7 +8,7 @@ import json
 import os
 import random
 import re
-from typing import Any
+from typing import Any, Callable
 
 from ..canonical import from_jsonable, to_jsonable
 
@@ -111,7 +111,15 @@ def finish(
     outputs: Any = None,
     error: dict | None = None,
     extra: dict | None = None,
+    measure: Callable[[], int | None] | None = None,
 ) -> int:
+    """Write the result file.
+
+    *measure* (the bootstrap's peak-RSS reading) runs after the outputs are
+    converted and encoded, which can be the largest allocation of the run, and
+    its value is spliced into the closing brace without copying the payload,
+    so writing the file cannot raise the peak it reports.
+    """
     payload = {"status": status, "log": ctx.messages}
     if outputs is not None:
         payload["outputs"] = to_jsonable(outputs)
@@ -119,8 +127,12 @@ def finish(
         payload["error"] = error
     if extra:
         payload.update(extra)
-    with open(os.path.join(ctx.output_dir, RESULT_FILE), "w", encoding="utf-8", newline="\n") as fh:
-        json.dump(payload, fh, allow_nan=False)
+    data = json.dumps(payload, allow_nan=False).encode("ascii")  # ensure_ascii output
+    reading = measure() if measure is not None else None
+    closing = b"}" if reading is None else b',"peak_rss_kib":%d}' % reading
+    with open(os.path.join(ctx.output_dir, RESULT_FILE), "wb") as fh:
+        fh.write(memoryview(data)[:-1])
+        fh.write(closing)
     return 0 if status == "ok" else 1
 
 

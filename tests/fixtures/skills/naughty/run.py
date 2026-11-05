@@ -49,6 +49,9 @@ def run(inputs, ctx):
         import os
 
         os.setxattr(inputs["target"], "user.atlas", b"x")
+    elif mode == "large-output":
+        # Small while running; converting and serializing the result is the peak.
+        return {"done": True, "padding": [0] * inputs["count"]}
     elif mode == "allocate":
         # Touch every page: zero-filled allocations may never become resident.
         block = bytearray(inputs["megabytes"] * 1024 * 1024)

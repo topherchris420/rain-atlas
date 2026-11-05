@@ -73,6 +73,39 @@ def test_rain_export_matches_verified_upstream_contract_and_is_local(tmp_path):
         export(ledger, exp, "V3D-EXP-0001", 1, ledger.root / "submission.json")
 
 
+def _later_run(ledger, exp, commit):
+    ledger.append(
+        "run",
+        {
+            "experiment": exp,
+            "run_id": "later",
+            "skill": {"name": "fixture"},
+            "status": "ok",
+            "seed": 43,
+            "inputs_hash": "sha256:" + "1" * 64,
+            "role": "experimental-engineer",
+            "started_at": "2026-11-04T00:02:00.000Z",
+            "ended_at": "2026-11-04T00:03:00.000Z",
+            "environment": {"atlas_commit": commit},
+            "wall_s": 60,
+            "artifacts": {},
+        },
+    )
+
+
+def test_rain_export_provenance_covers_every_run(tmp_path):
+    # Regression: commit and dirty were read from the first run only, so a
+    # study continued from a modified tree was exported as clean.
+    ledger, exp = study(tmp_path / "dirty")
+    _later_run(ledger, exp, "a" * 40 + "-dirty")
+    provenance = submission(ledger, exp, "V3D-EXP-0001", 1)["provenance"]
+    assert provenance["commit"] == "a" * 40 and provenance["dirty"] is True
+    ledger, exp = study(tmp_path / "mixed")
+    _later_run(ledger, exp, "b" * 40)
+    with pytest.raises(ValueError, match="more than one source commit"):
+        submission(ledger, exp, "V3D-EXP-0001", 1)
+
+
 @pytest.mark.parametrize(
     "record,recognized",
     [

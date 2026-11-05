@@ -154,6 +154,10 @@ class Registry:
             raise RegistryError(f"skill {name} is disabled")
         if not item.approved:
             raise RegistryError(f"skill {name}@{item.version} is untrusted and not approved")
+        if item.problems:
+            # Includes installed files that no longer match their recorded hash:
+            # _ref alone re-hashes the files and would compare them with themselves.
+            raise RegistryError(f"skill {name}@{item.version} is invalid: {'; '.join(item.problems)}")
         return self._ref(item)
 
     # selection --------------------------------------------------------------
