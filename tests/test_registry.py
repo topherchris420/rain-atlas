@@ -99,6 +99,10 @@ def test_tampered_install_is_flagged(registry, tmp_path):
     listing = next(i for i in registry.listings() if i.name == "echo")
     assert any("no longer match" in p for p in listing.problems)
     assert registry.select("test.echo") == []
+    # Regression: get() (used by `atlas run` and upgrade checks) re-hashed the
+    # files and compared them with themselves, so it returned tampered code.
+    with pytest.raises(RegistryError, match="no longer match"):
+        registry.get("echo")
 
 
 def test_dependency_resolution(registry, tmp_path):
