@@ -60,8 +60,8 @@
             2,
             2
           ],
-          "runtime_total_s": 0.009791200049221516,
-          "runtime_median_s": 0.000760149909183383
+          "runtime_total_s": 0.007225624999591673,
+          "runtime_median_s": 0.0005782790000239402
         },
         "nls-bic": {
           "false_positive_trial_rate": {
@@ -91,7 +91,7 @@
             "alpha": 0.05,
             "method": "Wilson score"
           },
-          "conditional_matched_rmse_hz": 0.001466206976917869,
+          "conditional_matched_rmse_hz": 0.0014662068418321826,
           "matched_samples": 24,
           "detection_counts": [
             2,
@@ -107,8 +107,8 @@
             2,
             2
           ],
-          "runtime_total_s": 0.5385723998770118,
-          "runtime_median_s": 0.03881704993546009
+          "runtime_total_s": 0.34500612000010733,
+          "runtime_median_s": 0.027086944000075164
         }
       },
       "method_disagreement": {
@@ -173,8 +173,8 @@
             1,
             1
           ],
-          "runtime_total_s": 0.008436600444838405,
-          "runtime_median_s": 0.000688950065523386
+          "runtime_total_s": 0.0070661059999110876,
+          "runtime_median_s": 0.0005876129999933255
         },
         "nls-bic": {
           "false_positive_trial_rate": {
@@ -204,7 +204,7 @@
             "alpha": 0.05,
             "method": "Wilson score"
           },
-          "conditional_matched_rmse_hz": 0.027389875257409744,
+          "conditional_matched_rmse_hz": 0.027389875243785555,
           "matched_samples": 19,
           "detection_counts": [
             3,
@@ -220,8 +220,8 @@
             2,
             2
           ],
-          "runtime_total_s": 1.0021628006361425,
-          "runtime_median_s": 0.07486470008734614
+          "runtime_total_s": 0.658416840999962,
+          "runtime_median_s": 0.0499549589999333
         }
       },
       "method_disagreement": {
@@ -267,8 +267,8 @@
             0,
             0
           ],
-          "runtime_total_s": 0.00885400059632957,
-          "runtime_median_s": 0.000660850084386766
+          "runtime_total_s": 0.005935619000638326,
+          "runtime_median_s": 0.00047612549985842634
         },
         "nls-bic": {
           "false_positive_trial_rate": {
@@ -298,8 +298,8 @@
             0,
             0
           ],
-          "runtime_total_s": 0.13921450008638203,
-          "runtime_median_s": 0.010797000024467707
+          "runtime_total_s": 0.10177355299947521,
+          "runtime_median_s": 0.0075761214999374715
         }
       },
       "method_disagreement": {
@@ -345,8 +345,8 @@
             9,
             7
           ],
-          "runtime_total_s": 0.011731300037354231,
-          "runtime_median_s": 0.0009258999489247799
+          "runtime_total_s": 0.0077232870005445875,
+          "runtime_median_s": 0.0006480035001459328
         },
         "nls-bic": {
           "false_positive_trial_rate": {
@@ -376,8 +376,8 @@
             2,
             4
           ],
-          "runtime_total_s": 1.4052112000063062,
-          "runtime_median_s": 0.09525825001765043
+          "runtime_total_s": 0.7715289190000476,
+          "runtime_median_s": 0.05224207850005769
         }
       },
       "method_disagreement": {
@@ -415,8 +415,8 @@
             7,
             7
           ],
-          "runtime_total_s": 0.010394600220024586,
-          "runtime_median_s": 0.0008419000077992678
+          "runtime_total_s": 0.006809448999774759,
+          "runtime_median_s": 0.0005628129998740405
         },
         "nls-bic": {
           "false_positive_trial_rate": null,
@@ -438,8 +438,8 @@
             0,
             0
           ],
-          "runtime_total_s": 0.3035219004377723,
-          "runtime_median_s": 0.018865450052544475
+          "runtime_total_s": 0.160348017999695,
+          "runtime_median_s": 0.011273985000116227
         }
       },
       "method_disagreement": {
@@ -505,8 +505,8 @@
             1,
             1
           ],
-          "runtime_total_s": 0.011930900160223246,
-          "runtime_median_s": 0.0009315500501543283
+          "runtime_total_s": 0.007120347000636684,
+          "runtime_median_s": 0.0005628580000802685
         },
         "nls-bic": {
           "false_positive_trial_rate": {
@@ -536,7 +536,7 @@
             "alpha": 0.05,
             "method": "Wilson score"
           },
-          "conditional_matched_rmse_hz": 0.003154457222114328,
+          "conditional_matched_rmse_hz": 0.0031544572258138787,
           "matched_samples": 36,
           "detection_counts": [
             3,
@@ -552,8 +552,8 @@
             3,
             3
           ],
-          "runtime_total_s": 0.9866035003215075,
-          "runtime_median_s": 0.07773370004724711
+          "runtime_total_s": 0.5229739730004894,
+          "runtime_median_s": 0.04220538700008092
         }
       },
       "method_disagreement": {
@@ -574,6 +574,6 @@
     "Wilson intervals use independent trials within each case; no aggregation across heterogeneous cases.",
     "Truth-unavailable chirp cases retain detections without labelling them true or false.",
     "Both baselines are classical methods; no unexecuted external system or LLM comparison.",
-    "Process peak memory and environment are recorded by the executor; POSIX memory is an upper bound over host children."
+    "Process peak memory and environment are recorded per run by the executor (Windows job-object peak commit; POSIX peak RSS via wait4)."
   ]
 }

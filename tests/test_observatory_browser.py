@@ -18,6 +18,7 @@ from rain_atlas.ledger.store import Ledger
 from rain_atlas.observatory.export import export
 
 CHECKER = REPO / "tests" / "web" / "browser-check.cjs"
+DEMONSTRATION = REPO / "docs" / "demonstration" / "index.html"
 
 
 def _browser_available() -> bool:
@@ -121,3 +122,8 @@ def test_fresh_export_renders_every_view_offline_at_desktop_and_phone_width(tmp_
     for viewport in report["viewports"].values():
         assert viewport["network_probe"] == "refused"
         assert viewport["views"]["reports"]["figures"] == [True]
+
+
+@pytest.mark.skipif(not DEMONSTRATION.is_file(), reason="no published demonstration")
+def test_published_demonstration_renders_offline():
+    assert _check(DEMONSTRATION)["problems"] == []

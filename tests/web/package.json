@@ -1,1 +1,1 @@
-{"name":"atlas-observatory-tests","private":true,"type":"module","scripts":{"test":"node --test observatory.test.mjs"},"devDependencies":{"jsdom":"^30.1.3"}}
+{"name":"atlas-observatory-tests","private":true,"type":"module","scripts":{"test":"node --test observatory.test.mjs","test:browser":"node browser-check.cjs ../../docs/demonstration/index.html --assert"},"devDependencies":{"jsdom":"^30.1.3"}}
