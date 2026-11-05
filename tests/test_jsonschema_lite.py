@@ -57,3 +57,37 @@ def test_unsupported_keywords_are_rejected():
         check_schema({"type": "object", "if": {"type": "object"}})
     with pytest.raises(SchemaError):
         check_schema({"type": "object", "properties": {"a": {"$ref": "#/defs/x"}}})
+
+
+@pytest.mark.parametrize(
+    "value,schema,valid",
+    [
+        # JSON equality: booleans are never numbers, although True == 1 in Python.
+        (1, {"const": True}, False),
+        (1.0, {"const": True}, False),
+        (True, {"const": True}, True),
+        (True, {"const": 1}, False),
+        (1.0, {"const": 1}, True),  # numbers compare mathematically
+        (False, {"enum": [0, 1]}, False),
+        (0, {"enum": [0, 1]}, True),
+        ([1, True], {"const": [1, True]}, True),
+        ([1, 1], {"const": [1, True]}, False),
+        ({"a": 1}, {"const": {"a": True}}, False),
+        # ECMA-262 anchors: "$" ends the input; Python's also allowed a final "\n".
+        ("abc\n", {"pattern": "^[a-z]+$"}, False),
+        ("abc", {"pattern": "^[a-z]+$"}, True),
+        ("x$", {"pattern": r"\$$"}, True),
+        ("x$\n", {"pattern": r"\$$"}, False),
+        ("$", {"pattern": "^[$]$"}, True),
+        ("]$", {"pattern": "^[]$]+$"}, True),
+    ],
+)
+def test_equality_and_anchors_follow_json_schema(value, schema, valid):
+    assert (validate(value, schema) == []) is valid
+
+
+def test_proposal_hashes_reject_a_trailing_newline():
+    from rain_atlas.agents.proposals import HASH
+
+    assert validate("sha256:" + "a" * 64, HASH) == []
+    assert validate("sha256:" + "a" * 64 + "\n", HASH)
