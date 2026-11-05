@@ -119,3 +119,61 @@ def test_unsealed_run_reproduces_exactly(lab):
     rec, match = engineer.reproduce(exp, entry)
     assert match
     assert lab.ledger.get_json(rec.object)["outputs_match"] is True
+
+
+def test_falsification_outcomes_follow_the_tested_frequency(lab):
+    # Regression: outcomes were paired with claims by position. A skill that
+    # returned its tests in another order would attach each verdict to the
+    # wrong claim, and a short response silently left claims unchallenged.
+    from types import SimpleNamespace
+
+    from rain_atlas.agents.roles import Skeptic
+
+    exp = prereg(lab)
+    run = lab.ledger.append(
+        "run",
+        {
+            "run_id": "r",
+            "skill": {"name": "x"},
+            "status": "ok",
+            "seed": 0,
+            "inputs_hash": "sha256:" + "1" * 64,
+            "experiment": exp,
+            "role": "experimental-engineer",
+        },
+    )
+    author = {"role": "computational-scientist", "generation": "scripted"}
+    claims = []
+    for f in (10.0, 20.0, 30.0):
+        entry = lab.ledger.append(
+            "claim",
+            {
+                "experiment": exp,
+                "category": "COMPUTED",
+                "statement": f"{f} Hz",
+                "evidence": [run.object],
+                "author": author,
+            },
+        )
+        claims.append((entry, {"frequency_hz": f}))
+
+    class ReversingEngineer:
+        def execute(self, experiment, skill, inputs, **kwargs):
+            tests = [
+                {
+                    "frequency_hz": f,
+                    "outcome": {10.0: "corroborated", 20.0: "contradicted"}[f],
+                    "fraction_significant": 1.0,
+                }
+                for f in reversed(inputs["frequencies_hz"])
+                if f != 30.0  # a short response: 30 Hz is never tested
+            ]
+            return run, SimpleNamespace(ok=True, outputs={"tests": tests})
+
+    replicates = {"$artifact": "replicates.npy", "sha256": lab.ledger.put_bytes(b"replicates")}
+    outcomes = Skeptic(lab, ReversingEngineer()).falsify(
+        exp, None, replicates, claims, fs=1.0, alpha=0.01, min_fraction=0.8, seed=0, label="order"
+    )
+    assert [outcomes[e.object] for e, _ in claims] == ["corroborated", "contradicted", "inconclusive"]
+    challenged = [r["target"] for _, r in lab.ledger.records("challenge")]
+    assert challenged == [e.object for e, _ in claims]

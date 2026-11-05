@@ -282,8 +282,12 @@ class Skeptic:
             purpose=f"replicate falsification test ({label})",
         )
         tests = from_jsonable(result.outputs)["tests"] if result.ok else []
+        # Pair by the frequency each test reports, never by position: a skill
+        # may reorder or omit tests, and every claim must still be challenged.
+        tested = {t["frequency_hz"]: t for t in tests if isinstance(t, dict) and "frequency_hz" in t}
         outcomes: dict[str, str] = {}
-        for (claim_entry, c), test in zip(claims, tests or [None] * len(claims)):
+        for claim_entry, c in claims:
+            test = tested.get(c["frequency_hz"])
             outcome = test["outcome"] if test else "inconclusive"
             outcomes[claim_entry.object] = outcome
             self.lab.ledger.append(
