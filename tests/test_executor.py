@@ -70,6 +70,63 @@ def test_reads_outside_the_skill_and_inputs_are_blocked(runs_dir):
     assert result.policy_denials
 
 
+def test_sqlite_cannot_create_databases_outside_the_run(runs_dir, tmp_path):
+    # Regression: SQLite opens files natively, so the "open" audit event never
+    # saw them; sqlite3.connect could create files anywhere.
+    target = tmp_path / "OUTSIDE.sqlite"
+    result = run_skill(
+        fixture_ref("naughty"), {"mode": "sqlite-outside", "target": str(target)}, seed=1, runs_dir=runs_dir
+    )
+    assert result.status == "error" and result.policy_denials, result.error
+    assert not target.exists()
+
+
+def test_sqlite_cannot_read_databases_outside_the_read_roots(runs_dir, tmp_path):
+    # Browser cookie and history stores are SQLite files; mode=ro is still a read.
+    import sqlite3
+
+    secret = tmp_path / "host-secret.sqlite"
+    with sqlite3.connect(secret) as con:
+        con.execute("create table secret (x)")
+    result = run_skill(
+        fixture_ref("naughty"),
+        {"mode": "sqlite-read-outside", "target": secret.as_posix()},
+        seed=1,
+        runs_dir=runs_dir,
+    )
+    assert result.status == "error" and result.policy_denials, result.error
+
+
+def test_sqlite_native_extensions_are_refused(runs_dir):
+    result = run_skill(fixture_ref("naughty"), {"mode": "sqlite-extension"}, seed=1, runs_dir=runs_dir)
+    assert result.status == "error"
+    assert any("SQLite extensions" in d for d in result.policy_denials), result.error
+
+
+def test_sqlite_in_memory_and_in_the_output_directory_still_work(runs_dir):
+    result = run_skill(fixture_ref("naughty"), {"mode": "sqlite-inside"}, seed=1, runs_dir=runs_dir)
+    assert result.status == "ok", result.error
+    assert "scratch.sqlite" in result.artifacts
+
+
+@pytest.mark.skipif(not hasattr(__import__("os"), "setxattr"), reason="extended attributes are Linux-only")
+def test_extended_attributes_outside_the_run_are_blocked(runs_dir, tmp_path):
+    import os
+
+    target = tmp_path / "victim.txt"
+    target.write_text("x", encoding="utf-8")
+    try:
+        os.setxattr(target, "user.probe", b"1")
+    except OSError:
+        pytest.skip("this filesystem does not support user extended attributes")
+    os.removexattr(target, "user.probe")
+    result = run_skill(
+        fixture_ref("naughty"), {"mode": "xattr-outside", "target": str(target)}, seed=1, runs_dir=runs_dir
+    )
+    assert result.status == "error" and result.policy_denials, result.error
+    assert "user.atlas" not in os.listxattr(target)
+
+
 @pytest.mark.skipif(sys.platform != "win32", reason="job-object process limit is Windows-specific")
 def test_native_process_creation_is_blocked_by_the_job_object(runs_dir):
     result = run_skill(fixture_ref("naughty"), {"mode": "native-subprocess"}, seed=1, runs_dir=runs_dir)
@@ -102,6 +159,27 @@ def test_memory_limit_stops_runaway_allocation(runs_dir):
     assert result.status != "ok"
     if result.peak_memory_mb is not None and sys.platform == "win32":
         assert result.peak_memory_mb < 256 + 64
+
+
+def test_peak_memory_is_measured_per_run(runs_dir):
+    # Regression (POSIX): RUSAGE_CHILDREN is a running maximum over every
+    # child the host ever reaped, so a small run after a large one inherited
+    # the large run's peak. Each record must describe its own process.
+    small_before = run_skill(fixture_ref("echo"), {"values": [1.0]}, seed=1, runs_dir=runs_dir)
+    large = run_skill(
+        fixture_ref("naughty"), {"mode": "allocate", "megabytes": 160}, seed=1, runs_dir=runs_dir
+    )
+    small_after = run_skill(fixture_ref("echo"), {"values": [1.0]}, seed=1, runs_dir=runs_dir)
+    assert small_before.ok and large.ok and small_after.ok, (large.error, small_after.error)
+    peaks = [r.peak_memory_mb for r in (small_before, large, small_after)]
+    assert all(p is not None for p in peaks), [r.peak_memory_note for r in (small_before, large, small_after)]
+    assert peaks[1] >= 160, peaks
+    assert peaks[2] < peaks[1] - 100, peaks
+    assert abs(peaks[2] - peaks[0]) < 50, peaks
+    if sys.platform.startswith("linux"):
+        # wait4 alone is not enough: Linux folds the host's RSS at spawn into
+        # the child's maxrss, which made every run in a large host look large.
+        assert all("VmHWM" in r.peak_memory_note for r in (small_before, large, small_after))
 
 
 def test_runs_are_deterministic_given_seed(runs_dir):

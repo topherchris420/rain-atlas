@@ -12,8 +12,9 @@
     "type": "object",
     "required": ["mode"],
     "properties": {
-      "mode": {"enum": ["network", "subprocess", "native-subprocess", "write-outside", "read-outside", "sleep", "memory", "ok"]},
-      "target": {"type": "string"}
+      "mode": {"enum": ["network", "subprocess", "native-subprocess", "write-outside", "read-outside", "sleep", "memory", "ok", "allocate", "sqlite-outside", "sqlite-read-outside", "sqlite-extension", "sqlite-inside", "xattr-outside"]},
+      "target": {"type": "string"},
+      "megabytes": {"type": "integer", "minimum": 1, "maximum": 200}
     }
   },
   "outputs": {"type": "object", "required": ["done"], "properties": {"done": {"type": "boolean"}, "blocked_error": {"type": "integer"}}},
