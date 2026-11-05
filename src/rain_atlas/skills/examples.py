@@ -29,6 +29,8 @@ from ..exec.runner import RunResult, SkillRef, run_skill
 def _close(actual: float, expected: float, tol: dict) -> bool:
     if math.isnan(expected):
         return math.isnan(actual)
+    if math.isinf(expected):  # inf - inf is NaN, which no tolerance accepts
+        return actual == expected
     return abs(actual - expected) <= max(tol.get("abs", 0.0), tol.get("rel", 0.0) * abs(expected))
 
 
@@ -55,7 +57,9 @@ def compare(actual: Any, expected: Any, tol: dict, path: str = "$") -> list[str]
             problems.extend(compare(a, e, tol, f"{path}[{i}]"))
         return problems
     if isinstance(expected, bool) or expected is None or isinstance(expected, str):
-        return [] if actual == expected else [f"{path}: expected {expected!r}, got {actual!r}"]
+        # type() as well as ==: Python has True == 1, JSON does not.
+        same = type(actual) is type(expected) and actual == expected
+        return [] if same else [f"{path}: expected {expected!r}, got {actual!r}"]
     if isinstance(expected, (int, float)):
         if not isinstance(actual, (int, float)) or isinstance(actual, bool):
             return [f"{path}: expected a number, got {actual!r}"]
@@ -67,12 +71,17 @@ def compare(actual: Any, expected: Any, tol: dict, path: str = "$") -> list[str]
     return [f"{path}: unsupported expectation {expected!r}"]
 
 
+def load_expected(path: Path) -> Any:
+    """An expected file, decoded like outputs (``{"$float": "inf"}`` becomes ``inf``)."""
+    return from_jsonable(json.loads(Path(path).read_text(encoding="utf-8")))
+
+
 def run_example(
     skill: SkillRef, example: dict, runs_dir: Path, host: HostPolicy | None = None
 ) -> tuple[RunResult, list[str]]:
     stem = Path(skill.path) / "examples" / example["name"]
     inputs = json.loads(stem.with_name(stem.name + ".input.json").read_text(encoding="utf-8"))
-    expected = json.loads(stem.with_name(stem.name + ".expected.json").read_text(encoding="utf-8"))
+    expected = load_expected(stem.with_name(stem.name + ".expected.json"))
     files_dir = stem.with_name(stem.name + ".files")
     files = {p.name: p for p in sorted(files_dir.iterdir())} if files_dir.is_dir() else {}
     result = run_skill(
