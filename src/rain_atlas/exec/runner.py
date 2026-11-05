@@ -297,7 +297,7 @@ def run_skill(
         if "sha256" in ref and sha256_file(target) != ref["sha256"]:
             return refuse("invalid-input", f"artifact {ref['$artifact']!r} does not match its hash")
     inputs_path = input_dir / "_inputs.json"
-    inputs_path.write_text(json.dumps(inputs, allow_nan=False), encoding="utf-8")
+    inputs_path.write_text(json.dumps(inputs, allow_nan=False), encoding="utf-8", newline="\n")
 
     spec = {
         "sys_path": _child_sys_path(),
@@ -312,7 +312,7 @@ def run_skill(
         "policy": base.policy,
     }
     spec_path = run_dir / "spec.json"
-    spec_path.write_text(json.dumps(spec, indent=2), encoding="utf-8")
+    spec_path.write_text(json.dumps(spec, indent=2), encoding="utf-8", newline="\n")
 
     cmd = [_interpreter(), "-s", "-P", "-B", "-X", "utf8", str(CHILD_SCRIPT), str(spec_path)]
     env = _child_env(tmp_dir.resolve(), policy.threads)

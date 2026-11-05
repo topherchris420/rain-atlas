@@ -3,7 +3,14 @@ import math
 import numpy as np
 import pytest
 
-from rain_atlas.canonical import canonical_bytes, from_jsonable, sha256_json, to_jsonable, tree_hash
+from rain_atlas.canonical import (
+    canonical_bytes,
+    from_jsonable,
+    sha256_json,
+    to_jsonable,
+    tree_files,
+    tree_hash,
+)
 
 
 def test_canonical_bytes_sorted_and_compact():
@@ -44,6 +51,44 @@ def test_tree_hash_ignores_pycache_and_tracks_content(tmp_path):
     (tmp_path / "a.txt").write_text("one", encoding="utf-8")
     (tmp_path / "b.txt").write_text("", encoding="utf-8")
     assert tree_hash(tmp_path) != first
+
+
+MIXED_CASE_TREE = {
+    "SKILL.md": b"# skill\n",
+    "Zeta.txt": b"z\n",
+    "alpha/beta.txt": b"b\n",
+    "alpha-gamma.txt": b"g\n",
+    "examples/a.json": b"{}\n",
+    "run.py": b"def run(i, c):\n    return {}\n",
+}
+
+
+def _write_tree(root, files):
+    for name, data in files.items():
+        (root / name).parent.mkdir(parents=True, exist_ok=True)
+        (root / name).write_bytes(data)
+
+
+def test_tree_order_is_code_point_order_of_components_on_every_os(tmp_path):
+    # Regression: sorting Path objects is case-insensitive on Windows only, so
+    # every skill (all contain SKILL.md) hashed differently on Windows and POSIX.
+    _write_tree(tmp_path, MIXED_CASE_TREE)
+    assert [name for name, _ in tree_files(tmp_path)] == [
+        "SKILL.md",
+        "Zeta.txt",
+        "alpha/beta.txt",
+        "alpha-gamma.txt",
+        "examples/a.json",
+        "run.py",
+    ]
+
+
+def test_tree_hash_is_pinned_across_platforms(tmp_path):
+    # Golden value computed independently from the ordering rule above. A
+    # platform that orders or encodes differently fails here, before its
+    # hashes reach a ledger, an approval pin or a proposal.
+    _write_tree(tmp_path, MIXED_CASE_TREE)
+    assert tree_hash(tmp_path) == "sha256:35934484e1c5fe5888c9a9fe5fddafb25909d91395334fe481c7cef111a920c0"
 
 
 def test_tree_hash_refuses_symlinks(tmp_path):

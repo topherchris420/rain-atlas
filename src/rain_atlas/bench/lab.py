@@ -66,6 +66,6 @@ def run(root: Path, trials: int = 12, registry: Registry | None = None) -> dict:
     if ledger.verify():
         raise ValueError("benchmark ledger verification failed")
     out = root / "benchmark.json"
-    out.write_text(__import__("json").dumps(data, indent=2), encoding="utf-8")
+    out.write_text(__import__("json").dumps(data, indent=2) + "\n", encoding="utf-8", newline="\n")
     export(ledger.root, root / "observatory", registry=registry)
     return {"results": data, "path": str(out), "experiment": exp, "run": entry.object}

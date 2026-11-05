@@ -1,4 +1,7 @@
-"""Generate a typed stress-benchmark skill and analytic configuration fixture."""
+"""Generate a typed stress-benchmark skill and analytic configuration fixture.
+
+Committed outputs are canonical; see make_resonance_skills.py on regenerating.
+"""
 
 import json
 from pathlib import Path
@@ -86,14 +89,16 @@ def main():
             {"results": {"protocol": "atlas.spectral-stress/v1", "fs": 128, "n": 1024, "trials_per_case": 3}},
         ),
     ]:
-        (path / name).write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8")
+        (path / name).write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8", newline="\n")
     (path / "run.py").write_text(
         "from rain_atlas.bench.spectral import run as evaluate\n\n\ndef run(inputs, ctx):\n    return evaluate(inputs, ctx)\n",
         encoding="utf-8",
+        newline="\n",
     )
     (path / "SKILL.md").write_text(
         "---\nname: spectral-stress-benchmark\ndescription: Measure false detections and missed tones with classical baselines. Use for diagnostic stress evaluation.\nlicense: MIT\n---\n\n# Spectral stress benchmark\n\nRun `atlas skills test spectral-stress-benchmark`. The example checks configuration;\n`tests/test_bench.py` checks errors, null controls and unknown-truth treatment.\nSee docs/BENCHMARKS.md for rates, assumptions and failure conditions.\n",
         encoding="utf-8",
+        newline="\n",
     )
 
 

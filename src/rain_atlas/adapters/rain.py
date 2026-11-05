@@ -107,6 +107,6 @@ def export(ledger: Ledger, experiment: str, experiment_id: str, version: int, de
     if target == ledger.root.resolve() or ledger.root.resolve() in target.parents:
         raise ValueError("export destination must be outside the source ledger")
     target.parent.mkdir(parents=True, exist_ok=True)
-    with target.open("x", encoding="utf-8") as stream:
+    with target.open("x", encoding="utf-8", newline="\n") as stream:
         json.dump(data, stream, indent=2, allow_nan=False)
     return target

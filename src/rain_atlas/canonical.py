@@ -94,21 +94,40 @@ def sha256_file(path: Path, chunk: int = 1 << 20) -> str:
     return HASH_PREFIX + digest.hexdigest()
 
 
-def tree_hash(root: Path, *, exclude_dirs: frozenset[str] = frozenset({"__pycache__"})) -> str:
-    """Hash a directory: sorted (relative POSIX path, file hash) pairs.
+def tree_files(
+    root: Path, *, exclude_dirs: frozenset[str] = frozenset({"__pycache__"})
+) -> list[tuple[str, Path]]:
+    """Regular files under *root* as ``(relative POSIX path, path)`` in canonical order.
 
-    Symlinks are refused rather than followed, so a hash always describes the
-    bytes inside *root*.
+    The order is the relative path components compared as plain strings
+    (code-point order), the same on every operating system. Sorting ``Path``
+    objects is not portable: Windows compares them case-insensitively, so a
+    tree containing ``SKILL.md`` and ``run.py`` hashed differently on Windows
+    and POSIX. Symlinks are refused rather than followed, so the listing
+    always describes bytes inside *root*.
     """
 
     root = Path(root)
-    entries: list[list[str]] = []
-    for path in sorted(root.rglob("*")):
+    found: list[tuple[tuple[str, ...], Path]] = []
+    for path in root.rglob("*"):
         rel = path.relative_to(root)
         if any(part in exclude_dirs for part in rel.parts):
             continue
         if path.is_symlink():
             raise ValueError(f"symlinks are not allowed inside a skill: {rel.as_posix()}")
         if path.is_file():
-            entries.append([rel.as_posix(), sha256_file(path)])
-    return sha256_json(entries)
+            found.append((rel.parts, path))
+    found.sort(key=lambda item: item[0])
+    return [("/".join(parts), path) for parts, path in found]
+
+
+def tree_hash(root: Path, *, exclude_dirs: frozenset[str] = frozenset({"__pycache__"})) -> str:
+    """Hash a directory: canonically ordered (relative POSIX path, file hash) pairs.
+
+    Bytes are hashed exactly as stored; line endings are not normalized, so
+    a checkout must contain the committed bytes (``.gitattributes`` pins LF).
+    """
+
+    return sha256_json(
+        [[name, sha256_file(path)] for name, path in tree_files(root, exclude_dirs=exclude_dirs)]
+    )

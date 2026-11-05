@@ -6,32 +6,31 @@ import io
 import zipfile
 from pathlib import Path
 
-from .canonical import sha256_bytes, sha256_json
+from .canonical import sha256_bytes, sha256_json, tree_files
 
 
 def source_snapshot(root: Path) -> tuple[bytes, str]:
     """Exact relative files and tree digest, excluding bytecode and host paths.
 
+    Uses the same canonical, operating-system-independent file order as
+    :func:`rain_atlas.canonical.tree_hash`, so the digest equals the skill
+    content hash and the archive bytes are identical on every platform.
     ZIP timestamps and permissions are fixed. Symlinks and oversized trees
     are refused. No archive extraction occurs.
     """
     stream = io.BytesIO()
     entries = []
     size = 0
+    try:
+        files = tree_files(Path(root))
+    except ValueError:
+        raise ValueError("source snapshots refuse symlinks") from None
     with zipfile.ZipFile(stream, "w", compression=zipfile.ZIP_DEFLATED) as archive:
-        for path in sorted(Path(root).rglob("*")):
-            rel = path.relative_to(root)
-            if "__pycache__" in rel.parts:
-                continue
-            if path.is_symlink():
-                raise ValueError("source snapshots refuse symlinks")
-            if not path.is_file():
-                continue
+        for name, path in files:
             size += path.stat().st_size
             if size > 32 * 1024 * 1024:
                 raise ValueError("source snapshot exceeds 32 MiB")
             data = path.read_bytes()
-            name = rel.as_posix()
             entries.append([name, sha256_bytes(data)])
             info = zipfile.ZipInfo(name, (1980, 1, 1, 0, 0, 0))
             info.compress_type = zipfile.ZIP_DEFLATED

@@ -82,7 +82,7 @@ class Registry:
     def _write_index(self, data: dict) -> None:
         self.root.mkdir(parents=True, exist_ok=True)
         tmp = self.index_path.with_suffix(".json.tmp")
-        tmp.write_text(json.dumps(data, indent=2, sort_keys=True), encoding="utf-8")
+        tmp.write_text(json.dumps(data, indent=2, sort_keys=True), encoding="utf-8", newline="\n")
         os.replace(tmp, self.index_path)
 
     # catalog --------------------------------------------------------------
