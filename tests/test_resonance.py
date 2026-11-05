@@ -151,6 +151,33 @@ def test_coherence_and_cross_phase_against_scipy():
     assert np.mean(np.asarray(neg["coherence"])[0, 1]) < 0.05
 
 
+@pytest.mark.parametrize("nperseg", [8, 9, 64, 65])
+def test_coherence_requires_three_segments_for_odd_and_even_lengths(nperseg):
+    # Regression: n >= 2*nperseg was accepted as "three segments", but odd
+    # nperseg yields two, where the coherence of independent noise is ~0.5.
+    rng = np.random.default_rng(nperseg)
+    step = nperseg - nperseg // 2
+    shortest = nperseg + 2 * step
+    assert cross_spectrum(rng.normal(size=(shortest, 2)), 1.0, nperseg)["segments"] == 3
+    with pytest.raises(ValueError, match="three"):
+        cross_spectrum(rng.normal(size=(shortest - 1, 2)), 1.0, nperseg)
+    f, _ = signal.coherence(*rng.normal(size=(2, shortest)), 1.0, nperseg=nperseg)
+    assert f.size == nperseg // 2 + 1
+
+
+@pytest.mark.parametrize("omega0", [6.0, 8.0])
+def test_wavelet_ridge_follows_the_l2_normalization_relation(omega0):
+    # The documented nominal centers are not ridge frequencies: under L2
+    # normalization a tone's modulus ridge sits at f*2w0/(w0+sqrt(w0^2+2)).
+    fs, tone = 200.0, 10.0
+    x = np.cos(2 * np.pi * tone * np.arange(4000) / fs)
+    nominal = np.linspace(9.0, 11.0, 2001)
+    ridge = nominal[np.argmax(np.abs(morlet_cwt(x, fs, nominal, omega0).coefficients[:, 2000]))]
+    expected = tone * 2 * omega0 / (omega0 + np.sqrt(omega0**2 + 2))
+    assert abs(ridge - expected) <= 0.002  # grid spacing 0.001 Hz
+    assert ridge < tone
+
+
 @pytest.mark.parametrize(
     "call",
     [
