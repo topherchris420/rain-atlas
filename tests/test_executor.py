@@ -1,3 +1,4 @@
+import sqlite3
 import sys
 import threading
 from pathlib import Path
@@ -97,7 +98,12 @@ def test_sqlite_cannot_read_databases_outside_the_read_roots(runs_dir, tmp_path)
     assert result.status == "error" and result.policy_denials, result.error
 
 
+@pytest.mark.skipif(
+    not hasattr(sqlite3.Connection, "enable_load_extension"),
+    reason="sqlite3 built without loadable-extension support: no extension can load",
+)
 def test_sqlite_native_extensions_are_refused(runs_dir):
+    # The child runs this same interpreter build, so the host check is exact.
     result = run_skill(fixture_ref("naughty"), {"mode": "sqlite-extension"}, seed=1, runs_dir=runs_dir)
     assert result.status == "error"
     assert any("SQLite extensions" in d for d in result.policy_denials), result.error
@@ -180,6 +186,25 @@ def test_peak_memory_is_measured_per_run(runs_dir):
         # wait4 alone is not enough: Linux folds the host's RSS at spawn into
         # the child's maxrss, which made every run in a large host look large.
         assert all("VmHWM" in r.peak_memory_note for r in (small_before, large, small_after))
+
+
+@pytest.mark.skipif(not sys.platform.startswith("linux"), reason="VmHWM is read from Linux /proc")
+def test_peak_memory_includes_result_serialization(runs_dir):
+    # Regression: VmHWM was sampled before finish() converted and serialized
+    # the outputs, so a skill whose peak is its own result under-reported it.
+    # 3e6 zeros: an 8-byte-per-item list, a converted copy and ~9 MB of JSON.
+    small = run_skill(fixture_ref("naughty"), {"mode": "ok"}, seed=1, runs_dir=runs_dir)
+    large = run_skill(
+        fixture_ref("naughty"), {"mode": "large-output", "count": 3_000_000}, seed=1, runs_dir=runs_dir
+    )
+    assert small.ok and large.ok, large.error
+    assert "VmHWM" in large.peak_memory_note
+    list_mb = 3_000_000 * 8 / 2**20
+    # Sampled too early, the excess is only the skill's own list (~23 MiB).
+    assert large.peak_memory_mb - small.peak_memory_mb > 1.7 * list_mb, (
+        small.peak_memory_mb,
+        large.peak_memory_mb,
+    )
 
 
 def test_runs_are_deterministic_given_seed(runs_dir):
