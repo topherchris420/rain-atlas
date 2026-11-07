@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480" font-family="sans-serif" font-size="11">
+<rect width="960" height="480" fill="#ffffff"/>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#57606a"/></marker></defs>
+<line x1="520" y1="47" x2="330" y2="117" stroke="#8c959f" marker-end="url(#a)"/>
+<line x1="520" y1="187" x2="330" y2="117" stroke="#8c959f" marker-end="url(#a)"/>
+<line x1="520" y1="257" x2="330" y2="117" stroke="#8c959f" marker-end="url(#a)"/>
+<line x1="520" y1="327" x2="330" y2="117" stroke="#8c959f" marker-end="url(#a)"/>
+<line x1="520" y1="327" x2="330" y2="187" stroke="#8c959f" marker-end="url(#a)"/>
+<line x1="520" y1="397" x2="330" y2="117" stroke="#8c959f" marker-end="url(#a)"/>
+<line x1="220" y1="47" x2="330" y2="257" stroke="#8c959f" marker-end="url(#a)"/>
+<line x1="220" y1="117" x2="330" y2="327" stroke="#8c959f" marker-end="url(#a)"/>
+<line x1="220" y1="117" x2="30" y2="47" stroke="#8c959f" stroke-dasharray="4,3" marker-end="url(#a)"/>
+<line x1="220" y1="117" x2="30" y2="47" stroke="#8c959f" marker-end="url(#a)"/>
+<line x1="220" y1="187" x2="330" y2="397" stroke="#8c959f" marker-end="url(#a)"/>
+<rect x="330" y="30" width="190" height="34" rx="5" fill="#ffffff" stroke="#2ea043" stroke-width="1.5"/>
+<text x="338" y="51" fill="#1f2328">bin/busybox</text>
+<rect x="330" y="100" width="190" height="34" rx="5" fill="#ffffff" stroke="#2ea043" stroke-width="1.5"/>
+<text x="338" y="121" fill="#1f2328">lib/libc.so.6</text>
+<rect x="330" y="170" width="190" height="34" rx="5" fill="#ffffff" stroke="#2ea043" stroke-width="1.5"/>
+<text x="338" y="191" fill="#1f2328">lib/libssl.so.1</text>
+<rect x="330" y="240" width="190" height="34" rx="5" fill="#ffffff" stroke="#2ea043" stroke-width="1.5"/>
+<text x="338" y="261" fill="#1f2328">usr/bin/config-helper (setuid)</text>
+<rect x="330" y="310" width="190" height="34" rx="5" fill="#ffffff" stroke="#2ea043" stroke-width="1.5"/>
+<text x="338" y="331" fill="#1f2328">usr/sbin/httpd</text>
+<rect x="330" y="380" width="190" height="34" rx="5" fill="#ffffff" stroke="#2ea043" stroke-width="1.5"/>
+<text x="338" y="401" fill="#1f2328">usr/sbin/telnetd</text>
+<rect x="30" y="30" width="190" height="34" rx="5" fill="#ffffff" stroke="#1f6feb" stroke-width="1.5"/>
+<text x="38" y="51" fill="#1f2328">config.service</text>
+<rect x="30" y="100" width="190" height="34" rx="5" fill="#ffffff" stroke="#1f6feb" stroke-width="1.5"/>
+<text x="38" y="121" fill="#1f2328">httpd.service</text>
+<rect x="30" y="170" width="190" height="34" rx="5" fill="#ffffff" stroke="#1f6feb" stroke-width="1.5"/>
+<text x="38" y="191" fill="#1f2328">telnetd</text>
+</svg>

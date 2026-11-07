@@ -6,6 +6,33 @@ All notable changes are recorded here. Versions follow semantic versioning.
 
 First end-to-end slice.
 
+### Added (BLACK GLASS firmware intelligence subsystem, 2026-11-07)
+
+- New isolated package `rain_atlas.blackglass`: an offline, read-only,
+  vendor-neutral static-analysis instrument for embedded operating systems. It
+  imports operator-supplied firmware (tar/zip/extracted directory), builds a
+  deterministic, evidence-linked model — component inventory, service and
+  library dependency graph, static network surface, integrity and signature
+  verification against trust anchors, and version diffs — and records it into
+  the evidence ledger using only existing record kinds, so the ledger and
+  observatory are unchanged.
+- Dependency-free building blocks: a bounds-checked ELF reader
+  (ELF32/64, little/big-endian; `DT_NEEDED`/`SONAME`/`RPATH`, imports, PIE/NX/
+  RELRO/canary), a safe archive ingest (path-traversal, symlink and
+  decompression-bomb defences), and an RFC 8032 Ed25519 verifier pinned by the
+  official known-answer vectors (`cryptography` used as an optional backend when
+  present, for Ed25519 and for RSA/ECDSA).
+- Every finding carries evidence (file, digest, locus, method), a confidence
+  level (`verified`/`high`/`medium`/`low`/`unverifiable`) and an independent
+  cross-check; static inferences (e.g. linking `bind`/`listen`) are never
+  promoted to confirmed runtime behaviour.
+- New CLI group `atlas firmware {analyze,inventory,diff,verify,report,inspect}`,
+  a reproducible demonstration (`scripts/make_blackglass_fixtures.py`, committed
+  outputs under `docs/demonstration/blackglass/`), `docs/BLACK_GLASS.md`, and a
+  test suite covering the ELF reader (vs `readelf`), ingest defences, Ed25519
+  vectors, verification, pipeline accuracy/false-positive/determinism checks,
+  ledger integration and the CLI. No new runtime dependencies.
+
 ### Fixed (ledger corruption handling, 2026-11-05)
 
 - Ledger verification rejects non-object records, including JSON `null`, which
