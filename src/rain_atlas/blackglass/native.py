@@ -106,9 +106,7 @@ def load_snapshot(path: Path, components: list[Component]) -> NativeSnapshot:
         name = row.get("name")
         size = row.get("size")
         calls = row.get("calls")
-        if not isinstance(name, str) or not name or len(name) > 256 or any(
-            ord(char) < 32 for char in name
-        ):
+        if not isinstance(name, str) or not name or len(name) > 256 or any(ord(char) < 32 for char in name):
             raise ValueError(f"invalid native function name at {entry}")
         if type(size) is not int or not 0 <= size <= 100_000_000:
             raise ValueError(f"invalid native function size at {entry}")
