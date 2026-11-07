@@ -44,6 +44,7 @@ FINDING_KINDS = (
     "signature",
     "trust-boundary",
     "difference",
+    "native-call",
 )
 
 # How a static finding is cross-checked by an independent method. Mirrors the
