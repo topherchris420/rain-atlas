@@ -322,8 +322,13 @@ def analyze(
         for func in snapshot.functions:
             src = f"function:{snapshot.binary}:{func.entry}"
             graph.add_node(
-                src, func.name, "function", binary=snapshot.binary, entry=func.entry,
-                tool=snapshot.tool, size=func.size,
+                src,
+                func.name,
+                "function",
+                binary=snapshot.binary,
+                entry=func.entry,
+                tool=snapshot.tool,
+                size=func.size,
             )
             graph.add_edge(f"exe:{snapshot.binary}", src, "contains")
             for called in func.calls:
@@ -333,7 +338,11 @@ def analyze(
                 else:
                     dst = f"unresolved-call:{snapshot.binary}:{called}"
                     graph.add_node(
-                        dst, called, "unresolved-call", binary=snapshot.binary, resolved=False,
+                        dst,
+                        called,
+                        "unresolved-call",
+                        binary=snapshot.binary,
+                        resolved=False,
                     )
                     unresolved_calls += 1
                 graph.add_edge(src, dst, "calls")
@@ -372,8 +381,7 @@ def analyze(
             )
     if snapshots:
         parameters["native_evidence"] = [
-            {"binary": s.binary, "tool": s.tool, "snapshot_sha256": s.snapshot_sha256}
-            for s in snapshots
+            {"binary": s.binary, "tool": s.tool, "snapshot_sha256": s.snapshot_sha256} for s in snapshots
         ]
     counts = _inventory_counts(components)
     manifest_rows = tree_manifest(image)
