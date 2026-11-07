@@ -29,8 +29,11 @@ def unpack_member(source: Path, member: str, destination: Path) -> dict:
         raise IngestError(f"destination must not exist: {destination}")
     if source.is_dir() and destination.is_relative_to(source):
         raise IngestError("destination must be outside the source firmware tree")
-    if not member or member.startswith("/") or "\\" in member or any(
-        part in ("", ".", "..") for part in member.split("/")
+    if (
+        not member
+        or member.startswith("/")
+        or "\\" in member
+        or any(part in ("", ".", "..") for part in member.split("/"))
     ):
         raise IngestError("member must be a canonical relative POSIX path")
     with tempfile.TemporaryDirectory(prefix="blackglass-outer-") as temporary:
