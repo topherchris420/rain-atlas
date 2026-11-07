@@ -687,7 +687,9 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--root", required=True, help="new output directory; refuses an existing ledger")
     p.add_argument("--label", help="human label for the image")
     p.add_argument(
-        "--native-snapshot", action="append", default=[],
+        "--native-snapshot",
+        action="append",
+        default=[],
         help="offline Ghidra/IDA call-graph JSON bound to an ELF SHA256 (repeatable)",
     )
     p.add_argument("--manifest", help="expected-digest baseline (JSON) for integrity verification")
