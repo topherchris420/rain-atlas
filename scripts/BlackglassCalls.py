@@ -10,6 +10,7 @@
 # when Ghidra's recorded import hash does not match the source ELF on disk.
 
 import hashlib
+import io
 import json
 import os
 
@@ -78,7 +79,7 @@ document = {
 }
 if os.path.exists(output_path):
     raise ValueError("refusing to overwrite an existing native snapshot")
-with open(output_path, "w") as output:
+with io.open(output_path, "w", encoding="utf-8", newline="\n") as output:
     output.write(json.dumps(document, indent=2, sort_keys=True) + "\n")
 print("BLACK GLASS: %d functions, %d calls, sha256:%s" %
       (len(rows), total_calls, file_sha))
