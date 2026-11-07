@@ -13,6 +13,7 @@ assertion that a port is open.
 from __future__ import annotations
 
 import struct
+from pathlib import Path
 
 from . import PROTOCOL
 from .graph import to_dot, to_svg
@@ -20,6 +21,7 @@ from .ingest import FirmwareImage, tree_manifest, tree_manifest_digest
 from .inventory import build_inventory
 from .model import AnalysisReport, Component, Evidence, Finding, Graph, ServiceNode
 from .network import detect_network
+from .native import load_snapshots
 from .services import build_graph, parse_services
 
 ENGINE_VERSION = "0.1.0"
@@ -35,6 +37,8 @@ LIMITATIONS = [
     "blobs are reported as unsupported and left uninterpreted rather than guessed at.",
     "Integrity and signature results are only as trustworthy as the operator-supplied trust anchors; "
     "without an anchor the verdict is 'unverifiable', never 'valid'.",
+    "Imported Ghidra/IDA function call graphs are tool assertions, not runtime observations; "
+    "hash matching does not independently validate disassembly or indirect-call recovery.",
 ]
 
 
@@ -298,6 +302,7 @@ def analyze(
     parameters: dict | None = None,
     verification=None,
     findings_cap: int = 500,
+    native_snapshots: list[Path] | None = None,
 ) -> AnalysisReport:
     """Run the full static pipeline and return a deterministic report."""
 
@@ -309,6 +314,67 @@ def analyze(
     verification = list(verification or [])
 
     findings = build_findings(image, components, services, graph, network, verification, cap=findings_cap)
+    snapshots = load_snapshots(native_snapshots or [], components)
+    native_calls = 0
+    unresolved_calls = 0
+    for snapshot in snapshots:
+        addresses = {f.entry for f in snapshot.functions}
+        for func in snapshot.functions:
+            src = f"function:{snapshot.binary}:{func.entry}"
+            graph.add_node(
+                src, func.name, "function", binary=snapshot.binary, entry=func.entry,
+                tool=snapshot.tool, size=func.size,
+            )
+            graph.add_edge(f"exe:{snapshot.binary}", src, "contains")
+            for called in func.calls:
+                if called in addresses:
+                    dst = f"function:{snapshot.binary}:{called}"
+                    native_calls += 1
+                else:
+                    dst = f"unresolved-call:{snapshot.binary}:{called}"
+                    graph.add_node(
+                        dst, called, "unresolved-call", binary=snapshot.binary, resolved=False,
+                    )
+                    unresolved_calls += 1
+                graph.add_edge(src, dst, "calls")
+        for func in snapshot.functions[:findings_cap]:
+            findings.append(
+                Finding(
+                    id=f"FND-{len(findings) + 1:04d}",
+                    kind="native-call",
+                    subject=f"{snapshot.binary}@{func.entry}",
+                    statement=(
+                        f"{snapshot.tool} export labels {func.entry} as {func.name}; "
+                        f"{len(func.calls)} static call target(s) recorded"
+                    ),
+                    confidence="high",
+                    evidence=[
+                        Evidence(
+                            f"native snapshot {snapshot.snapshot_sha256}",
+                            "native.load_snapshot",
+                            f"function {func.entry}, {len(func.calls)} target(s); "
+                            "ELF SHA256 matched the inventoried binary",
+                            "high",
+                            snapshot.binary,
+                            snapshot.binary_sha256,
+                        )
+                    ],
+                    assumptions=[
+                        "tool-generated call edges may omit indirect, dynamic, or unresolved calls",
+                        "function identities and edges are not independently disassembled",
+                    ],
+                    crosscheck={
+                        "method": "check snapshot ELF digest against inventory",
+                        "outcome": "inconclusive",
+                        "detail": "binary hash matches; independent call-target verification not performed",
+                    },
+                )
+            )
+    if snapshots:
+        parameters["native_evidence"] = [
+            {"binary": s.binary, "tool": s.tool, "snapshot_sha256": s.snapshot_sha256}
+            for s in snapshots
+        ]
     counts = _inventory_counts(components)
     manifest_rows = tree_manifest(image)
     counts.update(
@@ -321,6 +387,9 @@ def analyze(
                 {node["label"] for node in graph.nodes if node["type"] == "external-library"}
             ),
             "findings": len(findings),
+            "native_functions": sum(len(s.functions) for s in snapshots),
+            "native_resolved_calls": native_calls,
+            "native_unresolved_calls": unresolved_calls,
         }
     )
     report = AnalysisReport(
