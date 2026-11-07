@@ -1,3 +1,4 @@
+# fmt: off
 # ruff: noqa: F821
 # BLACK GLASS: deterministic read-only Ghidra call graph exporter.
 #@category BLACK_GLASS
