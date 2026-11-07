@@ -60,8 +60,10 @@ def test_import_calls_attaches_evidence_without_promoting_static_inference(tmp_p
     observations = [f for f in report.findings if f.kind == "native-call"]
     assert len(observations) == 2
     assert all(f.confidence == "high" and f.crosscheck["outcome"] == "inconclusive" for f in observations)
-    assert all(f.evidence[0].sha256 == report.parameters.get("bogus", f.evidence[0].sha256)
-               for f in observations)
+    assert all(
+        f.evidence[0].sha256 == next(c.sha256 for c in report.components if c.path == "usr/sbin/httpd")
+        for f in observations
+    )
     assert report.parameters["native_evidence"][0]["snapshot_sha256"].startswith("sha256:")
 
 
@@ -78,13 +80,16 @@ def test_native_graph_is_deterministic_for_shuffled_export(tmp_path):
     assert first.counts == second.counts
 
 
-@pytest.mark.parametrize("mutation", [
-    {"sha256": "sha256:" + "0" * 64},
-    {"binary": "../usr/sbin/httpd"},
-    {"binary": "/usr/sbin/httpd"},
-    {"tool": "unknown"},
-    {"schema": "unspecified"},
-])
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        {"sha256": "sha256:" + "0" * 64},
+        {"binary": "../usr/sbin/httpd"},
+        {"binary": "/usr/sbin/httpd"},
+        {"tool": "unknown"},
+        {"schema": "unspecified"},
+    ],
+)
 def test_refuses_unbound_or_unrecognised_native_input(tmp_path, mutation):
     image, export, doc = _case(tmp_path)
     doc.update(mutation)
@@ -107,10 +112,20 @@ def test_refuses_duplicate_entries_and_excessive_snapshots(tmp_path):
 def test_cli_native_evidence_is_recorded_in_existing_ledger(tmp_path, capsys):
     image, export, _ = _case(tmp_path)
     output = tmp_path / "report"
-    assert main([
-        "firmware", "analyze", str(image.root), "--root", str(output),
-        "--native-snapshot", str(export),
-    ]) == 0, capsys.readouterr()
+    assert (
+        main(
+            [
+                "firmware",
+                "analyze",
+                str(image.root),
+                "--root",
+                str(output),
+                "--native-snapshot",
+                str(export),
+            ]
+        )
+        == 0
+    ), capsys.readouterr()
     assert Ledger(output / "ledger").verify() == []
     analysis = next(output.rglob("analysis.json"))
     data = json.loads(analysis.read_text(encoding="utf-8"))
