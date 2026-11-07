@@ -470,6 +470,13 @@ def cmd_firmware_diff(args) -> int:
     return 0
 
 
+def cmd_firmware_unpack(args) -> int:
+    from .blackglass.nested import unpack_member  # noqa: PLC0415
+
+    _print_json(unpack_member(Path(args.source), args.member, Path(args.out)))
+    return 0
+
+
 def cmd_firmware_verify(args) -> int:
     import tempfile  # noqa: PLC0415
 
@@ -694,6 +701,12 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("source")
     p.add_argument("--json", action="store_true")
     p.set_defaults(func=cmd_firmware_inventory)
+
+    p = fsub.add_parser("unpack", help="extract a selected nested tar/zip payload into a fresh directory")
+    p.add_argument("source", help="outer archive or extracted firmware directory")
+    p.add_argument("--member", required=True, help="relative path to a supported inner archive")
+    p.add_argument("--out", required=True, help="new destination for root/ and provenance.json")
+    p.set_defaults(func=cmd_firmware_unpack)
 
     p = fsub.add_parser("diff", help="report noteworthy changes between two images")
     p.add_argument("base")
