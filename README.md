@@ -162,8 +162,10 @@ integrity and signature verification against operator-supplied trust anchors,
 and version diffs — and records it into the same evidence ledger, using only the
 existing record kinds, so `atlas ledger verify` and the observatory work
 unchanged. It reads open-format structural metadata (ELF, init definitions,
-configuration) and never disassembles, executes, or reconstructs proprietary
-logic, and it targets no live device.
+configuration) and never executes firmware or reconstructs proprietary routines.
+An opt-in, read-only Ghidra exporter can attach hash-bound native function/call
+graph observations, always marked as static assertions rather than proven
+runtime behavior. It targets no live device.
 
 ```sh
 uv run python scripts/make_blackglass_fixtures.py --out atlas-data/bg-fixtures
@@ -182,6 +184,7 @@ uses only self-generated, redistributable fixtures — no proprietary firmware a
 no compiler.
 
 [BLACK GLASS documentation](docs/BLACK_GLASS.md) ·
+[DSM 7.2.2 research protocol](docs/BLACK_GLASS_DSM_RESEARCH.md) ·
 [Example report](docs/demonstration/blackglass/report.md) ·
 [Service graph](docs/demonstration/blackglass/graph.svg) ·
 [Version diff](docs/demonstration/blackglass/diff.md)
