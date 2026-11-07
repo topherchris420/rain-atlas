@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import shutil
 import subprocess
+import sys
 
 import pytest
 
@@ -65,7 +66,13 @@ def test_deterministic_build():
     assert fixtures.build_elf(**kw) == fixtures.build_elf(**kw)
 
 
-@pytest.mark.skipif(not (shutil.which("gcc") and shutil.which("readelf")), reason="needs gcc + readelf")
+# Linux-only: the oracle needs a toolchain that emits ELF (gcc on Windows/macOS
+# produces PE/Mach-O, and MinGW lacks POSIX headers). The builder-based tests and
+# the RFC 8032 vectors provide the cross-platform correctness guarantee instead.
+@pytest.mark.skipif(
+    not (sys.platform.startswith("linux") and shutil.which("gcc") and shutil.which("readelf")),
+    reason="needs a Linux ELF toolchain (gcc + readelf)",
+)
 def test_matches_readelf_oracle(tmp_path):
     src = tmp_path / "p.c"
     src.write_text(
