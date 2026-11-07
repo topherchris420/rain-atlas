@@ -20,8 +20,8 @@ from .graph import to_dot, to_svg
 from .ingest import FirmwareImage, tree_manifest, tree_manifest_digest
 from .inventory import build_inventory
 from .model import AnalysisReport, Component, Evidence, Finding, Graph, ServiceNode
-from .network import detect_network
 from .native import load_snapshots
+from .network import detect_network
 from .services import build_graph, parse_services
 
 ENGINE_VERSION = "0.1.0"
