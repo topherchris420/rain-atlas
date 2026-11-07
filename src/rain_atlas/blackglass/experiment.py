@@ -106,7 +106,9 @@ def run(
     with tempfile.TemporaryDirectory() as tmp:
         repro_image = ingest(source, Path(tmp) / "work", label=label)
         repro_report = analyze(
-            repro_image, parameters=report.parameters, verification=verification,
+            repro_image,
+            parameters=report.parameters,
+            verification=verification,
             native_snapshots=native_snapshots,
         )
         reproducible = sha256_json(asdict(repro_report)) == refs["analysis_object"]
