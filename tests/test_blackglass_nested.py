@@ -42,8 +42,7 @@ def test_nested_pat_style_container_is_usable_for_full_analysis(tmp_path):
 def test_nested_command_reports_provenance(tmp_path, capsys):
     outer, _ = _archives(tmp_path)
     output = tmp_path / "expanded"
-    assert main(["firmware", "unpack", str(outer), "--member", "hda1.tgz",
-                 "--out", str(output)]) == 0
+    assert main(["firmware", "unpack", str(outer), "--member", "hda1.tgz", "--out", str(output)]) == 0
     result = json.loads(capsys.readouterr().out)
     assert result["output"] == "root"
     assert (output / "root" / "usr" / "sbin" / "httpd").is_file()
