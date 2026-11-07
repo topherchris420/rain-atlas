@@ -9,7 +9,7 @@ software it contains, and records that model into the ATLAS evidence ledger so
 other researchers can re-run and challenge every finding. It reads structural
 metadata defined by open formats — ELF headers, init/supervision definitions,
 configuration files — and **never disassembles, decompiles, executes, or
-reconstructs proprietary logic**.
+reconstructs proprietary logic as part of the core static pipeline**. An optional local Ghidra exporter can supply separately identified native call observations.
 
 - [Scope and ethics](#scope-and-ethics)
 - [What it produces](#what-it-produces)
@@ -21,6 +21,7 @@ reconstructs proprietary logic**.
 - [Limitations](#limitations)
 - [Reproducible demonstration](#reproducible-demonstration)
 - [Analysing your own firmware](#analysing-your-own-firmware)
+- [DSM and function-level evidence protocol](BLACK_GLASS_DSM_RESEARCH.md)
 
 ## Scope and ethics
 
@@ -111,6 +112,8 @@ Modules (`src/rain_atlas/blackglass/`):
 | `errors.py` | typed failures: `IngestError`, `UnsupportedInput` |
 | `model.py` | typed, JSON-serialisable data model (Evidence, Component, Finding, …) |
 | `ingest.py` | safe import of tar/zip/directory; traversal, symlink and bomb defences |
+| `nested.py` | explicit two-stage archive unpack with chained SHA-256 provenance |
+| `native.py` | hash-bound, bounded offline Ghidra/IDA call-graph evidence importer |
 | `elf.py` | dependency-free ELF reader (header, dynamic section, imports, hardening) |
 | `inventory.py` | file classification into typed components |
 | `services.py` | init/supervision parsing, dependency and trust-boundary graph |
@@ -177,6 +180,13 @@ uv run atlas firmware verify IMAGE --signature update.sig --public-key vendor.pu
 # Render / query a stored analysis:
 uv run atlas firmware report  atlas-data/fw-001/reports/<id>/analysis.json
 uv run atlas firmware inspect atlas-data/fw-001/reports/<id>/analysis.json findings --kind network
+
+# Explicitly unpack a nested tar/zip payload, if the archive listing establishes one:
+uv run atlas firmware unpack FIRMWARE.pat --member hda1.tgz --out extracted
+
+# Attach a local Ghidra function/call graph export to a new ledger:
+uv run atlas firmware analyze extracted/root --root atlas-data/fw-native \\
+    --native-snapshot snapshots/example-binary.json
 ```
 
 `IMAGE` is a `.tar`/`.tar.gz`/`.zip` archive, or a directory holding an
@@ -272,3 +282,11 @@ Supply your own trust anchors (a known-good hash manifest, or the vendor's
 public key and a detached signature) to turn integrity and signature findings
 from `unverifiable` into `verified`/`failed`. BLACK GLASS neither obtains images
 nor assumes you are permitted to analyse one — that judgement is yours.
+
+## DSM and native call-graph research
+
+For the official DS220+ DSM 7.2.2-72806 target, acquisition commands, separately
+attested hashes, nested-container limitations, a read-only Ghidra exporter,
+and the distinction between verified facts and untested hypotheses, consult
+[the DSM research protocol](BLACK_GLASS_DSM_RESEARCH.md). The current checked-in
+demonstrations are **synthetic**, not empirical DSM reverse-engineering results.

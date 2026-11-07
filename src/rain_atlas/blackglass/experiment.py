@@ -59,6 +59,7 @@ def run(
     label: str | None = None,
     trust: dict | None = None,
     progress: Callable[[str], None] | None = None,
+    native_snapshots: list[Path] | None = None,
 ) -> dict:
     """Analyse *source* into a fresh ledger under *root* and return a summary."""
 
@@ -80,6 +81,7 @@ def run(
         image,
         parameters={"source": source.name, "trust": sorted((trust or {}).keys())},
         verification=verification,
+        native_snapshots=native_snapshots,
     )
 
     say("stage: record")
@@ -103,7 +105,12 @@ def run(
     say("stage: reproducibility check")
     with tempfile.TemporaryDirectory() as tmp:
         repro_image = ingest(source, Path(tmp) / "work", label=label)
-        repro_report = analyze(repro_image, parameters=report.parameters, verification=verification)
+        repro_report = analyze(
+            repro_image,
+            parameters=report.parameters,
+            verification=verification,
+            native_snapshots=native_snapshots,
+        )
         reproducible = sha256_json(asdict(repro_report)) == refs["analysis_object"]
 
     acceptance = _acceptance(report, refs, reproducible)

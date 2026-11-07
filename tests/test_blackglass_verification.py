@@ -60,3 +60,30 @@ def test_unsupported_algorithm_without_backend(tmp_path):
 def test_unverifiable_without_anchor():
     result = unverifiable("image", "no trust anchor supplied")
     assert result.status == "unverifiable" and result.method == "none"
+
+
+def test_empty_or_partial_manifest_cannot_attest_full_image(tmp_path):
+    image = ingest(fixtures.build_image(tmp_path / "fw-partial"))
+    assert verify_hash_manifest(image, {}).status == "unverifiable"
+    sample = dict(list(_manifest(image).items())[:1])
+    partial = verify_hash_manifest(image, sample)
+    assert partial.status == "unverifiable"
+    assert "incomplete baseline" in partial.detail
+    sample["ghost"] = "sha256:" + "1" * 64
+    assert verify_hash_manifest(image, sample).status == "failed"
+
+
+def test_manifest_rejects_malformed_digest_and_traversal(tmp_path):
+    import json
+
+    import pytest
+
+    from rain_atlas.blackglass.verification import load_manifest
+
+    path = tmp_path / "manifest.json"
+    path.write_text(json.dumps({"files": {"etc/config": "sha256:abc"}}))
+    with pytest.raises(ValueError, match="64 hexadecimal"):
+        load_manifest(path)
+    path.write_text(json.dumps({"files": {"../escape": "a" * 64}}))
+    with pytest.raises(ValueError, match="contained"):
+        load_manifest(path)

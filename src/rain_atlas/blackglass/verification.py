@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import binascii
 import json
+import re
 from pathlib import Path
 
 from ..canonical import sha256_bytes, sha256_file
@@ -29,7 +30,10 @@ from .signing import ed25519_ref, has_cryptography
 
 def _normalise_digest(value: str) -> str:
     value = value.strip().lower()
-    return value if value.startswith("sha256:") else "sha256:" + value
+    normal = value if value.startswith("sha256:") else "sha256:" + value
+    if not re.fullmatch(r"sha256:[0-9a-f]{64}", normal):
+        raise ValueError("SHA-256 manifest entries must contain exactly 64 hexadecimal digits")
+    return normal
 
 
 def load_manifest(path: Path) -> dict[str, str]:
@@ -39,7 +43,12 @@ def load_manifest(path: Path) -> dict[str, str]:
     files = data.get("files", data) if isinstance(data, dict) else {}
     if not isinstance(files, dict):
         raise ValueError("manifest must be a JSON object of path -> sha256 digest")
-    return {str(k): _normalise_digest(str(v)) for k, v in files.items()}
+    normalised = {}
+    for name, digest in files.items():
+        if not isinstance(name, str) or not name or name.startswith("/") or ".." in name.split("/"):
+            raise ValueError("manifest paths must be non-empty contained POSIX paths")
+        normalised[name] = _normalise_digest(str(digest))
+    return normalised
 
 
 def verify_hash_manifest(image: FirmwareImage, manifest: dict[str, str]) -> VerificationResult:
@@ -69,15 +78,17 @@ def verify_hash_manifest(image: FirmwareImage, manifest: dict[str, str]) -> Veri
                 )
             )
     extra = sorted(set(actual) - set(manifest))
-    ok = not mismatched and not missing
+    complete = bool(manifest) and not extra
+    failed = bool(mismatched or missing)
     detail = (
         f"{len(manifest)} baseline entries: {len(manifest) - len(mismatched) - len(missing)} matched, "
         f"{len(mismatched)} mismatched, {len(missing)} missing, {len(extra)} unlisted file(s) present"
+        + ("; empty or incomplete baseline cannot attest to the entire image" if not complete else "")
     )
     return VerificationResult(
         subject=image.label,
         method="sha256-manifest",
-        status="verified" if ok else "failed",
+        status="failed" if failed else "verified" if complete else "unverifiable",
         detail=detail,
         evidence=evidence[:200],
     )

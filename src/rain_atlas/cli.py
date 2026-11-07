@@ -422,6 +422,7 @@ def cmd_firmware_analyze(args) -> int:
         Path(args.root),
         label=args.label,
         trust=_firmware_trust(args) or None,
+        native_snapshots=[Path(p) for p in args.native_snapshot],
         progress=lambda message: print(message, flush=True),
     )
     print()
@@ -466,6 +467,13 @@ def cmd_firmware_diff(args) -> int:
         _print_json(asdict(diff))
     else:
         print(render_diff_markdown(diff), end="")
+    return 0
+
+
+def cmd_firmware_unpack(args) -> int:
+    from .blackglass.nested import unpack_member  # noqa: PLC0415
+
+    _print_json(unpack_member(Path(args.source), args.member, Path(args.out)))
     return 0
 
 
@@ -678,6 +686,12 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("source", help="firmware archive (tar/zip) or an extracted root-filesystem directory")
     p.add_argument("--root", required=True, help="new output directory; refuses an existing ledger")
     p.add_argument("--label", help="human label for the image")
+    p.add_argument(
+        "--native-snapshot",
+        action="append",
+        default=[],
+        help="offline Ghidra/IDA call-graph JSON bound to an ELF SHA256 (repeatable)",
+    )
     p.add_argument("--manifest", help="expected-digest baseline (JSON) for integrity verification")
     p.add_argument("--signature", help="detached signature file over --signed-target")
     p.add_argument("--public-key", help="operator trust anchor (raw/hex/PEM public key)")
@@ -689,6 +703,12 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("source")
     p.add_argument("--json", action="store_true")
     p.set_defaults(func=cmd_firmware_inventory)
+
+    p = fsub.add_parser("unpack", help="extract a selected nested tar/zip payload into a fresh directory")
+    p.add_argument("source", help="outer archive or extracted firmware directory")
+    p.add_argument("--member", required=True, help="relative path to a supported inner archive")
+    p.add_argument("--out", required=True, help="new destination for root/ and provenance.json")
+    p.set_defaults(func=cmd_firmware_unpack)
 
     p = fsub.add_parser("diff", help="report noteworthy changes between two images")
     p.add_argument("base")
