@@ -151,6 +151,41 @@ observed errors in another case do not establish a zero error rate.
 [Recorded benchmark data](docs/demonstration/benchmark.json) ·
 [Executed validation](docs/VALIDATION.md)
 
+## Firmware intelligence (BLACK GLASS)
+
+**BLACK GLASS** extends ATLAS from numerical experiments to *embedded software*:
+an offline, read-only, vendor-neutral static-analysis instrument for firmware
+you are authorised to examine. It imports a firmware archive or an extracted
+root filesystem, builds a deterministic, evidence-linked model — component
+inventory, service and library dependency graph, static network surface,
+integrity and signature verification against operator-supplied trust anchors,
+and version diffs — and records it into the same evidence ledger, using only the
+existing record kinds, so `atlas ledger verify` and the observatory work
+unchanged. It reads open-format structural metadata (ELF, init definitions,
+configuration) and never disassembles, executes, or reconstructs proprietary
+logic, and it targets no live device.
+
+```sh
+uv run python scripts/make_blackglass_fixtures.py --out atlas-data/bg-fixtures
+uv run atlas firmware analyze atlas-data/bg-fixtures/fw-v1.tar.gz --root atlas-data/bg-001 \
+    --manifest atlas-data/bg-fixtures/manifest-v1.json \
+    --signature atlas-data/bg-fixtures/fw-v1.tar.gz.sig \
+    --public-key atlas-data/bg-fixtures/ed25519.pub \
+    --signed-target atlas-data/bg-fixtures/fw-v1.tar.gz
+uv run atlas ledger verify atlas-data/bg-001/ledger
+```
+
+Every finding carries evidence, a confidence level and an independent
+cross-check; a static inference (for example, that a binary links `bind`/
+`listen`) is never promoted to confirmed runtime behaviour. The demonstration
+uses only self-generated, redistributable fixtures — no proprietary firmware and
+no compiler.
+
+[BLACK GLASS documentation](docs/BLACK_GLASS.md) ·
+[Example report](docs/demonstration/blackglass/report.md) ·
+[Service graph](docs/demonstration/blackglass/graph.svg) ·
+[Version diff](docs/demonstration/blackglass/diff.md)
+
 ## Scientific skills
 
 Each skill pairs executable Python with a typed manifest, declared permissions
@@ -260,6 +295,7 @@ Node.js and browser checks in [CONTRIBUTING.md](CONTRIBUTING.md).
 |---|---|
 | [Tutorial](docs/TUTORIAL.md) | Running, inspecting, and sharing an experiment |
 | [Architecture](docs/ARCHITECTURE.md) | Components and design, with planned work marked |
+| [BLACK GLASS](docs/BLACK_GLASS.md) | Offline, read-only firmware static-analysis subsystem |
 | [Skill authoring](docs/SKILL_AUTHORING.md) | Extending the scientific catalog |
 | [Resonance methods](docs/RESONANCE.md) | Numerical methods and physical assumptions |
 | [Offline observatory](docs/OBSERVATORY.md) | Viewer behavior, privacy projection, and browser checks |

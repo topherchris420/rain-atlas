@@ -1,0 +1,24 @@
+digraph blackglass {
+  rankdir=LR;
+  node [fontname="sans-serif", fontsize=10];
+  "exe:bin/busybox" [label="bin/busybox", shape=ellipse, color="#2ea043"];
+  "exe:lib/libc.so.6" [label="lib/libc.so.6", shape=ellipse, color="#2ea043"];
+  "exe:lib/libssl.so.1" [label="lib/libssl.so.1", shape=ellipse, color="#2ea043"];
+  "exe:usr/bin/config-helper" [label="usr/bin/config-helper [setuid]", shape=ellipse, color="#2ea043"];
+  "exe:usr/sbin/httpd" [label="usr/sbin/httpd", shape=ellipse, color="#2ea043"];
+  "exe:usr/sbin/telnetd" [label="usr/sbin/telnetd", shape=ellipse, color="#2ea043"];
+  "systemd:config.service" [label="config.service", shape=box, color="#1f6feb"];
+  "systemd:httpd.service" [label="httpd.service", shape=box, color="#1f6feb"];
+  "sysv:telnetd" [label="telnetd", shape=box, color="#1f6feb"];
+  "exe:bin/busybox" -> "exe:lib/libc.so.6" [label="links", style=solid, color="#57606a"];
+  "exe:lib/libssl.so.1" -> "exe:lib/libc.so.6" [label="links", style=solid, color="#57606a"];
+  "exe:usr/bin/config-helper" -> "exe:lib/libc.so.6" [label="links", style=solid, color="#57606a"];
+  "exe:usr/sbin/httpd" -> "exe:lib/libc.so.6" [label="links", style=solid, color="#57606a"];
+  "exe:usr/sbin/httpd" -> "exe:lib/libssl.so.1" [label="links", style=solid, color="#57606a"];
+  "exe:usr/sbin/telnetd" -> "exe:lib/libc.so.6" [label="links", style=solid, color="#57606a"];
+  "systemd:config.service" -> "exe:usr/bin/config-helper" [label="starts", style=bold, color="#57606a"];
+  "systemd:httpd.service" -> "exe:usr/sbin/httpd" [label="starts", style=bold, color="#57606a"];
+  "systemd:httpd.service" -> "systemd:config.service" [label="after", style=dashed, color="#57606a"];
+  "systemd:httpd.service" -> "systemd:config.service" [label="requires", style=solid, color="#57606a"];
+  "sysv:telnetd" -> "exe:usr/sbin/telnetd" [label="starts", style=bold, color="#57606a"];
+}

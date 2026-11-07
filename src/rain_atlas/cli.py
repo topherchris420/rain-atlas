@@ -396,6 +396,134 @@ def cmd_integration(args) -> int:
     return 0
 
 
+def _firmware_trust(args) -> dict:
+    trust: dict = {}
+    if getattr(args, "manifest", None):
+        trust["manifest"] = args.manifest
+    if getattr(args, "signature", None):
+        trust["signature"] = args.signature
+        trust["public_key"] = args.public_key
+        trust["signed_target"] = args.signed_target or args.source
+        trust["algorithm"] = args.algorithm
+    return trust
+
+
+def _ingest_cli(source: str, tmp: str):
+    from .blackglass.ingest import ingest  # noqa: PLC0415
+
+    return ingest(Path(source), Path(tmp) / "work")
+
+
+def cmd_firmware_analyze(args) -> int:
+    from .blackglass import experiment  # noqa: PLC0415
+
+    summary = experiment.run(
+        Path(args.source),
+        Path(args.root),
+        label=args.label,
+        trust=_firmware_trust(args) or None,
+        progress=lambda message: print(message, flush=True),
+    )
+    print()
+    for item in summary["acceptance"]:
+        print(f"  {item['id']} {'PASS' if item['passed'] else 'FAIL'}  {item['criterion']}")
+    print(f"verdicts: {summary['verdicts']}")
+    print(f"report: {summary['report_path']}")
+    print(f"observatory: {summary['observatory_path']}")
+    return 0 if all(item["passed"] for item in summary["acceptance"]) else 1
+
+
+def cmd_firmware_inventory(args) -> int:
+    import tempfile  # noqa: PLC0415
+    from dataclasses import asdict  # noqa: PLC0415
+
+    from .blackglass.inventory import build_inventory  # noqa: PLC0415
+
+    with tempfile.TemporaryDirectory() as tmp:
+        components = build_inventory(_ingest_cli(args.source, tmp))
+        if args.json:
+            _print_json([asdict(c) for c in components])
+        else:
+            for c in components:
+                extra = c.detail.get("machine", "") if c.kind == "elf" else ""
+                print(f"{c.kind:<16} {c.size:>10} {c.sha256[7:19]}  {c.path} {extra}")
+    return 0
+
+
+def cmd_firmware_diff(args) -> int:
+    import tempfile  # noqa: PLC0415
+    from dataclasses import asdict  # noqa: PLC0415
+
+    from .blackglass.analyze import analyze  # noqa: PLC0415
+    from .blackglass.diff import diff_reports  # noqa: PLC0415
+    from .blackglass.report import render_diff_markdown  # noqa: PLC0415
+
+    with tempfile.TemporaryDirectory() as t1, tempfile.TemporaryDirectory() as t2:
+        base = analyze(_ingest_cli(args.base, t1))
+        target = analyze(_ingest_cli(args.target, t2))
+    diff = diff_reports(base, target)
+    if args.json:
+        _print_json(asdict(diff))
+    else:
+        print(render_diff_markdown(diff), end="")
+    return 0
+
+
+def cmd_firmware_verify(args) -> int:
+    import tempfile  # noqa: PLC0415
+
+    from .blackglass.verification import (  # noqa: PLC0415
+        load_manifest,
+        verify_hash_manifest,
+        verify_signature_files,
+    )
+
+    results = []
+    with tempfile.TemporaryDirectory() as tmp:
+        if args.manifest:
+            results.append(
+                verify_hash_manifest(_ingest_cli(args.source, tmp), load_manifest(Path(args.manifest)))
+            )
+        if args.signature:
+            results.append(
+                verify_signature_files(
+                    Path(args.signed_target or args.source),
+                    Path(args.signature),
+                    Path(args.public_key),
+                    algorithm=args.algorithm,
+                )
+            )
+    if not results:
+        print("no trust anchor supplied (--manifest or --signature)", file=sys.stderr)
+        return 2
+    for r in results:
+        print(f"{r.status.upper():<12} {r.method:<24} {r.detail}")
+    return 0 if all(r.status == "verified" for r in results) else 1
+
+
+def cmd_firmware_report(args) -> int:
+    from .blackglass.report import render_markdown  # noqa: PLC0415
+
+    data = json.loads(Path(args.analysis).read_text(encoding="utf-8"))
+    print(render_markdown(data), end="")
+    return 0
+
+
+def cmd_firmware_inspect(args) -> int:
+    from .blackglass.inspect import Inspector  # noqa: PLC0415
+
+    insp = Inspector.from_json(Path(args.analysis))
+    _print_json(
+        insp.query(
+            args.query,
+            kind=args.kind,
+            min_confidence=args.min_confidence,
+            max_confidence=args.max_confidence,
+        )
+    )
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="atlas",
@@ -539,6 +667,55 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--limit", type=int, default=0)
     p.add_argument("--full", action="store_true")
     p.set_defaults(func=cmd_ledger_show)
+
+    firmware = sub.add_parser(
+        "firmware",
+        help="BLACK GLASS: offline, read-only firmware static analysis (operator-supplied images only)",
+    )
+    fsub = firmware.add_subparsers(dest="command", required=True)
+
+    p = fsub.add_parser("analyze", help="analyse an image into a fresh ledger + observatory")
+    p.add_argument("source", help="firmware archive (tar/zip) or an extracted root-filesystem directory")
+    p.add_argument("--root", required=True, help="new output directory; refuses an existing ledger")
+    p.add_argument("--label", help="human label for the image")
+    p.add_argument("--manifest", help="expected-digest baseline (JSON) for integrity verification")
+    p.add_argument("--signature", help="detached signature file over --signed-target")
+    p.add_argument("--public-key", help="operator trust anchor (raw/hex/PEM public key)")
+    p.add_argument("--signed-target", help="file the signature covers (default: the source archive)")
+    p.add_argument("--algorithm", default="ed25519", help="ed25519 (default), rsa-pss or ecdsa")
+    p.set_defaults(func=cmd_firmware_analyze)
+
+    p = fsub.add_parser("inventory", help="print the component inventory (no ledger)")
+    p.add_argument("source")
+    p.add_argument("--json", action="store_true")
+    p.set_defaults(func=cmd_firmware_inventory)
+
+    p = fsub.add_parser("diff", help="report noteworthy changes between two images")
+    p.add_argument("base")
+    p.add_argument("target")
+    p.add_argument("--json", action="store_true")
+    p.set_defaults(func=cmd_firmware_diff)
+
+    p = fsub.add_parser("verify", help="verify integrity and/or a signature against trust anchors")
+    p.add_argument("source")
+    p.add_argument("--manifest")
+    p.add_argument("--signature")
+    p.add_argument("--public-key")
+    p.add_argument("--signed-target")
+    p.add_argument("--algorithm", default="ed25519")
+    p.set_defaults(func=cmd_firmware_verify)
+
+    p = fsub.add_parser("report", help="render Markdown from a stored analysis.json")
+    p.add_argument("analysis")
+    p.set_defaults(func=cmd_firmware_report)
+
+    p = fsub.add_parser("inspect", help="read-only query over a stored analysis.json")
+    p.add_argument("analysis")
+    p.add_argument("query", help="components | services | network | findings | counts | image")
+    p.add_argument("--kind")
+    p.add_argument("--min-confidence")
+    p.add_argument("--max-confidence")
+    p.set_defaults(func=cmd_firmware_inspect)
 
     p = sub.add_parser("env", help="describe the environment and isolation in use")
     p.set_defaults(func=cmd_env)

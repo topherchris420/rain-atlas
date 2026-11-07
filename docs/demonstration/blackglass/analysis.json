@@ -1,0 +1,1106 @@
+{
+  "components": [
+    {
+      "detail": {
+        "bits": 64,
+        "elf_type": "DYN",
+        "endianness": "little",
+        "fortify": false,
+        "imported_symbols": [
+          "malloc",
+          "printf"
+        ],
+        "interpreter": "/lib/ld.so.1",
+        "machine": "x86-64",
+        "needed": [
+          "libc.so.6"
+        ],
+        "nx": true,
+        "osabi": "SYSV",
+        "pie": true,
+        "relro": "full",
+        "rpath": null,
+        "runpath": null,
+        "section_headers_present": true,
+        "shared_object": true,
+        "soname": null,
+        "stack_canary": false
+      },
+      "kind": "elf",
+      "mode": 493,
+      "path": "bin/busybox",
+      "sha256": "sha256:a807d987333466565bc9141766e312b0ef788d099be9b4023e15162354a6ed96",
+      "size": 872
+    },
+    {
+      "detail": {},
+      "kind": "config",
+      "mode": 420,
+      "path": "etc/dropbear/dropbear.conf",
+      "sha256": "sha256:483cc024c3fca55c68acdc2e1c3e7ff06cc7480fff7d8f8092eda1c288ccaeb1",
+      "size": 25
+    },
+    {
+      "detail": {},
+      "kind": "config",
+      "mode": 420,
+      "path": "etc/httpd/httpd.conf",
+      "sha256": "sha256:b1c6b82aca45f381096b6c817efd279c3ce92c86f133b5fb93fb5d013e2b0ae5",
+      "size": 93
+    },
+    {
+      "detail": {
+        "interpreter": "/bin/sh",
+        "language": "shell",
+        "shebang": "#!/bin/sh"
+      },
+      "kind": "script",
+      "mode": 493,
+      "path": "etc/init.d/telnetd",
+      "sha256": "sha256:fcb99a3df1676fb57bd5c0651974bad1279f6107d2bfd3c9d45aa70c33651c77",
+      "size": 147
+    },
+    {
+      "detail": {},
+      "kind": "config",
+      "mode": 420,
+      "path": "etc/os-release",
+      "sha256": "sha256:abf3e81d0efa2dc3b7a8c7ee665db432507e8e555f62dc80d6f25b9a9f93924e",
+      "size": 30
+    },
+    {
+      "detail": {
+        "pem_type": "certificate"
+      },
+      "kind": "key-material",
+      "mode": 420,
+      "path": "etc/ssl/certs/example.pem",
+      "sha256": "sha256:8b38b75ad5bf1801e9a0b38e0b4a123384269ebd841fefee555fc46b8df3c6fb",
+      "size": 91
+    },
+    {
+      "detail": {},
+      "kind": "config",
+      "mode": 420,
+      "path": "etc/systemd/system/config.service",
+      "sha256": "sha256:ebf10103e4d82b86adb3e0954e6de6a03a8dcf61347f09ad741ba47c68e89bf8",
+      "size": 116
+    },
+    {
+      "detail": {},
+      "kind": "config",
+      "mode": 420,
+      "path": "etc/systemd/system/httpd.service",
+      "sha256": "sha256:237b0b4ee3c9cad330d7670e828995921195f6fe8a87967ec24a001221291214",
+      "size": 260
+    },
+    {
+      "detail": {
+        "bits": 64,
+        "elf_type": "DYN",
+        "endianness": "little",
+        "fortify": null,
+        "imported_symbols": [],
+        "interpreter": null,
+        "machine": "x86-64",
+        "needed": [],
+        "nx": true,
+        "osabi": "SYSV",
+        "pie": false,
+        "relro": "full",
+        "rpath": null,
+        "runpath": null,
+        "section_headers_present": true,
+        "shared_object": true,
+        "soname": "libc.so.6",
+        "stack_canary": null
+      },
+      "kind": "elf",
+      "mode": 420,
+      "path": "lib/libc.so.6",
+      "sha256": "sha256:789a1c989e92a98edb2d92509cc1bb933a180797779a709bafa4395ce86010cd",
+      "size": 744
+    },
+    {
+      "detail": {
+        "bits": 64,
+        "elf_type": "DYN",
+        "endianness": "little",
+        "fortify": null,
+        "imported_symbols": [],
+        "interpreter": null,
+        "machine": "x86-64",
+        "needed": [
+          "libc.so.6"
+        ],
+        "nx": true,
+        "osabi": "SYSV",
+        "pie": false,
+        "relro": "full",
+        "rpath": null,
+        "runpath": null,
+        "section_headers_present": true,
+        "shared_object": true,
+        "soname": "libssl.so.1",
+        "stack_canary": null
+      },
+      "kind": "elf",
+      "mode": 420,
+      "path": "lib/libssl.so.1",
+      "sha256": "sha256:041db5c5dccde563e7fe96d06da71da7bd5bd80c5a4126142e6a141c66479069",
+      "size": 768
+    },
+    {
+      "detail": {
+        "bits": 64,
+        "elf_type": "DYN",
+        "endianness": "little",
+        "fortify": false,
+        "imported_symbols": [
+          "__stack_chk_fail",
+          "open",
+          "read"
+        ],
+        "interpreter": "/lib/ld.so.1",
+        "machine": "x86-64",
+        "needed": [
+          "libc.so.6"
+        ],
+        "nx": true,
+        "osabi": "SYSV",
+        "pie": true,
+        "relro": "full",
+        "rpath": null,
+        "runpath": null,
+        "section_headers_present": true,
+        "shared_object": true,
+        "soname": null,
+        "stack_canary": true
+      },
+      "kind": "elf",
+      "mode": 2541,
+      "path": "usr/bin/config-helper",
+      "sha256": "sha256:55c55a24b77ad657cd0b5c1c0f593b17aaed1ad01736d681b473723611894a65",
+      "size": 912
+    },
+    {
+      "detail": {
+        "bits": 64,
+        "elf_type": "DYN",
+        "endianness": "little",
+        "fortify": false,
+        "imported_symbols": [
+          "__stack_chk_fail",
+          "accept",
+          "bind",
+          "listen",
+          "socket"
+        ],
+        "interpreter": "/lib/ld.so.1",
+        "machine": "x86-64",
+        "needed": [
+          "libc.so.6",
+          "libssl.so.1"
+        ],
+        "nx": true,
+        "osabi": "SYSV",
+        "pie": true,
+        "relro": "full",
+        "rpath": null,
+        "runpath": null,
+        "section_headers_present": true,
+        "shared_object": true,
+        "soname": null,
+        "stack_canary": true
+      },
+      "kind": "elf",
+      "mode": 493,
+      "path": "usr/sbin/httpd",
+      "sha256": "sha256:ac65a81499bda85a08bc9b3ffb2d5a837a0b575b8c632f707afacc66b7d607ba",
+      "size": 1000
+    },
+    {
+      "detail": {
+        "bits": 64,
+        "elf_type": "DYN",
+        "endianness": "little",
+        "fortify": false,
+        "imported_symbols": [
+          "bind",
+          "listen",
+          "socket"
+        ],
+        "interpreter": "/lib/ld.so.1",
+        "machine": "x86-64",
+        "needed": [
+          "libc.so.6"
+        ],
+        "nx": true,
+        "osabi": "SYSV",
+        "pie": true,
+        "relro": "full",
+        "rpath": null,
+        "runpath": null,
+        "section_headers_present": true,
+        "shared_object": true,
+        "soname": null,
+        "stack_canary": false
+      },
+      "kind": "elf",
+      "mode": 493,
+      "path": "usr/sbin/telnetd",
+      "sha256": "sha256:3c6aade923f164f4c1cd65e05ba0eae17803880e1e561ca599db54de1377d2c5",
+      "size": 904
+    },
+    {
+      "detail": {
+        "manifest_kind": "dpkg",
+        "packages": [
+          {
+            "architecture": "amd64",
+            "depends": "libssl1",
+            "package": "httpd",
+            "version": "1.4.2"
+          },
+          {
+            "architecture": "amd64",
+            "package": "busybox",
+            "version": "1.36.1"
+          }
+        ]
+      },
+      "kind": "package-manifest",
+      "mode": 420,
+      "path": "var/lib/dpkg/status",
+      "sha256": "sha256:30648e5a7c08e4a75af1f76a2c1498a56ccf1040c299545f3941896d60299528",
+      "size": 122
+    }
+  ],
+  "counts": {
+    "by_kind": {
+      "config": 5,
+      "elf": 6,
+      "key-material": 1,
+      "package-manifest": 1,
+      "script": 1
+    },
+    "elf_by_machine": {
+      "x86-64": 6
+    },
+    "files": 14,
+    "findings": 18,
+    "listening_ports": [
+      22,
+      8080,
+      8443
+    ],
+    "network_capabilities": 5,
+    "services": 3,
+    "setuid_binaries": [
+      "usr/bin/config-helper"
+    ],
+    "unresolved_libraries": []
+  },
+  "engine_version": "0.1.0",
+  "findings": [
+    {
+      "assumptions": [],
+      "confidence": "verified",
+      "crosscheck": {
+        "detail": "{'elf': 6, 'config': 5, 'script': 1, 'key-material': 1, 'package-manifest': 1}",
+        "method": "recompute counts from the inventory",
+        "outcome": "corroborated"
+      },
+      "evidence": [
+        {
+          "component": null,
+          "confidence": "verified",
+          "detail": "14 regular files",
+          "locus": "tree manifest",
+          "method": "inventory.build_inventory",
+          "offset": null,
+          "sha256": null
+        }
+      ],
+      "id": "FND-0001",
+      "kind": "component",
+      "statement": "The image contains 14 files: config=5, elf=6, key-material=1, package-manifest=1, script=1; ELF architectures: {'x86-64': 6}",
+      "subject": "image"
+    },
+    {
+      "assumptions": [
+        "section headers present"
+      ],
+      "confidence": "verified",
+      "crosscheck": {
+        "detail": "bits=64, endianness=little, machine=62",
+        "method": "independent ELF header re-read",
+        "outcome": "corroborated"
+      },
+      "evidence": [
+        {
+          "component": "bin/busybox",
+          "confidence": "verified",
+          "detail": "machine=x86-64, needed=['libc.so.6']",
+          "locus": "ELF header + .dynamic",
+          "method": "elf.parse",
+          "offset": null,
+          "sha256": "sha256:a807d987333466565bc9141766e312b0ef788d099be9b4023e15162354a6ed96"
+        }
+      ],
+      "id": "FND-0002",
+      "kind": "component",
+      "statement": "bin/busybox is a 64-bit little-endian x86-64 ELF DYN (PIE), needs ['libc.so.6']",
+      "subject": "bin/busybox"
+    },
+    {
+      "assumptions": [
+        "section headers present"
+      ],
+      "confidence": "verified",
+      "crosscheck": {
+        "detail": "bits=64, endianness=little, machine=62",
+        "method": "independent ELF header re-read",
+        "outcome": "corroborated"
+      },
+      "evidence": [
+        {
+          "component": "lib/libc.so.6",
+          "confidence": "verified",
+          "detail": "machine=x86-64, needed=[]",
+          "locus": "ELF header + .dynamic",
+          "method": "elf.parse",
+          "offset": null,
+          "sha256": "sha256:789a1c989e92a98edb2d92509cc1bb933a180797779a709bafa4395ce86010cd"
+        }
+      ],
+      "id": "FND-0003",
+      "kind": "component",
+      "statement": "lib/libc.so.6 is a 64-bit little-endian x86-64 ELF DYN",
+      "subject": "lib/libc.so.6"
+    },
+    {
+      "assumptions": [
+        "section headers present"
+      ],
+      "confidence": "verified",
+      "crosscheck": {
+        "detail": "bits=64, endianness=little, machine=62",
+        "method": "independent ELF header re-read",
+        "outcome": "corroborated"
+      },
+      "evidence": [
+        {
+          "component": "lib/libssl.so.1",
+          "confidence": "verified",
+          "detail": "machine=x86-64, needed=['libc.so.6']",
+          "locus": "ELF header + .dynamic",
+          "method": "elf.parse",
+          "offset": null,
+          "sha256": "sha256:041db5c5dccde563e7fe96d06da71da7bd5bd80c5a4126142e6a141c66479069"
+        }
+      ],
+      "id": "FND-0004",
+      "kind": "component",
+      "statement": "lib/libssl.so.1 is a 64-bit little-endian x86-64 ELF DYN, needs ['libc.so.6']",
+      "subject": "lib/libssl.so.1"
+    },
+    {
+      "assumptions": [
+        "section headers present"
+      ],
+      "confidence": "verified",
+      "crosscheck": {
+        "detail": "bits=64, endianness=little, machine=62",
+        "method": "independent ELF header re-read",
+        "outcome": "corroborated"
+      },
+      "evidence": [
+        {
+          "component": "usr/bin/config-helper",
+          "confidence": "verified",
+          "detail": "machine=x86-64, needed=['libc.so.6']",
+          "locus": "ELF header + .dynamic",
+          "method": "elf.parse",
+          "offset": null,
+          "sha256": "sha256:55c55a24b77ad657cd0b5c1c0f593b17aaed1ad01736d681b473723611894a65"
+        }
+      ],
+      "id": "FND-0005",
+      "kind": "component",
+      "statement": "usr/bin/config-helper is a 64-bit little-endian x86-64 ELF DYN (PIE), needs ['libc.so.6']",
+      "subject": "usr/bin/config-helper"
+    },
+    {
+      "assumptions": [
+        "section headers present"
+      ],
+      "confidence": "verified",
+      "crosscheck": {
+        "detail": "bits=64, endianness=little, machine=62",
+        "method": "independent ELF header re-read",
+        "outcome": "corroborated"
+      },
+      "evidence": [
+        {
+          "component": "usr/sbin/httpd",
+          "confidence": "verified",
+          "detail": "machine=x86-64, needed=['libc.so.6', 'libssl.so.1']",
+          "locus": "ELF header + .dynamic",
+          "method": "elf.parse",
+          "offset": null,
+          "sha256": "sha256:ac65a81499bda85a08bc9b3ffb2d5a837a0b575b8c632f707afacc66b7d607ba"
+        }
+      ],
+      "id": "FND-0006",
+      "kind": "component",
+      "statement": "usr/sbin/httpd is a 64-bit little-endian x86-64 ELF DYN (PIE), needs ['libc.so.6', 'libssl.so.1']",
+      "subject": "usr/sbin/httpd"
+    },
+    {
+      "assumptions": [
+        "section headers present"
+      ],
+      "confidence": "verified",
+      "crosscheck": {
+        "detail": "bits=64, endianness=little, machine=62",
+        "method": "independent ELF header re-read",
+        "outcome": "corroborated"
+      },
+      "evidence": [
+        {
+          "component": "usr/sbin/telnetd",
+          "confidence": "verified",
+          "detail": "machine=x86-64, needed=['libc.so.6']",
+          "locus": "ELF header + .dynamic",
+          "method": "elf.parse",
+          "offset": null,
+          "sha256": "sha256:3c6aade923f164f4c1cd65e05ba0eae17803880e1e561ca599db54de1377d2c5"
+        }
+      ],
+      "id": "FND-0007",
+      "kind": "component",
+      "statement": "usr/sbin/telnetd is a 64-bit little-endian x86-64 ELF DYN (PIE), needs ['libc.so.6']",
+      "subject": "usr/sbin/telnetd"
+    },
+    {
+      "assumptions": [],
+      "confidence": "verified",
+      "crosscheck": {
+        "detail": "usr/bin/config-helper present",
+        "method": "resolve ExecStart target in the inventory",
+        "outcome": "corroborated"
+      },
+      "evidence": [
+        {
+          "component": "etc/systemd/system/config.service",
+          "confidence": "verified",
+          "detail": "ExecStart=/usr/bin/config-helper apply",
+          "locus": "etc/systemd/system/config.service",
+          "method": "services.parse_services",
+          "offset": null,
+          "sha256": null
+        }
+      ],
+      "id": "FND-0008",
+      "kind": "service",
+      "statement": "Service config.service (systemd) runs as root, starts usr/bin/config-helper",
+      "subject": "systemd:config.service"
+    },
+    {
+      "assumptions": [],
+      "confidence": "verified",
+      "crosscheck": {
+        "detail": "usr/sbin/httpd present",
+        "method": "resolve ExecStart target in the inventory",
+        "outcome": "corroborated"
+      },
+      "evidence": [
+        {
+          "component": "etc/systemd/system/httpd.service",
+          "confidence": "verified",
+          "detail": "ExecStart=/usr/sbin/httpd --port 8080 --config /etc/httpd/httpd.conf",
+          "locus": "etc/systemd/system/httpd.service",
+          "method": "services.parse_services",
+          "offset": null,
+          "sha256": null
+        }
+      ],
+      "id": "FND-0009",
+      "kind": "service",
+      "statement": "Service httpd.service (systemd) runs as www, starts usr/sbin/httpd, requires ['config.service']",
+      "subject": "systemd:httpd.service"
+    },
+    {
+      "assumptions": [],
+      "confidence": "verified",
+      "crosscheck": {
+        "detail": "usr/sbin/telnetd present",
+        "method": "resolve ExecStart target in the inventory",
+        "outcome": "corroborated"
+      },
+      "evidence": [
+        {
+          "component": "etc/init.d/telnetd",
+          "confidence": "verified",
+          "detail": "ExecStart=/usr/sbin/telnetd",
+          "locus": "etc/init.d/telnetd",
+          "method": "services.parse_services",
+          "offset": null,
+          "sha256": null
+        }
+      ],
+      "id": "FND-0010",
+      "kind": "service",
+      "statement": "Service telnetd (sysv) runs as default user, starts usr/sbin/telnetd, requires ['$network']",
+      "subject": "sysv:telnetd"
+    },
+    {
+      "assumptions": [
+        "symbol linkage or config declaration; not a runtime observation"
+      ],
+      "confidence": "high",
+      "crosscheck": {
+        "detail": "etc/dropbear/dropbear.conf:line 1",
+        "method": "locate the declaring line",
+        "outcome": "corroborated"
+      },
+      "evidence": [
+        {
+          "component": "etc/dropbear/dropbear.conf",
+          "confidence": "verified",
+          "detail": "Port 22",
+          "locus": "etc/dropbear/dropbear.conf:line 1",
+          "method": "network.port_directive",
+          "offset": null,
+          "sha256": "sha256:483cc024c3fca55c68acdc2e1c3e7ff06cc7480fff7d8f8092eda1c288ccaeb1"
+        }
+      ],
+      "id": "FND-0011",
+      "kind": "network",
+      "statement": "etc/dropbear/dropbear.conf: declares port 22: Port 22 (port 22)",
+      "subject": "etc/dropbear/dropbear.conf"
+    },
+    {
+      "assumptions": [
+        "symbol linkage or config declaration; not a runtime observation"
+      ],
+      "confidence": "high",
+      "crosscheck": {
+        "detail": "etc/httpd/httpd.conf:line 2",
+        "method": "locate the declaring line",
+        "outcome": "corroborated"
+      },
+      "evidence": [
+        {
+          "component": "etc/httpd/httpd.conf",
+          "confidence": "verified",
+          "detail": "Listen 8080",
+          "locus": "etc/httpd/httpd.conf:line 2",
+          "method": "network.port_directive",
+          "offset": null,
+          "sha256": "sha256:b1c6b82aca45f381096b6c817efd279c3ce92c86f133b5fb93fb5d013e2b0ae5"
+        }
+      ],
+      "id": "FND-0012",
+      "kind": "network",
+      "statement": "etc/httpd/httpd.conf: declares port 8080: Listen 8080 (port 8080)",
+      "subject": "etc/httpd/httpd.conf"
+    },
+    {
+      "assumptions": [
+        "symbol linkage or config declaration; not a runtime observation"
+      ],
+      "confidence": "high",
+      "crosscheck": {
+        "detail": "etc/httpd/httpd.conf:line 5",
+        "method": "locate the declaring line",
+        "outcome": "corroborated"
+      },
+      "evidence": [
+        {
+          "component": "etc/httpd/httpd.conf",
+          "confidence": "verified",
+          "detail": "Listen 8443",
+          "locus": "etc/httpd/httpd.conf:line 5",
+          "method": "network.port_directive",
+          "offset": null,
+          "sha256": "sha256:b1c6b82aca45f381096b6c817efd279c3ce92c86f133b5fb93fb5d013e2b0ae5"
+        }
+      ],
+      "id": "FND-0013",
+      "kind": "network",
+      "statement": "etc/httpd/httpd.conf: declares port 8443: Listen 8443 (port 8443)",
+      "subject": "etc/httpd/httpd.conf"
+    },
+    {
+      "assumptions": [
+        "symbol linkage or config declaration; not a runtime observation"
+      ],
+      "confidence": "medium",
+      "crosscheck": {
+        "detail": "etc/httpd/httpd.conf declares a listener for httpd",
+        "method": "corroborate socket symbols with a port declaration naming this component",
+        "outcome": "corroborated"
+      },
+      "evidence": [
+        {
+          "component": "usr/sbin/httpd",
+          "confidence": "verified",
+          "detail": "imports accept, bind, listen, socket",
+          "locus": "ELF .dynsym (undefined imports)",
+          "method": "elf.imported_symbols",
+          "offset": null,
+          "sha256": "sha256:ac65a81499bda85a08bc9b3ffb2d5a837a0b575b8c632f707afacc66b7d607ba"
+        }
+      ],
+      "id": "FND-0014",
+      "kind": "network",
+      "statement": "usr/sbin/httpd: imports accept, bind, listen, socket; bind+listen suggests a server",
+      "subject": "usr/sbin/httpd"
+    },
+    {
+      "assumptions": [
+        "symbol linkage or config declaration; not a runtime observation"
+      ],
+      "confidence": "medium",
+      "crosscheck": {
+        "detail": "no port declaration names this component; capability remains an inference",
+        "method": "corroborate socket symbols with a port declaration naming this component",
+        "outcome": "inconclusive"
+      },
+      "evidence": [
+        {
+          "component": "usr/sbin/telnetd",
+          "confidence": "verified",
+          "detail": "imports bind, listen, socket",
+          "locus": "ELF .dynsym (undefined imports)",
+          "method": "elf.imported_symbols",
+          "offset": null,
+          "sha256": "sha256:3c6aade923f164f4c1cd65e05ba0eae17803880e1e561ca599db54de1377d2c5"
+        }
+      ],
+      "id": "FND-0015",
+      "kind": "network",
+      "statement": "usr/sbin/telnetd: imports bind, listen, socket; bind+listen suggests a server",
+      "subject": "usr/sbin/telnetd"
+    },
+    {
+      "assumptions": [],
+      "confidence": "high",
+      "crosscheck": {
+        "detail": "0 non-root launcher(s)",
+        "method": "check launching services' declared user",
+        "outcome": "inconclusive"
+      },
+      "evidence": [
+        {
+          "component": "usr/bin/config-helper",
+          "confidence": "verified",
+          "detail": "setuid bit set",
+          "locus": "usr/bin/config-helper",
+          "method": "inventory.mode",
+          "offset": null,
+          "sha256": null
+        }
+      ],
+      "id": "FND-0016",
+      "kind": "trust-boundary",
+      "statement": "usr/bin/config-helper is setuid (mode 0o4755)",
+      "subject": "usr/bin/config-helper"
+    },
+    {
+      "assumptions": [],
+      "confidence": "verified",
+      "crosscheck": {
+        "detail": "14 baseline entries: 14 matched, 0 mismatched, 0 missing, 0 unlisted file(s) present",
+        "method": "trust-anchor verification",
+        "outcome": "corroborated"
+      },
+      "evidence": [
+        {
+          "component": null,
+          "confidence": "verified",
+          "detail": "14 baseline entries: 14 matched, 0 mismatched, 0 missing, 0 unlisted file(s) present",
+          "locus": "verification",
+          "method": "verification.sha256-manifest",
+          "offset": null,
+          "sha256": null
+        }
+      ],
+      "id": "FND-0017",
+      "kind": "integrity",
+      "statement": "sha256-manifest: verified \u2014 14 baseline entries: 14 matched, 0 mismatched, 0 missing, 0 unlisted file(s) present",
+      "subject": "ExampleOS-v1"
+    },
+    {
+      "assumptions": [],
+      "confidence": "verified",
+      "crosscheck": {
+        "detail": "signature valid",
+        "method": "trust-anchor verification",
+        "outcome": "corroborated"
+      },
+      "evidence": [
+        {
+          "component": null,
+          "confidence": "verified",
+          "detail": "target digest sha256:c5e0fff111bd56f4\u2026, key sha256:6ae4e29ac7da\u2026",
+          "locus": "signature over fw-v1.tar.gz",
+          "method": "verification.ed25519",
+          "offset": null,
+          "sha256": "sha256:c5e0fff111bd56f49fe5eded12265d090641429274fd4fd0eced3a49e21a8855"
+        }
+      ],
+      "id": "FND-0018",
+      "kind": "signature",
+      "statement": "ed25519/ed25519_ref: verified \u2014 signature valid",
+      "subject": "fw-v1.tar.gz"
+    }
+  ],
+  "graph": {
+    "edges": [
+      {
+        "dst": "systemd:config.service",
+        "kind": "requires",
+        "src": "systemd:httpd.service"
+      },
+      {
+        "dst": "systemd:config.service",
+        "kind": "after",
+        "src": "systemd:httpd.service"
+      },
+      {
+        "dst": "exe:usr/bin/config-helper",
+        "kind": "starts",
+        "src": "systemd:config.service"
+      },
+      {
+        "dst": "exe:usr/sbin/httpd",
+        "kind": "starts",
+        "src": "systemd:httpd.service"
+      },
+      {
+        "dst": "exe:usr/sbin/telnetd",
+        "kind": "starts",
+        "src": "sysv:telnetd"
+      },
+      {
+        "dst": "exe:lib/libc.so.6",
+        "kind": "links",
+        "src": "exe:bin/busybox"
+      },
+      {
+        "dst": "exe:lib/libc.so.6",
+        "kind": "links",
+        "src": "exe:lib/libssl.so.1"
+      },
+      {
+        "dst": "exe:lib/libc.so.6",
+        "kind": "links",
+        "src": "exe:usr/bin/config-helper"
+      },
+      {
+        "dst": "exe:lib/libc.so.6",
+        "kind": "links",
+        "src": "exe:usr/sbin/httpd"
+      },
+      {
+        "dst": "exe:lib/libssl.so.1",
+        "kind": "links",
+        "src": "exe:usr/sbin/httpd"
+      },
+      {
+        "dst": "exe:lib/libc.so.6",
+        "kind": "links",
+        "src": "exe:usr/sbin/telnetd"
+      }
+    ],
+    "nodes": [
+      {
+        "attrs": {
+          "enabled": null,
+          "init": "systemd",
+          "privileged": true,
+          "user": "root"
+        },
+        "id": "systemd:config.service",
+        "label": "config.service",
+        "type": "service"
+      },
+      {
+        "attrs": {
+          "enabled": null,
+          "init": "systemd",
+          "privileged": false,
+          "user": "www"
+        },
+        "id": "systemd:httpd.service",
+        "label": "httpd.service",
+        "type": "service"
+      },
+      {
+        "attrs": {
+          "enabled": null,
+          "init": "sysv",
+          "privileged": true,
+          "user": "(default)"
+        },
+        "id": "sysv:telnetd",
+        "label": "telnetd",
+        "type": "service"
+      },
+      {
+        "attrs": {
+          "machine": "x86-64",
+          "present": true,
+          "setuid": true
+        },
+        "id": "exe:usr/bin/config-helper",
+        "label": "usr/bin/config-helper",
+        "type": "executable"
+      },
+      {
+        "attrs": {
+          "machine": "x86-64",
+          "present": true,
+          "setuid": false
+        },
+        "id": "exe:usr/sbin/httpd",
+        "label": "usr/sbin/httpd",
+        "type": "executable"
+      },
+      {
+        "attrs": {
+          "machine": "x86-64",
+          "present": true,
+          "setuid": false
+        },
+        "id": "exe:usr/sbin/telnetd",
+        "label": "usr/sbin/telnetd",
+        "type": "executable"
+      },
+      {
+        "attrs": {
+          "machine": "x86-64",
+          "present": true,
+          "setuid": false
+        },
+        "id": "exe:bin/busybox",
+        "label": "bin/busybox",
+        "type": "executable"
+      },
+      {
+        "attrs": {
+          "machine": "x86-64",
+          "present": true,
+          "setuid": false
+        },
+        "id": "exe:lib/libc.so.6",
+        "label": "lib/libc.so.6",
+        "type": "executable"
+      },
+      {
+        "attrs": {
+          "machine": "x86-64",
+          "present": true,
+          "setuid": false
+        },
+        "id": "exe:lib/libssl.so.1",
+        "label": "lib/libssl.so.1",
+        "type": "executable"
+      }
+    ]
+  },
+  "image": {
+    "file_count": 14,
+    "label": "ExampleOS-v1",
+    "recorded_symlinks": 0,
+    "source_digest": "sha256:c5e0fff111bd56f49fe5eded12265d090641429274fd4fd0eced3a49e21a8855",
+    "source_kind": "tar",
+    "total_bytes": 6084,
+    "tree_manifest_sha256": "sha256:b2c61b9cba49859ab7e5be2f2e62633eab452393834582b55c77d12b8329797e",
+    "warnings": []
+  },
+  "limitations": [
+    "Static analysis only: the firmware is never executed, so no finding is a runtime observation.",
+    "Linking a symbol (e.g. bind/listen) is evidence of a capability, not proof the code path runs; such findings are inferences with medium or low confidence, never confirmed behaviour.",
+    "Dependency edges come from declared DT_NEEDED entries and init metadata; dlopen() and other dynamic loading are invisible to static analysis.",
+    "Port declarations in configuration are the shipped defaults; a running device may be reconfigured.",
+    "Only tar, zip and already-extracted directories are parsed. squashfs, cpio, raw flash and encrypted blobs are reported as unsupported and left uninterpreted rather than guessed at.",
+    "Integrity and signature results are only as trustworthy as the operator-supplied trust anchors; without an anchor the verdict is 'unverifiable', never 'valid'."
+  ],
+  "network": [
+    {
+      "component": "etc/dropbear/dropbear.conf",
+      "confidence": "high",
+      "detail": "declares port 22: Port 22",
+      "evidence": {
+        "component": "etc/dropbear/dropbear.conf",
+        "confidence": "verified",
+        "detail": "Port 22",
+        "locus": "etc/dropbear/dropbear.conf:line 1",
+        "method": "network.port_directive",
+        "offset": null,
+        "sha256": "sha256:483cc024c3fca55c68acdc2e1c3e7ff06cc7480fff7d8f8092eda1c288ccaeb1"
+      },
+      "kind": "port-declared",
+      "port": 22,
+      "protocol": null
+    },
+    {
+      "component": "etc/httpd/httpd.conf",
+      "confidence": "high",
+      "detail": "declares port 8080: Listen 8080",
+      "evidence": {
+        "component": "etc/httpd/httpd.conf",
+        "confidence": "verified",
+        "detail": "Listen 8080",
+        "locus": "etc/httpd/httpd.conf:line 2",
+        "method": "network.port_directive",
+        "offset": null,
+        "sha256": "sha256:b1c6b82aca45f381096b6c817efd279c3ce92c86f133b5fb93fb5d013e2b0ae5"
+      },
+      "kind": "port-declared",
+      "port": 8080,
+      "protocol": null
+    },
+    {
+      "component": "etc/httpd/httpd.conf",
+      "confidence": "high",
+      "detail": "declares port 8443: Listen 8443",
+      "evidence": {
+        "component": "etc/httpd/httpd.conf",
+        "confidence": "verified",
+        "detail": "Listen 8443",
+        "locus": "etc/httpd/httpd.conf:line 5",
+        "method": "network.port_directive",
+        "offset": null,
+        "sha256": "sha256:b1c6b82aca45f381096b6c817efd279c3ce92c86f133b5fb93fb5d013e2b0ae5"
+      },
+      "kind": "port-declared",
+      "port": 8443,
+      "protocol": null
+    },
+    {
+      "component": "usr/sbin/httpd",
+      "confidence": "medium",
+      "detail": "imports accept, bind, listen, socket; bind+listen suggests a server",
+      "evidence": {
+        "component": "usr/sbin/httpd",
+        "confidence": "verified",
+        "detail": "imports accept, bind, listen, socket",
+        "locus": "ELF .dynsym (undefined imports)",
+        "method": "elf.imported_symbols",
+        "offset": null,
+        "sha256": "sha256:ac65a81499bda85a08bc9b3ffb2d5a837a0b575b8c632f707afacc66b7d607ba"
+      },
+      "kind": "socket-symbol",
+      "port": null,
+      "protocol": null
+    },
+    {
+      "component": "usr/sbin/telnetd",
+      "confidence": "medium",
+      "detail": "imports bind, listen, socket; bind+listen suggests a server",
+      "evidence": {
+        "component": "usr/sbin/telnetd",
+        "confidence": "verified",
+        "detail": "imports bind, listen, socket",
+        "locus": "ELF .dynsym (undefined imports)",
+        "method": "elf.imported_symbols",
+        "offset": null,
+        "sha256": "sha256:3c6aade923f164f4c1cd65e05ba0eae17803880e1e561ca599db54de1377d2c5"
+      },
+      "kind": "socket-symbol",
+      "port": null,
+      "protocol": null
+    }
+  ],
+  "parameters": {
+    "source": "fw-v1.tar.gz",
+    "trust": [
+      "manifest",
+      "signature"
+    ]
+  },
+  "protocol": "blackglass.firmware-analysis/v1",
+  "services": [
+    {
+      "after": [],
+      "enabled": null,
+      "exec_component": "usr/bin/config-helper",
+      "exec_start": "/usr/bin/config-helper apply",
+      "id": "systemd:config.service",
+      "init_system": "systemd",
+      "name": "config.service",
+      "requires": [],
+      "source": "etc/systemd/system/config.service",
+      "user": "root",
+      "wants": []
+    },
+    {
+      "after": [
+        "network.target",
+        "config.service"
+      ],
+      "enabled": null,
+      "exec_component": "usr/sbin/httpd",
+      "exec_start": "/usr/sbin/httpd --port 8080 --config /etc/httpd/httpd.conf",
+      "id": "systemd:httpd.service",
+      "init_system": "systemd",
+      "name": "httpd.service",
+      "requires": [
+        "config.service"
+      ],
+      "source": "etc/systemd/system/httpd.service",
+      "user": "www",
+      "wants": [
+        "logging.service"
+      ]
+    },
+    {
+      "after": [
+        "$network"
+      ],
+      "enabled": null,
+      "exec_component": "usr/sbin/telnetd",
+      "exec_start": "/usr/sbin/telnetd",
+      "id": "sysv:telnetd",
+      "init_system": "sysv",
+      "name": "telnetd",
+      "requires": [
+        "$network"
+      ],
+      "source": "etc/init.d/telnetd",
+      "user": null,
+      "wants": []
+    }
+  ],
+  "verification": [
+    {
+      "detail": "14 baseline entries: 14 matched, 0 mismatched, 0 missing, 0 unlisted file(s) present",
+      "evidence": [],
+      "method": "sha256-manifest",
+      "status": "verified",
+      "subject": "ExampleOS-v1"
+    },
+    {
+      "detail": "signature valid",
+      "evidence": [
+        {
+          "component": null,
+          "confidence": "verified",
+          "detail": "target digest sha256:c5e0fff111bd56f4\u2026, key sha256:6ae4e29ac7da\u2026",
+          "locus": "signature over fw-v1.tar.gz",
+          "method": "verification.ed25519",
+          "offset": null,
+          "sha256": "sha256:c5e0fff111bd56f49fe5eded12265d090641429274fd4fd0eced3a49e21a8855"
+        }
+      ],
+      "method": "ed25519/ed25519_ref",
+      "status": "verified",
+      "subject": "fw-v1.tar.gz"
+    }
+  ]
+}

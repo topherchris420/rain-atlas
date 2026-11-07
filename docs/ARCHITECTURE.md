@@ -421,6 +421,18 @@ interfaces only; they never write into another project's state directories,
 memories, prompts or ledgers; each adapter ships with a contract test that
 skips cleanly when the external agent is absent.
 
+## 8a. BLACK GLASS firmware intelligence subsystem
+
+`rain_atlas.blackglass` is an isolated extension that applies the same evidence
+discipline to *embedded software*: it statically analyses operator-supplied
+firmware (offline, read-only, vendor-neutral) and records findings through the
+existing ledger vocabulary, adding no new record kinds and modifying no engine
+module. It plugs in only at the CLI (`atlas firmware …`) and the ledger bridge,
+so the ledger, verifier and observatory are unchanged. Each finding carries
+evidence, a confidence level and an independent cross-check, and static
+inferences are never promoted to confirmed behaviour. See
+[`docs/BLACK_GLASS.md`](BLACK_GLASS.md).
+
 ## 9. Web laboratory (Phase 6)
 
 A static, read-only site generated from `atlas export --site`. It renders the
