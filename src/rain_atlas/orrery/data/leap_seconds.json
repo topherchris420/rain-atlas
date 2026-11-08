@@ -1,0 +1,298 @@
+{
+ "description": "TAI-UTC = offset_s + (MJD - ref_mjd) * rate_s_per_day from utc_mjd onward (USNO/IERS)",
+ "source": {
+  "file": "data/time/tai-utc.dat",
+  "sha256": "sha256:96017d361fda96801547dc7846c25d4a529ad48128a2aa849962966ad5b95eeb",
+  "distribution": "NASA GMAT R2026a gmat-win-R2026a.zip (MD5 e6248b1a776c952c3dda0bedda7f1f19)",
+  "note": "USNO tai-utc.dat as distributed with GMAT"
+ },
+ "rows": [
+  {
+   "utc_date": "1961-01-01",
+   "utc_mjd": 37300,
+   "offset_s": 1.422818,
+   "ref_mjd": 37300.0,
+   "rate_s_per_day": 0.001296
+  },
+  {
+   "utc_date": "1961-08-01",
+   "utc_mjd": 37512,
+   "offset_s": 1.372818,
+   "ref_mjd": 37300.0,
+   "rate_s_per_day": 0.001296
+  },
+  {
+   "utc_date": "1962-01-01",
+   "utc_mjd": 37665,
+   "offset_s": 1.845858,
+   "ref_mjd": 37665.0,
+   "rate_s_per_day": 0.0011232
+  },
+  {
+   "utc_date": "1963-11-01",
+   "utc_mjd": 38334,
+   "offset_s": 1.945858,
+   "ref_mjd": 37665.0,
+   "rate_s_per_day": 0.0011232
+  },
+  {
+   "utc_date": "1964-01-01",
+   "utc_mjd": 38395,
+   "offset_s": 3.24013,
+   "ref_mjd": 38761.0,
+   "rate_s_per_day": 0.001296
+  },
+  {
+   "utc_date": "1964-04-01",
+   "utc_mjd": 38486,
+   "offset_s": 3.34013,
+   "ref_mjd": 38761.0,
+   "rate_s_per_day": 0.001296
+  },
+  {
+   "utc_date": "1964-09-01",
+   "utc_mjd": 38639,
+   "offset_s": 3.44013,
+   "ref_mjd": 38761.0,
+   "rate_s_per_day": 0.001296
+  },
+  {
+   "utc_date": "1965-01-01",
+   "utc_mjd": 38761,
+   "offset_s": 3.54013,
+   "ref_mjd": 38761.0,
+   "rate_s_per_day": 0.001296
+  },
+  {
+   "utc_date": "1965-03-01",
+   "utc_mjd": 38820,
+   "offset_s": 3.64013,
+   "ref_mjd": 38761.0,
+   "rate_s_per_day": 0.001296
+  },
+  {
+   "utc_date": "1965-07-01",
+   "utc_mjd": 38942,
+   "offset_s": 3.74013,
+   "ref_mjd": 38761.0,
+   "rate_s_per_day": 0.001296
+  },
+  {
+   "utc_date": "1965-09-01",
+   "utc_mjd": 39004,
+   "offset_s": 3.84013,
+   "ref_mjd": 38761.0,
+   "rate_s_per_day": 0.001296
+  },
+  {
+   "utc_date": "1966-01-01",
+   "utc_mjd": 39126,
+   "offset_s": 4.31317,
+   "ref_mjd": 39126.0,
+   "rate_s_per_day": 0.002592
+  },
+  {
+   "utc_date": "1968-02-01",
+   "utc_mjd": 39887,
+   "offset_s": 4.21317,
+   "ref_mjd": 39126.0,
+   "rate_s_per_day": 0.002592
+  },
+  {
+   "utc_date": "1972-01-01",
+   "utc_mjd": 41317,
+   "offset_s": 10.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "1972-07-01",
+   "utc_mjd": 41499,
+   "offset_s": 11.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "1973-01-01",
+   "utc_mjd": 41683,
+   "offset_s": 12.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "1974-01-01",
+   "utc_mjd": 42048,
+   "offset_s": 13.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "1975-01-01",
+   "utc_mjd": 42413,
+   "offset_s": 14.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "1976-01-01",
+   "utc_mjd": 42778,
+   "offset_s": 15.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "1977-01-01",
+   "utc_mjd": 43144,
+   "offset_s": 16.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "1978-01-01",
+   "utc_mjd": 43509,
+   "offset_s": 17.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "1979-01-01",
+   "utc_mjd": 43874,
+   "offset_s": 18.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "1980-01-01",
+   "utc_mjd": 44239,
+   "offset_s": 19.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "1981-07-01",
+   "utc_mjd": 44786,
+   "offset_s": 20.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "1982-07-01",
+   "utc_mjd": 45151,
+   "offset_s": 21.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "1983-07-01",
+   "utc_mjd": 45516,
+   "offset_s": 22.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "1985-07-01",
+   "utc_mjd": 46247,
+   "offset_s": 23.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "1988-01-01",
+   "utc_mjd": 47161,
+   "offset_s": 24.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "1990-01-01",
+   "utc_mjd": 47892,
+   "offset_s": 25.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "1991-01-01",
+   "utc_mjd": 48257,
+   "offset_s": 26.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "1992-07-01",
+   "utc_mjd": 48804,
+   "offset_s": 27.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "1993-07-01",
+   "utc_mjd": 49169,
+   "offset_s": 28.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "1994-07-01",
+   "utc_mjd": 49534,
+   "offset_s": 29.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "1996-01-01",
+   "utc_mjd": 50083,
+   "offset_s": 30.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "1997-07-01",
+   "utc_mjd": 50630,
+   "offset_s": 31.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "1999-01-01",
+   "utc_mjd": 51179,
+   "offset_s": 32.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "2006-01-01",
+   "utc_mjd": 53736,
+   "offset_s": 33.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "2009-01-01",
+   "utc_mjd": 54832,
+   "offset_s": 34.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "2012-07-01",
+   "utc_mjd": 56109,
+   "offset_s": 35.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "2015-07-01",
+   "utc_mjd": 57204,
+   "offset_s": 36.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  },
+  {
+   "utc_date": "2017-01-01",
+   "utc_mjd": 57754,
+   "offset_s": 37.0,
+   "ref_mjd": 41317.0,
+   "rate_s_per_day": 0.0
+  }
+ ]
+}

@@ -33,6 +33,40 @@ First end-to-end slice.
   vectors, verification, pipeline accuracy/false-positive/determinism checks,
   ledger integration and the CLI. No new runtime dependencies.
 
+### Added (ORRERY orbital-dynamics subsystem, 2026-11-07)
+
+- New isolated package `rain_atlas.orrery`: an original, high-fidelity orbital-
+  mechanics engine. Universal-variable two-body motion; point-mass, closed-form
+  zonal-J2, JGM-3 spherical-harmonic (Montenbruck–Gill V/W recursion) and
+  third-body (Sun/Moon) force models with analytic gradients; embedded
+  Runge–Kutta integration (Dormand–Prince 5(4), Runge–Kutta–Fehlberg 7(8),
+  classical RK4, symplectic Störmer–Verlet and Yoshida-4) with PI step control
+  and a 6+36 state-transition matrix; the IAU-76/80 FK5 frame reduction
+  (precession, 106-term nutation, GMST, polar motion, EOP); JPL DE421
+  ephemerides tied to MJ2000Eq by GMAT's ICRF-to-FK5 table; N-body dynamics
+  with conserved-integral diagnostics; batch-least-squares orbit determination;
+  STM covariance propagation with a Monte-Carlo consistency check; and
+  Hohmann/lunar transfers.
+- Validated against two independent references: the closed-form Kepler solution
+  (genuine analytic truth for the two-body cases) and **NASA GMAT R2026a**
+  reference runs (code-to-code consistency — explicitly *not* a claim of
+  physical validation). Measured agreement over multi-day arcs: two-body to
+  sub-millimetre, LEO/HEO/GEO + J2/geopotential/third-body to GMAT within
+  2 cm–0.84 m, Earth–Moon TLI 5 cm, figure-eight choreography return 7.5e-8.
+  Committed GMAT reference trajectories (with version, distribution MD5 and
+  binary/report SHA-256 provenance) let the comparison run without GMAT.
+- Integrates only at the edges: eight new `astrodynamics` skills (orbit
+  propagation, Kepler reference, trajectory comparison, Earth orientation,
+  tracking simulation, orbit determination, covariance propagation, N-body
+  integration), a preregistered `atlas experiment run orrery` study that records
+  claims, independent-integrator (SciPy DOP853) challenges and verdicts through
+  the existing ledger vocabulary and exports to the offline observatory, and a
+  self-contained, CSP-locked celestial lab (`docs/orrery-lab.html`) rendering
+  only engine-computed data. Added the `astrodynamics` skill domain. No engine,
+  ledger or executor module changed; no new runtime dependencies.
+- Docs: `docs/ORRERY.md` (the mathematical assumptions behind every capability)
+  and `docs/ORRERY_VALIDATION.md` (the measured validation record).
+
 ### Fixed (ledger corruption handling, 2026-11-05)
 
 - Ledger verification rejects non-object records, including JSON `null`, which

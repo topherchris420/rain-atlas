@@ -1,0 +1,579 @@
+{
+ "description": "IERS EOP 20 C04 daily values at 0h UTC (x, y, dPsi, dEps arcsec; UT1-UTC, LOD s)",
+ "source": {
+  "file": "data/planetary_coeff/eopc04_08.62-now",
+  "sha256": "sha256:eddd4bf62178dad0ff0a5cb500e639a85a2bd54ff507708dbdac7184e2e7159c",
+  "distribution": "NASA GMAT R2026a gmat-win-R2026a.zip (MD5 e6248b1a776c952c3dda0bedda7f1f19)",
+  "note": "excerpt 2025-12-20 to 2026-02-20",
+  "name": "eop_c04_2026"
+ },
+ "rows": [
+  {
+   "mjd": 61029,
+   "x_arcsec": 0.113622,
+   "y_arcsec": 0.319076,
+   "ut1_utc_s": 0.0762437,
+   "lod_s": -0.0005736,
+   "dpsi_arcsec": -0.114655,
+   "deps_arcsec": -0.007719
+  },
+  {
+   "mjd": 61030,
+   "x_arcsec": 0.112817,
+   "y_arcsec": 0.319393,
+   "ut1_utc_s": 0.0768078,
+   "lod_s": -0.0005356,
+   "dpsi_arcsec": -0.114562,
+   "deps_arcsec": -0.00748
+  },
+  {
+   "mjd": 61031,
+   "x_arcsec": 0.11232,
+   "y_arcsec": 0.320417,
+   "ut1_utc_s": 0.077287,
+   "lod_s": -0.0004018,
+   "dpsi_arcsec": -0.114308,
+   "deps_arcsec": -0.007189
+  },
+  {
+   "mjd": 61032,
+   "x_arcsec": 0.111229,
+   "y_arcsec": 0.321227,
+   "ut1_utc_s": 0.0775798,
+   "lod_s": -0.0001782,
+   "dpsi_arcsec": -0.114035,
+   "deps_arcsec": -0.006985
+  },
+  {
+   "mjd": 61033,
+   "x_arcsec": 0.110338,
+   "y_arcsec": 0.321876,
+   "ut1_utc_s": 0.0776301,
+   "lod_s": 8.47e-05,
+   "dpsi_arcsec": -0.113888,
+   "deps_arcsec": -0.006907
+  },
+  {
+   "mjd": 61034,
+   "x_arcsec": 0.109134,
+   "y_arcsec": 0.322679,
+   "ut1_utc_s": 0.077402,
+   "lod_s": 0.000361,
+   "dpsi_arcsec": -0.113892,
+   "deps_arcsec": -0.006892
+  },
+  {
+   "mjd": 61035,
+   "x_arcsec": 0.108371,
+   "y_arcsec": 0.323202,
+   "ut1_utc_s": 0.0769267,
+   "lod_s": 0.0005822,
+   "dpsi_arcsec": -0.113949,
+   "deps_arcsec": -0.006923
+  },
+  {
+   "mjd": 61036,
+   "x_arcsec": 0.10797,
+   "y_arcsec": 0.324128,
+   "ut1_utc_s": 0.0762682,
+   "lod_s": 0.0007108,
+   "dpsi_arcsec": -0.114002,
+   "deps_arcsec": -0.006918
+  },
+  {
+   "mjd": 61037,
+   "x_arcsec": 0.108017,
+   "y_arcsec": 0.325056,
+   "ut1_utc_s": 0.0755546,
+   "lod_s": 0.0006949,
+   "dpsi_arcsec": -0.114094,
+   "deps_arcsec": -0.006907
+  },
+  {
+   "mjd": 61038,
+   "x_arcsec": 0.109053,
+   "y_arcsec": 0.326203,
+   "ut1_utc_s": 0.0749295,
+   "lod_s": 0.0005594,
+   "dpsi_arcsec": -0.114328,
+   "deps_arcsec": -0.006818
+  },
+  {
+   "mjd": 61039,
+   "x_arcsec": 0.110275,
+   "y_arcsec": 0.327903,
+   "ut1_utc_s": 0.0744521,
+   "lod_s": 0.0003846,
+   "dpsi_arcsec": -0.114749,
+   "deps_arcsec": -0.006727
+  },
+  {
+   "mjd": 61040,
+   "x_arcsec": 0.110731,
+   "y_arcsec": 0.329666,
+   "ut1_utc_s": 0.0741645,
+   "lod_s": 0.000179,
+   "dpsi_arcsec": -0.115169,
+   "deps_arcsec": -0.006753
+  },
+  {
+   "mjd": 61041,
+   "x_arcsec": 0.110512,
+   "y_arcsec": 0.331193,
+   "ut1_utc_s": 0.0740869,
+   "lod_s": -2.17e-05,
+   "dpsi_arcsec": -0.115299,
+   "deps_arcsec": -0.007008
+  },
+  {
+   "mjd": 61042,
+   "x_arcsec": 0.109623,
+   "y_arcsec": 0.332564,
+   "ut1_utc_s": 0.0741827,
+   "lod_s": -0.000162,
+   "dpsi_arcsec": -0.114994,
+   "deps_arcsec": -0.007279
+  },
+  {
+   "mjd": 61043,
+   "x_arcsec": 0.108235,
+   "y_arcsec": 0.333533,
+   "ut1_utc_s": 0.0743754,
+   "lod_s": -0.0001956,
+   "dpsi_arcsec": -0.114457,
+   "deps_arcsec": -0.007302
+  },
+  {
+   "mjd": 61044,
+   "x_arcsec": 0.106865,
+   "y_arcsec": 0.334552,
+   "ut1_utc_s": 0.0745122,
+   "lod_s": -4.39e-05,
+   "dpsi_arcsec": -0.113996,
+   "deps_arcsec": -0.007109
+  },
+  {
+   "mjd": 61045,
+   "x_arcsec": 0.105572,
+   "y_arcsec": 0.335529,
+   "ut1_utc_s": 0.0744093,
+   "lod_s": 0.0002351,
+   "dpsi_arcsec": -0.113679,
+   "deps_arcsec": -0.006954
+  },
+  {
+   "mjd": 61046,
+   "x_arcsec": 0.103998,
+   "y_arcsec": 0.336287,
+   "ut1_utc_s": 0.0740508,
+   "lod_s": 0.0004711,
+   "dpsi_arcsec": -0.113434,
+   "deps_arcsec": -0.006955
+  },
+  {
+   "mjd": 61047,
+   "x_arcsec": 0.102558,
+   "y_arcsec": 0.336911,
+   "ut1_utc_s": 0.0735047,
+   "lod_s": 0.0006125,
+   "dpsi_arcsec": -0.113379,
+   "deps_arcsec": -0.00698
+  },
+  {
+   "mjd": 61048,
+   "x_arcsec": 0.101147,
+   "y_arcsec": 0.337467,
+   "ut1_utc_s": 0.0728595,
+   "lod_s": 0.0006462,
+   "dpsi_arcsec": -0.113657,
+   "deps_arcsec": -0.006921
+  },
+  {
+   "mjd": 61049,
+   "x_arcsec": 0.100607,
+   "y_arcsec": 0.33776,
+   "ut1_utc_s": 0.0722566,
+   "lod_s": 0.0005561,
+   "dpsi_arcsec": -0.114183,
+   "deps_arcsec": -0.006849
+  },
+  {
+   "mjd": 61050,
+   "x_arcsec": 0.100548,
+   "y_arcsec": 0.33859,
+   "ut1_utc_s": 0.0717719,
+   "lod_s": 0.0004054,
+   "dpsi_arcsec": -0.114625,
+   "deps_arcsec": -0.00689
+  },
+  {
+   "mjd": 61051,
+   "x_arcsec": 0.10052,
+   "y_arcsec": 0.339389,
+   "ut1_utc_s": 0.0714649,
+   "lod_s": 0.000198,
+   "dpsi_arcsec": -0.114808,
+   "deps_arcsec": -0.007017
+  },
+  {
+   "mjd": 61052,
+   "x_arcsec": 0.10028,
+   "y_arcsec": 0.340027,
+   "ut1_utc_s": 0.0713712,
+   "lod_s": -2.2e-06,
+   "dpsi_arcsec": -0.114791,
+   "deps_arcsec": -0.007108
+  },
+  {
+   "mjd": 61053,
+   "x_arcsec": 0.09984,
+   "y_arcsec": 0.340591,
+   "ut1_utc_s": 0.0714581,
+   "lod_s": -0.000178,
+   "dpsi_arcsec": -0.11468,
+   "deps_arcsec": -0.00715
+  },
+  {
+   "mjd": 61054,
+   "x_arcsec": 0.0993,
+   "y_arcsec": 0.340921,
+   "ut1_utc_s": 0.0717242,
+   "lod_s": -0.0003483,
+   "dpsi_arcsec": -0.114502,
+   "deps_arcsec": -0.007172
+  },
+  {
+   "mjd": 61055,
+   "x_arcsec": 0.098571,
+   "y_arcsec": 0.341277,
+   "ut1_utc_s": 0.0721413,
+   "lod_s": -0.0004911,
+   "dpsi_arcsec": -0.114314,
+   "deps_arcsec": -0.007331
+  },
+  {
+   "mjd": 61056,
+   "x_arcsec": 0.09725,
+   "y_arcsec": 0.341706,
+   "ut1_utc_s": 0.0726961,
+   "lod_s": -0.0006061,
+   "dpsi_arcsec": -0.114214,
+   "deps_arcsec": -0.00754
+  },
+  {
+   "mjd": 61057,
+   "x_arcsec": 0.096044,
+   "y_arcsec": 0.341942,
+   "ut1_utc_s": 0.073321,
+   "lod_s": -0.000618,
+   "dpsi_arcsec": -0.114254,
+   "deps_arcsec": -0.007631
+  },
+  {
+   "mjd": 61058,
+   "x_arcsec": 0.094855,
+   "y_arcsec": 0.342662,
+   "ut1_utc_s": 0.0738846,
+   "lod_s": -0.0005015,
+   "dpsi_arcsec": -0.114306,
+   "deps_arcsec": -0.007539
+  },
+  {
+   "mjd": 61059,
+   "x_arcsec": 0.093371,
+   "y_arcsec": 0.343352,
+   "ut1_utc_s": 0.0742854,
+   "lod_s": -0.0002692,
+   "dpsi_arcsec": -0.114222,
+   "deps_arcsec": -0.00735
+  },
+  {
+   "mjd": 61060,
+   "x_arcsec": 0.092287,
+   "y_arcsec": 0.344585,
+   "ut1_utc_s": 0.0743723,
+   "lod_s": 6.67e-05,
+   "dpsi_arcsec": -0.114027,
+   "deps_arcsec": -0.007219
+  },
+  {
+   "mjd": 61061,
+   "x_arcsec": 0.091602,
+   "y_arcsec": 0.346059,
+   "ut1_utc_s": 0.0741836,
+   "lod_s": 0.0003257,
+   "dpsi_arcsec": -0.113891,
+   "deps_arcsec": -0.007214
+  },
+  {
+   "mjd": 61062,
+   "x_arcsec": 0.091282,
+   "y_arcsec": 0.347597,
+   "ut1_utc_s": 0.0737307,
+   "lod_s": 0.000576,
+   "dpsi_arcsec": -0.113916,
+   "deps_arcsec": -0.007293
+  },
+  {
+   "mjd": 61063,
+   "x_arcsec": 0.091116,
+   "y_arcsec": 0.349328,
+   "ut1_utc_s": 0.0730468,
+   "lod_s": 0.0007617,
+   "dpsi_arcsec": -0.114057,
+   "deps_arcsec": -0.007367
+  },
+  {
+   "mjd": 61064,
+   "x_arcsec": 0.091561,
+   "y_arcsec": 0.350645,
+   "ut1_utc_s": 0.0722468,
+   "lod_s": 0.0008038,
+   "dpsi_arcsec": -0.114211,
+   "deps_arcsec": -0.007385
+  },
+  {
+   "mjd": 61065,
+   "x_arcsec": 0.091972,
+   "y_arcsec": 0.352411,
+   "ut1_utc_s": 0.0714965,
+   "lod_s": 0.0006849,
+   "dpsi_arcsec": -0.114363,
+   "deps_arcsec": -0.00734
+  },
+  {
+   "mjd": 61066,
+   "x_arcsec": 0.091839,
+   "y_arcsec": 0.353665,
+   "ut1_utc_s": 0.0709164,
+   "lod_s": 0.0004781,
+   "dpsi_arcsec": -0.114554,
+   "deps_arcsec": -0.007261
+  },
+  {
+   "mjd": 61067,
+   "x_arcsec": 0.091907,
+   "y_arcsec": 0.354782,
+   "ut1_utc_s": 0.070546,
+   "lod_s": 0.0002596,
+   "dpsi_arcsec": -0.114783,
+   "deps_arcsec": -0.007216
+  },
+  {
+   "mjd": 61068,
+   "x_arcsec": 0.09209,
+   "y_arcsec": 0.356089,
+   "ut1_utc_s": 0.0703822,
+   "lod_s": 5.67e-05,
+   "dpsi_arcsec": -0.114936,
+   "deps_arcsec": -0.007296
+  },
+  {
+   "mjd": 61069,
+   "x_arcsec": 0.091814,
+   "y_arcsec": 0.357447,
+   "ut1_utc_s": 0.0704269,
+   "lod_s": -0.000118,
+   "dpsi_arcsec": -0.114903,
+   "deps_arcsec": -0.007527
+  },
+  {
+   "mjd": 61070,
+   "x_arcsec": 0.091642,
+   "y_arcsec": 0.358822,
+   "ut1_utc_s": 0.0705811,
+   "lod_s": -0.0001657,
+   "dpsi_arcsec": -0.114628,
+   "deps_arcsec": -0.007793
+  },
+  {
+   "mjd": 61071,
+   "x_arcsec": 0.091717,
+   "y_arcsec": 0.360219,
+   "ut1_utc_s": 0.0706982,
+   "lod_s": -6.14e-05,
+   "dpsi_arcsec": -0.114188,
+   "deps_arcsec": -0.007917
+  },
+  {
+   "mjd": 61072,
+   "x_arcsec": 0.091839,
+   "y_arcsec": 0.361536,
+   "ut1_utc_s": 0.0706818,
+   "lod_s": 0.0001329,
+   "dpsi_arcsec": -0.113698,
+   "deps_arcsec": -0.007836
+  },
+  {
+   "mjd": 61073,
+   "x_arcsec": 0.091976,
+   "y_arcsec": 0.362458,
+   "ut1_utc_s": 0.0704043,
+   "lod_s": 0.0003978,
+   "dpsi_arcsec": -0.113232,
+   "deps_arcsec": -0.007654
+  },
+  {
+   "mjd": 61074,
+   "x_arcsec": 0.091883,
+   "y_arcsec": 0.363524,
+   "ut1_utc_s": 0.0699148,
+   "lod_s": 0.0005722,
+   "dpsi_arcsec": -0.112866,
+   "deps_arcsec": -0.007516
+  },
+  {
+   "mjd": 61075,
+   "x_arcsec": 0.09209,
+   "y_arcsec": 0.364347,
+   "ut1_utc_s": 0.0692974,
+   "lod_s": 0.0006654,
+   "dpsi_arcsec": -0.112767,
+   "deps_arcsec": -0.007479
+  },
+  {
+   "mjd": 61076,
+   "x_arcsec": 0.09233,
+   "y_arcsec": 0.365716,
+   "ut1_utc_s": 0.068603,
+   "lod_s": 0.0006842,
+   "dpsi_arcsec": -0.11302,
+   "deps_arcsec": -0.007544
+  },
+  {
+   "mjd": 61077,
+   "x_arcsec": 0.092721,
+   "y_arcsec": 0.367125,
+   "ut1_utc_s": 0.0679779,
+   "lod_s": 0.0005556,
+   "dpsi_arcsec": -0.113554,
+   "deps_arcsec": -0.007692
+  },
+  {
+   "mjd": 61078,
+   "x_arcsec": 0.093294,
+   "y_arcsec": 0.368421,
+   "ut1_utc_s": 0.067514,
+   "lod_s": 0.0003709,
+   "dpsi_arcsec": -0.114104,
+   "deps_arcsec": -0.007899
+  },
+  {
+   "mjd": 61079,
+   "x_arcsec": 0.093859,
+   "y_arcsec": 0.369226,
+   "ut1_utc_s": 0.0672412,
+   "lod_s": 0.0001723,
+   "dpsi_arcsec": -0.114472,
+   "deps_arcsec": -0.00807
+  },
+  {
+   "mjd": 61080,
+   "x_arcsec": 0.095355,
+   "y_arcsec": 0.369937,
+   "ut1_utc_s": 0.0671668,
+   "lod_s": -3.16e-05,
+   "dpsi_arcsec": -0.114604,
+   "deps_arcsec": -0.008128
+  },
+  {
+   "mjd": 61081,
+   "x_arcsec": 0.0969,
+   "y_arcsec": 0.371397,
+   "ut1_utc_s": 0.0673064,
+   "lod_s": -0.0002441,
+   "dpsi_arcsec": -0.11452,
+   "deps_arcsec": -0.008113
+  },
+  {
+   "mjd": 61082,
+   "x_arcsec": 0.098465,
+   "y_arcsec": 0.372782,
+   "ut1_utc_s": 0.0676462,
+   "lod_s": -0.0004246,
+   "dpsi_arcsec": -0.114257,
+   "deps_arcsec": -0.008103
+  },
+  {
+   "mjd": 61083,
+   "x_arcsec": 0.099675,
+   "y_arcsec": 0.374355,
+   "ut1_utc_s": 0.0681324,
+   "lod_s": -0.0005311,
+   "dpsi_arcsec": -0.1139,
+   "deps_arcsec": -0.008215
+  },
+  {
+   "mjd": 61084,
+   "x_arcsec": 0.100509,
+   "y_arcsec": 0.375429,
+   "ut1_utc_s": 0.0686773,
+   "lod_s": -0.0005543,
+   "dpsi_arcsec": -0.113614,
+   "deps_arcsec": -0.00841
+  },
+  {
+   "mjd": 61085,
+   "x_arcsec": 0.101234,
+   "y_arcsec": 0.376857,
+   "ut1_utc_s": 0.0692134,
+   "lod_s": -0.0005086,
+   "dpsi_arcsec": -0.113535,
+   "deps_arcsec": -0.008596
+  },
+  {
+   "mjd": 61086,
+   "x_arcsec": 0.101484,
+   "y_arcsec": 0.377888,
+   "ut1_utc_s": 0.0696746,
+   "lod_s": -0.0003882,
+   "dpsi_arcsec": -0.113648,
+   "deps_arcsec": -0.008665
+  },
+  {
+   "mjd": 61087,
+   "x_arcsec": 0.101829,
+   "y_arcsec": 0.378412,
+   "ut1_utc_s": 0.0699535,
+   "lod_s": -0.0001433,
+   "dpsi_arcsec": -0.113782,
+   "deps_arcsec": -0.00863
+  },
+  {
+   "mjd": 61088,
+   "x_arcsec": 0.102582,
+   "y_arcsec": 0.379514,
+   "ut1_utc_s": 0.0699267,
+   "lod_s": 0.0001846,
+   "dpsi_arcsec": -0.113785,
+   "deps_arcsec": -0.008581
+  },
+  {
+   "mjd": 61089,
+   "x_arcsec": 0.103137,
+   "y_arcsec": 0.38082,
+   "ut1_utc_s": 0.0695922,
+   "lod_s": 0.0004734,
+   "dpsi_arcsec": -0.113712,
+   "deps_arcsec": -0.008562
+  },
+  {
+   "mjd": 61090,
+   "x_arcsec": 0.103825,
+   "y_arcsec": 0.381662,
+   "ut1_utc_s": 0.0690086,
+   "lod_s": 0.0006674,
+   "dpsi_arcsec": -0.1137,
+   "deps_arcsec": -0.008576
+  },
+  {
+   "mjd": 61091,
+   "x_arcsec": 0.104911,
+   "y_arcsec": 0.382323,
+   "ut1_utc_s": 0.0683093,
+   "lod_s": 0.0007131,
+   "dpsi_arcsec": -0.113875,
+   "deps_arcsec": -0.008607
+  }
+ ]
+}

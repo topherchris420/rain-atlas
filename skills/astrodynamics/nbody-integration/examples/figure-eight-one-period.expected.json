@@ -1,0 +1,6 @@
+{
+  "$comment": "After one period the figure-eight returns to its start and conserves energy and angular momentum (a published periodic solution).",
+  "return_error": 0.0,
+  "relative_energy_drift": 0.0,
+  "angular_momentum_drift": 0.0
+}

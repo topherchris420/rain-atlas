@@ -1,0 +1,105 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "earth-orientation",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "astrodynamics",
+  "summary": "Rotate a state between MJ2000Eq and EarthFixed with the IAU-76/80 FK5 reduction.",
+  "capabilities": [
+    "astro.earth-orientation",
+    "astro.reference-frames"
+  ],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+      "epoch_utc": {
+        "type": "string"
+      },
+      "position_km": {
+        "type": "array"
+      },
+      "velocity_km_s": {
+        "type": [
+          "array",
+          "null"
+        ]
+      },
+      "eop_rows": {
+        "type": "array"
+      },
+      "direction": {
+        "type": "string"
+      },
+      "nutation_corrections": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "epoch_utc",
+      "position_km",
+      "eop_rows"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "required": [
+      "position_km",
+      "gmst_deg"
+    ],
+    "properties": {
+      "position_km": {
+        "type": "array"
+      },
+      "velocity_km_s": {
+        "type": [
+          "array",
+          "null"
+        ]
+      },
+      "gmst_deg": {
+        "type": "number"
+      }
+    }
+  },
+  "permissions": {
+    "network": false,
+    "subprocess": false,
+    "read": [
+      "inputs"
+    ],
+    "write": [
+      "outputs"
+    ]
+  },
+  "limits": {
+    "timeout_s": 60,
+    "memory_mb": 2048
+  },
+  "requires": {
+    "python": ">=3.11",
+    "packages": {
+      "numpy": ">=2.0",
+      "scipy": ">=1.13",
+      "rain-atlas": ">=0.1"
+    }
+  },
+  "examples": [
+    {
+      "name": "vallado-itrf-to-j2000",
+      "tolerance": {
+        "rel": 1e-07
+      }
+    }
+  ],
+  "references": [
+    "Vallado, D. A. (2013). Fundamentals of Astrodynamics and Applications, 4th ed. Microcosm Press.",
+    "Montenbruck, O. & Gill, E. (2000). Satellite Orbits. Springer."
+  ],
+  "limitations": [
+    "EOP must be supplied",
+    "no constant frame bias"
+  ]
+}

@@ -1,0 +1,4 @@
+{
+  "$comment": "A point-mass LEO run must match the exact Kepler solution to sub-millimetre.",
+  "analytic_max_position_error_m": 0.0
+}
