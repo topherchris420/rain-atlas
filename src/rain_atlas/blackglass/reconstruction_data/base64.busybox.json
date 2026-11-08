@@ -1,0 +1,79 @@
+{
+  "binary": "bin/busybox",
+  "binary_sha256": "sha256:6e123e7f3202a8c1e9b1f94d8941580a25135382b99e8d3e34fb858bba311348",
+  "entry": "0x40a567",
+  "name": "FUN_0040a567",
+  "size": 267,
+  "architecture": "x86",
+  "tool": "ghidra-headless",
+  "tool_version": "12.1.4",
+  "settings": "default auto-analysis",
+  "facts": [
+    {
+      "kind": "call",
+      "detail": "calls FUN_004047d3",
+      "target": "FUN_004047d3"
+    },
+    {
+      "kind": "call",
+      "detail": "calls FUN_00404c8f",
+      "target": "FUN_00404c8f"
+    },
+    {
+      "kind": "call",
+      "detail": "calls FUN_004bd84e",
+      "target": "FUN_004bd84e"
+    },
+    {
+      "kind": "call",
+      "detail": "calls FUN_004cec88",
+      "target": "FUN_004cec88"
+    },
+    {
+      "kind": "call",
+      "detail": "calls FUN_004cf622",
+      "target": "FUN_004cf622"
+    },
+    {
+      "kind": "call",
+      "detail": "calls FUN_004cfaf3",
+      "target": "FUN_004cfaf3"
+    },
+    {
+      "kind": "call",
+      "detail": "calls FUN_004d0109",
+      "target": "FUN_004d0109"
+    },
+    {
+      "kind": "string-ref",
+      "detail": "references string 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=ABCDEFGHIJKLMNOPQRSTUVWXYZ234567ignoring all arguments'",
+      "target": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=ABCDEFGHIJKLMNOPQRSTUVWXYZ234567ignoring all arguments"
+    },
+    {
+      "kind": "string-ref",
+      "detail": "references string 'read error'",
+      "target": "read error"
+    },
+    {
+      "kind": "constant",
+      "detail": "uses constant 0x50d534",
+      "target": "0x50d534"
+    },
+    {
+      "kind": "constant",
+      "detail": "uses constant 0x5107b0",
+      "target": "0x5107b0"
+    },
+    {
+      "kind": "constant",
+      "detail": "uses constant 0x511213",
+      "target": "0x511213"
+    },
+    {
+      "kind": "cfg-metric",
+      "detail": "22 basic blocks"
+    }
+  ],
+  "decompilation_sha256": "sha256:26b17a73138fcb72f9918923741a76a434cffb63a3b6f146b70edbf786afc55a",
+  "notes": "BusyBox routine carrying the defining evidence of BASE64; derived facts only, decompilation referenced by digest."
+}

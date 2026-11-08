@@ -33,6 +33,40 @@ First end-to-end slice.
   vectors, verification, pipeline accuracy/false-positive/determinism checks,
   ledger integration and the CLI. No new runtime dependencies.
 
+### Added (BLACK GLASS native routine reconstruction, 2026-11-08)
+
+- New native-reconstruction extension that advances BLACK GLASS from firmware
+  metadata to working native-software analysis, with four explicit provenance
+  levels — **Observed** (disassembler facts), **Reconstructed** (interpretation),
+  **Implemented** (clean-room code), **Validated** (reproduces the public
+  standard's vectors and the binary exhibits that standard's defining evidence).
+  The analysed binary is never executed and no decompiled source is committed
+  (only its SHA-256 digest and non-copyrightable derived facts).
+- Modules: `routines.py` (the four-level model), `comparison.py` (the Behavioural
+  Comparison Laboratory), `behavior.py` (the Subsystem Reconstruction Engine),
+  `explorer.py` (the Native Routine Explorer over the Ghidra document),
+  `reconstructions.py` (clean-room MD5/SHA-1/base64 written from RFC 1321 /
+  FIPS 180-1 / RFC 4648), `evolution.py` (the Firmware Evolution Analyzer) and
+  `reconstruction_ledger.py` (records the reconstruction with no new record
+  kinds; each routine is a claim, its evidence cross-check a challenge, resolved
+  to a verdict scoped to static identity, never runtime).
+- A read-only `scripts/BlackglassReconstruct.java` Ghidra exporter (Ghidra 12
+  dropped Jython; this runs on the bundled JDK, needs no Python) that refuses on
+  a hash mismatch and emits only derived facts plus a digest of the local
+  decompilation.
+- **Empirical demonstration** on a licensed BusyBox ELF: MD5 and SHA-1 state
+  initialisation and base64 encoding are identified from their standard-defined
+  constants (`0xefcdab8967452301`/`0x1032547698badcfe`; plus `0xc3d2e1f0` for
+  SHA-1) and alphabet, re-implemented clean-room (agreeing with `hashlib`/`base64`
+  on 200+ random inputs and the RFC vectors), and recorded into a verifying
+  ledger. The DSM image was downloaded and found **encrypted**, so its binaries
+  were not opened (reported honestly, not worked around).
+- New CLI commands `atlas firmware {routines,reconstruct,evolution}`; docs
+  `docs/BLACK_GLASS_NATIVE.md` and an updated `docs/BLACK_GLASS_DSM_RESEARCH.md`
+  recording the encryption finding. Tests cover the model, comparison, engine,
+  explorer, evolution, the clean-room models and the end-to-end committed
+  BusyBox validation. No new runtime dependencies.
+
 ### Fixed (ledger corruption handling, 2026-11-05)
 
 - Ledger verification rejects non-object records, including JSON `null`, which

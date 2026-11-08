@@ -8,8 +8,14 @@ are authorised to analyse, builds a reproducible, evidence-linked model of the
 software it contains, and records that model into the ATLAS evidence ledger so
 other researchers can re-run and challenge every finding. It reads structural
 metadata defined by open formats — ELF headers, init/supervision definitions,
-configuration files — and **never disassembles, decompiles, executes, or
-reconstructs proprietary logic as part of the core static pipeline**. An optional local Ghidra exporter can supply separately identified native call observations.
+configuration files — and the **core static pipeline never disassembles,
+decompiles, executes, or reconstructs proprietary logic**. An optional local
+Ghidra exporter supplies separately identified native call observations, and an
+optional **native-reconstruction** extension (new) runs a local, read-only
+disassembler/decompiler on a binary you are licensed to analyse to build and
+validate clean-room models of the *standard* algorithms it contains — copying no
+decompiled source and executing nothing. See
+[native routine reconstruction](BLACK_GLASS_NATIVE.md).
 
 - [Scope and ethics](#scope-and-ethics)
 - [What it produces](#what-it-produces)
@@ -21,6 +27,7 @@ reconstructs proprietary logic as part of the core static pipeline**. An optiona
 - [Limitations](#limitations)
 - [Reproducible demonstration](#reproducible-demonstration)
 - [Analysing your own firmware](#analysing-your-own-firmware)
+- [Native routine reconstruction](BLACK_GLASS_NATIVE.md)
 - [DSM and function-level evidence protocol](BLACK_GLASS_DSM_RESEARCH.md)
 
 ## Scope and ethics
@@ -33,8 +40,13 @@ firmware, or images provided under an authorised engagement.
 It deliberately does **not**:
 
 - fetch or bundle any vendor's proprietary firmware;
-- disassemble or decompile binaries, or reconstruct a product's internal
-  security logic (for example, how a specific device validates an update);
+- disassemble or decompile binaries **in its core static pipeline**, or ever
+  reconstruct a product's internal security logic in order to defeat a protection
+  measure (for example, to forge an update a device would accept). The optional
+  native-reconstruction extension does run a local, read-only disassembler on a
+  binary you are licensed to analyse, but it keeps the decompiled text local
+  (committing only digests and derived facts), executes nothing, and reconstructs
+  only *published standard* algorithms — it is for understanding, never evasion;
 - target, probe or communicate with any live device — it runs fully offline and
   opens no sockets;
 - circumvent, or help circumvent, any technological protection measure.
@@ -283,10 +295,29 @@ public key and a detached signature) to turn integrity and signature findings
 from `unverifiable` into `verified`/`failed`. BLACK GLASS neither obtains images
 nor assumes you are permitted to analyse one — that judgement is yours.
 
+## Native routine reconstruction
+
+The firmware-metadata pipeline answers *what is in the image*. The optional
+native-reconstruction extension answers *what a native routine does*, with four
+provenance levels — **Observed** (disassembler facts), **Reconstructed**
+(interpretation), **Implemented** (clean-room code), **Validated** (reproduces
+the public standard's vectors, and the binary exhibits that standard's defining
+evidence). It is demonstrated on a licensed BusyBox ELF: three routines (MD5 and
+SHA-1 state initialisation, base64 encoding) are identified from their
+standard-defined constants and alphabet, re-implemented clean-room, and validated
+against RFC 1321 / FIPS 180-1 / RFC 4648 — never by executing the binary. See
+[native routine reconstruction](BLACK_GLASS_NATIVE.md), and run it with
+`atlas firmware routines`, `atlas firmware reconstruct` and
+`atlas firmware evolution`.
+
 ## DSM and native call-graph research
 
 For the official DS220+ DSM 7.2.2-72806 target, acquisition commands, separately
 attested hashes, nested-container limitations, a read-only Ghidra exporter,
 and the distinction between verified facts and untested hypotheses, consult
-[the DSM research protocol](BLACK_GLASS_DSM_RESEARCH.md). The current checked-in
-demonstrations are **synthetic**, not empirical DSM reverse-engineering results.
+[the DSM research protocol](BLACK_GLASS_DSM_RESEARCH.md). The official DSM image
+was downloaded and found **encrypted**, so its binaries were not opened; the
+native-reconstruction capability is therefore demonstrated on a licensed BusyBox
+ELF instead. The firmware-metadata demonstrations remain **synthetic**; the
+BusyBox native reconstruction is **empirical** (real Ghidra output, validated
+clean-room models).

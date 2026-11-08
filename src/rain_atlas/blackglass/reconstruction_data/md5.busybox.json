@@ -1,0 +1,34 @@
+{
+  "binary": "bin/busybox",
+  "binary_sha256": "sha256:6e123e7f3202a8c1e9b1f94d8941580a25135382b99e8d3e34fb858bba311348",
+  "entry": "0x4b4c00",
+  "name": "FUN_004b4c00",
+  "size": 45,
+  "architecture": "x86",
+  "tool": "ghidra-headless",
+  "tool_version": "12.1.4",
+  "settings": "default auto-analysis",
+  "facts": [
+    {
+      "kind": "constant",
+      "detail": "uses constant 0xefcdab8967452301",
+      "target": "0xefcdab8967452301"
+    },
+    {
+      "kind": "constant",
+      "detail": "uses constant 0x4b4271",
+      "target": "0x4b4271"
+    },
+    {
+      "kind": "constant",
+      "detail": "uses constant 0x1032547698badcfe",
+      "target": "0x1032547698badcfe"
+    },
+    {
+      "kind": "cfg-metric",
+      "detail": "1 basic blocks"
+    }
+  ],
+  "decompilation_sha256": "sha256:ae87dc9bcf630f8d3869902fc07e63b591c3bcdc2686b16c2848711492053ab8",
+  "notes": "BusyBox routine carrying the defining evidence of MD5; derived facts only, decompilation referenced by digest."
+}

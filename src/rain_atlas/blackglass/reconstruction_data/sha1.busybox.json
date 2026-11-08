@@ -1,0 +1,39 @@
+{
+  "binary": "bin/busybox",
+  "binary_sha256": "sha256:6e123e7f3202a8c1e9b1f94d8941580a25135382b99e8d3e34fb858bba311348",
+  "entry": "0x4b4cb6",
+  "name": "FUN_004b4cb6",
+  "size": 52,
+  "architecture": "x86",
+  "tool": "ghidra-headless",
+  "tool_version": "12.1.4",
+  "settings": "default auto-analysis",
+  "facts": [
+    {
+      "kind": "constant",
+      "detail": "uses constant 0xefcdab8967452301",
+      "target": "0xefcdab8967452301"
+    },
+    {
+      "kind": "constant",
+      "detail": "uses constant 0x4b48f9",
+      "target": "0x4b48f9"
+    },
+    {
+      "kind": "constant",
+      "detail": "uses constant 0xc3d2e1f0",
+      "target": "0xc3d2e1f0"
+    },
+    {
+      "kind": "constant",
+      "detail": "uses constant 0x1032547698badcfe",
+      "target": "0x1032547698badcfe"
+    },
+    {
+      "kind": "cfg-metric",
+      "detail": "1 basic blocks"
+    }
+  ],
+  "decompilation_sha256": "sha256:1aac4ef03d4b8a1ea192e73b2e53247f58575edfb08d076de50a9b8095c6e8d2",
+  "notes": "BusyBox routine carrying the defining evidence of SHA1; derived facts only, decompilation referenced by digest."
+}
