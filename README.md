@@ -9,7 +9,7 @@ R.A.I.N. ATLAS is an **open-source, local-first research workbench** from [Vers3
 [![Release status](https://img.shields.io/badge/Release-v0.1%20unreleased-555555)](CHANGELOG.md)
 [![CI](https://github.com/topherchris420/rain-atlas/actions/workflows/ci.yml/badge.svg)](https://github.com/topherchris420/rain-atlas/actions)
 
-**[Run an experiment](#run-your-first-experiment)** · **[Investigate firmware](#black-glass-firmware-intelligence)** · **[Inspect recorded evidence](#recorded-experiments)** · **[Browse the methods](#30-executable-scientific-skills)** · **[Understand the limits](#what-is-implemented-and-what-is-not)**
+**[Run an experiment](#run-your-first-experiment)** · **[Investigate firmware](#black-glass-firmware-intelligence)** · **[Inspect recorded evidence](#recorded-experiments)** · **[Browse the methods](#31-executable-scientific-skills)** · **[Understand the limits](#what-is-implemented-and-what-is-not)**
 
 ![Offline R.A.I.N. ATLAS observatory showing a challenged synchronization claim, its evidence, reproduction and verdict](docs/demonstration/evidence-explorer.png)
 
@@ -27,7 +27,7 @@ Most scientific software returns an answer. ATLAS also records **how the answer 
 | **Offline observatory** | Explore claims, evidence dependencies, runs, timelines, skills, reports and non-executing proposals in a local HTML file. |
 | **BLACK GLASS** | Inventory authorized firmware, reconstruct static service/library relationships, inspect declared network surfaces, verify supplied trust anchors and compare releases. |
 | **ORRERY** | Propagate orbits and N-body systems with a real force model, transform frames and time scales, estimate orbits and propagate covariance — validated against the analytic Kepler solution and NASA GMAT R2026a. |
-| **30 executable skills** | Compose tested methods across signal processing, dynamical systems, physics, neuroscience, statistics, astrodynamics and evaluation. |
+| **31 executable skills** | Compose tested methods across signal processing, dynamical systems, physics, neuroscience, statistics, astrodynamics and evaluation. |
 
 The built-in research roles are **scripted policies**, not autonomous LLM researchers. No live model provider or general-purpose AI agent is required or included in the demonstrations.
 
@@ -113,9 +113,9 @@ BLACK GLASS **does not run firmware or establish runtime behavior**. Linking `bi
 
 A specific research protocol identifies **Synology DS220+, DSM 7.2.2 build 72806** and explains local acquisition, nested-container constraints, and optional hash-bound native call-graph observations through a read-only Ghidra exporter.
 
-**Official DSM binary analysis has not yet been performed.** The committed BLACK GLASS results come from controlled synthetic fixtures. The core pipeline does not decompile proprietary code. [IDA-Ghidra-bridge](https://github.com/oscarsantanaarias/IDA-Ghidra-bridge) is documented as an optional *manual exploration tool*, not a dependency or an automatically connected service.
+The acquired DSM image was encrypted, so the DSM executables remain unexamined. The service graph above comes from synthetic fixtures. A separate native study used headless Ghidra on a licensed BusyBox ELF and checked clean-room models of three routines against published test vectors.
 
-[Technical documentation](docs/BLACK_GLASS.md) · [DSM research protocol](docs/BLACK_GLASS_DSM_RESEARCH.md) · [Native evidence and limitations](docs/BLACK_GLASS_DSM_RESEARCH.md#optional-function-level-native-analysis)
+[Technical documentation](docs/BLACK_GLASS.md) · [DSM research protocol](docs/BLACK_GLASS_DSM_RESEARCH.md) · [BusyBox evidence and reconstruction](docs/BLACK_GLASS_NATIVE.md)
 
 ## How ATLAS decides what the evidence supports
 
@@ -188,7 +188,20 @@ The benchmark includes separated and close tones, colored and white noise, chirp
 
 [Benchmark protocol](docs/BENCHMARKS.md) · [Recorded output](docs/demonstration/benchmark.json) · [Validation details](docs/VALIDATION.md)
 
-## 30 executable scientific skills
+### 04 / Calibrating a search across an entire spectrum
+
+The stress benchmark exposed a failure in colored noise. This follow-up compares the original Welch detector with detectors calibrated on independent blank windows and measures the trade-off between false alarms and tone sensitivity. An oscillatory noise-only control tests what happens when neither reference model matches.
+
+```sh
+uv run atlas benchmark --protocol spectral-calibration --root atlas-data/calibration
+uv run atlas ledger verify atlas-data/calibration/ledger
+```
+
+In 512 AR(1) noise-only trials, the reference panel reported **2 false alarms** and the original Welch threshold reported **512**. The panel localized every strong injected tone, missed every weak one and flagged every out-of-panel oscillatory noise trial.
+
+[Protocol, results and limits](docs/BENCHMARKS.md#held-out-spectral-calibration) · [Recorded JSON](docs/demonstration/spectral-calibration.json)
+
+## 31 executable scientific skills
 
 Skills combine executable Python, a typed manifest, explicit permissions and limits, documented assumptions, and examples with independently derived expected answers.
 
@@ -225,6 +238,7 @@ uv run atlas skills test
 | [`synchronization-sweep`](skills/resonance/synchronization-sweep/SKILL.md) | Resonance | Noisy phase-lagged oscillator sweeps |
 | [`synchronization-measure`](skills/resonance/synchronization-measure/SKILL.md) | Resonance | Frequency/phase metrics and replicate intervals |
 | [`spectral-stress-benchmark`](skills/evaluation/spectral-stress-benchmark/SKILL.md) | Evaluation | Failures, disagreement and unknown-truth cases |
+| [`spectral-calibration-benchmark`](skills/evaluation/spectral-calibration-benchmark/SKILL.md) | Evaluation | Held-out reference calibration, noise shift and tone localization |
 | [`orbit-propagation`](skills/astrodynamics/orbit-propagation/SKILL.md) | Astrodynamics | Propagate an orbit under configurable gravity with conservation diagnostics |
 | [`kepler-reference`](skills/astrodynamics/kepler-reference/SKILL.md) | Astrodynamics | Closed-form two-body propagation and classical elements |
 | [`trajectory-comparison`](skills/astrodynamics/trajectory-comparison/SKILL.md) | Astrodynamics | Position/velocity and RTN error against a reference trajectory |

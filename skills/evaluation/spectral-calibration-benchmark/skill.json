@@ -1,0 +1,327 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "spectral-calibration-benchmark",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "evaluation",
+  "summary": "Compare spectral false alarms and localization under matched and shifted noise.",
+  "capabilities": [
+    "benchmark.spectral-calibration"
+  ],
+  "entrypoint": "run.py",
+  "determinism": "seeded",
+  "inputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "trials": {
+        "type": "integer",
+        "minimum": 3,
+        "maximum": 1024
+      }
+    },
+    "required": [
+      "trials"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "results": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "design": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "protocol": {
+                "type": "string"
+              },
+              "trials_per_case": {
+                "type": "integer"
+              },
+              "seed": {
+                "type": "integer"
+              },
+              "alpha": {
+                "type": "number"
+              },
+              "sample_rate_hz": {
+                "type": "integer"
+              },
+              "window_samples": {
+                "type": "integer"
+              },
+              "welch_segment_samples": {
+                "type": "integer"
+              },
+              "welch_overlap_samples": {
+                "type": "integer"
+              },
+              "search_band_hz_exclusive": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              },
+              "localization_tolerance_hz": {
+                "type": "number"
+              },
+              "template_windows_per_model_per_trial": {
+                "type": "integer"
+              },
+              "calibration_windows_per_model_per_trial": {
+                "type": "integer"
+              },
+              "noise_models": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              },
+              "reference_models": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "methods": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "cases": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "noise": {
+                      "type": "string"
+                    },
+                    "tone_hz": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "tone_amplitude": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "noise",
+                    "tone_hz",
+                    "tone_amplitude"
+                  ]
+                }
+              },
+              "target_frequency_hz": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "protocol",
+              "trials_per_case",
+              "seed",
+              "alpha",
+              "sample_rate_hz",
+              "window_samples",
+              "welch_segment_samples",
+              "welch_overlap_samples",
+              "search_band_hz_exclusive",
+              "localization_tolerance_hz",
+              "template_windows_per_model_per_trial",
+              "calibration_windows_per_model_per_trial",
+              "noise_models",
+              "reference_models",
+              "methods",
+              "cases",
+              "target_frequency_hz"
+            ]
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "case": {
+                  "type": "string"
+                },
+                "methods": {
+                  "type": "object",
+                  "required": [
+                    "welch-white-threshold",
+                    "white-reference",
+                    "ar1-reference",
+                    "reference-panel"
+                  ],
+                  "additionalProperties": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "any_detection_rate": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "rate": {
+                            "type": "number"
+                          },
+                          "low": {
+                            "type": "number"
+                          },
+                          "high": {
+                            "type": "number"
+                          },
+                          "n": {
+                            "type": "integer"
+                          },
+                          "successes": {
+                            "type": "integer"
+                          },
+                          "alpha": {
+                            "type": "number"
+                          },
+                          "method": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "rate",
+                          "low",
+                          "high",
+                          "n",
+                          "successes",
+                          "alpha",
+                          "method"
+                        ]
+                      },
+                      "target_band_detection_rate": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "rate": {
+                            "type": "number"
+                          },
+                          "low": {
+                            "type": "number"
+                          },
+                          "high": {
+                            "type": "number"
+                          },
+                          "n": {
+                            "type": "integer"
+                          },
+                          "successes": {
+                            "type": "integer"
+                          },
+                          "alpha": {
+                            "type": "number"
+                          },
+                          "method": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "rate",
+                          "low",
+                          "high",
+                          "n",
+                          "successes",
+                          "alpha",
+                          "method"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "any_detection_rate",
+                      "target_band_detection_rate"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "case",
+                "methods"
+              ]
+            }
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "design",
+          "rows",
+          "limitations"
+        ]
+      },
+      "artifact": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "$artifact": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "$artifact",
+          "sha256"
+        ]
+      }
+    },
+    "required": [
+      "results",
+      "artifact"
+    ]
+  },
+  "permissions": {
+    "network": false,
+    "subprocess": false,
+    "read": [
+      "inputs"
+    ],
+    "write": [
+      "outputs"
+    ]
+  },
+  "limits": {
+    "timeout_s": 600,
+    "memory_mb": 1024
+  },
+  "requires": {
+    "python": ">=3.11",
+    "packages": {
+      "numpy": ">=2.0",
+      "scipy": ">=1.13",
+      "rain-atlas": ">=0.1"
+    }
+  },
+  "examples": [
+    {
+      "name": "configuration",
+      "seed": 42
+    }
+  ],
+  "limitations": [
+    "The false-alarm bound assumes an exchangeable noise reference model.",
+    "Measurements concern simulated independent windows."
+  ],
+  "references": [
+    "docs/BENCHMARKS.md"
+  ]
+}

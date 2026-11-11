@@ -6,6 +6,17 @@ All notable changes are recorded here. Versions follow semantic versioning.
 
 First end-to-end slice.
 
+### Added (held-out spectral calibration)
+
+- `atlas benchmark --protocol spectral-calibration` compares a white-noise
+  Welch threshold with rank tests calibrated on independent blank windows.
+  It records white and AR(1) nulls, an out-of-panel oscillatory null and three
+  injected-tone amplitudes, with Wilson intervals for whole-window detection
+  and tone localization.
+- The protocol records the complete design before execution, then reruns the
+  seeded skill and compares output and artifact hashes. The JSON and offline
+  observatory preserve all cases.
+
 ### Added (BLACK GLASS firmware intelligence subsystem, 2026-11-07)
 
 - New isolated package `rain_atlas.blackglass`: an offline, read-only,
