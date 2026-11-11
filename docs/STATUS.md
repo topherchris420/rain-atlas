@@ -20,6 +20,19 @@ for implemented boundaries and explicitly planned work.
 
 ## Validation record
 
+- **BLACK GLASS native reconstruction, 2026-11-08, Windows Python 3.12.15:** the
+  non-slow suite passed (461 tests collected, exit 0), including 17 new tests for
+  the model, comparison laboratory, reconstruction engine, native routine
+  explorer, evolution analyzer and the end-to-end committed-BusyBox validation;
+  ruff, format, mypy and `atlas skills validate` clean. A real Ghidra 12.1.4
+  headless run on a licensed BusyBox ELF
+  (`6e123e7f…48`) recovered the routine facts; the three clean-room models (MD5,
+  SHA-1, base64) agree with `hashlib`/`base64` on 200+ random inputs and all RFC
+  vectors, and `atlas firmware reconstruct` records a reconstruction whose ledger
+  verifies clean (12 records, every routine `supported`). The binary is never
+  executed; agreement is between a reconstruction and a published standard, not a
+  physical measurement. The official DSM image was downloaded and found encrypted
+  (8.0 bits/byte, magic `bf ad be ef`), so its binaries were not opened.
 - **Linux, 2026-11-05, first POSIX execution** at `3e770cb`: full suites
   **235 passed, 1 skipped** on CPython 3.12.3 (207.46 s) and on CPython 3.11.18
   (202.10 s), including all slow acceptance tests. Lint, format, types and skill

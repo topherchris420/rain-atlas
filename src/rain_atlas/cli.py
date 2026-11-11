@@ -546,6 +546,72 @@ def cmd_firmware_inspect(args) -> int:
     return 0
 
 
+def cmd_firmware_routines(args) -> int:
+    from .blackglass.explorer import load_reconstruction, summary  # noqa: PLC0415
+
+    observations = load_reconstruction(Path(args.reconstruction))
+    if args.json:
+        _print_json(summary(observations))
+    else:
+        for o in observations:
+            print(
+                f"{o.entry:>12}  {o.name:<32} size={o.size:<6} calls={len(o.call_targets()):<4} facts={len(o.facts)}"
+            )
+    return 0
+
+
+def cmd_firmware_reconstruct(args) -> int:
+    from .blackglass.behavior import validate  # noqa: PLC0415
+    from .blackglass.reconstructions import available, reconstructed  # noqa: PLC0415
+
+    data_dir = Path(args.data) if args.data else None
+    names = args.routine or list(available())
+    bundles = [reconstructed(name, data_dir) for name in names]
+    results = [validate(b) for b in bundles]
+    ledger_refs = None
+    if args.root:
+        from .blackglass.reconstruction_ledger import record_reconstruction  # noqa: PLC0415
+        from .ledger.store import Ledger  # noqa: PLC0415
+
+        ledger = Ledger(Path(args.root) / "ledger")
+        ledger_refs = record_reconstruction(ledger, bundles)
+    if args.json:
+        _print_json(
+            {
+                "routines": [
+                    {
+                        "routine": r.routine,
+                        "binary": r.binary,
+                        "binary_sha256": r.binary_sha256,
+                        "vectors": f"{r.passed}/{r.total}",
+                        "evidence_consistent": r.behaviour_consistent,
+                        "validated": r.validated,
+                    }
+                    for r in results
+                ],
+                "ledger": ledger_refs,
+            }
+        )
+    else:
+        for r in results:
+            mark = "VALIDATED" if r.validated else "NOT-VALIDATED"
+            print(f"{r.routine:<10} {mark:<14} vectors {r.passed}/{r.total}  evidence={r.consistency_detail}")
+        if ledger_refs is not None:
+            print(f"ledger: {ledger_refs['report']}  problems: {ledger_refs['problems']}")
+    return 0 if all(r.validated for r in results) else 1
+
+
+def cmd_firmware_evolution(args) -> int:
+    from .blackglass.evolution import analyze_evolution  # noqa: PLC0415
+    from .blackglass.explorer import load_reconstruction  # noqa: PLC0415
+
+    base = load_reconstruction(Path(args.base))
+    target = load_reconstruction(Path(args.target))
+    result = analyze_evolution(base, target, base_label=args.base, target_label=args.target)
+    _print_json(result)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="atlas",
@@ -750,6 +816,28 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--min-confidence")
     p.add_argument("--max-confidence")
     p.set_defaults(func=cmd_firmware_inspect)
+
+    p = fsub.add_parser("routines", help="explore a native reconstruction.json (functions and derived facts)")
+    p.add_argument(
+        "reconstruction", help="a blackglass.native-reconstruction/v1 JSON from the Ghidra exporter"
+    )
+    p.add_argument("--json", action="store_true")
+    p.set_defaults(func=cmd_firmware_routines)
+
+    p = fsub.add_parser(
+        "reconstruct",
+        help="validate the clean-room behaviour models against their vectors and binary evidence",
+    )
+    p.add_argument("routine", nargs="*", help="routine names (default: all committed reconstructions)")
+    p.add_argument("--data", help="directory of committed observation facts (default: the package data)")
+    p.add_argument("--root", help="also record the reconstruction into a fresh ledger at this root")
+    p.add_argument("--json", action="store_true")
+    p.set_defaults(func=cmd_firmware_reconstruct)
+
+    p = fsub.add_parser("evolution", help="routine-level change between two reconstruction.json documents")
+    p.add_argument("base")
+    p.add_argument("target")
+    p.set_defaults(func=cmd_firmware_evolution)
 
     p = sub.add_parser("env", help="describe the environment and isolation in use")
     p.set_defaults(func=cmd_env)

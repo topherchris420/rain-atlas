@@ -1,11 +1,49 @@
 # BLACK GLASS | DSM research protocol and native evidence
 
-Status: **implementation present; official DSM binary analysis not yet performed**.
+Status: **DSM image acquired and found encrypted; native analysis demonstrated on
+a licensed real-world ELF instead.** The official DSM binaries were not reached,
+and that is reported honestly below rather than worked around.
 
 This document separates facts established from public release listings and
 source-code tests from observations that require a local firmware artifact.
 It is not a report claiming to have run DSM, decompiled Synology binaries,
 verified a publisher signature, or recovered security-sensitive routines.
+
+## Acquisition result (2026-11-08)
+
+The official image was downloaded independently and inspected:
+
+| Field | Value |
+|---|---|
+| Artifact | `DSM_DS220+_72806.pat` (Synology DS220+, DSM 7.2.2 build 72806) |
+| Source | `https://global.synologydownload.com/download/DSM/release/7.2.2/72806/DSM_DS220%2B_72806.pat` |
+| Size | 387,262,777 bytes |
+| SHA-256 | `1e74937c3a7adb517167a70b604b7ff3812d4a8a5abb4cd32838fe6e22222d2f` |
+| `file(1)` | "Synology archive"; header magic `bf ad be ef` (the encrypted `.pat` format) |
+| `tar -tf` | fails ("does not look like a tar archive") |
+| Entropy | 8.000 bits/byte across head and middle windows; no plaintext container |
+
+**Conclusion: the outer image is encrypted.** The scattered gzip/bzip2/zip byte
+sequences are coincidental in high-entropy data, not structural members. Reaching
+the DSM binaries would require circumventing the vendor's encryption, which is out
+of scope (do not evade access controls or firmware security protections). No DSM
+binary, symbol, service, trust anchor, update-verification routine, or behaviour is
+asserted. This is an honest **NOT-EXAMINED** result for the DSM executables.
+
+The firmware image is kept locally and is **never committed**.
+
+## Native analysis demonstrated on a licensed ELF
+
+Because the DSM userland could not be opened without defeating its encryption, the
+genuine native-analysis and behavioural-reconstruction capability is demonstrated
+on a **real-world, freely-licensed** binary of the same kind that firmware ships:
+**BusyBox 1.35.0, x86-64, statically linked and stripped** (the canonical embedded
+userland; GPL-2.0; public source for ground-truth validation). It is downloaded,
+hashed, and analysed with Ghidra 12 headless; the DSM-specific run remains a
+ready, documented step that this protocol will execute verbatim on any DSM
+root-filesystem supplied already extracted. See
+[`docs/BLACK_GLASS_NATIVE.md`](BLACK_GLASS_NATIVE.md) for the demonstration and the
+Observed → Reconstructed → Implemented → Validated model.
 
 ## Identified artifact and acquisition
 
