@@ -218,9 +218,23 @@ def cmd_experiment_run(args) -> int:
         print(f"report: {summary['report_path']}")
         print(f"observatory: {summary['observatory_path']}")
         return 0 if all(a["passed"] for a in summary["acceptance"]) else 1
+    if args.name == "orrery":
+        from .experiments import orrery
+
+        summary = orrery.run(
+            Path(args.root),
+            orrery.Settings(figures=not args.no_figures),
+            registry=_registry(args),
+            progress=lambda message: print(message, flush=True),
+        )
+        for item in summary["acceptance"]:
+            print(f"{item['id']} {'PASS' if item['passed'] else 'FAIL'} {item['criterion']}")
+        print(f"report: {summary['report_path']}")
+        print(f"observatory: {summary['observatory_path']}")
+        return 0 if all(a["passed"] for a in summary["acceptance"]) else 1
     if args.name != "spectral-recovery":
         print(
-            f"unknown experiment {args.name!r}; available: spectral-recovery, synchronization",
+            f"unknown experiment {args.name!r}; available: spectral-recovery, synchronization, orrery",
             file=sys.stderr,
         )
         return 2

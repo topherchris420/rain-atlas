@@ -1,0 +1,99 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "orbit-determination",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "astrodynamics",
+  "summary": "Batch least-squares orbit determination from synthetic tracking.",
+  "capabilities": [
+    "astro.orbit-determination",
+    "astro.estimation"
+  ],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+      "truth_state_km_kms": {
+        "type": "array"
+      },
+      "stations": {
+        "type": "array"
+      },
+      "times_s": {
+        "type": "array"
+      },
+      "sigma": {
+        "type": "array"
+      },
+      "noisy": {
+        "type": "boolean"
+      },
+      "model": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "truth_state_km_kms",
+      "stations",
+      "times_s"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "required": [
+      "converged",
+      "position_error_m"
+    ],
+    "properties": {
+      "converged": {
+        "type": "boolean"
+      },
+      "position_error_m": {
+        "type": "number"
+      },
+      "velocity_error_m_s": {
+        "type": "number"
+      }
+    }
+  },
+  "permissions": {
+    "network": false,
+    "subprocess": false,
+    "read": [
+      "inputs"
+    ],
+    "write": [
+      "outputs"
+    ]
+  },
+  "limits": {
+    "timeout_s": 300,
+    "memory_mb": 2048
+  },
+  "requires": {
+    "python": ">=3.11",
+    "packages": {
+      "numpy": ">=2.0",
+      "scipy": ">=1.13",
+      "rain-atlas": ">=0.1"
+    }
+  },
+  "examples": [
+    {
+      "name": "noiseless-recovery",
+      "tolerance": {
+        "abs": 0.5
+      }
+    }
+  ],
+  "references": [
+    "Vallado, D. A. (2013). Fundamentals of Astrodynamics and Applications, 4th ed. Microcosm Press.",
+    "Montenbruck, O. & Gill, E. (2000). Satellite Orbits. Springer."
+  ],
+  "limitations": [
+    "Needs an observable arc",
+    "closed identical-twin experiment"
+  ]
+}

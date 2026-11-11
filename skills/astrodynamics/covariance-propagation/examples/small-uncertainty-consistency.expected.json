@@ -1,0 +1,4 @@
+{
+  "$comment": "A small covariance mapped linearly through the STM is chi-square consistent with a Kepler Monte-Carlo cloud (~95% of samples inside the 95% ellipsoid).",
+  "chi2_95_inside_fraction": 0.95
+}

@@ -1,0 +1,90 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "nbody-integration",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "astrodynamics",
+  "summary": "Integrate a self-gravitating N-body system (figure-eight choreography or a DE421 subset).",
+  "capabilities": [
+    "astro.nbody",
+    "astro.numerical-integration"
+  ],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+      "system": {
+        "type": "string"
+      },
+      "periods": {
+        "type": "number"
+      },
+      "bodies": {
+        "type": "array"
+      },
+      "duration_s": {
+        "type": "number"
+      }
+    }
+  },
+  "outputs": {
+    "type": "object",
+    "required": [
+      "relative_energy_drift"
+    ],
+    "properties": {
+      "return_error": {
+        "type": [
+          "number",
+          "null"
+        ]
+      },
+      "relative_energy_drift": {
+        "type": "number"
+      },
+      "angular_momentum_drift": {
+        "type": "number"
+      }
+    }
+  },
+  "permissions": {
+    "network": false,
+    "subprocess": false,
+    "read": [
+      "inputs"
+    ],
+    "write": [
+      "outputs"
+    ]
+  },
+  "limits": {
+    "timeout_s": 120,
+    "memory_mb": 2048
+  },
+  "requires": {
+    "python": ">=3.11",
+    "packages": {
+      "numpy": ">=2.0",
+      "scipy": ">=1.13",
+      "rain-atlas": ">=0.1"
+    }
+  },
+  "examples": [
+    {
+      "name": "figure-eight-one-period",
+      "tolerance": {
+        "abs": 1e-05
+      }
+    }
+  ],
+  "references": [
+    "Chenciner, A. & Montgomery, R. (2000). A remarkable periodic solution of the three-body problem. Ann. Math. 152, 881-901.",
+    "Standish, E. M. (2009). JPL planetary ephemeris DE421. JPL IOM 343R-08-003."
+  ],
+  "limitations": [
+    "Newtonian point masses",
+    "return_error needs whole periods"
+  ]
+}

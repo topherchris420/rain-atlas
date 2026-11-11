@@ -1,0 +1,87 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "trajectory-comparison",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "astrodynamics",
+  "summary": "Position/velocity and radial-transverse-normal error statistics against a reference trajectory.",
+  "capabilities": [
+    "astro.trajectory-comparison"
+  ],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+      "config": {
+        "type": "object"
+      },
+      "reference": {
+        "type": "string"
+      },
+      "reference_states": {
+        "type": "array"
+      }
+    },
+    "required": [
+      "config"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "required": [
+      "max_position_error_m",
+      "final_position_error_m"
+    ],
+    "properties": {
+      "max_position_error_m": {
+        "type": "number"
+      },
+      "final_position_error_m": {
+        "type": "number"
+      },
+      "max_velocity_error_m_s": {
+        "type": "number"
+      }
+    }
+  },
+  "permissions": {
+    "network": false,
+    "subprocess": false,
+    "read": [
+      "inputs"
+    ],
+    "write": [
+      "outputs"
+    ]
+  },
+  "limits": {
+    "timeout_s": 120,
+    "memory_mb": 2048
+  },
+  "requires": {
+    "python": ">=3.11",
+    "packages": {
+      "numpy": ">=2.0",
+      "scipy": ">=1.13",
+      "rain-atlas": ">=0.1"
+    }
+  },
+  "examples": [
+    {
+      "name": "identity-is-zero",
+      "tolerance": {
+        "abs": 1e-12
+      }
+    }
+  ],
+  "references": [
+    "Vallado, D. A. (2013). Fundamentals of Astrodynamics and Applications, 4th ed. Microcosm Press.",
+    "Montenbruck, O. & Gill, E. (2000). Satellite Orbits. Springer."
+  ],
+  "limitations": [
+    "Reference sampled at output times",
+    "consistency is not validation"
+  ]
+}

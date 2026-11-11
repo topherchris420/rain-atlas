@@ -25,6 +25,7 @@ DOMAINS = (
     "simulation",
     "evaluation",
     "resonance",
+    "astrodynamics",
 )
 READ_SCOPES = frozenset({"inputs", "skill", "system-fonts"})
 WRITE_SCOPES = frozenset({"outputs"})

@@ -9,7 +9,7 @@ R.A.I.N. ATLAS is an **open-source, local-first research workbench** from [Vers3
 [![Release status](https://img.shields.io/badge/Release-v0.1%20unreleased-555555)](CHANGELOG.md)
 [![CI](https://github.com/topherchris420/rain-atlas/actions/workflows/ci.yml/badge.svg)](https://github.com/topherchris420/rain-atlas/actions)
 
-**[Run an experiment](#run-your-first-experiment)** · **[Investigate firmware](#black-glass-firmware-intelligence)** · **[Inspect recorded evidence](#recorded-experiments)** · **[Browse the methods](#22-executable-scientific-skills)** · **[Understand the limits](#what-is-implemented-and-what-is-not)**
+**[Run an experiment](#run-your-first-experiment)** · **[Investigate firmware](#black-glass-firmware-intelligence)** · **[Inspect recorded evidence](#recorded-experiments)** · **[Browse the methods](#30-executable-scientific-skills)** · **[Understand the limits](#what-is-implemented-and-what-is-not)**
 
 ![Offline R.A.I.N. ATLAS observatory showing a challenged synchronization claim, its evidence, reproduction and verdict](docs/demonstration/evidence-explorer.png)
 
@@ -26,7 +26,8 @@ Most scientific software returns an answer. ATLAS also records **how the answer 
 | **Evidence ledger** | Preserve ordered records, inputs, code snapshots, hashes, challenges and verdicts; verify their internal consistency. |
 | **Offline observatory** | Explore claims, evidence dependencies, runs, timelines, skills, reports and non-executing proposals in a local HTML file. |
 | **BLACK GLASS** | Inventory authorized firmware, reconstruct static service/library relationships, inspect declared network surfaces, verify supplied trust anchors and compare releases. |
-| **22 executable skills** | Compose tested methods across signal processing, dynamical systems, physics, neuroscience, statistics and evaluation. |
+| **ORRERY** | Propagate orbits and N-body systems with a real force model, transform frames and time scales, estimate orbits and propagate covariance — validated against the analytic Kepler solution and NASA GMAT R2026a. |
+| **30 executable skills** | Compose tested methods across signal processing, dynamical systems, physics, neuroscience, statistics, astrodynamics and evaluation. |
 
 The built-in research roles are **scripted policies**, not autonomous LLM researchers. No live model provider or general-purpose AI agent is required or included in the demonstrations.
 
@@ -187,7 +188,7 @@ The benchmark includes separated and close tones, colored and white noise, chirp
 
 [Benchmark protocol](docs/BENCHMARKS.md) · [Recorded output](docs/demonstration/benchmark.json) · [Validation details](docs/VALIDATION.md)
 
-## 22 executable scientific skills
+## 30 executable scientific skills
 
 Skills combine executable Python, a typed manifest, explicit permissions and limits, documented assumptions, and examples with independently derived expected answers.
 
@@ -224,6 +225,14 @@ uv run atlas skills test
 | [`synchronization-sweep`](skills/resonance/synchronization-sweep/SKILL.md) | Resonance | Noisy phase-lagged oscillator sweeps |
 | [`synchronization-measure`](skills/resonance/synchronization-measure/SKILL.md) | Resonance | Frequency/phase metrics and replicate intervals |
 | [`spectral-stress-benchmark`](skills/evaluation/spectral-stress-benchmark/SKILL.md) | Evaluation | Failures, disagreement and unknown-truth cases |
+| [`orbit-propagation`](skills/astrodynamics/orbit-propagation/SKILL.md) | Astrodynamics | Propagate an orbit under configurable gravity with conservation diagnostics |
+| [`kepler-reference`](skills/astrodynamics/kepler-reference/SKILL.md) | Astrodynamics | Closed-form two-body propagation and classical elements |
+| [`trajectory-comparison`](skills/astrodynamics/trajectory-comparison/SKILL.md) | Astrodynamics | Position/velocity and RTN error against a reference trajectory |
+| [`earth-orientation`](skills/astrodynamics/earth-orientation/SKILL.md) | Astrodynamics | MJ2000Eq ↔ EarthFixed via the IAU-76/80 FK5 reduction |
+| [`tracking-simulation`](skills/astrodynamics/tracking-simulation/SKILL.md) | Astrodynamics | Synthetic range and range-rate from ground stations |
+| [`orbit-determination`](skills/astrodynamics/orbit-determination/SKILL.md) | Astrodynamics | Batch least-squares orbit determination from tracking |
+| [`covariance-propagation`](skills/astrodynamics/covariance-propagation/SKILL.md) | Astrodynamics | STM covariance propagation with a Monte-Carlo check |
+| [`nbody-integration`](skills/astrodynamics/nbody-integration/SKILL.md) | Astrodynamics | Self-gravitating N-body (figure-eight or DE421 subset) |
 
 </details>
 
@@ -231,7 +240,7 @@ To contribute a method, follow the [skill authoring guide](docs/SKILL_AUTHORING.
 
 ## What is implemented, and what is not
 
-**Version 0.1.0 is unreleased.** ATLAS currently includes the numerical experiments above, a 22-skill catalog, evidence search and recovery, an offline observatory, local proposal registration/approval, export integrations, and BLACK GLASS static firmware analysis.
+**Version 0.1.0 is unreleased.** ATLAS currently includes the numerical experiments above, a 30-skill catalog, evidence search and recovery, an offline observatory, local proposal registration/approval, export integrations, and BLACK GLASS static firmware analysis.
 
 **Validation snapshot:** the [November 5, 2026 Linux record](docs/VALIDATION.md) reports **235 passing tests and one platform-specific skip** on each of Python 3.11 and 3.12, including the slow acceptance tests. It also documents cross-platform agreement and defects found through validation. These are historical recorded results, **not a claim that every subsequent commit has been retested**. See [GitHub Actions](https://github.com/topherchris420/rain-atlas/actions) for the current hosted workflow state; hosted CI was account-blocked at the time of the published validation.
 

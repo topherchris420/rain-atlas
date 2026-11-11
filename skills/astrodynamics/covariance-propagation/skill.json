@@ -1,0 +1,97 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "covariance-propagation",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "astrodynamics",
+  "summary": "Propagate a state covariance through the STM and check it against a Monte-Carlo cloud.",
+  "capabilities": [
+    "astro.covariance-propagation",
+    "astro.uncertainty"
+  ],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+      "state_km_kms": {
+        "type": "array"
+      },
+      "elements": {
+        "type": "object"
+      },
+      "sigma0": {
+        "type": "array"
+      },
+      "dt_s": {
+        "type": "number"
+      },
+      "samples": {
+        "type": "integer"
+      },
+      "seed": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "sigma0",
+      "dt_s"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "required": [
+      "chi2_95_inside_fraction"
+    ],
+    "properties": {
+      "chi2_95_inside_fraction": {
+        "type": "number"
+      },
+      "position_block_rel_diff": {
+        "type": "number"
+      },
+      "mean_offset_m": {
+        "type": "number"
+      }
+    }
+  },
+  "permissions": {
+    "network": false,
+    "subprocess": false,
+    "read": [
+      "inputs"
+    ],
+    "write": [
+      "outputs"
+    ]
+  },
+  "limits": {
+    "timeout_s": 120,
+    "memory_mb": 2048
+  },
+  "requires": {
+    "python": ">=3.11",
+    "packages": {
+      "numpy": ">=2.0",
+      "scipy": ">=1.13",
+      "rain-atlas": ">=0.1"
+    }
+  },
+  "examples": [
+    {
+      "name": "small-uncertainty-consistency",
+      "tolerance": {
+        "abs": 0.04
+      }
+    }
+  ],
+  "references": [
+    "Vallado, D. A. (2013). Fundamentals of Astrodynamics and Applications, 4th ed. Microcosm Press.",
+    "Montenbruck, O. & Gill, E. (2000). Satellite Orbits. Springer."
+  ],
+  "limitations": [
+    "First-order linear map",
+    "point-mass Monte-Carlo"
+  ]
+}

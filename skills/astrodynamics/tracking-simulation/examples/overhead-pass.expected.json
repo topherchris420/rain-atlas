@@ -1,0 +1,6 @@
+{
+  "$comment": "A satellite 1000 km radially above a station with tangential velocity: range = altitude (1000 km) exactly and range-rate = 0, independent of the frame.",
+  "num_observations": 1,
+  "first_range_km": 1000.0,
+  "first_range_rate_km_s": 0.0
+}
