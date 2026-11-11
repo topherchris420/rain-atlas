@@ -1,0 +1,605 @@
+{
+  "design": {
+    "protocol": "atlas.spectral-calibration/v1",
+    "trials_per_case": 512,
+    "seed": 20261110,
+    "alpha": 0.05,
+    "sample_rate_hz": 128,
+    "window_samples": 1024,
+    "welch_segment_samples": 256,
+    "welch_overlap_samples": 128,
+    "search_band_hz_exclusive": [
+      1.0,
+      64.0
+    ],
+    "target_frequency_hz": 12.25,
+    "localization_tolerance_hz": 0.5,
+    "template_windows_per_model_per_trial": 32,
+    "calibration_windows_per_model_per_trial": 99,
+    "noise_models": [
+      {
+        "name": "white",
+        "marginal_sd": 1
+      },
+      {
+        "name": "ar1",
+        "rho": 0.95,
+        "marginal_sd": 1
+      },
+      {
+        "name": "oscillatory",
+        "pole_radius": 0.97,
+        "center_hz": 12.25,
+        "marginal_sd": 1
+      }
+    ],
+    "reference_models": [
+      "white",
+      "ar1"
+    ],
+    "methods": [
+      "welch-white-threshold",
+      "white-reference",
+      "ar1-reference",
+      "reference-panel"
+    ],
+    "cases": [
+      {
+        "name": "white-null",
+        "noise": "white",
+        "tone_hz": null,
+        "tone_amplitude": 0.0
+      },
+      {
+        "name": "ar1-null",
+        "noise": "ar1",
+        "tone_hz": null,
+        "tone_amplitude": 0.0
+      },
+      {
+        "name": "oscillatory-null",
+        "noise": "oscillatory",
+        "tone_hz": null,
+        "tone_amplitude": 0.0
+      },
+      {
+        "name": "ar1-weak-tone",
+        "noise": "ar1",
+        "tone_hz": 12.25,
+        "tone_amplitude": 0.12
+      },
+      {
+        "name": "ar1-intermediate-tone",
+        "noise": "ar1",
+        "tone_hz": 12.25,
+        "tone_amplitude": 0.25
+      },
+      {
+        "name": "ar1-strong-tone",
+        "noise": "ar1",
+        "tone_hz": 12.25,
+        "tone_amplitude": 0.75
+      }
+    ]
+  },
+  "rows": [
+    {
+      "case": "white-null",
+      "methods": {
+        "welch-white-threshold": {
+          "any_detection_rate": {
+            "rate": 0.06640625,
+            "low": 0.04790706612817715,
+            "high": 0.09136335813151024,
+            "n": 512,
+            "successes": 34,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 0.00390625,
+            "low": 0.0010718890803936704,
+            "high": 0.014129407144654047,
+            "n": 512,
+            "successes": 2,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        },
+        "white-reference": {
+          "any_detection_rate": {
+            "rate": 0.056640625,
+            "low": 0.039723226447529306,
+            "high": 0.08016139655674563,
+            "n": 512,
+            "successes": 29,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 0.001953125,
+            "low": 0.00034485776154337486,
+            "high": 0.010979278212421853,
+            "n": 512,
+            "successes": 1,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        },
+        "ar1-reference": {
+          "any_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 0.765625,
+            "low": 0.7270378376472112,
+            "high": 0.8002559565000072,
+            "n": 512,
+            "successes": 392,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        },
+        "reference-panel": {
+          "any_detection_rate": {
+            "rate": 0.052734375,
+            "low": 0.036492305788731,
+            "high": 0.07563799671337895,
+            "n": 512,
+            "successes": 27,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 0.001953125,
+            "low": 0.00034485776154337486,
+            "high": 0.010979278212421853,
+            "n": 512,
+            "successes": 1,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        }
+      }
+    },
+    {
+      "case": "ar1-null",
+      "methods": {
+        "welch-white-threshold": {
+          "any_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 0.5390625,
+            "low": 0.4957545667122138,
+            "high": 0.5817886383094361,
+            "n": 512,
+            "successes": 276,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        },
+        "white-reference": {
+          "any_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 0.0,
+            "low": 0.0,
+            "high": 0.007446975722882739,
+            "n": 512,
+            "successes": 0,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        },
+        "ar1-reference": {
+          "any_detection_rate": {
+            "rate": 0.048828125,
+            "low": 0.033289430544156826,
+            "high": 0.07108655145578816,
+            "n": 512,
+            "successes": 25,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 0.001953125,
+            "low": 0.00034485776154337486,
+            "high": 0.010979278212421853,
+            "n": 512,
+            "successes": 1,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        },
+        "reference-panel": {
+          "any_detection_rate": {
+            "rate": 0.00390625,
+            "low": 0.0010718890803936704,
+            "high": 0.014129407144654047,
+            "n": 512,
+            "successes": 2,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 0.0,
+            "low": 0.0,
+            "high": 0.007446975722882739,
+            "n": 512,
+            "successes": 0,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        }
+      }
+    },
+    {
+      "case": "oscillatory-null",
+      "methods": {
+        "welch-white-threshold": {
+          "any_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 0.943359375,
+            "low": 0.9198386034432544,
+            "high": 0.9602767735524707,
+            "n": 512,
+            "successes": 483,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        },
+        "white-reference": {
+          "any_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        },
+        "ar1-reference": {
+          "any_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        },
+        "reference-panel": {
+          "any_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        }
+      }
+    },
+    {
+      "case": "ar1-weak-tone",
+      "methods": {
+        "welch-white-threshold": {
+          "any_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 0.98828125,
+            "low": 0.9746716344674621,
+            "high": 0.9946184283031602,
+            "n": 512,
+            "successes": 506,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        },
+        "white-reference": {
+          "any_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 0.0,
+            "low": 0.0,
+            "high": 0.007446975722882739,
+            "n": 512,
+            "successes": 0,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        },
+        "ar1-reference": {
+          "any_detection_rate": {
+            "rate": 0.419921875,
+            "low": 0.3779230769299778,
+            "high": 0.4631133527756402,
+            "n": 512,
+            "successes": 215,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 0.388671875,
+            "low": 0.34742797463672115,
+            "high": 0.43157389105157695,
+            "n": 512,
+            "successes": 199,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        },
+        "reference-panel": {
+          "any_detection_rate": {
+            "rate": 0.001953125,
+            "low": 0.00034485776154337486,
+            "high": 0.010979278212421853,
+            "n": 512,
+            "successes": 1,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 0.0,
+            "low": 0.0,
+            "high": 0.007446975722882739,
+            "n": 512,
+            "successes": 0,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        }
+      }
+    },
+    {
+      "case": "ar1-intermediate-tone",
+      "methods": {
+        "welch-white-threshold": {
+          "any_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        },
+        "white-reference": {
+          "any_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 0.08203125,
+            "low": 0.06125951961291098,
+            "high": 0.10902818665543632,
+            "n": 512,
+            "successes": 42,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        },
+        "ar1-reference": {
+          "any_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        },
+        "reference-panel": {
+          "any_detection_rate": {
+            "rate": 0.083984375,
+            "low": 0.06294737053968927,
+            "high": 0.11121749597974051,
+            "n": 512,
+            "successes": 43,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 0.08203125,
+            "low": 0.06125951961291098,
+            "high": 0.10902818665543632,
+            "n": 512,
+            "successes": 42,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        }
+      }
+    },
+    {
+      "case": "ar1-strong-tone",
+      "methods": {
+        "welch-white-threshold": {
+          "any_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        },
+        "white-reference": {
+          "any_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        },
+        "ar1-reference": {
+          "any_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        },
+        "reference-panel": {
+          "any_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          },
+          "target_band_detection_rate": {
+            "rate": 1.0,
+            "low": 0.9925530242771171,
+            "high": 1.0,
+            "n": 512,
+            "successes": 512,
+            "alpha": 0.05,
+            "method": "Wilson score"
+          }
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "The 5% bound concerns any declaration in one all-noise window under an exchangeable reference model.",
+    "The bound is marginal over the rank reference bank and conditional on the independent template.",
+    "The benchmark redraws references per trial. Reusing one bank does not justify these binomial intervals.",
+    "A reference panel can lose power, and the oscillatory null deliberately falls outside the panel.",
+    "Target-band declarations measure chance hits under the null and localization for one injected frequency.",
+    "Overlapping windows, repeated scans, hardware noise and other distribution shifts require separate validation."
+  ]
+}

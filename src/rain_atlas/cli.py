@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 
 from . import __version__
+from .bench import PROTOCOLS
 from .canonical import from_jsonable, to_jsonable
 
 
@@ -346,7 +347,7 @@ def cmd_proposal(args) -> int:
 def cmd_benchmark(args) -> int:
     from .bench.lab import run
 
-    result = run(Path(args.root), args.trials, registry=_registry(args))
+    result = run(Path(args.root), args.trials, registry=_registry(args), protocol=args.protocol)
     print(result["path"])
     return 0
 
@@ -625,9 +626,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--builtin", help="built-in skills directory (default: the repository's skills/)")
     sub = parser.add_subparsers(dest="group", required=True)
 
-    p = sub.add_parser("benchmark", help="execute the classical spectral stress benchmark")
+    p = sub.add_parser("benchmark", help="execute a registered scientific benchmark")
     p.add_argument("--root", required=True)
-    p.add_argument("--trials", type=int, default=12)
+    p.add_argument("--protocol", choices=PROTOCOLS, default="spectral-stress")
+    p.add_argument("--trials", type=int, help="trials per case (stress: 12, calibration: 128 by default)")
     p.set_defaults(func=cmd_benchmark)
 
     p = sub.add_parser("approve", help="append a local operator attestation; never executes a proposal")

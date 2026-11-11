@@ -1,0 +1,15 @@
+{
+  "results": {
+    "design": {
+      "protocol": "atlas.spectral-calibration/v1",
+      "trials_per_case": 3,
+      "seed": 42,
+      "alpha": 0.05,
+      "calibration_windows_per_model_per_trial": 99,
+      "reference_models": [
+        "white",
+        "ar1"
+      ]
+    }
+  }
+}
