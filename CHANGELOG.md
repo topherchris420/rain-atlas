@@ -33,39 +33,39 @@ First end-to-end slice.
   vectors, verification, pipeline accuracy/false-positive/determinism checks,
   ledger integration and the CLI. No new runtime dependencies.
 
-### Added (BLACK GLASS native routine reconstruction, 2026-11-08)
+### Added (ORRERY orbital-dynamics subsystem, 2026-11-07)
 
-- New native-reconstruction extension that advances BLACK GLASS from firmware
-  metadata to working native-software analysis, with four explicit provenance
-  levels — **Observed** (disassembler facts), **Reconstructed** (interpretation),
-  **Implemented** (clean-room code), **Validated** (reproduces the public
-  standard's vectors and the binary exhibits that standard's defining evidence).
-  The analysed binary is never executed and no decompiled source is committed
-  (only its SHA-256 digest and non-copyrightable derived facts).
-- Modules: `routines.py` (the four-level model), `comparison.py` (the Behavioural
-  Comparison Laboratory), `behavior.py` (the Subsystem Reconstruction Engine),
-  `explorer.py` (the Native Routine Explorer over the Ghidra document),
-  `reconstructions.py` (clean-room MD5/SHA-1/base64 written from RFC 1321 /
-  FIPS 180-1 / RFC 4648), `evolution.py` (the Firmware Evolution Analyzer) and
-  `reconstruction_ledger.py` (records the reconstruction with no new record
-  kinds; each routine is a claim, its evidence cross-check a challenge, resolved
-  to a verdict scoped to static identity, never runtime).
-- A read-only `scripts/BlackglassReconstruct.java` Ghidra exporter (Ghidra 12
-  dropped Jython; this runs on the bundled JDK, needs no Python) that refuses on
-  a hash mismatch and emits only derived facts plus a digest of the local
-  decompilation.
-- **Empirical demonstration** on a licensed BusyBox ELF: MD5 and SHA-1 state
-  initialisation and base64 encoding are identified from their standard-defined
-  constants (`0xefcdab8967452301`/`0x1032547698badcfe`; plus `0xc3d2e1f0` for
-  SHA-1) and alphabet, re-implemented clean-room (agreeing with `hashlib`/`base64`
-  on 200+ random inputs and the RFC vectors), and recorded into a verifying
-  ledger. The DSM image was downloaded and found **encrypted**, so its binaries
-  were not opened (reported honestly, not worked around).
-- New CLI commands `atlas firmware {routines,reconstruct,evolution}`; docs
-  `docs/BLACK_GLASS_NATIVE.md` and an updated `docs/BLACK_GLASS_DSM_RESEARCH.md`
-  recording the encryption finding. Tests cover the model, comparison, engine,
-  explorer, evolution, the clean-room models and the end-to-end committed
-  BusyBox validation. No new runtime dependencies.
+- New isolated package `rain_atlas.orrery`: an original, high-fidelity orbital-
+  mechanics engine. Universal-variable two-body motion; point-mass, closed-form
+  zonal-J2, JGM-3 spherical-harmonic (Montenbruck–Gill V/W recursion) and
+  third-body (Sun/Moon) force models with analytic gradients; embedded
+  Runge–Kutta integration (Dormand–Prince 5(4), Runge–Kutta–Fehlberg 7(8),
+  classical RK4, symplectic Störmer–Verlet and Yoshida-4) with PI step control
+  and a 6+36 state-transition matrix; the IAU-76/80 FK5 frame reduction
+  (precession, 106-term nutation, GMST, polar motion, EOP); JPL DE421
+  ephemerides tied to MJ2000Eq by GMAT's ICRF-to-FK5 table; N-body dynamics
+  with conserved-integral diagnostics; batch-least-squares orbit determination;
+  STM covariance propagation with a Monte-Carlo consistency check; and
+  Hohmann/lunar transfers.
+- Validated against two independent references: the closed-form Kepler solution
+  (genuine analytic truth for the two-body cases) and **NASA GMAT R2026a**
+  reference runs (code-to-code consistency — explicitly *not* a claim of
+  physical validation). Measured agreement over multi-day arcs: two-body to
+  sub-millimetre, LEO/HEO/GEO + J2/geopotential/third-body to GMAT within
+  2 cm–0.84 m, Earth–Moon TLI 5 cm, figure-eight choreography return 7.5e-8.
+  Committed GMAT reference trajectories (with version, distribution MD5 and
+  binary/report SHA-256 provenance) let the comparison run without GMAT.
+- Integrates only at the edges: eight new `astrodynamics` skills (orbit
+  propagation, Kepler reference, trajectory comparison, Earth orientation,
+  tracking simulation, orbit determination, covariance propagation, N-body
+  integration), a preregistered `atlas experiment run orrery` study that records
+  claims, independent-integrator (SciPy DOP853) challenges and verdicts through
+  the existing ledger vocabulary and exports to the offline observatory, and a
+  self-contained, CSP-locked celestial lab (`docs/orrery-lab.html`) rendering
+  only engine-computed data. Added the `astrodynamics` skill domain. No engine,
+  ledger or executor module changed; no new runtime dependencies.
+- Docs: `docs/ORRERY.md` (the mathematical assumptions behind every capability)
+  and `docs/ORRERY_VALIDATION.md` (the measured validation record).
 
 ### Fixed (ledger corruption handling, 2026-11-05)
 

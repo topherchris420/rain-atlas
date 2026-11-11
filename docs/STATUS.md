@@ -8,7 +8,7 @@ for implemented boundaries and explicitly planned work.
 |---|---|
 | Audit / CI repair | Reproduced baseline, inspected workflow annotations, repaired artifact/ledger/process handling; pinned four-job matrix with JUnit artifacts |
 | Offline observatory | Experiment/evidence/timeline/skill/report/composer views, standalone CSP-restricted HTML, source verification, privacy projection; Python, DOM and real-browser (Chromium, CSS/CSP active) tests |
-| Resonance | STFT, Morlet CWT, PLV/order parameter, noisy Kuramoto, LMS/NLMS, FIR identification, supported thin-plate modes, multichannel cross spectra; 22 total executable skills |
+| Resonance | STFT, Morlet CWT, PLV/order parameter, noisy Kuramoto, LMS/NLMS, FIR identification, supported thin-plate modes, multichannel cross spectra; 30 total executable skills (8 astrodynamics) |
 | Demonstration | Two-oscillator synchronization sweep with analytical reference, new-data replication, independent phase/frequency observables, exact reproduction, reports and figures |
 | Scientific skepticism | Noise/phase-lag shifts, independent replicate intervals, Bonferroni and Holm utilities, Wilson error-rate intervals, exact-identity leakage check, preserved unknown truth |
 | Evidence | Exact engine/skill source snapshots, lockfile, dependency verification, derived SQLite search, fresh-store torn-tail recovery; no historical record changes |
@@ -16,7 +16,7 @@ for implemented boundaries and explicitly planned work.
 | Integrations | R.A.I.N. local submission export against inspected schema; Luca records always quarantined, no path following or external state writes |
 | Benchmark | Welch versus NLS/BIC on separated/close tones, white/colored nulls, chirp and amplitude modulation |
 | Developer experience | Locked setup, tutorial, working skill templates, lint/format, targeted scientific API typing, adversarial and regression tests |
-| BLACK GLASS native reconstruction | Observed→Reconstructed→Implemented→Validated model; read-only Ghidra (Java) exporter; Native Routine Explorer, Comparison Laboratory, Reconstruction Engine, Evolution Analyzer, ledger integration (no new record kinds); demonstrated on a licensed BusyBox ELF — MD5/SHA-1 init and base64 identified from standard constants/alphabet, clean-room models validated vs RFC 1321/FIPS 180-1/RFC 4648; the binary is never executed. Official DSM image downloaded and found encrypted (binaries not opened) |
+| ORRERY orbital dynamics | Original two-body/perturbed/N-body engine, IAU-76/80 frames, DE421 ephemerides, orbit determination, covariance; validated against the analytic Kepler solution and NASA GMAT R2026a (consistency, not physical validation); 8 astrodynamics skills, a preregistered experiment, and a CSP-locked celestial lab |
 
 ## Validation record
 
@@ -43,6 +43,17 @@ for implemented boundaries and explicitly planned work.
   two-segment coherence, and report overflow. The regenerated demonstration
   reaches the same 30 verdicts as Windows, with byte-identical reports. See
   [VALIDATION.md](VALIDATION.md).
+- **ORRERY, 2026-11-07, Windows Python 3.12.15** (NumPy 2.5.4, SciPy 1.18.1):
+  non-slow suite **437 passed, 7 skipped, 20 deselected** (107.9 s); the ORRERY
+  slow subset (GMAT, N-body, OD, acceptance) **12 passed** (345.1 s); ruff,
+  mypy and `atlas skills validate` (30 skills) clean; all 8 astrodynamics skill
+  examples pass in the bounded executor. The preregistered experiment
+  corroborates all 9 scenarios against the analytic Kepler solution and GMAT
+  R2026a (two-body to sub-mm; perturbed cases to GMAT within 2 cm–0.84 m), with
+  exact reproduction and a verifying ledger. Agreement with GMAT is code-to-code
+  consistency, not physical validation. The full slow suite on both interpreters
+  and the Linux/CI paths were not re-run. See
+  [ORRERY_VALIDATION.md](ORRERY_VALIDATION.md).
 - Baseline Windows Python 3.12: **112 passed, 1 skipped, 7 deselected** (non-slow).
 - Repair-stage full suite: **138 passed, 1 skipped** on Windows Python 3.12.15
   (887.71 s) and **138 passed, 1 skipped** on Windows Python 3.11.9 (849.72 s).

@@ -433,6 +433,25 @@ evidence, a confidence level and an independent cross-check, and static
 inferences are never promoted to confirmed behaviour. See
 [`docs/BLACK_GLASS.md`](BLACK_GLASS.md).
 
+## 8b. ORRERY orbital-dynamics subsystem
+
+`rain_atlas.orrery` is an isolated, original orbital-mechanics engine:
+universal-variable two-body motion, point-mass / zonal-J2 / JGM-3 spherical-
+harmonic / third-body force models, embedded Runge–Kutta integration (DP5(4),
+RKF7(8), symplectic schemes) with a state-transition matrix, the IAU-76/80 FK5
+frame reduction, JPL DE421 ephemerides with GMAT's ICRF-to-FK5 tie, N-body
+dynamics, batch-least-squares orbit determination, covariance propagation and
+Hohmann/lunar transfers. It validates against two independent references — the
+analytic Kepler solution (genuine truth) and NASA **GMAT R2026a** reference runs
+(code-to-code consistency, *not* physical validation) — and plugs into the rest
+of ATLAS only at the edges: eight `astrodynamics` skills in the registry, a
+preregistered `atlas experiment run orrery` study that records claims,
+independent-integrator challenges and verdicts through the existing ledger
+vocabulary, and an offline, CSP-locked celestial lab. No engine, ledger or
+executor module is modified. See [`docs/ORRERY.md`](ORRERY.md) for the
+mathematical assumptions and [`docs/ORRERY_VALIDATION.md`](ORRERY_VALIDATION.md)
+for the measured agreement.
+
 ## 9. Web laboratory (Phase 6)
 
 A static, read-only site generated from `atlas export --site`. It renders the

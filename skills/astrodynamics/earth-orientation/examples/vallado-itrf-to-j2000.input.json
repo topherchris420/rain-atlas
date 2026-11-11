@@ -1,0 +1,62 @@
+{
+  "epoch_utc": "2004-04-06T07:51:28.386009",
+  "position_km": [
+    -1033.479383,
+    7901.2952754,
+    6380.3565958
+  ],
+  "velocity_km_s": [
+    -3.22563652,
+    -2.87245145,
+    5.531924446
+  ],
+  "eop_rows": [
+    {
+      "mjd": 53099,
+      "x_arcsec": -0.140682,
+      "y_arcsec": 0.333309,
+      "ut1_utc_s": -0.4399619,
+      "lod_s": 0.0015563,
+      "dpsi_arcsec": -0.052195,
+      "deps_arcsec": -0.003875
+    },
+    {
+      "mjd": 53100,
+      "x_arcsec": -0.140682,
+      "y_arcsec": 0.333309,
+      "ut1_utc_s": -0.4399619,
+      "lod_s": 0.0015563,
+      "dpsi_arcsec": -0.052195,
+      "deps_arcsec": -0.003875
+    },
+    {
+      "mjd": 53101,
+      "x_arcsec": -0.140682,
+      "y_arcsec": 0.333309,
+      "ut1_utc_s": -0.4399619,
+      "lod_s": 0.0015563,
+      "dpsi_arcsec": -0.052195,
+      "deps_arcsec": -0.003875
+    },
+    {
+      "mjd": 53102,
+      "x_arcsec": -0.140682,
+      "y_arcsec": 0.333309,
+      "ut1_utc_s": -0.4399619,
+      "lod_s": 0.0015563,
+      "dpsi_arcsec": -0.052195,
+      "deps_arcsec": -0.003875
+    },
+    {
+      "mjd": 53103,
+      "x_arcsec": -0.140682,
+      "y_arcsec": 0.333309,
+      "ut1_utc_s": -0.4399619,
+      "lod_s": 0.0015563,
+      "dpsi_arcsec": -0.052195,
+      "deps_arcsec": -0.003875
+    }
+  ],
+  "direction": "fixed_to_inertial",
+  "nutation_corrections": true
+}

@@ -1,0 +1,98 @@
+{
+  "schema": "atlas.skill/v1",
+  "name": "tracking-simulation",
+  "version": "1.0.0",
+  "kind": "executable",
+  "domain": "astrodynamics",
+  "summary": "Synthetic range and range-rate of an orbit from ground stations.",
+  "capabilities": [
+    "astro.tracking-simulation",
+    "astro.measurements"
+  ],
+  "entrypoint": "run.py",
+  "determinism": "deterministic",
+  "inputs": {
+    "type": "object",
+    "additionalProperties": true,
+    "properties": {
+      "initial_state_km_kms": {
+        "type": "array"
+      },
+      "stations": {
+        "type": "array"
+      },
+      "times_s": {
+        "type": "array"
+      },
+      "model": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "initial_state_km_kms",
+      "stations",
+      "times_s"
+    ]
+  },
+  "outputs": {
+    "type": "object",
+    "required": [
+      "num_observations"
+    ],
+    "properties": {
+      "num_observations": {
+        "type": "integer"
+      },
+      "first_range_km": {
+        "type": [
+          "number",
+          "null"
+        ]
+      },
+      "first_range_rate_km_s": {
+        "type": [
+          "number",
+          "null"
+        ]
+      }
+    }
+  },
+  "permissions": {
+    "network": false,
+    "subprocess": false,
+    "read": [
+      "inputs"
+    ],
+    "write": [
+      "outputs"
+    ]
+  },
+  "limits": {
+    "timeout_s": 60,
+    "memory_mb": 2048
+  },
+  "requires": {
+    "python": ">=3.11",
+    "packages": {
+      "numpy": ">=2.0",
+      "scipy": ">=1.13",
+      "rain-atlas": ">=0.1"
+    }
+  },
+  "examples": [
+    {
+      "name": "overhead-pass",
+      "tolerance": {
+        "abs": 1e-06
+      }
+    }
+  ],
+  "references": [
+    "Vallado, D. A. (2013). Fundamentals of Astrodynamics and Applications, 4th ed. Microcosm Press.",
+    "Montenbruck, O. & Gill, E. (2000). Satellite Orbits. Springer."
+  ],
+  "limitations": [
+    "Range and range-rate only",
+    "simple elevation mask"
+  ]
+}

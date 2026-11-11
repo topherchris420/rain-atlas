@@ -1,0 +1,5 @@
+{
+  "$comment": "Noiseless identical-twin data over a 12-hour, three-station arc recovers the truth state to well under a metre.",
+  "converged": true,
+  "position_error_m": 0.0
+}

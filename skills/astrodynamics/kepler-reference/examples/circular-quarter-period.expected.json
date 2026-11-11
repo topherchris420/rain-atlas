@@ -1,0 +1,13 @@
+{
+  "$comment": "A circular orbit advanced a quarter period rotates 90 deg: (a,0,0) -> (0,a,0).",
+  "final_state_km_kms": [
+    0.0,
+    7000.0,
+    0.0,
+    -7.546053287267836,
+    0.0,
+    0.0
+  ],
+  "sma_km": 7000.0,
+  "eccentricity": 0.0
+}
