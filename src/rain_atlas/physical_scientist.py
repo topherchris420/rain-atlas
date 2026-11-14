@@ -101,6 +101,7 @@ def preregister(
     *,
     purpose: str = "model discrimination",
     parent: str | None = None,
+    selection: dict | None = None,
 ) -> str:
     validate_models(models, weights, sigma)
     validate_frequency(frequency_hz)
@@ -130,6 +131,10 @@ def preregister(
         "acceptance": {"precommitted_three_sigma_discrepancy": True},
         "created_by": author("physical-theorist"),
     }
+    if selection is not None:
+        if selection.get("frequency_hz") != frequency_hz:
+            raise ValueError("selection must match preregistered frequency")
+        record["design"]["selection"] = selection
     if parent:
         if not any(e.object == parent for e in ledger.entries("preregistration")):
             raise ValueError("parent experiment must be an earlier preregistration")
@@ -319,7 +324,9 @@ def demo(root: Path, *, seed: int = 7, truth_hz: float = 186.0) -> dict:
     for act in ("I prediction", "II targeted follow-up"):
         selection = select_frequency(models, prior, sigma, grid, tuple(seen))
         f = selection["frequency_hz"]
-        exp = preregister(ledger, models, prior, sigma, f, purpose=act, parent=parent)
+        exp = preregister(
+            ledger, models, prior, sigma, f, purpose=act, parent=parent, selection=selection
+        )
         obs = observe(
             ledger,
             exp,
