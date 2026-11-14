@@ -24,21 +24,23 @@ R.A.I.N. ATLAS is an **open-source, local-first research workbench** from [Vers3
 
 > **Evidence boundary:** The runnable three-act demonstration is **simulation-only**. Hardware and circuit illustrations below are **design concepts**, not KiCad schematics, routed PCBs, validated CAD, completed enclosures, physical measurements, or manufacturing instructions. The measurement-import path accepts operator-attested CSV data but cannot authenticate a physical instrument. There is no actuator-control path.
 
-![Figure 1: editorial concept of ATLAS's scientific roles, evidence ledger and proposed acoustic instrument](docs/figures/atlas-system-concept.svg)
+![Figure 1: editorial concept of ATLAS's scientific roles, evidence ledger and proposed acoustic instrument](docs/figures/atlas-physical-scientist-lab-system.png)
 
 *Figure 1. ATLAS as an evidence-first scientific instrument. The research workflow is a software prototype; the exploded assembly and instrument are conceptual illustrations, not tested hardware.*
 
 ### Prediction, contradiction, revision
 
-![Figure 2: competing damped-oscillator models, synthetic contradiction, and held-out revision evaluation](docs/figures/atlas-scientific-loop.svg)
+![Figure 2: competing damped-oscillator models, synthetic contradiction, and held-out revision evaluation](docs/figures/atlas-physical-scientist-infographic.png)
 
 *Figure 2. Mathematical illustration of the preregistered three-act **synthetic** demonstration. Curves are illustrative, not recorded physical observations. A revision may fail and its negative result remains in the ledger.*
 
 ### Proposed sensing and safety architecture
 
-![Figure 3: conceptual host, controller, sensor, interlock and resonator topology with authority separation](docs/figures/atlas-instrument-topology.svg)
+![Figure 3: conceptual host, controller, sensor, interlock and resonator topology with authority separation](docs/figures/atlas-instrument-topology-diagram.png)
 
 *Figure 3. Conceptual signal and authority boundaries. **No wiring, power distribution, control firmware, custom PCB, or safety interlock has been physically designed and verified.** Do not build a device from this diagram.*
+
+The full-resolution PNG figures above are visual design illustrations. The earlier editable schematic-style SVGs remain available as supporting references: [system architecture](docs/figures/atlas-system-concept.svg) · [experiment workflow](docs/figures/atlas-scientific-loop.svg) · [instrument topology](docs/figures/atlas-instrument-topology.svg). Neither format is a source of manufacturing-ready electrical or mechanical information.
 
 | Available now | Not yet demonstrated |
 |---|---|
