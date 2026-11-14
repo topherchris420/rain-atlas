@@ -11,11 +11,52 @@ R.A.I.N. ATLAS is an **open-source, local-first research workbench** from [Vers3
 [![Release status](https://img.shields.io/badge/Release-v0.1%20unreleased-555555)](CHANGELOG.md)
 [![CI](https://github.com/topherchris420/rain-atlas/actions/workflows/ci.yml/badge.svg)](https://github.com/topherchris420/rain-atlas/actions)
 
-**[Run an experiment](#run-your-first-experiment)** · **[Investigate firmware](#black-glass-firmware-intelligence)** · **[Inspect recorded evidence](#recorded-experiments)** · **[Browse the methods](#31-executable-scientific-skills)** · **[Understand the limits](#what-is-implemented-and-what-is-not)**
+**[Explore Physical Scientist](#atlas-physical-scientist)** · **[Run an experiment](#run-your-first-experiment)** · **[Investigate firmware](#black-glass-firmware-intelligence)** · **[Inspect recorded evidence](#recorded-experiments)** · **[Browse the methods](#31-executable-scientific-skills)** · **[Understand the limits](#what-is-implemented-and-what-is-not)**
 
 ![Offline R.A.I.N. ATLAS observatory showing a challenged synchronization claim, its evidence, reproduction and verdict](docs/demonstration/evidence-explorer.png)
 
 *This is a screenshot of the actual offline observatory, not a product mockup. The [recorded demonstration](docs/demonstration/) is a standalone HTML review snapshot: clone or download the repository, then open `docs/demonstration/index.html` locally.*
+
+
+## ATLAS Physical Scientist
+
+**A hypothesis is only useful if reality is allowed to reject it.** This extension introduces a reproducible *software* loop for competing resonance models: preregister a predicted response, select a discriminating frequency, preserve an observation, score the mismatch, and retain failed revisions. It reuses the original evidence ledger and offline observatory.
+
+> **Evidence boundary:** The runnable three-act demonstration is **simulation-only**. Hardware and circuit illustrations below are **design concepts**, not KiCad schematics, routed PCBs, validated CAD, completed enclosures, physical measurements, or manufacturing instructions. The measurement-import path accepts operator-attested CSV data but cannot authenticate a physical instrument. There is no actuator-control path.
+
+![Figure 1: editorial concept of ATLAS's scientific roles, evidence ledger and proposed acoustic instrument](docs/figures/atlas-system-concept.svg)
+
+*Figure 1. ATLAS as an evidence-first scientific instrument. The research workflow is a software prototype; the exploded assembly and instrument are conceptual illustrations, not tested hardware.*
+
+### Prediction, contradiction, revision
+
+![Figure 2: competing damped-oscillator models, synthetic contradiction, and held-out revision evaluation](docs/figures/atlas-scientific-loop.svg)
+
+*Figure 2. Mathematical illustration of the preregistered three-act **synthetic** demonstration. Curves are illustrative, not recorded physical observations. A revision may fail and its negative result remains in the ledger.*
+
+### Proposed sensing and safety architecture
+
+![Figure 3: conceptual host, controller, sensor, interlock and resonator topology with authority separation](docs/figures/atlas-instrument-topology.svg)
+
+*Figure 3. Conceptual signal and authority boundaries. **No wiring, power distribution, control firmware, custom PCB, or safety interlock has been physically designed and verified.** Do not build a device from this diagram.*
+
+| Available now | Not yet demonstrated |
+|---|---|
+| Preregistered competing linear surrogate models and an adaptive disagreement selector | AI-generated novel physical theories or measured superiority to baseline design methods |
+| Deterministic uncertainty scoring and stored negative results | Real excitation, synchronous sensors, validated camera measurement, calibrated physical apparatus |
+| Content-addressed records and read-only offline replay | Engineering-grade KiCad / Gerber / enclosure CAD, electrical validation and safe physical actuation |
+
+**Try the simulation locally:**
+
+~~~sh
+uv sync --locked
+uv run python scripts/physical_scientist.py demo --root atlas-data/physical-demo --seed 7
+uv run atlas ledger verify atlas-data/physical-demo/ledger
+~~~
+
+Open \`atlas-data/physical-demo/observatory/index.html\` to inspect the source-labeled evidence. For the physical roadmap, risk gates, operator-attested import workflow and seven-lens review, read [ATLAS Physical Scientist: Engineering & Evidence](docs/PHYSICAL_SCIENTIST.md).
+
+
 
 ## What makes ATLAS different?
 
@@ -300,3 +341,5 @@ The check script runs formatting, lint, targeted scientific types, skill validat
 R.A.I.N. ATLAS is an independent Vers3Dynamics project. It is not affiliated with or endorsed by the U.S. Department of Energy or the Genesis Mission.
 
 **A useful research instrument does not have to agree with its inventor.**
+
+
