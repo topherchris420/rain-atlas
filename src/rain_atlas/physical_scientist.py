@@ -274,13 +274,6 @@ def evaluate(ledger: Ledger, experiment: str, observation: str) -> dict:
             "evaluated_observation": observation,
             "findings": [],
             "reproduction": {
-                "method": "recreate-three-act-simulation",
-                "tool": "scripts/physical_scientist.py demo",
-                "seed": seed,
-                "truth_hz": truth_hz,
-                "fixed_holdout_hz": holdout_hz,
-            },
-            "reproduction": {
                 "method": "deterministic-evaluation-from-immutable-ledger",
                 "tool": "scripts/physical_scientist.py evaluate",
                 "inputs": [experiment, observation],
@@ -396,6 +389,13 @@ def demo(root: Path, *, seed: int = 7, truth_hz: float = 186.0) -> dict:
         {
             "experiment": exp,
             "findings": [],
+            "reproduction": {
+                "method": "recreate-three-act-simulation",
+                "tool": "scripts/physical_scientist.py demo",
+                "seed": seed,
+                "truth_hz": truth_hz,
+                "fixed_holdout_hz": holdout_hz,
+            },
             "acceptance": [
                 {
                     "id": "heldout_revision_improvement",
