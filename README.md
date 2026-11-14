@@ -2,6 +2,8 @@
 
 **Scientific work that can be questioned, reproduced, and proved wrong.**
 
+**R.A.I.N.** stands for **Recursive Architecture of Intelligent Nexus**.
+
 R.A.I.N. ATLAS is an **open-source, local-first research workbench** from [Vers3Dynamics](https://vers3dynamics.com). It runs computational experiments through versioned scientific skills, records the evidence behind each result, and makes independent challenges part of the workflow. Its **BLACK GLASS** subsystem applies the same discipline to offline firmware inspection.
 
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-3776ab?logo=python&logoColor=white)](pyproject.toml)
