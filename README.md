@@ -302,7 +302,7 @@ R.A.I.N. ATLAS is an independent Vers3Dynamics project. It is not affiliated wit
 ## Physical Scientist (software prototype)
 
 ATLAS now includes a **simulation-only resonance experiment loop** with competing preregistered
-models, a deterministic disagreement selector, raw evidence capture, an independent numerical
+models, a deterministic disagreement selector, raw evidence capture, a deterministic numerical
 evaluator and an offline replayable three-act demonstration. An explicit operator-attested CSV
 import path exists for independently acquired measurements. **No hardware driver or validated
 physical apparatus exists yet.** Read [the engineering and scientific boundary](docs/PHYSICAL_SCIENTIST.md)
