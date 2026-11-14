@@ -298,3 +298,17 @@ The check script runs formatting, lint, targeted scientific types, skill validat
 R.A.I.N. ATLAS is an independent Vers3Dynamics project. It is not affiliated with or endorsed by the U.S. Department of Energy or the Genesis Mission.
 
 **A useful research instrument does not have to agree with its inventor.**
+
+## Physical Scientist (software prototype)
+
+ATLAS now includes a **simulation-only resonance experiment loop** with competing preregistered
+models, a deterministic disagreement selector, raw evidence capture, an independent numerical
+evaluator and an offline replayable three-act demonstration. An explicit operator-attested CSV
+import path exists for independently acquired measurements. **No hardware driver or validated
+physical apparatus exists yet.** Read [the engineering and scientific boundary](docs/PHYSICAL_SCIENTIST.md)
+before using the experiment code.
+
+~~~sh
+uv run python scripts/physical_scientist.py demo --root atlas-data/physical-demo --seed 7
+uv run atlas ledger verify atlas-data/physical-demo/ledger
+~~~
