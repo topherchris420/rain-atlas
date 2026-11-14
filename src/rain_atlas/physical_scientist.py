@@ -241,8 +241,7 @@ def evaluate(ledger: Ledger, experiment: str, observation: str) -> dict:
         raise ValueError("frozen predictions do not match frozen models")
     observed = _parse_measurement(ledger.get_bytes(measurement["object"]), design["frequency_hz"])
     log_likelihood = [
-        math.log(w) - 0.5 * ((observed - p) / sigma) ** 2 if w else -math.inf
-        for w, p in zip(prior, expected)
+        math.log(w) - 0.5 * ((observed - p) / sigma) ** 2 if w else -math.inf for w, p in zip(prior, expected)
     ]
     peak = max(log_likelihood)
     normalized = [math.exp(v - peak) for v in log_likelihood]
@@ -264,7 +263,9 @@ def evaluate(ledger: Ledger, experiment: str, observation: str) -> dict:
         "initial_champion_residual_sigma": residual_sigma,
         "champion_contradicted": contradiction,
         "method": "Gaussian likelihood with preregistered fixed sigma; no parameter fitting",
-        "evidence_level": "simulation" if measurement["origin"] == "synthetic" else "operator-attested-import",
+        "evidence_level": "simulation"
+        if measurement["origin"] == "synthetic"
+        else "operator-attested-import",
     }
     ledger.append(
         "report",
@@ -280,9 +281,7 @@ def evaluate(ledger: Ledger, experiment: str, observation: str) -> dict:
                 }
             ],
             "negative_results": (
-                ["Initial champion contradicted by precommitted 3-sigma criterion"]
-                if contradiction
-                else []
+                ["Initial champion contradicted by precommitted 3-sigma criterion"] if contradiction else []
             ),
             "limitations": [
                 "Single-mode linear oscillator surrogate, not a validated plate FEM.",
@@ -291,7 +290,9 @@ def evaluate(ledger: Ledger, experiment: str, observation: str) -> dict:
                 "Hash chains verify consistency, not sensor authenticity or physical correctness.",
             ],
             "conclusion": (
-                "Precommitted champion contradicted" if contradiction else "Precommitted champion not contradicted"
+                "Precommitted champion contradicted"
+                if contradiction
+                else "Precommitted champion not contradicted"
             )
             + f" ({result['evidence_level']})",
             "evaluation": result,
@@ -324,9 +325,7 @@ def demo(root: Path, *, seed: int = 7, truth_hz: float = 186.0) -> dict:
     for act in ("I prediction", "II targeted follow-up"):
         selection = select_frequency(models, prior, sigma, grid, tuple(seen))
         f = selection["frequency_hz"]
-        exp = preregister(
-            ledger, models, prior, sigma, f, purpose=act, parent=parent, selection=selection
-        )
+        exp = preregister(ledger, models, prior, sigma, f, purpose=act, parent=parent, selection=selection)
         obs = observe(
             ledger,
             exp,
@@ -343,7 +342,13 @@ def demo(root: Path, *, seed: int = 7, truth_hz: float = 186.0) -> dict:
     # Fixed before the demo, never adaptively selected; this tests a new frequency, not a new plate.
     holdout_hz = 187.0
     exp = preregister(
-        ledger, models, prior, sigma, holdout_hz, purpose="III withheld-frequency predictive check", parent=parent
+        ledger,
+        models,
+        prior,
+        sigma,
+        holdout_hz,
+        purpose="III withheld-frequency predictive check",
+        parent=parent,
     )
     obs = observe(
         ledger,
