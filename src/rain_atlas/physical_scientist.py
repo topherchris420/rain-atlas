@@ -400,7 +400,9 @@ def demo(root: Path, *, seed: int = 7, truth_hz: float = 186.0) -> dict:
                 "Fixed single-frequency simulated holdout; no physical or cross-apparatus validation."
             ],
             "conclusion": (
-                "Synthetic holdout improved" if comparison["revision_improved"] else "Synthetic holdout did not improve"
+                "Synthetic holdout improved"
+                if comparison["revision_improved"]
+                else "Synthetic holdout did not improve"
             ),
             "author": author("deterministic-statistician"),
         },
