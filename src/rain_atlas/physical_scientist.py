@@ -296,7 +296,7 @@ def evaluate(ledger: Ledger, experiment: str, observation: str) -> dict:
             )
             + f" ({result['evidence_level']})",
             "evaluation": result,
-            "author": author("independent-deterministic-statistician"),
+            "author": author("deterministic-statistician"),
         },
     )
     return result
@@ -376,7 +376,33 @@ def demo(root: Path, *, seed: int = 7, truth_hz: float = 186.0) -> dict:
             "experiment": exp,
             "text": "Held-out prediction comparison (synthetic only)",
             "comparison": comparison,
-            "author": author("independent-deterministic-statistician"),
+            "author": author("deterministic-statistician"),
+        },
+    )
+    ledger.append(
+        "report",
+        {
+            "experiment": exp,
+            "findings": [],
+            "acceptance": [
+                {
+                    "id": "heldout_revision_improvement",
+                    "passed": comparison["revision_improved"],
+                    "criterion": "revised mixture reduces squared error on fixed synthetic holdout",
+                }
+            ],
+            "negative_results": (
+                ["Revised mixture did not improve the prespecified holdout"]
+                if not comparison["revision_improved"]
+                else []
+            ),
+            "limitations": [
+                "Fixed single-frequency simulated holdout; no physical or cross-apparatus validation."
+            ],
+            "conclusion": (
+                "Synthetic holdout improved" if comparison["revision_improved"] else "Synthetic holdout did not improve"
+            ),
+            "author": author("deterministic-statistician"),
         },
     )
     assert ledger.verify() == []
