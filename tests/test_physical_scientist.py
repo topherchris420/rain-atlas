@@ -124,3 +124,15 @@ def test_three_act_demo_is_explicitly_synthetic_and_replayable(tmp_path):
     assert all(r["origin"] == "synthetic" for _, r in ledger.records("dataset"))
     data = json.loads((tmp_path / "new-demo" / "observatory" / "review-data.json").read_text())
     assert all(r["data"]["origin"] == "synthetic" for r in data["records"] if r["kind"] == "dataset")
+
+def test_failed_holdout_is_retained_as_negative_evidence(tmp_path):
+    outcome = demo(tmp_path / "negative-demo", seed=7, truth_hz=195.0)
+    assert outcome["heldout_comparison"]["revision_improved"] is False
+    ledger = Ledger(tmp_path / "negative-demo" / "ledger")
+    assert ledger.verify() == []
+    reports = [record for _, record in ledger.records("report")]
+    assert any(
+        "did not improve" in message
+        for report in reports
+        for message in report.get("negative_results", [])
+    )
