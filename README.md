@@ -24,21 +24,25 @@ R.A.I.N. ATLAS is an **open-source, local-first research workbench** from [Vers3
 
 > **Evidence boundary:** The runnable three-act demonstration is **simulation-only**. Hardware and circuit illustrations below are **design concepts**, not KiCad schematics, routed PCBs, validated CAD, completed enclosures, physical measurements, or manufacturing instructions. The measurement-import path accepts operator-attested CSV data but cannot authenticate a physical instrument. There is no actuator-control path.
 
-![Figure 1: editorial concept of ATLAS's scientific roles, evidence ledger and proposed acoustic instrument](docs/figures/atlas-system-concept.svg)
+![Figure 1: rendered concept of ATLAS Physical Scientist, proposed acoustic apparatus and research architecture](docs/figures/atlas-physical-scientist-lab-system.png)
 
-*Figure 1. ATLAS as an evidence-first scientific instrument. The research workflow is a software prototype; the exploded assembly and instrument are conceptual illustrations, not tested hardware.*
+*Figure 1. ATLAS Physical Scientist, an editorial concept rendering of the proposed acoustic resonance apparatus, exploded assembly and research architecture. **This is artwork, not an engineering CAD model, tested circuit, or physical prototype.**
 
 ### Prediction, contradiction, revision
 
-![Figure 2: competing damped-oscillator models, synthetic contradiction, and held-out revision evaluation](docs/figures/atlas-scientific-loop.svg)
+![Figure 2: rendered editorial illustration of ATLAS prediction, contradiction and revision](docs/figures/atlas-physical-scientist-infographic.png)
 
-*Figure 2. Mathematical illustration of the preregistered three-act **synthetic** demonstration. Curves are illustrative, not recorded physical observations. A revision may fail and its negative result remains in the ledger.*
+*Figure 2. **Illustrative, not experimental data.** The pictured frequencies, amplitudes, curves, uncertainty values, and posterior weights are artist-rendered examples, **not output from the implemented ATLAS demonstration**. For authentic synthetic results and negative outcomes, run the reproducible software experiment and inspect its evidence ledger.*
 
 ### Proposed sensing and safety architecture
 
-![Figure 3: conceptual host, controller, sensor, interlock and resonator topology with authority separation](docs/figures/atlas-instrument-topology.svg)
+![Figure 3: rendered concept illustration of the proposed ATLAS acoustic instrument topology](docs/figures/atlas-instrument-topology-diagram.png)
 
-*Figure 3. Conceptual signal and authority boundaries. **No wiring, power distribution, control firmware, custom PCB, or safety interlock has been physically designed and verified.** Do not build a device from this diagram.*
+*Figure 3. **Concept art, not a real PCB layout or electrical schematic.** Illustrated traces, components, signal directions, the scale bar and power labels are not specified or validated engineering geometry. No physical interlock or wiring design is provided. **Do not manufacture or wire hardware from this image.**
+
+### Supporting vector documentation
+
+The earlier editable diagrams remain in the repository as simplified reference visuals, not validated fabrication files: [system concept](docs/figures/atlas-system-concept.svg), [scientific loop](docs/figures/atlas-scientific-loop.svg), and [instrument topology](docs/figures/atlas-instrument-topology.svg).
 
 | Available now | Not yet demonstrated |
 |---|---|
@@ -54,7 +58,7 @@ uv run python scripts/physical_scientist.py demo --root atlas-data/physical-demo
 uv run atlas ledger verify atlas-data/physical-demo/ledger
 ~~~
 
-Open \`atlas-data/physical-demo/observatory/index.html\` to inspect the source-labeled evidence. For the physical roadmap, risk gates, operator-attested import workflow and seven-lens review, read [ATLAS Physical Scientist: Engineering & Evidence](docs/PHYSICAL_SCIENTIST.md).
+Open `atlas-data/physical-demo/observatory/index.html` to inspect the source-labeled evidence. For the physical roadmap, risk gates, operator-attested import workflow and seven-lens review, read [ATLAS Physical Scientist: Engineering & Evidence](docs/PHYSICAL_SCIENTIST.md).
 
 
 
