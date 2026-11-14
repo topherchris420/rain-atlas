@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="900" viewBox="0 0 1680 900" role="img" aria-labelledby="title desc">
+<title id="title">ATLAS Physical Scientist: experimental system concept</title><desc id="desc">Editorial overview of a scientific software loop and a proposed acoustic measurement apparatus. Hardware render is conceptual, not a manufactured board or validated design.</desc>
+<defs><linearGradient id="paper" x2="0" y2="1"><stop stop-color="#f8f8f5"/><stop offset="1" stop-color="#e9eeea"/></linearGradient><linearGradient id="rig" x2="1" y2="1"><stop stop-color="#54636a"/><stop offset="1" stop-color="#26343c"/></linearGradient><linearGradient id="plate" x2="1" y2="1"><stop stop-color="#fbffff"/><stop offset="1" stop-color="#cedbd9"/></linearGradient><filter id="shadow"><feDropShadow dx="0" dy="11" stdDeviation="15" flood-color="#344a49" flood-opacity=".11"/></filter><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8z" fill="#72918e"/></marker></defs>
+<rect width="1680" height="900" fill="url(#paper)"/>
+<rect x="42" y="33" width="1596" height="834" rx="28" fill="none" stroke="#c9d5d0" stroke-width="1.4"/>
+<text x="85" y="91" fill="#0B5D63" font-size="20" font-family="Inter, Arial, sans-serif" font-weight="700" text-anchor="start">VERS3DYNAMICS  /  R.A.I.N. ATLAS</text>
+<text x="1595" y="91" fill="#718280" font-size="17" font-family="Inter, Arial, sans-serif" font-weight="600" text-anchor="end">FIGURE 01 / SYSTEM CONCEPT</text>
+<text x="85" y="174" fill="#26383c" font-size="66" font-family="Georgia, 'Times New Roman', serif" font-weight="400" text-anchor="start">Physical Scientist</text>
+<text x="87" y="219" fill="#607471" font-size="23" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="start">Falsifiable predictions, measured evidence, and a machine permitted to be wrong.</text>
+<rect x="85" y="261" width="775" height="424" rx="24" fill="#fcfdfb" stroke="#cad8d2" stroke-width="1.5"/>
+<rect x="891" y="261" width="701" height="424" rx="24" fill="#fbfcfb" stroke="#cad8d2" stroke-width="1.5"/>
+<text x="115" y="308" fill="#0B5D63" font-size="19" font-family="Inter, Arial, sans-serif" font-weight="700" text-anchor="start">01  /  SCIENTIFIC REASONING</text>
+<text x="922" y="308" fill="#0B5D63" font-size="19" font-family="Inter, Arial, sans-serif" font-weight="700" text-anchor="start">02  /  PROPOSED PHYSICAL INSTRUMENT</text>
+<text x="115" y="348" fill="#2f4144" font-size="24" font-family="Inter, Arial, sans-serif" font-weight="600" text-anchor="start">Seven roles, separated by evidence and authority</text>
+<rect x="115" y="374" width="165" height="104" rx="12" fill="#e4efeb" stroke="#c5d1cd" stroke-width="1.5"/>
+<text x="128" y="409" fill="#3c5756" font-size="13" font-family="Inter, Arial, sans-serif" font-weight="700" text-anchor="start">THEORIST</text>
+<text x="128" y="438" fill="#5e6e6d" font-size="15" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="start">Competing models</text>
+<rect x="292" y="374" width="165" height="104" rx="12" fill="#f6f8f6" stroke="#c5d1cd" stroke-width="1.5"/>
+<text x="305" y="409" fill="#3c5756" font-size="13" font-family="Inter, Arial, sans-serif" font-weight="700" text-anchor="start">EXPERIMENTALIST</text>
+<text x="305" y="438" fill="#5e6e6d" font-size="15" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="start">Discriminating test</text>
+<path d="M282 428 h-3" fill="none" stroke="#80a09b" stroke-width="2" />
+<rect x="469" y="374" width="165" height="104" rx="12" fill="#f6f8f6" stroke="#c5d1cd" stroke-width="1.5"/>
+<text x="482" y="409" fill="#3c5756" font-size="13" font-family="Inter, Arial, sans-serif" font-weight="700" text-anchor="start">INSTRUMENT ENGINEER</text>
+<text x="482" y="438" fill="#5e6e6d" font-size="15" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="start">Bounded plan</text>
+<path d="M459 428 h-3" fill="none" stroke="#80a09b" stroke-width="2" />
+<rect x="646" y="374" width="165" height="104" rx="12" fill="#edf1f5" stroke="#c5d1cd" stroke-width="1.5"/>
+<text x="659" y="409" fill="#3c5756" font-size="13" font-family="Inter, Arial, sans-serif" font-weight="700" text-anchor="start">OBSERVER</text>
+<text x="659" y="438" fill="#5e6e6d" font-size="15" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="start">Frozen measurement</text>
+<path d="M636 428 h-3" fill="none" stroke="#80a09b" stroke-width="2" />
+<rect x="115" y="503" width="215" height="104" rx="12" fill="#f6f8f6" stroke="#c5d1cd" stroke-width="1.5"/>
+<text x="128" y="538" fill="#3c5756" font-size="14" font-family="Inter, Arial, sans-serif" font-weight="700" text-anchor="start">SKEPTIC</text>
+<text x="128" y="567" fill="#5e6e6d" font-size="17" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="start">Alternative causes</text>
+<rect x="346" y="503" width="215" height="104" rx="12" fill="#f6f8f6" stroke="#c5d1cd" stroke-width="1.5"/>
+<text x="359" y="538" fill="#3c5756" font-size="14" font-family="Inter, Arial, sans-serif" font-weight="700" text-anchor="start">STATISTICIAN</text>
+<text x="359" y="567" fill="#5e6e6d" font-size="17" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="start">Independent scoring</text>
+<path d="M336 557 h-3" fill="none" stroke="#80a09b" stroke-width="2" />
+<rect x="577" y="503" width="215" height="104" rx="12" fill="#f6f8f6" stroke="#c5d1cd" stroke-width="1.5"/>
+<text x="590" y="538" fill="#3c5756" font-size="14" font-family="Inter, Arial, sans-serif" font-weight="700" text-anchor="start">ARCHIVIST</text>
+<text x="590" y="567" fill="#5e6e6d" font-size="17" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="start">Retained history</text>
+<path d="M567 557 h-3" fill="none" stroke="#80a09b" stroke-width="2" />
+<text x="115" y="639" fill="#415d5a" font-size="22" font-family="Inter, Arial, sans-serif" font-weight="600" text-anchor="start">Agents propose; the deterministic evaluator decides.</text>
+<text x="115" y="667" fill="#70817e" font-size="18" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="start">The ledger stores every prediction before its observation.</text>
+<text x="922" y="345" fill="#4e6864" font-size="21" font-family="Inter, Arial, sans-serif" font-weight="600" text-anchor="start">Acoustic resonance rig  /  not yet constructed</text>
+<g filter="url(#shadow)">
+<path d="M1118 540 L1462 540 L1542 591 L1198 591 Z" fill="#879695" stroke="#42545c" stroke-width="2" />
+<path d="M1198 591 L1542 591 L1542 651 Q1542 662 1530 662 L1210 662 Q1198 662 1198 650 Z" fill="url(#rig)" stroke="#31444a" stroke-width="2" />
+<path d="M1118 540 L1198 591 L1198 652 L1118 600 Z" fill="#53656a" stroke="#42545c" stroke-width="2" />
+<rect x="1239" y="615" width="57" height="14" rx="7" fill="#c0dad2" stroke="#84938d" stroke-width="1.5"/>
+<rect x="1502" y="617" width="18" height="18" rx="9" fill="#d4e3df" stroke="#9babaa" stroke-width="1.5"/>
+<path d="M1258 506 L1258 374 Q1258 355 1279 355 L1445 355 Q1465 355 1465 376 L1465 517" fill="none" stroke="#283a43" stroke-width="22" stroke-linecap="round"/>
+<path d="M1259 506 L1259 374 Q1259 355 1279 355 L1445 355 Q1465 355 1465 376 L1465 517" fill="none" stroke="#617279" stroke-width="7" stroke-linecap="round"/>
+<rect x="1350" y="377" width="48" height="29" rx="6" fill="#4c5b60" stroke="#24323c" stroke-width="1.5"/>
+<path d="M1365 404 L1384 404 L1381 431 L1367 431 Z" fill="#59666a" stroke="#34454c" stroke-width="2" />
+<circle cx="1374" cy="428" r="10" fill="#151e25" stroke="#aebbb9" stroke-width="4"/>
+<path d="M1265 504 L1439 504 L1511 550 L1337 550 Z" fill="url(#plate)" stroke="#6b8c89" stroke-width="2" />
+<ellipse cx="1388" cy="527" rx="21" ry="6.5" fill="none" stroke="#9d96bb" stroke-opacity="0.64" stroke-width="2"/>
+<ellipse cx="1388" cy="527" rx="42" ry="13" fill="none" stroke="#9d96bb" stroke-opacity="0.52" stroke-width="2"/>
+<ellipse cx="1388" cy="527" rx="63" ry="19.5" fill="none" stroke="#9d96bb" stroke-opacity="0.4" stroke-width="2"/>
+<ellipse cx="1388" cy="527" rx="84" ry="26" fill="none" stroke="#9d96bb" stroke-opacity="0.28" stroke-width="2"/>
+<path d="M1258 525 L1258 545 M1459 545 L1459 563" fill="none" stroke="#9eabaf" stroke-width="12" stroke-linecap="round"/>
+<rect x="1273" y="575" width="161" height="39" rx="6" fill="#477368" stroke="#294e47" stroke-width="1.5"/>
+<rect x="1286" y="584" width="41" height="22" rx="3" fill="#253f43" stroke="#9db7ad" stroke-width="1.5"/>
+<rect x="1345" y="584" width="69" height="7" rx="2" fill="#c9d6ca" stroke="#879a91" stroke-width="1.5"/>
+</g>
+<text x="922" y="673" fill="#71817f" font-size="17" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="start">Illustrative enclosure / sensors / camera</text>
+<line x1="91" y1="715" x2="1589" y2="715" stroke="#b9c9c3" stroke-width="1.4" />
+<rect x="85" y="736" width="491" height="104" rx="16" fill="#ffffff" stroke="#d3dcd6" stroke-width="1.5"/>
+<text x="107" y="774" fill="#0B5D63" font-size="18" font-family="Inter, Arial, sans-serif" font-weight="700" text-anchor="start">01</text>
+<text x="151" y="774" fill="#263e42" font-size="19" font-family="Inter, Arial, sans-serif" font-weight="700" text-anchor="start">PREDICT</text>
+<text x="107" y="808" fill="#657b76" font-size="18" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="start">Locked hypotheses and uncertainty</text>
+<rect x="594" y="736" width="491" height="104" rx="16" fill="#ffffff" stroke="#d3dcd6" stroke-width="1.5"/>
+<text x="616" y="774" fill="#0B5D63" font-size="18" font-family="Inter, Arial, sans-serif" font-weight="700" text-anchor="start">02</text>
+<text x="660" y="774" fill="#263e42" font-size="19" font-family="Inter, Arial, sans-serif" font-weight="700" text-anchor="start">OBSERVE</text>
+<text x="616" y="808" fill="#657b76" font-size="18" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="start">Synthetic or operator-attested CSV</text>
+<rect x="1103" y="736" width="491" height="104" rx="16" fill="#ffffff" stroke="#d3dcd6" stroke-width="1.5"/>
+<text x="1125" y="774" fill="#0B5D63" font-size="18" font-family="Inter, Arial, sans-serif" font-weight="700" text-anchor="start">03</text>
+<text x="1169" y="774" fill="#263e42" font-size="19" font-family="Inter, Arial, sans-serif" font-weight="700" text-anchor="start">REVISE</text>
+<text x="1125" y="808" fill="#657b76" font-size="18" font-family="Inter, Arial, sans-serif" font-weight="400" text-anchor="start">Posterior update, errors retained</text>
+<text x="1595" y="852" fill="#738682" font-size="13" font-family="Inter, Arial, sans-serif" font-weight="600" text-anchor="end">CONCEPT ILLUSTRATION  ·  NOT A PCB, CAD DRAWING OR PHYSICAL VALIDATION</text>
+</svg>
