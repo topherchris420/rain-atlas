@@ -66,8 +66,12 @@ def main() -> int:
         else:
             selection = {"frequency_hz": args.frequency, "selection_rule": "human_fixed_v1"}
         experiment = preregister(
-            Ledger(args.ledger), models, args.weights, args.sigma,
-            selection["frequency_hz"], selection=selection
+            Ledger(args.ledger),
+            models,
+            args.weights,
+            args.sigma,
+            selection["frequency_hz"],
+            selection=selection,
         )
         value = {"experiment": experiment, "selection": selection, "execution": "NONE"}
     elif args.command == "observe":
@@ -79,8 +83,11 @@ def main() -> int:
             "attestation": "operator-attested",
         }
         ref = observe(
-            Ledger(args.ledger), args.experiment, args.csv.read_bytes(),
-            origin="empirical", provenance=provenance
+            Ledger(args.ledger),
+            args.experiment,
+            args.csv.read_bytes(),
+            origin="empirical",
+            provenance=provenance,
         )
         value = {"observation": ref, "evidence_level": "OPERATOR_ATTESTED_IMPORT"}
     elif args.command == "evaluate":
