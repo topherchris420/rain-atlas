@@ -38,12 +38,14 @@ def test_benchmark_is_resumable_reproducible_and_refuses_verdicts_on_tiny_sample
     arms = ("closed-loop", "yoked", "fixed-sweep")
     results = run_benchmark("dev", 1, arms=arms, workers=1, out=tmp_path)
     assert len(results) == len(arms) * len(FAMILIES)
-    lines = (tmp_path / "results.jsonl").read_text().splitlines()
-    with (tmp_path / "results.jsonl").open("a") as fh:
+    lines = (tmp_path / "results.jsonl").read_text(encoding="utf-8").splitlines()
+    with (tmp_path / "results.jsonl").open("a", encoding="utf-8", newline="\n") as fh:
         fh.write('{"torn": ')  # a crash mid-write leaves a torn final line
     again = run_benchmark("dev", 1, arms=arms, workers=1, out=tmp_path)
     assert [r["digest"] for r in again] == [r["digest"] for r in results]
-    assert len((tmp_path / "results.jsonl").read_text().splitlines()) == len(lines) + 1  # nothing rerun
+    assert (
+        len((tmp_path / "results.jsonl").read_text(encoding="utf-8").splitlines()) == len(lines) + 1
+    )  # nothing rerun
     for r in results:
         assert r["efficiency"] == (r["experiments"] if r["correct"] else 16)
         assert not (r["correct"] and r["false"])
@@ -114,9 +116,9 @@ def test_cli_investigation_is_gated_recorded_and_resumable(tmp_path, capsys):
     assert "unseal" in kinds and kinds.index("unseal") > max(
         i for i, k in enumerate(kinds) if k == "verdict" and i < kinds.index("unseal")
     )
-    summary = json.loads((root / "reports" / "research-summary.json").read_text())
+    summary = json.loads((root / "reports" / "research-summary.json").read_text(encoding="utf-8"))
     assert [m["mission"] for m in summary["missions"]][:2] == ["M1-characterize", "M2-hidden-change"]
-    assert (root / "reports" / "dossier.html").read_text().count("<svg") >= 5
+    assert (root / "reports" / "dossier.html").read_text(encoding="utf-8").count("<svg") >= 5
     assert (root / "observatory" / "index.html").exists()
     before = len(kinds)
     assert main(["research", "resume", "--root", str(root), "--workers", "1"]) == 0
@@ -151,7 +153,7 @@ def test_cli_investigation_is_gated_recorded_and_resumable(tmp_path, capsys):
 def test_demo_with_a_small_benchmark_produces_a_bounded_answer(tmp_path, capsys):
     root = tmp_path / "demo"
     assert main(["research", "demo", "--root", str(root), "--problems", "2", "--workers", "2"]) == 0
-    summary = json.loads((root / "reports" / "research-summary.json").read_text())
+    summary = json.loads((root / "reports" / "research-summary.json").read_text(encoding="utf-8"))
     assert summary["benchmark"]["hypotheses"]["problems_per_family"] == 2
     assert summary["answer"]["verdict"] == "unresolved"  # too few problems to draw verdicts
     assert Ledger(root / "ledger").verify() == []
