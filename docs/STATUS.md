@@ -38,8 +38,12 @@ for implemented boundaries and explicitly planned work.
   requests. One earlier full run failed a single spectral acceptance test
   with "engine source changed since the original run" because source files
   were edited while it ran. That is the reproduction guard working; the
-  test passes in isolation and in the clean run above. Hosted CI and Windows
-  were not exercised.
+  test passes in isolation and in the clean run above. Hosted CI (GitHub
+  Actions run 44086141151, same code) then passed all eight jobs: tests on
+  Ubuntu 24.04 and Windows Server 2022 with Python 3.11 and 3.12, the
+  installed-wheel package check on both systems, the offline viewer, and
+  acceptance (slow tests, all experiments, both `atlas rain` demonstrations
+  and their ledger verification).
 - **Unified R.A.I.N. architecture, 2026-11-16, Windows Python 3.12:** the
   full suite including the new modules passed (642 passed, 19 skipped;
   661 collected), ruff check/format clean, `atlas ledger verify` clean on
