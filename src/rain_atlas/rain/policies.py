@@ -17,6 +17,7 @@ PolicyName = str
 ADAPTIVE = "adaptive"
 ADAPTIVE_NO_MEMORY = "adaptive-no-memory"
 GRID = "grid"
+GRID_DESCENDING = "grid-descending"
 RANDOM = "random"
 
 POLICIES = (ADAPTIVE, ADAPTIVE_NO_MEMORY, GRID, RANDOM)
@@ -30,7 +31,13 @@ class Selector(Protocol):
 
 
 class AdaptiveSelector:
-    """Maximum-disagreement selection among untested conditions."""
+    """Maximum-disagreement selection among untested conditions.
+
+    The predicted disagreement between the two candidates does not depend on
+    the observations, so for this two-model problem the policy is a fixed
+    high-to-low ordering of the grid; :class:`DescendingGridSelector`
+    reproduces it exactly (the ordering control of protocol v2).
+    """
 
     name = ADAPTIVE
 
@@ -53,6 +60,19 @@ class GridSelector:
     def next_condition(self, grid: list[float], observations: list[Observation]) -> float | None:
         tested = {round(obs.coupling, 6) for obs in observations}
         for value in sorted(grid):
+            if round(value, 6) not in tested:
+                return value
+        return None
+
+
+class DescendingGridSelector:
+    """Fixed design: run the grid in order, high to low (uses no model knowledge)."""
+
+    name = GRID_DESCENDING
+
+    def next_condition(self, grid: list[float], observations: list[Observation]) -> float | None:
+        tested = {round(obs.coupling, 6) for obs in observations}
+        for value in sorted(grid, reverse=True):
             if round(value, 6) not in tested:
                 return value
         return None
