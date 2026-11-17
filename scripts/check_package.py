@@ -5,12 +5,16 @@ data files and the lockfile next to it. This check builds the sdist and
 wheel, installs the wheel into a fresh virtual environment, and runs the
 CLI from an unrelated directory, so anything the wheel forgot fails here.
 
-Usage: ``uv run python scripts/check_package.py`` (needs ``uv`` on PATH).
+Usage: ``uv run python scripts/check_package.py [--dist DIR]`` (needs ``uv``
+on PATH). With ``--dist`` it checks already-built distributions instead of
+building, so a release publishes exactly the files that were checked.
 """
 
 from __future__ import annotations
 
+import argparse
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -28,10 +32,17 @@ def run(*args: str, cwd: Path | None = None, env: dict | None = None) -> str:
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--dist", type=Path, help="check these built distributions instead of building")
+    args = parser.parse_args()
     with tempfile.TemporaryDirectory(prefix="atlas-package-") as tmp:
         work = Path(tmp)
-        dist = work / "dist"
-        run("uv", "build", "--out-dir", str(dist), cwd=ROOT)
+        if args.dist:
+            dist = args.dist.resolve()
+        else:
+            dist = work / "dist"
+            run("uv", "build", "--out-dir", str(dist), cwd=ROOT)
+        assert len(list(dist.glob("rain_atlas-*.tar.gz"))) == 1, f"expected one sdist in {dist}"
         wheel = next(dist.glob("rain_atlas-*.whl"))
         names = zipfile.ZipFile(wheel).namelist()
         manifests = [
@@ -45,6 +56,13 @@ def main() -> None:
             "rain_atlas/memory/vendor/mem0/LICENSE",
         ):
             assert required in names, f"wheel is missing {required}"
+        # PyPI rejects or mis-renders bad metadata; check it exactly as PyPI will.
+        run("uvx", "twine", "check", "--strict", *(str(p) for p in sorted(dist.glob("rain_atlas-*"))))
+        metadata = zipfile.ZipFile(wheel).read(f"{wheel.name.split('-py3')[0]}.dist-info/METADATA").decode()
+        description = metadata.split("\n\n", 1)[1]
+        assert re.search(r"\]\((?!https?://|#|mailto:)[^)\s]+\)", description) is None, (
+            "PyPI description still has relative links"
+        )
 
         venv = work / "venv"
         run("uv", "venv", "--quiet", str(venv))

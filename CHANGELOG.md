@@ -2,9 +2,23 @@
 
 All notable changes are recorded here. Versions follow semantic versioning.
 
-## 0.1.0 — unreleased
+## 0.1.0 — 2026-11-17
 
-First end-to-end slice.
+First release ([release notes](docs/releases/v0.1.0.md)). Published as a GitHub
+release (wheel, sdist, `SHA256SUMS`, CycloneDX SBOM) and on PyPI as
+`rain-atlas`.
+
+### Release engineering
+
+- Tag-triggered release workflow (`.github/workflows/release.yml`). It
+  refuses a tag that differs from the package version or lacks release
+  notes, runs the installed-wheel check, builds once, attaches the
+  distributions, checksums and SBOM to a GitHub release, and uploads to PyPI
+  through trusted publishing (no stored token).
+- PyPI metadata: project URLs, keywords and classifiers for the tested
+  platforms and Python versions. The long description is the README with its
+  relative links and images made absolute, so they render on PyPI. The
+  package check now runs `twine check --strict` and rejects relative links.
 
 ### Changed and fixed (production readiness and central experiment v2, 2026-11-17)
 
