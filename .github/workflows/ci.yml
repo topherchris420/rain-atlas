@@ -65,6 +65,10 @@ jobs:
       - run: uv run atlas experiment run spectral-recovery --mode fixed --root atlas-data/ci
       - run: uv run atlas experiment run synchronization --root atlas-data/sync --replicates 12
       - run: uv run atlas benchmark --root atlas-data/bench --trials 12
+      - run: uv run atlas rain slice --root atlas-data/rain-slice
+      - run: uv run atlas ledger verify atlas-data/rain-slice/ledger
+      - run: uv run atlas rain central --root atlas-data/rain-central
+      - run: uv run atlas ledger verify atlas-data/rain-central/ledger
       - uses: actions/upload-artifact@v4
         if: always()
         with:
