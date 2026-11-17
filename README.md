@@ -18,31 +18,6 @@ R.A.I.N. ATLAS is an **open-source, local-first research workbench** from [Vers3
 *This is a screenshot of the actual offline observatory, not a product mockup. The [recorded demonstration](docs/demonstration/) is a standalone HTML review snapshot: clone or download the repository, then open `docs/demonstration/index.html` locally.*
 
 
-## REA: reconstructed capabilities, unified
-
-Vers3Dynamics applies **Recursive Engineering & Analysis (REA)** to
-reference systems: investigate an authorized reference, reconstruct selected
-capabilities independently, verify against recorded behavior, then integrate
-what survives. Nine Y Combinator–funded systems were investigated this way
-and their useful capabilities were rebuilt as eight independently tested
-modules inside this repository — no reference source is included or copied.
-
-| Reconstructed capability | Reference investigated | Module |
-| --- | --- | --- |
-| Scientific memory (extraction, retrieval, history, contradictions) | Mem0 | `rain_atlas.memory` |
-| Execution tracing, spans, scores, eval datasets | Langfuse | `rain_atlas.observability` |
-| Research missions, approvals, supervision | Omnara, Maxxwell | `rain_atlas.mission` |
-| Protocol compilation with safety constraints | Infera | `rain_atlas.protocol` |
-| Stateful simulation twin with fault injection | Arga Labs | `rain_atlas.simulation` |
-| Local inference providers (Ollama, llama.cpp, mock) | RunAnywhere | `rain_atlas.inference` |
-| Local-first versioned knowledge with conflict resolution | Epicenter | `rain_atlas.knowledge` |
-| Authorized web retrieval with provenance | Browser Use | `rain_atlas.browser` |
-
-For Mem0 the reference SDK itself runs locally in a differential
-conformance suite (12 passing comparisons against mem0ai 2.2.1). Every
-investigation is a validated evidence package with enforced
-OBSERVED / COMPUTED / INFERRED / UNKNOWN classifications.
-
 **Run the integrated demonstrations:**
 
 ```bash
