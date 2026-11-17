@@ -32,9 +32,14 @@ class GenerationResult:
 
 
 class InferenceProvider:
-    """Interface every provider implements."""
+    """Interface every provider implements.
+
+    ``generation`` is the evidence label for text this provider produces:
+    ``"model"`` for a language model, ``"scripted"`` for deterministic rules.
+    """
 
     name = "abstract"
+    generation = "model"
 
     def complete(self, prompt: str, *, model: str | None = None, **kwargs: Any) -> GenerationResult:
         raise NotImplementedError
@@ -54,10 +59,12 @@ class MockProvider(InferenceProvider):
     * ``classify: <statement>`` → labels a statement hypothesis/finding/…;
     * anything else is echoed with a ``mock:`` prefix.
 
-    Determinism: the same prompt always returns the same text.
+    Determinism: the same prompt always returns the same text. Its output is
+    rule-based, so it is labeled ``generation="scripted"``, never ``"model"``.
     """
 
     name = "mock"
+    generation = "scripted"
 
     def __init__(self, vocabulary: list[str] | None = None) -> None:
         self.vocabulary = list(vocabulary or [])

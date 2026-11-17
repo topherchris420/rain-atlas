@@ -97,10 +97,50 @@ class TestVerticalSlice:
         assert all(task["status"] == "completed" for task in result.tasks)
         assert len(result.approvals) == 1
         assert result.approvals[0]["resolution"] == "approve"
-        # Model generation is labeled honestly.
+        # Generation is labeled honestly: the default provider is rule-based,
+        # so nothing in the default slice claims model generation.
         generations = {t["generation"] for task in result.tasks for t in task["transitions"]}
+        assert "model" not in generations
         assert "scripted" in generations
-        assert "model" in generations
+
+    def test_model_generation_label_follows_the_provider(self, tmp_path: Path):
+        from rain_atlas.inference import MockProvider
+
+        class LanguageModelStub(MockProvider):
+            name = "stub-llm"
+            generation = "model"
+
+        result = run_vertical_slice(
+            tmp_path / "llm", seed=7, true_model="damped", provider=LanguageModelStub(["coupling strength"])
+        )
+        proposer = next(task for task in result.tasks if task["name"] == "propose-hypothesis")
+        assert {t["generation"] for t in proposer["transitions"]} & {"model"}
+
+    def test_preregistration_precedes_execution_and_evidence_is_complete(self, tmp_path: Path):
+        from rain_atlas.ledger.store import Ledger
+
+        run_vertical_slice(tmp_path / "evidence", seed=7, true_model="damped")
+        ledger = Ledger(tmp_path / "evidence" / "ledger")
+        kinds = [entry.kind for entry in ledger.entries()]
+        assert kinds[0] == "preregistration"
+        assert {"run", "dataset", "claim", "verdict", "report"} <= set(kinds)
+        verdict = ledger.get_json(next(ledger.entries("verdict")).object)
+        assert verdict["verdict"] == "supported"
+        prereg = ledger.get_json(next(ledger.entries("preregistration")).object)
+        assert prereg["design"]["hypothesis_generation"] == "scripted"
+        assert ledger.verify() == []
+
+    def test_reused_root_attaches_evidence_to_its_own_preregistration(self, tmp_path: Path):
+        from rain_atlas.ledger.store import Ledger
+
+        run_vertical_slice(tmp_path / "reused", seed=7, true_model="damped")
+        run_vertical_slice(tmp_path / "reused", seed=8, true_model="linear")
+        ledger = Ledger(tmp_path / "reused" / "ledger")
+        preregs = [entry.object for entry in ledger.entries("preregistration")]
+        reports = [ledger.get_json(entry.object) for entry in ledger.entries("report")]
+        assert len(preregs) == 2
+        assert [report["experiment"] for report in reports] == preregs
+        assert ledger.verify() == []
 
     def test_slice_is_deterministic(self, tmp_path: Path):
         a = run_vertical_slice(tmp_path / "a", seed=3, true_model="linear", clock=lambda: 1.0)
