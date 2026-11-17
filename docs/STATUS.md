@@ -6,6 +6,7 @@ for implemented boundaries and explicitly planned work.
 
 | Priority | Implemented and exercised |
 |---|---|
+| Autonomous research | `atlas research`: charter-scoped research loop (exact NIG evidence over structure, change and attribution hypotheses; critic; total-information design; novel-condition and sentinel challenges; cross-validated independent check; verdicts from the existing rule), escalation outside scope, ledger journal with verified resume, memory as a tempered prior with quarantine, optional validated Ollama advisor. Preregistered held-out benchmark (200 problems, 8 arms): H1, H2, H4, H5, H6, H7 supported; H3 (false conclusions ≤ 5 %) unresolved at 5.0 % [1.5, 10.9]. See [RESEARCH.md](RESEARCH.md) and [demonstration/research/](demonstration/research/) |
 | REA evidence framework | Typed investigation packages with enforced OBSERVED/COMPUTED/INFERRED/UNKNOWN evidence classifications, conformance harness, replica registry with integration gates; no built-in target data |
 | Unified capabilities | Eight independent modules: scientific memory, observability tracing, mission control with approvals, protocol compilation, simulation twin, inference providers, knowledge store, browser adapter — with hybrid BM25 ranking via vendored Apache-2.0 scoring |
 | Unified R.A.I.N. demonstrations | `atlas rain slice` (one mission through every module; preregistered before the approval gate; run, claim, skeptic verdict and report in the ledger; honest scripted/model/human labels) and `atlas rain central` protocol v2 (six arms, stationary and shifting worlds, 150 programs per regime, Bonferroni-adjusted paired bootstrap; recorded outcome: verified memory saves 26.9 % [24.3, 29.5] — H1 unresolved — with no detectable added false conclusions, H2 supported; naive memory errs in 91 % of post-change missions, H3 supported; selection advantage equals a fixed ordering. See [CENTRAL_EXPERIMENT.md](CENTRAL_EXPERIMENT.md)) |
@@ -26,6 +27,14 @@ for implemented boundaries and explicitly planned work.
 
 ## Validation record
 
+- **Autonomous research, 2026-11-17, Linux CPython 3.12.3** (NumPy 2.5.4,
+  SciPy 1.18.1): full suite excluding slow tests **692 passed, 2 skipped**
+  before the held-out run, plus the new slow demonstration test; ruff and
+  format clean. The preregistered held-out investigation (`atlas research
+  demo`, 1 600 benchmark missions and five featured missions, 389 s on four
+  workers) verified its 250-record ledger; 64/64 reproduction missions were
+  identical. The preregistration was committed and pushed (`cad3c64`) before
+  the run.
 - **Production readiness and central experiment v2, 2026-11-17, Linux
   CPython 3.12.3** at `d9ac38d`: full suite including slow acceptance tests
   **674 passed, 2 skipped** (`cryptography` not installed; Windows-only job

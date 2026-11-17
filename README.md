@@ -11,7 +11,7 @@ R.A.I.N. ATLAS is an **open-source, local-first research workbench** from [Vers3
 [![Release v0.1.0](https://img.shields.io/badge/Release-v0.1.0-0b5d63)](https://github.com/topherchris420/rain-atlas/releases/tag/v0.1.0)
 [![CI](https://github.com/topherchris420/rain-atlas/actions/workflows/ci.yml/badge.svg)](https://github.com/topherchris420/rain-atlas/actions)
 
-**[Explore Physical Scientist](#atlas-physical-scientist)** · **[Run an experiment](#run-your-first-experiment)** · **[Investigate firmware](#black-glass-firmware-intelligence)** · **[Inspect recorded evidence](#recorded-experiments)** · **[Browse the methods](#31-executable-scientific-skills)** · **[Understand the limits](#what-is-implemented-and-what-is-not)**
+**[Run an autonomous investigation](#autonomous-research)** · **[Explore Physical Scientist](#atlas-physical-scientist)** · **[Run an experiment](#run-your-first-experiment)** · **[Investigate firmware](#black-glass-firmware-intelligence)** · **[Inspect recorded evidence](#recorded-experiments)** · **[Browse the methods](#31-executable-scientific-skills)** · **[Understand the limits](#what-is-implemented-and-what-is-not)**
 
 ![Offline R.A.I.N. ATLAS observatory showing a challenged synchronization claim, its evidence, reproduction and verdict](docs/demonstration/evidence-explorer.png)
 
@@ -47,6 +47,25 @@ The first protocol of this experiment reported a 68 % saving that its design
 guaranteed; it remains reproducible with `--protocol v1`. See
 [docs/CENTRAL_EXPERIMENT.md](docs/CENTRAL_EXPERIMENT.md) for the design, the
 full results and why v1 was superseded.
+
+## Autonomous research
+
+**Give ATLAS a question and an approved scope; it decides what to test next because of what it has seen.**
+
+`atlas research` runs a complete investigation within a charter a human approves (question, permitted methods, budgets, execution environment). Inside that scope the research loop forms competing hypotheses, preregisters them, chooses each experiment to maximize expected information about the explanations still in contention, records its prediction before every run, notices when its model is inadequate, admits or rejects new hypotheses on exact evidence, challenges its conclusions with fresh data and an independent method, and stops for a stated reason. Anything outside the scope (more experiments, a wider design space, new hypothesis terms) becomes an escalation request for a human. Hardware control and untrusted code have no execution path at all. Every step is in the evidence ledger; an interrupted mission resumes by replaying the record and verifying each regenerated event.
+
+```bash
+uv run atlas research demo --root atlas-data/research     # default charter, labeled proxy approval
+uv run atlas ledger verify atlas-data/research/ledger
+```
+
+The question it was built to answer, investigated on a simulated noisy driven oscillator with hidden changes, unanticipated terms, stale memories and heavy-tailed noise:
+
+> Can an intelligent experimental system detect previously unknown changes in a noisy dynamical system, determine what changed, and develop a better explanatory model using fewer experiments than conventional methods?
+
+**Recorded answer: supported, with conditions.** On 200 held-out problems, preregistered and pushed before the run, the closed loop needed fewer experiments to a correct conclusion than a yoked control that replays its own designs from a different problem (−1.14 experiments, adjusted interval [−1.85, −0.45]), and fewer than open-loop D-optimal design, a fixed sweep, random designs and the existing ATLAS rule. It identified hidden changes far more often than a fixed sweep (64 % vs 18 %) and found unanticipated terms more often (36 % vs 4 %). **The safety hypothesis is unresolved:** 5.0 % of its conclusions were false (interval 1.5–10.9 % against a 5 % bound). It never identified the held-out-only cubic-damping term, and it missed 6 of 19 stale memories. The preregistration had predicted the observation-dependence test would be unresolved.
+
+[Design and limits](docs/RESEARCH.md) · [Preregistration](docs/research/PREREGISTRATION.md) · [Recorded investigation and dossier](docs/demonstration/research/)
 
 ## ATLAS Physical Scientist
 
@@ -104,9 +123,10 @@ Most scientific software returns an answer. ATLAS also records **how the answer 
 | **Offline observatory** | Explore claims, evidence dependencies, runs, timelines, skills, reports and non-executing proposals in a local HTML file. |
 | **BLACK GLASS** | Inventory authorized firmware, reconstruct static service/library relationships, inspect declared network surfaces, verify supplied trust anchors and compare releases. |
 | **ORRERY** | Propagate orbits and N-body systems with a real force model, transform frames and time scales, estimate orbits and propagate covariance — validated against the analytic Kepler solution and NASA GMAT R2026a. |
+| **Autonomous research** | Run a charter-scoped investigation: competing hypotheses, observation-dependent experiment choice, self-critique, challenges, escalation outside scope, verified resume. |
 | **31 executable skills** | Compose tested methods across signal processing, dynamical systems, physics, neuroscience, statistics, astrodynamics and evaluation. |
 
-The built-in research roles are **scripted policies**, not autonomous LLM researchers. No live model provider or general-purpose AI agent is required or included in the demonstrations.
+The research loop is **deterministic code**, not an LLM agent: exact evidence, information-driven design and fixed verdict rules decide. A local Ollama model can be allowed as an *advisor* whose suggestions are validated and labeled; it never counts as evidence. No live model provider is required or used in the demonstrations.
 
 ## Run your first experiment
 
@@ -351,7 +371,8 @@ To contribute a method, follow the [skill authoring guide](docs/SKILL_AUTHORING.
 Important boundaries:
 
 - The executor enforces declared permissions and resource bounds, **but is not a hardened sandbox for hostile code**.
-- Live model providers, unrestricted agent execution, generic proposal scheduling, automatic experiment resume and accelerator backends are not implemented.
+- Unrestricted agent execution, hosted model providers and accelerator backends are not implemented. Adaptive scheduling and verified resume exist inside `atlas research` missions; the original experiments still refuse to resume. The optional local Ollama advisor is tested only against a simulated server.
+- `atlas research` is demonstrated on one simulated domain; its generality is designed, not demonstrated.
 - BLACK GLASS works on supported **offline inputs**. Static imports and configuration statements are not evidence of live-device behavior.
 - The checked-in BLACK GLASS demonstration is **synthetic**; no verified analysis of an official DSM executable is claimed.
 - A checked ledger proves record consistency, not external authenticity or scientific correctness.

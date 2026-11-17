@@ -9,7 +9,7 @@ is not declared complete merely because these pieces work.
 |---|---|---|
 | Observatory | Six views, recorded data, search/filter, downloads, offline composer; Chromium checks with CSS/CSP active at desktop and phone widths | Live run monitoring; execution server |
 | Resonance | Eight primitives, typed skills, analytical and synthetic tests | Arbitrary physical cymatics, free-edge plate FEM, experimental sensor validation |
-| Scientific workflow | Existing scripted roles, two methods, new seeded replication, computed verdicts, source reproduction | Generic adaptive follow-up scheduler, dynamic model-assisted execution, automatic resume |
+| Scientific workflow | Existing scripted roles, two methods, new seeded replication, computed verdicts, source reproduction; `atlas research`: observation-dependent experiment selection, self-critique, challenges, escalation, verified resume of research missions (one simulated domain) | Research loops on further domains and real instruments; resume of the original experiments; live model-assisted execution |
 | Proposals | Strict local JSON intake, provenance, operator gate, persistent declared budget | Live language-model adapters and model-quality evaluation |
 | Skepticism | Nulls, perturbation/noise/phase-lag shifts, independent replicate intervals, multiplicity correction, exact-identity leakage rejection | General power analysis, posterior calibration, semantic leakage/selection-bias detection, general uncertainty propagation |
 | Ledger | Artifact dependencies, source/lock snapshots, SQLite search, non-destructive torn-tail recovery | External authenticity, signed witnesses, automatic checkpoint resume, concurrent experiment-budget transactions |

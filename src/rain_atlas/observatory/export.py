@@ -52,6 +52,10 @@ FIELDS = {
     "revision": ("supersedes", "replacement", "reason"),
     "approval": ("scope", "attestation", "identity_verified"),
     "seal": ("label", "commitment"),
+    "charter": ("title", "question", "digest"),
+    "authorization": ("decision", "scope", "attestation", "identity_verified", "granted", "effective"),
+    "escalation": ("mission", "request"),
+    "research": ("mission", "event", "summary"),
     # Even published truth is deliberately absent from the review projection.
     "unseal": ("commitment", "after"),
 }

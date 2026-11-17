@@ -2,6 +2,37 @@
 
 All notable changes are recorded here. Versions follow semantic versioning.
 
+## Unreleased
+
+### Autonomous, evidence-driven research (`rain_atlas.research`)
+
+- A general research loop over a domain interface, with a first domain (a
+  noisy driven nonlinear oscillator with hidden changes, unanticipated terms,
+  stale memories and heavy-tailed noise). Exact Normal-Inverse-Gamma evidence
+  over structure, change-point and attribution hypotheses; a critic whose score
+  tests propose new hypotheses and whose evidence decides; total-information
+  experiment design; novel-condition and sentinel challenges with predictions
+  recorded first; a cross-validated independent check; three-valued verdicts
+  from the existing rule. See [docs/RESEARCH.md](docs/RESEARCH.md).
+- Charter-scoped autonomy: a human approves the charter (question, methods,
+  budgets, environment); out-of-scope actions become escalation requests;
+  hardware control, untrusted code and unapproved network access have no
+  execution path. New ledger kinds `charter`, `authorization`, `escalation`
+  and `research`; verification rejects a preregistration whose charter was
+  not approved first.
+- Persistence: missions journal every event to the ledger and resume by
+  verified replay; the benchmark resumes line by line.
+- Scientific memory as a tempered prior with validity regimes, per-coefficient
+  conflict checks, quarantine with retained history, and contradiction handling.
+- Optional local Ollama advisor, schema-validated and labeled `model`; never
+  evidence.
+- `atlas research init | approve | run | resume | demo | status | authorize |
+  benchmark`; offline dossier, Markdown and JSON reports, observatory export.
+- A preregistered held-out benchmark (eight arms including a yoked control and
+  ablations), frozen in [docs/research/PREREGISTRATION.md](docs/research/PREREGISTRATION.md)
+  before it ran; the recorded result is in
+  [docs/demonstration/research/](docs/demonstration/research/).
+
 ## 0.1.0 — 2026-11-17
 
 First release ([release notes](docs/releases/v0.1.0.md)). Published as a GitHub
