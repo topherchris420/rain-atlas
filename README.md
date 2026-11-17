@@ -345,7 +345,7 @@ To contribute a method, follow the [skill authoring guide](docs/SKILL_AUTHORING.
 
 **Version 0.1.0 is unreleased.** ATLAS currently includes the numerical experiments above, a 31-skill catalog, evidence search and recovery, an offline observatory, local proposal registration/approval, export integrations, BLACK GLASS static firmware analysis, and the REA replication framework with eight reconstructed-capability modules and the unified `atlas rain` demonstrations.
 
-**Validation snapshot:** the [November 5, 2026 Linux record](docs/VALIDATION.md) reports **235 passing tests and one platform-specific skip** on each of Python 3.11 and 3.12, including the slow acceptance tests. It also documents cross-platform agreement and defects found through validation. These are historical recorded results, **not a claim that every subsequent commit has been retested**. See [GitHub Actions](https://github.com/topherchris420/rain-atlas/actions) for the current hosted workflow state; hosted CI was account-blocked at the time of the published validation.
+**Validation snapshot:** the [November 17, 2026 Linux record](docs/STATUS.md#validation-record) reports **674 passing tests and two platform-specific skips** on Python 3.12, including the slow acceptance tests, plus an installed-wheel run outside the checkout. The [November 5 record](docs/VALIDATION.md) documents cross-platform agreement and defects found through validation. These are historical recorded results, **not a claim that every subsequent commit has been retested**. See [GitHub Actions](https://github.com/topherchris420/rain-atlas/actions) for the current hosted workflow state; hosted CI was account-blocked at the time of the published validation.
 
 Important boundaries:
 

@@ -25,6 +25,21 @@ for implemented boundaries and explicitly planned work.
 
 ## Validation record
 
+- **Production readiness and central experiment v2, 2026-11-17, Linux
+  CPython 3.12.3** at `d9ac38d`: full suite including slow acceptance tests
+  **674 passed, 2 skipped** (`cryptography` not installed; Windows-only job
+  object), 582 s. Changed-module suites pass on CPython 3.11 (NumPy 2.4),
+  including exact reproduction of the recorded v2 output. Ruff, format,
+  mypy and `atlas skills validate` are clean. The wheel built from the sdist
+  installs into a clean environment, lists 31 skills, passes all 32 skill
+  examples and runs the synchronization experiment and both `atlas rain`
+  demonstrations outside the checkout, with verifying ledgers. The exported
+  v2 observatory renders in Chromium with no console errors or network
+  requests. One earlier full run failed a single spectral acceptance test
+  with "engine source changed since the original run" because source files
+  were edited while it ran. That is the reproduction guard working; the
+  test passes in isolation and in the clean run above. Hosted CI and Windows
+  were not exercised.
 - **Unified R.A.I.N. architecture, 2026-11-16, Windows Python 3.12:** the
   full suite including the new modules passed (642 passed, 19 skipped;
   661 collected), ruff check/format clean, `atlas ledger verify` clean on
