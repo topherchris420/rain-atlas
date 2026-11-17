@@ -1,0 +1,98 @@
+{
+  "schema": "atlas.research-charter/v1",
+  "title": "Detecting and explaining hidden change in a noisy driven oscillator",
+  "question": "Can an intelligent experimental system detect previously unknown changes in a noisy dynamical system, determine what changed, and develop a better explanatory model using fewer experiments than conventional methods?",
+  "domain": "noisy-driven-oscillator/v1",
+  "design_space": {
+    "amplitude": [
+      0.0,
+      1.5
+    ],
+    "frequency": [
+      0.3,
+      2.5
+    ],
+    "x0": [
+      -1.0,
+      1.0
+    ]
+  },
+  "hypothesis_grammar": {
+    "core": [
+      "x",
+      "v",
+      "u"
+    ],
+    "optional": [
+      "x^3",
+      "1"
+    ],
+    "expansion": [
+      "x^2",
+      "x^2*v",
+      "v*|v|",
+      "x*u",
+      "v^3"
+    ],
+    "max_expansions": 2,
+    "max_changes_per_mission": 1
+  },
+  "methods": {
+    "design_policies": [
+      "closed-loop",
+      "yoked",
+      "open-loop-optimal",
+      "fixed-sweep",
+      "random",
+      "legacy-atlas",
+      "closed-loop-no-critic",
+      "closed-loop-no-challenge"
+    ],
+    "analyses": [
+      "nig-evidence",
+      "change-point-evidence",
+      "lagrange-multiplier-test",
+      "ljung-box",
+      "kurtosis-test",
+      "huber-irls",
+      "chow-test",
+      "linear-least-squares-baseline"
+    ],
+    "skills": [
+      "fir-identification",
+      "cross-spectral",
+      "spectral-peaks"
+    ]
+  },
+  "budgets": {
+    "experiments_per_mission": 16,
+    "featured_missions": 5,
+    "benchmark_problems_per_family": 50,
+    "wall_seconds": 7200,
+    "model_calls": 40,
+    "max_extension_per_request": 8
+  },
+  "environment": {
+    "executor": "in-process-simulation",
+    "network": false,
+    "hardware_control": false,
+    "untrusted_code": false,
+    "model_provider": null
+  },
+  "stopping": {
+    "decision_probability": 0.95,
+    "attribution_probability": 0.9,
+    "challenge_experiments": 2,
+    "futility_nats": 0.005,
+    "futility_patience": 3,
+    "futility_min_experiments": 8,
+    "min_experiments": 2
+  },
+  "priors": {
+    "noise_sd": 2.5,
+    "coefficient_sd": 2.0,
+    "change_hazard": 0.08,
+    "change_sd": 0.5,
+    "memory_validity": 0.8
+  }
+}

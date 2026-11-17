@@ -1,0 +1,4096 @@
+{
+ "question": "Can an intelligent experimental system detect previously unknown changes in a noisy dynamical system, determine what changed, and develop a better explanatory model using fewer experiments than conventional methods?",
+ "answer": {
+  "verdict": "supported",
+  "parts": [
+   {
+    "part": "observation-dependence",
+    "question": "Do observation-dependent decisions themselves help (closed loop vs yoked control)?",
+    "hypothesis": "H1",
+    "verdict": "supported"
+   },
+   {
+    "part": "fewer-experiments",
+    "question": "Fewer experiments than conventional methods?",
+    "hypothesis": "H2",
+    "verdict": "supported"
+   },
+   {
+    "part": "detect-and-determine-change",
+    "question": "Detect previously unknown changes and determine what changed?",
+    "hypothesis": "H4",
+    "verdict": "supported"
+   },
+   {
+    "part": "better-model",
+    "question": "Develop a better explanatory model?",
+    "hypothesis": "H7",
+    "verdict": "supported"
+   }
+  ],
+  "summary": "Supported: Do observation-dependent decisions themselves help (closed loop vs yoked control)?; Fewer experiments than conventional methods?; Detect previously unknown changes and determine what changed?; Develop a better explanatory model?.  Conditions: safety (H3) is unresolved: 10 false conclusions (5.0%, adjusted interval 1.5%\u201310.9%) against a 5 % bound. Bounded to the simulated oscillator family, the approved design space and the stated priors.",
+  "conditions": [
+   "safety (H3) is unresolved: 10 false conclusions (5.0%, adjusted interval 1.5%\u201310.9%) against a 5 % bound"
+  ],
+  "safety": {
+   "H3": "unresolved",
+   "H6": "supported"
+  }
+ },
+ "missions": [
+  {
+   "mission": "M1-characterize",
+   "apparatus": "bench-A",
+   "mission_id": "M1-characterize",
+   "arm": "closed-loop",
+   "stop_reason": "decision-challenged",
+   "experiments": 4,
+   "designs": [
+    {
+     "amplitude": 1.4062,
+     "frequency": 0.8704,
+     "x0": -0.76
+    },
+    {
+     "amplitude": 1.3125,
+     "frequency": 1.5222,
+     "x0": -0.12
+    },
+    {
+     "amplitude": 1.3594,
+     "frequency": 2.1741,
+     "x0": 0.52
+    },
+    {
+     "amplitude": 1.4062,
+     "frequency": 0.8704,
+     "x0": -0.76
+    }
+   ],
+   "purposes": [
+    "explore",
+    "explore",
+    "challenge",
+    "challenge"
+   ],
+   "conclusion": {
+    "decided": true,
+    "asserted": true,
+    "structure": [
+     "x",
+     "v",
+     "u",
+     "x^3"
+    ],
+    "p_structure": 0.9841210064,
+    "change": null,
+    "p_change": 0.09046253251,
+    "coefficients": {
+     "x": {
+      "mean": -1.361993502,
+      "sd": 0.07205582841
+     },
+     "v": {
+      "mean": -0.1637790818,
+      "sd": 0.02758148478
+     },
+     "u": {
+      "mean": 0.9403649601,
+      "sd": 0.04816940942
+     },
+     "x^3": {
+      "mean": -0.3706718214,
+      "sd": 0.01904376017
+     }
+    },
+    "noise_sd": 1.321640726,
+    "verdict": "supported",
+    "reasons": [
+     "independent estimator agrees",
+     "replicate test rejects absence",
+     "reproduced exactly"
+    ],
+    "falsification": "corroborated",
+    "independent": "corroborated",
+    "independent_detail": {
+     "method": "leave-experiments-out cross-validation, least squares, squared loss",
+     "outcome": "corroborated",
+     "comparisons": [
+      {
+       "neighbour": 1,
+       "kind": "reduced",
+       "z": 8.444513029,
+       "p": 1.526577575e-17,
+       "ok": true
+      },
+      {
+       "neighbour": 2,
+       "kind": "extended",
+       "z": 1.07149297,
+       "p": 0.8580260849,
+       "ok": true
+      },
+      {
+       "neighbour": 3,
+       "kind": "extended",
+       "z": 1.378812922,
+       "p": 0.9160237793,
+       "ok": true
+      },
+      {
+       "neighbour": 4,
+       "kind": "extended",
+       "z": 1.721999382,
+       "p": 0.9574651848,
+       "ok": true
+      },
+      {
+       "neighbour": 5,
+       "kind": "extended",
+       "z": 2.947929977,
+       "p": 0.9984004524,
+       "ok": true
+      },
+      {
+       "neighbour": 6,
+       "kind": "extended",
+       "z": 0.432051702,
+       "p": 0.6671480817,
+       "ok": true
+      },
+      {
+       "neighbour": 7,
+       "kind": "extended",
+       "z": 4.571966398,
+       "p": 0.9999975842,
+       "ok": true
+      }
+     ],
+     "rows": 1200,
+     "folds": 4,
+     "neighbours": [
+      "{x, v, u}",
+      "{x, v, u, x^3, 1}",
+      "{x, v, u, x^3, x^2}",
+      "{x, v, u, x^3, x^2*v}",
+      "{x, v, u, x^3, v*|v|}",
+      "{x, v, u, x^3, x*u}",
+      "{x, v, u, x^3, v^3}"
+     ]
+    },
+    "reproduced": true,
+    "change_claim": null,
+    "blockers": [],
+    "memory_state": "absent",
+    "challenges": 2,
+    "robust": false,
+    "candidate_terms": []
+   },
+   "digest": "sha256:488921e9b2aaf047c327cf43dfe373a09793b2d88eb90153df17431acb439176",
+   "counters": {
+    "hypotheses_evaluated": 92,
+    "planning_simulations": 2,
+    "analyses": 5
+   },
+   "escalation": null,
+   "memory_state": "absent",
+   "view": {
+    "experiments": [
+     {
+      "index": 1,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 1.4062,
+       "frequency": 0.8704,
+       "x0": -0.76
+      },
+      "reason": "maximizes expected information: 0.000 nats about 4 competing explanations + 6.481 nats about their coefficients; candidate origin: pool",
+      "utility": 6.481228738,
+      "predicted": null,
+      "predicted_under": "{x, v, u}",
+      "observed": 0.9708575769,
+      "surprise": null,
+      "within_90": null,
+      "information_realized": 0.8806372078,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_after": 0.9478104822
+     },
+     {
+      "index": 2,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 1.3125,
+       "frequency": 1.5222,
+       "x0": -0.12
+      },
+      "reason": "maximizes expected information: 0.138 nats about 3 competing explanations + 1.974 nats about their coefficients; candidate origin: pool",
+      "utility": 2.111131966,
+      "predicted": [
+       1.614455995,
+       2.09038499
+      ],
+      "predicted_under": "{x, v, u, x^3}",
+      "observed": 1.762573355,
+      "surprise": -1.537145359,
+      "within_90": true,
+      "information_realized": 0.03093429585,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_after": 0.9821716772
+     },
+     {
+      "index": 3,
+      "purpose": "challenge",
+      "design": {
+       "amplitude": 1.3594,
+       "frequency": 2.1741,
+       "x0": 0.52
+      },
+      "reason": "unvisited condition where the leading explanation and its neighbours disagree most (0.709 nats with rivals weighted equally)",
+      "utility": 0.7088871499,
+      "predicted": [
+       0.361028996,
+       0.7982327988
+      ],
+      "predicted_under": "{x, v, u, x^3}",
+      "observed": 0.4515269656,
+      "surprise": 0.5496689571,
+      "within_90": true,
+      "information_realized": -0.1618451591,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_after": 0.9844233679
+     },
+     {
+      "index": 4,
+      "purpose": "challenge",
+      "design": {
+       "amplitude": 1.4062,
+       "frequency": 0.8704,
+       "x0": -0.76
+      },
+      "reason": "sentinel: re-measures the first experiment's condition to test that the system has not changed during the mission",
+      "utility": null,
+      "predicted": [
+       0.7546962842,
+       1.014572064
+      ],
+      "predicted_under": "{x, v, u, x^3}",
+      "observed": 0.8233181555,
+      "surprise": -0.4247796798,
+      "within_90": true,
+      "information_realized": -0.008196149684,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_after": 0.9841210064
+     }
+    ],
+    "analyses": [
+     {
+      "after": 0,
+      "structure": [
+       "x",
+       "v",
+       "u"
+      ],
+      "p_structure": 0.5625,
+      "p_change": 0.0,
+      "blockers": [
+       "fewer than 2 experiments",
+       "leading structure probability 0.562 < 0.95"
+      ],
+      "information": null
+     },
+     {
+      "after": 1,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_structure": 0.9478104822,
+      "p_change": 0.0,
+      "blockers": [
+       "fewer than 2 experiments",
+       "leading structure probability 0.948 < 0.95"
+      ],
+      "information": 0.8806372078
+     },
+     {
+      "after": 2,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_structure": 0.9821716772,
+      "p_change": 0.0270737792,
+      "blockers": [],
+      "information": 0.03093429585
+     },
+     {
+      "after": 3,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_structure": 0.9844233679,
+      "p_change": 0.086984298,
+      "blockers": [],
+      "information": -0.1618451591
+     },
+     {
+      "after": 4,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_structure": 0.9841210064,
+      "p_change": 0.09046253251,
+      "blockers": [],
+      "information": -0.008196149684
+     }
+    ],
+    "revisions": [],
+    "challenges": [
+     {
+      "index": 3,
+      "kind": "novel-condition",
+      "outcome": "corroborated",
+      "z": 0.5496689571,
+      "amplitude": 0.4515269656,
+      "chow_p": 0.3657054167,
+      "target": "{x, v, u, x^3}"
+     },
+     {
+      "index": 4,
+      "kind": "sentinel",
+      "outcome": "corroborated",
+      "z": -0.4247796798,
+      "amplitude": 0.8233181555,
+      "chow_p": 0.5736002845,
+      "target": "{x, v, u, x^3}"
+     }
+    ]
+   }
+  },
+  {
+   "mission": "M2-hidden-change",
+   "apparatus": "bench-B",
+   "mission_id": "M2-hidden-change",
+   "arm": "closed-loop",
+   "stop_reason": "decision-challenged",
+   "experiments": 6,
+   "designs": [
+    {
+     "amplitude": 1.4062,
+     "frequency": 0.8704,
+     "x0": -0.76
+    },
+    {
+     "amplitude": 1.5,
+     "frequency": 1.0448,
+     "x0": 0.0
+    },
+    {
+     "amplitude": 0.9844,
+     "frequency": 0.7074,
+     "x0": -0.28
+    },
+    {
+     "amplitude": 1.4062,
+     "frequency": 0.8704,
+     "x0": -0.76
+    },
+    {
+     "amplitude": 0.5625,
+     "frequency": 0.7889,
+     "x0": -0.52
+    },
+    {
+     "amplitude": 1.4062,
+     "frequency": 0.8704,
+     "x0": -0.76
+    }
+   ],
+   "purposes": [
+    "explore",
+    "explore",
+    "challenge",
+    "explore",
+    "challenge",
+    "challenge"
+   ],
+   "conclusion": {
+    "decided": true,
+    "asserted": true,
+    "structure": [
+     "x",
+     "v",
+     "u",
+     "1"
+    ],
+    "p_structure": 0.9981753528,
+    "change": {
+     "change_at": 2,
+     "changed": [
+      "x"
+     ]
+    },
+    "p_change": 1.0,
+    "coefficients": {
+     "x": {
+      "mean": -0.711782602,
+      "sd": 0.01558821231
+     },
+     "v": {
+      "mean": -0.2590521346,
+      "sd": 0.03257580727
+     },
+     "u": {
+      "mean": 1.024036279,
+      "sd": 0.08422870511
+     },
+     "1": {
+      "mean": 0.2729928841,
+      "sd": 0.0331557558
+     }
+    },
+    "noise_sd": 1.369090171,
+    "verdict": "supported",
+    "reasons": [
+     "independent estimator agrees",
+     "replicate test rejects absence",
+     "reproduced exactly"
+    ],
+    "falsification": "corroborated",
+    "independent": "corroborated",
+    "independent_detail": {
+     "method": "leave-experiments-out cross-validation, least squares, squared loss",
+     "outcome": "corroborated",
+     "comparisons": [
+      {
+       "neighbour": 1,
+       "kind": "reduced",
+       "z": 4.097713644,
+       "p": 2.086255024e-05,
+       "ok": true
+      },
+      {
+       "neighbour": 2,
+       "kind": "extended",
+       "z": 0.02322064741,
+       "p": 0.5092628656,
+       "ok": true
+      },
+      {
+       "neighbour": 3,
+       "kind": "extended",
+       "z": -0.3027576151,
+       "p": 0.3810372933,
+       "ok": true
+      },
+      {
+       "neighbour": 4,
+       "kind": "extended",
+       "z": 1.702350324,
+       "p": 0.9556551419,
+       "ok": true
+      },
+      {
+       "neighbour": 5,
+       "kind": "extended",
+       "z": 0.4030408951,
+       "p": 0.6565409299,
+       "ok": true
+      },
+      {
+       "neighbour": 6,
+       "kind": "extended",
+       "z": 0.7077270355,
+       "p": 0.7604426075,
+       "ok": true
+      },
+      {
+       "neighbour": 7,
+       "kind": "extended",
+       "z": 0.529386276,
+       "p": 0.7017312417,
+       "ok": true
+      }
+     ],
+     "rows": 1800,
+     "folds": 6,
+     "neighbours": [
+      "{x, v, u} with change at experiment 3 (shift x)",
+      "{x, v, u, x^3, 1} with change at experiment 3 (shift x)",
+      "{x, v, u, 1, x^2} with change at experiment 3 (shift x)",
+      "{x, v, u, 1, x^2*v} with change at experiment 3 (shift x)",
+      "{x, v, u, 1, v*|v|} with change at experiment 3 (shift x)",
+      "{x, v, u, 1, x*u} with change at experiment 3 (shift x)",
+      "{x, v, u, 1, v^3} with change at experiment 3 (shift x)"
+     ]
+    },
+    "reproduced": true,
+    "change_claim": {
+     "statement": "the dynamics changed before experiment 3 (x)",
+     "change_at": 2,
+     "p_change": 1.0,
+     "p_location": 1.0,
+     "changed": [
+      "x"
+     ],
+     "p_attribution": 0.9846566642,
+     "attribution_resolved": true,
+     "independent": {
+      "F": 173.7961025,
+      "p": 5.986154766e-38,
+      "dof": [
+       1,
+       1795
+      ]
+     },
+     "verdict": "supported",
+     "reasons": [
+      "independent estimator agrees",
+      "replicate test rejects absence",
+      "reproduced exactly"
+     ]
+    },
+    "blockers": [],
+    "memory_state": "absent",
+    "challenges": 3,
+    "robust": false,
+    "candidate_terms": []
+   },
+   "digest": "sha256:d90ad61b261b3c6421a8165b2e41242e96a32877eac0cca3aa13d10d2f3f8fa0",
+   "counters": {
+    "hypotheses_evaluated": 208,
+    "planning_simulations": 3,
+    "analyses": 7
+   },
+   "escalation": null,
+   "memory_state": "absent",
+   "view": {
+    "experiments": [
+     {
+      "index": 1,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 1.4062,
+       "frequency": 0.8704,
+       "x0": -0.76
+      },
+      "reason": "maximizes expected information: 0.000 nats about 4 competing explanations + 6.481 nats about their coefficients; candidate origin: pool",
+      "utility": 6.481228738,
+      "predicted": null,
+      "predicted_under": "{x, v, u}",
+      "observed": 2.697302202,
+      "surprise": null,
+      "within_90": null,
+      "information_realized": 0.5258404643,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "1"
+      ],
+      "p_after": 0.7619146638
+     },
+     {
+      "index": 2,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 1.5,
+       "frequency": 1.0448,
+       "x0": 0.0
+      },
+      "reason": "maximizes expected information: 0.513 nats about 4 competing explanations + 1.990 nats about their coefficients; candidate origin: estimated resonance",
+      "utility": 2.503237025,
+      "predicted": [
+       2.369279197,
+       3.549281536
+      ],
+      "predicted_under": "{x, v, u, 1}",
+      "observed": 3.280166284,
+      "surprise": -0.9285703607,
+      "within_90": true,
+      "information_realized": 0.482196101,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "1"
+      ],
+      "p_after": 0.9966554786
+     },
+     {
+      "index": 3,
+      "purpose": "challenge",
+      "design": {
+       "amplitude": 0.9844,
+       "frequency": 0.7074,
+       "x0": -0.28
+      },
+      "reason": "unvisited condition where the leading explanation and its neighbours disagree most (0.694 nats with rivals weighted equally)",
+      "utility": 0.6936691648,
+      "predicted": [
+       1.028006274,
+       1.828469031
+      ],
+      "predicted_under": "{x, v, u, 1}",
+      "observed": 3.231077071,
+      "surprise": 4.662845801,
+      "within_90": false,
+      "information_realized": 0.04307388485,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "1"
+      ],
+      "p_after": 0.9860243149
+     },
+     {
+      "index": 4,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 1.4062,
+       "frequency": 0.8704,
+       "x0": -0.76
+      },
+      "reason": "maximizes expected information: 0.193 nats about 3 competing explanations + 1.893 nats about their coefficients; candidate origin: pool",
+      "utility": 2.085829801,
+      "predicted": [
+       3.373925199,
+       4.481271136
+      ],
+      "predicted_under": "{x, v, u, 1} with change at experiment 3 (shift x)",
+      "observed": 3.578999533,
+      "surprise": -1.352806149,
+      "within_90": true,
+      "information_realized": 0.05333197871,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "1"
+      ],
+      "p_after": 0.9970335636
+     },
+     {
+      "index": 5,
+      "purpose": "challenge",
+      "design": {
+       "amplitude": 0.5625,
+       "frequency": 0.7889,
+       "x0": -0.52
+      },
+      "reason": "unvisited condition where the leading explanation and its neighbours disagree most (0.885 nats with rivals weighted equally)",
+      "utility": 0.8848027282,
+      "predicted": [
+       1.274948728,
+       2.270248107
+      ],
+      "predicted_under": "{x, v, u, 1} with change at experiment 3 (shift x)",
+      "observed": 1.33463202,
+      "surprise": 0.1953525457,
+      "within_90": true,
+      "information_realized": 0.007634939319,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "1"
+      ],
+      "p_after": 0.9982916443
+     },
+     {
+      "index": 6,
+      "purpose": "challenge",
+      "design": {
+       "amplitude": 1.4062,
+       "frequency": 0.8704,
+       "x0": -0.76
+      },
+      "reason": "sentinel: re-measures the first experiment's condition to test that the system has not changed during the mission",
+      "utility": null,
+      "predicted": [
+       3.374829787,
+       4.371650442
+      ],
+      "predicted_under": "{x, v, u, 1} with change at experiment 3 (shift x)",
+      "observed": 3.60264305,
+      "surprise": -0.8624523509,
+      "within_90": true,
+      "information_realized": -0.0007369582338,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "1"
+      ],
+      "p_after": 0.9981753528
+     }
+    ],
+    "analyses": [
+     {
+      "after": 0,
+      "structure": [
+       "x",
+       "v",
+       "u"
+      ],
+      "p_structure": 0.5625,
+      "p_change": 0.0,
+      "blockers": [
+       "fewer than 2 experiments",
+       "leading structure probability 0.562 < 0.95"
+      ],
+      "information": null
+     },
+     {
+      "after": 1,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "1"
+      ],
+      "p_structure": 0.7619146638,
+      "p_change": 0.0,
+      "blockers": [
+       "fewer than 2 experiments",
+       "leading structure probability 0.762 < 0.95"
+      ],
+      "information": 0.5258404643
+     },
+     {
+      "after": 2,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "1"
+      ],
+      "p_structure": 0.9966554786,
+      "p_change": 0.01879694877,
+      "blockers": [],
+      "information": 0.482196101
+     },
+     {
+      "after": 3,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "1"
+      ],
+      "p_structure": 0.9860243149,
+      "p_change": 1.0,
+      "blockers": [
+       "attribution of the change unresolved (0.850 < 0.9)"
+      ],
+      "information": 0.04307388485
+     },
+     {
+      "after": 4,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "1"
+      ],
+      "p_structure": 0.9970335636,
+      "p_change": 1.0,
+      "blockers": [],
+      "information": 0.05333197871
+     },
+     {
+      "after": 5,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "1"
+      ],
+      "p_structure": 0.9982916443,
+      "p_change": 1.0,
+      "blockers": [],
+      "information": 0.007634939319
+     },
+     {
+      "after": 6,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "1"
+      ],
+      "p_structure": 0.9981753528,
+      "p_change": 1.0,
+      "blockers": [],
+      "information": -0.0007369582338
+     }
+    ],
+    "revisions": [
+     {
+      "seq": 12,
+      "after": 3,
+      "kind": "hypothesis-rejected",
+      "summary": "challenge at experiment 3 contradicted {x, v, u, 1}; returning to exploration with the new data"
+     }
+    ],
+    "challenges": [
+     {
+      "index": 3,
+      "kind": "novel-condition",
+      "outcome": "contradicted",
+      "z": 4.662845801,
+      "amplitude": 3.231077071,
+      "chow_p": 2.187370555e-20,
+      "target": "{x, v, u, 1}"
+     },
+     {
+      "index": 5,
+      "kind": "novel-condition",
+      "outcome": "corroborated",
+      "z": 0.1953525457,
+      "amplitude": 1.33463202,
+      "chow_p": 0.1197274129,
+      "target": "{x, v, u, 1} with change at experiment 3 (shift x)"
+     },
+     {
+      "index": 6,
+      "kind": "sentinel",
+      "outcome": "corroborated",
+      "z": -0.8624523509,
+      "amplitude": 3.60264305,
+      "chow_p": 0.458501315,
+      "target": "{x, v, u, 1} with change at experiment 3 (shift x)"
+     }
+    ]
+   }
+  },
+  {
+   "mission": "M3-unanticipated",
+   "apparatus": "bench-C",
+   "mission_id": "M3-unanticipated",
+   "arm": "closed-loop",
+   "stop_reason": "decision-challenged",
+   "experiments": 5,
+   "designs": [
+    {
+     "amplitude": 1.4062,
+     "frequency": 0.8704,
+     "x0": -0.76
+    },
+    {
+     "amplitude": 0.9844,
+     "frequency": 0.7074,
+     "x0": -0.28
+    },
+    {
+     "amplitude": 1.125,
+     "frequency": 0.5444,
+     "x0": 0.2
+    },
+    {
+     "amplitude": 1.3125,
+     "frequency": 1.5222,
+     "x0": -0.12
+    },
+    {
+     "amplitude": 1.4062,
+     "frequency": 0.8704,
+     "x0": -0.76
+    }
+   ],
+   "purposes": [
+    "explore",
+    "explore",
+    "explore",
+    "challenge",
+    "challenge"
+   ],
+   "conclusion": {
+    "decided": true,
+    "asserted": true,
+    "structure": [
+     "x",
+     "v",
+     "u",
+     "x^2*v"
+    ],
+    "p_structure": 0.9719803252,
+    "change": null,
+    "p_change": 0.07011148368,
+    "coefficients": {
+     "x": {
+      "mean": -1.025269463,
+      "sd": 0.0268629975
+     },
+     "v": {
+      "mean": -0.06658276471,
+      "sd": 0.04313643562
+     },
+     "u": {
+      "mean": 1.099741788,
+      "sd": 0.05645887219
+     },
+     "x^2*v": {
+      "mean": -0.3281775099,
+      "sd": 0.01896258286
+     }
+    },
+    "noise_sd": 1.300517652,
+    "verdict": "supported",
+    "reasons": [
+     "independent estimator agrees",
+     "replicate test rejects absence",
+     "reproduced exactly"
+    ],
+    "falsification": "corroborated",
+    "independent": "corroborated",
+    "independent_detail": {
+     "method": "leave-experiments-out cross-validation, least squares, squared loss",
+     "outcome": "corroborated",
+     "comparisons": [
+      {
+       "neighbour": 1,
+       "kind": "reduced",
+       "z": 8.034868443,
+       "p": 4.683968176e-16,
+       "ok": true
+      },
+      {
+       "neighbour": 2,
+       "kind": "extended",
+       "z": 2.56034064,
+       "p": 0.9947715195,
+       "ok": true
+      },
+      {
+       "neighbour": 3,
+       "kind": "extended",
+       "z": 0.4884037987,
+       "p": 0.6873680741,
+       "ok": true
+      },
+      {
+       "neighbour": 4,
+       "kind": "extended",
+       "z": -0.7418354278,
+       "p": 0.2290935263,
+       "ok": true
+      },
+      {
+       "neighbour": 5,
+       "kind": "extended",
+       "z": 0.4961829198,
+       "p": 0.6901173197,
+       "ok": true
+      },
+      {
+       "neighbour": 6,
+       "kind": "extended",
+       "z": -0.1873575605,
+       "p": 0.4256901476,
+       "ok": true
+      },
+      {
+       "neighbour": 7,
+       "kind": "extended",
+       "z": 0.104558093,
+       "p": 0.5416367653,
+       "ok": true
+      },
+      {
+       "neighbour": 8,
+       "kind": "swap",
+       "z": 7.955801164,
+       "p": 1.0,
+       "ok": true
+      },
+      {
+       "neighbour": 9,
+       "kind": "swap",
+       "z": 7.848843431,
+       "p": 1.0,
+       "ok": true
+      },
+      {
+       "neighbour": 10,
+       "kind": "swap",
+       "z": 7.988485912,
+       "p": 1.0,
+       "ok": true
+      },
+      {
+       "neighbour": 11,
+       "kind": "swap",
+       "z": 7.827052002,
+       "p": 1.0,
+       "ok": true
+      }
+     ],
+     "rows": 1500,
+     "folds": 5,
+     "neighbours": [
+      "{x, v, u}",
+      "{x, v, u, x^3, x^2*v}",
+      "{x, v, u, 1, x^2*v}",
+      "{x, v, u, x^2, x^2*v}",
+      "{x, v, u, x^2*v, v*|v|}",
+      "{x, v, u, x^2*v, x*u}",
+      "{x, v, u, x^2*v, v^3}",
+      "{x, v, u, x^2}",
+      "{x, v, u, v*|v|}",
+      "{x, v, u, x*u}",
+      "{x, v, u, v^3}"
+     ]
+    },
+    "reproduced": true,
+    "change_claim": null,
+    "blockers": [],
+    "memory_state": "absent",
+    "challenges": 2,
+    "robust": false,
+    "candidate_terms": [
+     "v*|v|",
+     "x^2*v"
+    ]
+   },
+   "digest": "sha256:d06bd7712cb1423f34c71fee0fc155d3b7801a57e02591b6246312e2a5251396",
+   "counters": {
+    "hypotheses_evaluated": 248,
+    "planning_simulations": 3,
+    "analyses": 7
+   },
+   "escalation": null,
+   "memory_state": "absent",
+   "view": {
+    "experiments": [
+     {
+      "index": 1,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 1.4062,
+       "frequency": 0.8704,
+       "x0": -0.76
+      },
+      "reason": "maximizes expected information: 0.000 nats about 4 competing explanations + 6.481 nats about their coefficients; candidate origin: pool",
+      "utility": 6.481228738,
+      "predicted": null,
+      "predicted_under": "{x, v, u}",
+      "observed": 1.854465201,
+      "surprise": null,
+      "within_90": null,
+      "information_realized": 0.8280759606,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^2*v"
+      ],
+      "p_after": 0.9371279123
+     },
+     {
+      "index": 2,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 0.9844,
+       "frequency": 0.7074,
+       "x0": -0.28
+      },
+      "reason": "maximizes expected information: 0.015 nats about 4 competing explanations + 1.875 nats about their coefficients; candidate origin: pool",
+      "utility": 1.889840103,
+      "predicted": [
+       1.124394179,
+       1.551923187
+      ],
+      "predicted_under": "{x, v, u, x^2*v}",
+      "observed": 1.390878772,
+      "surprise": 0.8436462928,
+      "within_90": true,
+      "information_realized": -0.132853039,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^2*v"
+      ],
+      "p_after": 0.9449039844
+     },
+     {
+      "index": 3,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 1.125,
+       "frequency": 0.5444,
+       "x0": 0.2
+      },
+      "reason": "maximizes expected information: 0.039 nats about 4 competing explanations + 1.165 nats about their coefficients; candidate origin: pool",
+      "utility": 1.203781814,
+      "predicted": [
+       1.012069105,
+       1.558830682
+      ],
+      "predicted_under": "{x, v, u, x^2*v}",
+      "observed": 1.202824224,
+      "surprise": 0.7807200812,
+      "within_90": true,
+      "information_realized": 0.002400389765,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^2*v"
+      ],
+      "p_after": 0.9552658014
+     },
+     {
+      "index": 4,
+      "purpose": "challenge",
+      "design": {
+       "amplitude": 1.3125,
+       "frequency": 1.5222,
+       "x0": -0.12
+      },
+      "reason": "unvisited condition where the leading explanation and its neighbours disagree most (0.985 nats with rivals weighted equally)",
+      "utility": 0.9849516444,
+      "predicted": [
+       0.633723341,
+       1.069992359
+      ],
+      "predicted_under": "{x, v, u, x^2*v}",
+      "observed": 0.7866615409,
+      "surprise": -0.5364649717,
+      "within_90": true,
+      "information_realized": 0.01051426698,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^2*v"
+      ],
+      "p_after": 0.9694867897
+     },
+     {
+      "index": 5,
+      "purpose": "challenge",
+      "design": {
+       "amplitude": 1.4062,
+       "frequency": 0.8704,
+       "x0": -0.76
+      },
+      "reason": "sentinel: re-measures the first experiment's condition to test that the system has not changed during the mission",
+      "utility": null,
+      "predicted": [
+       1.660862528,
+       1.940430908
+      ],
+      "predicted_under": "{x, v, u, x^2*v}",
+      "observed": 1.823260615,
+      "surprise": -0.3833626984,
+      "within_90": true,
+      "information_realized": 0.01483284647,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^2*v"
+      ],
+      "p_after": 0.9719803252
+     }
+    ],
+    "analyses": [
+     {
+      "after": 0,
+      "structure": [
+       "x",
+       "v",
+       "u"
+      ],
+      "p_structure": 0.5625,
+      "p_change": 0.0,
+      "blockers": [
+       "fewer than 2 experiments",
+       "leading structure probability 0.562 < 0.95"
+      ],
+      "information": null
+     },
+     {
+      "after": 1,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^2*v"
+      ],
+      "p_structure": 0.9371279123,
+      "p_change": 0.0,
+      "blockers": [
+       "fewer than 2 experiments",
+       "leading structure probability 0.937 < 0.95"
+      ],
+      "information": 0.8280759606
+     },
+     {
+      "after": 2,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^2*v"
+      ],
+      "p_structure": 0.9449039844,
+      "p_change": 0.04103734333,
+      "blockers": [
+       "leading structure probability 0.945 < 0.95"
+      ],
+      "information": -0.132853039
+     },
+     {
+      "after": 3,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^2*v"
+      ],
+      "p_structure": 0.9552658014,
+      "p_change": 0.05511175881,
+      "blockers": [],
+      "information": 0.002400389765
+     },
+     {
+      "after": 4,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^2*v"
+      ],
+      "p_structure": 0.9694867897,
+      "p_change": 0.07081424716,
+      "blockers": [],
+      "information": 0.01051426698
+     },
+     {
+      "after": 5,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^2*v"
+      ],
+      "p_structure": 0.9719803252,
+      "p_change": 0.07011148368,
+      "blockers": [],
+      "information": 0.01483284647
+     }
+    ],
+    "revisions": [
+     {
+      "seq": 4,
+      "after": 1,
+      "kind": "hypothesis-expansion",
+      "summary": "admitted unanticipated term v*|v| alongside x^2*v so evidence can separate them"
+     },
+     {
+      "seq": 5,
+      "after": 1,
+      "kind": "hypothesis-expansion",
+      "summary": "admitted unanticipated term x^2*v into the working hypotheses"
+     }
+    ],
+    "challenges": [
+     {
+      "index": 4,
+      "kind": "novel-condition",
+      "outcome": "corroborated",
+      "z": -0.5364649717,
+      "amplitude": 0.7866615409,
+      "chow_p": 0.3940795076,
+      "target": "{x, v, u, x^2*v}"
+     },
+     {
+      "index": 5,
+      "kind": "sentinel",
+      "outcome": "corroborated",
+      "z": -0.3833626984,
+      "amplitude": 1.823260615,
+      "chow_p": 0.4856521305,
+      "target": "{x, v, u, x^2*v}"
+     }
+    ]
+   }
+  },
+  {
+   "mission": "M4-returning",
+   "apparatus": "bench-A",
+   "mission_id": "M4-returning",
+   "arm": "closed-loop",
+   "stop_reason": "decision-challenged",
+   "experiments": 6,
+   "designs": [
+    {
+     "amplitude": 1.4062,
+     "frequency": 0.8704,
+     "x0": -0.76
+    },
+    {
+     "amplitude": 0.75,
+     "frequency": 1.0333,
+     "x0": -0.6
+    },
+    {
+     "amplitude": 1.5,
+     "frequency": 1.042,
+     "x0": 1.0
+    },
+    {
+     "amplitude": 1.4062,
+     "frequency": 0.8704,
+     "x0": -0.76
+    },
+    {
+     "amplitude": 1.4531,
+     "frequency": 1.3049,
+     "x0": -0.504
+    },
+    {
+     "amplitude": 1.4062,
+     "frequency": 0.8704,
+     "x0": -0.76
+    }
+   ],
+   "purposes": [
+    "explore",
+    "explore",
+    "challenge",
+    "challenge",
+    "challenge",
+    "challenge"
+   ],
+   "conclusion": {
+    "decided": true,
+    "asserted": true,
+    "structure": [
+     "x",
+     "v",
+     "u",
+     "x^3"
+    ],
+    "p_structure": 0.9848838984,
+    "change": null,
+    "p_change": 0.08903193324,
+    "coefficients": {
+     "x": {
+      "mean": -1.011721764,
+      "sd": 0.08125488273
+     },
+     "v": {
+      "mean": -0.3950291884,
+      "sd": 0.03725261111
+     },
+     "u": {
+      "mean": 1.109915743,
+      "sd": 0.07612890559
+     },
+     "x^3": {
+      "mean": -0.4032863812,
+      "sd": 0.02310463578
+     }
+    },
+    "noise_sd": 1.311456195,
+    "verdict": "supported",
+    "reasons": [
+     "independent estimator agrees",
+     "replicate test rejects absence",
+     "reproduced exactly"
+    ],
+    "falsification": "corroborated",
+    "independent": "corroborated",
+    "independent_detail": {
+     "method": "leave-experiments-out cross-validation, least squares, squared loss",
+     "outcome": "corroborated",
+     "comparisons": [
+      {
+       "neighbour": 1,
+       "kind": "reduced",
+       "z": 8.126330739,
+       "p": 2.21240328e-16,
+       "ok": true
+      },
+      {
+       "neighbour": 2,
+       "kind": "extended",
+       "z": 0.4996874291,
+       "p": 0.6913524073,
+       "ok": true
+      },
+      {
+       "neighbour": 3,
+       "kind": "extended",
+       "z": 0.6044945075,
+       "p": 0.7272425401,
+       "ok": true
+      },
+      {
+       "neighbour": 4,
+       "kind": "extended",
+       "z": 1.537300186,
+       "p": 0.937890092,
+       "ok": true
+      },
+      {
+       "neighbour": 5,
+       "kind": "extended",
+       "z": 0.4542160189,
+       "p": 0.6751633228,
+       "ok": true
+      },
+      {
+       "neighbour": 6,
+       "kind": "extended",
+       "z": 1.064840996,
+       "p": 0.8565260551,
+       "ok": true
+      },
+      {
+       "neighbour": 7,
+       "kind": "extended",
+       "z": 0.05523395853,
+       "p": 0.5220239624,
+       "ok": true
+      }
+     ],
+     "rows": 1800,
+     "folds": 6,
+     "neighbours": [
+      "{x, v, u}",
+      "{x, v, u, x^3, 1}",
+      "{x, v, u, x^3, x^2}",
+      "{x, v, u, x^3, x^2*v}",
+      "{x, v, u, x^3, v*|v|}",
+      "{x, v, u, x^3, x*u}",
+      "{x, v, u, x^3, v^3}"
+     ]
+    },
+    "reproduced": true,
+    "change_claim": null,
+    "blockers": [],
+    "memory_state": "quarantined",
+    "challenges": 4,
+    "robust": false,
+    "candidate_terms": []
+   },
+   "digest": "sha256:068a7b7528d484231ac7dfa5eda0bb2a57b4281821332c07afe461b229bece96",
+   "counters": {
+    "hypotheses_evaluated": 296,
+    "planning_simulations": 2,
+    "analyses": 7
+   },
+   "escalation": null,
+   "memory_state": "quarantined",
+   "view": {
+    "experiments": [
+     {
+      "index": 1,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 1.4062,
+       "frequency": 0.8704,
+       "x0": -0.76
+      },
+      "reason": "maximizes expected information: 0.000 nats about 4 competing explanations + 6.481 nats about their coefficients; candidate origin: pool",
+      "utility": 6.481228738,
+      "predicted": null,
+      "predicted_under": "{x, v, u}",
+      "observed": 1.039094967,
+      "surprise": null,
+      "within_90": null,
+      "information_realized": 1.111580713,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_after": 0.9982137748
+     },
+     {
+      "index": 2,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 0.75,
+       "frequency": 1.0333,
+       "x0": -0.6
+      },
+      "reason": "maximizes expected information: 0.003 nats about 2 competing explanations + 1.034 nats about their coefficients; candidate origin: pool",
+      "utility": 1.0371867,
+      "predicted": [
+       0.9025957753,
+       1.312329838
+      ],
+      "predicted_under": "{x, v, u, x^3}",
+      "observed": 1.078385721,
+      "surprise": 2.019862577,
+      "within_90": true,
+      "information_realized": -0.1109691541,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_after": 0.9983767887
+     },
+     {
+      "index": 3,
+      "purpose": "challenge",
+      "design": {
+       "amplitude": 1.5,
+       "frequency": 1.042,
+       "x0": 1.0
+      },
+      "reason": "unvisited condition where the leading explanation and its neighbours disagree most (0.856 nats with rivals weighted equally)",
+      "utility": 0.8560162655,
+      "predicted": [
+       1.205035548,
+       1.430675749
+      ],
+      "predicted_under": "{x, v, u, x^3}",
+      "observed": 1.286335089,
+      "surprise": -0.4135760583,
+      "within_90": true,
+      "information_realized": -0.02211291729,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_after": 0.9980397281
+     },
+     {
+      "index": 4,
+      "purpose": "challenge",
+      "design": {
+       "amplitude": 1.4062,
+       "frequency": 0.8704,
+       "x0": -0.76
+      },
+      "reason": "sentinel: re-measures the first experiment's condition to test that the system has not changed during the mission",
+      "utility": null,
+      "predicted": [
+       0.8931525056,
+       1.097871413
+      ],
+      "predicted_under": "{x, v, u, x^3}",
+      "observed": 1.141872757,
+      "surprise": -0.6128997835,
+      "within_90": false,
+      "information_realized": -0.2453524523,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_after": 0.9972825706
+     },
+     {
+      "index": 5,
+      "purpose": "challenge",
+      "design": {
+       "amplitude": 1.4531,
+       "frequency": 1.3049,
+       "x0": -0.504
+      },
+      "reason": "unvisited condition where the leading explanation and its neighbours disagree most (0.868 nats with rivals weighted equally)",
+      "utility": 0.8684403356,
+      "predicted": [
+       1.404919268,
+       1.595816637
+      ],
+      "predicted_under": "{x, v, u, x^3}",
+      "observed": 1.436841049,
+      "surprise": 2.287367546,
+      "within_90": true,
+      "information_realized": 0.05301541804,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_after": 0.9836874867
+     },
+     {
+      "index": 6,
+      "purpose": "challenge",
+      "design": {
+       "amplitude": 1.4062,
+       "frequency": 0.8704,
+       "x0": -0.76
+      },
+      "reason": "sentinel: re-measures the first experiment's condition to test that the system has not changed during the mission",
+      "utility": null,
+      "predicted": [
+       0.9646832152,
+       1.10795997
+      ],
+      "predicted_under": "{x, v, u, x^3}",
+      "observed": 1.079956154,
+      "surprise": 0.456135598,
+      "within_90": true,
+      "information_realized": -0.036765617,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_after": 0.9848838984
+     }
+    ],
+    "analyses": [
+     {
+      "after": 0,
+      "structure": [
+       "x",
+       "v",
+       "u"
+      ],
+      "p_structure": 0.5625,
+      "p_change": 0.0,
+      "blockers": [
+       "fewer than 2 experiments",
+       "leading structure probability 0.562 < 0.95"
+      ],
+      "information": null
+     },
+     {
+      "after": 1,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_structure": 0.9982137748,
+      "p_change": 0.0,
+      "blockers": [
+       "fewer than 2 experiments"
+      ],
+      "information": 1.111580713
+     },
+     {
+      "after": 2,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_structure": 0.9983767887,
+      "p_change": 0.02402790397,
+      "blockers": [],
+      "information": -0.1109691541
+     },
+     {
+      "after": 3,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_structure": 0.9980397281,
+      "p_change": 0.02992458973,
+      "blockers": [],
+      "information": -0.02211291729
+     },
+     {
+      "after": 4,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_structure": 0.9972825706,
+      "p_change": 0.1240470803,
+      "blockers": [],
+      "information": -0.2453524523
+     },
+     {
+      "after": 5,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_structure": 0.9836874867,
+      "p_change": 0.07188087219,
+      "blockers": [],
+      "information": 0.05301541804
+     },
+     {
+      "after": 6,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_structure": 0.9848838984,
+      "p_change": 0.08903193324,
+      "blockers": [],
+      "information": -0.036765617
+     }
+    ],
+    "revisions": [
+     {
+      "seq": 17,
+      "after": 4,
+      "kind": "memory-quarantine",
+      "summary": "fresh evidence contradicts the remembered characterization of bench-A: v (remembered -0.164, fresh -0.391); it no longer informs this mission"
+     }
+    ],
+    "challenges": [
+     {
+      "index": 3,
+      "kind": "novel-condition",
+      "outcome": "corroborated",
+      "z": -0.4135760583,
+      "amplitude": 1.286335089,
+      "chow_p": 0.8327564571,
+      "target": "{x, v, u, x^3}"
+     },
+     {
+      "index": 4,
+      "kind": "sentinel",
+      "outcome": "inconclusive",
+      "z": -0.6128997835,
+      "amplitude": 1.141872757,
+      "chow_p": 0.2754805179,
+      "target": "{x, v, u, x^3}"
+     },
+     {
+      "index": 5,
+      "kind": "novel-condition",
+      "outcome": "corroborated",
+      "z": 2.287367546,
+      "amplitude": 1.436841049,
+      "chow_p": 0.9902141918,
+      "target": "{x, v, u, x^3}"
+     },
+     {
+      "index": 6,
+      "kind": "sentinel",
+      "outcome": "corroborated",
+      "z": 0.456135598,
+      "amplitude": 1.079956154,
+      "chow_p": 0.735152033,
+      "target": "{x, v, u, x^3}"
+     }
+    ]
+   }
+  },
+  {
+   "mission": "M5-noise-limited",
+   "apparatus": "bench-D",
+   "mission_id": "M5-noise-limited",
+   "arm": "closed-loop",
+   "stop_reason": "budget-exhausted",
+   "experiments": 14,
+   "designs": [
+    {
+     "amplitude": 1.4062,
+     "frequency": 0.8704,
+     "x0": -0.76
+    },
+    {
+     "amplitude": 1.5,
+     "frequency": 1.5257,
+     "x0": 0.0
+    },
+    {
+     "amplitude": 1.4531,
+     "frequency": 1.3049,
+     "x0": -0.504
+    },
+    {
+     "amplitude": 1.4531,
+     "frequency": 1.3049,
+     "x0": -0.504
+    },
+    {
+     "amplitude": 1.5,
+     "frequency": 1.2749,
+     "x0": 0.0
+    },
+    {
+     "amplitude": 1.4531,
+     "frequency": 1.3049,
+     "x0": -0.504
+    },
+    {
+     "amplitude": 1.5,
+     "frequency": 1.2749,
+     "x0": 0.0
+    },
+    {
+     "amplitude": 1.5,
+     "frequency": 1.2749,
+     "x0": 0.0
+    },
+    {
+     "amplitude": 1.5,
+     "frequency": 1.3205,
+     "x0": 1.0
+    },
+    {
+     "amplitude": 1.5,
+     "frequency": 1.2749,
+     "x0": 0.0
+    },
+    {
+     "amplitude": 1.4062,
+     "frequency": 0.8704,
+     "x0": -0.76
+    },
+    {
+     "amplitude": 1.5,
+     "frequency": 1.3552,
+     "x0": 0.0
+    },
+    {
+     "amplitude": 1.5,
+     "frequency": 1.3552,
+     "x0": 0.0
+    },
+    {
+     "amplitude": 1.3125,
+     "frequency": 1.5222,
+     "x0": -0.12
+    }
+   ],
+   "purposes": [
+    "explore",
+    "explore",
+    "explore",
+    "explore",
+    "explore",
+    "explore",
+    "explore",
+    "explore",
+    "explore",
+    "explore",
+    "explore",
+    "explore",
+    "explore",
+    "explore"
+   ],
+   "conclusion": {
+    "decided": false,
+    "asserted": false,
+    "structure": [
+     "x",
+     "v",
+     "u",
+     "x^3",
+     "1"
+    ],
+    "p_structure": 0.6225265106,
+    "change": null,
+    "p_change": 0.3746491635,
+    "coefficients": {
+     "x": {
+      "mean": -1.775126502,
+      "sd": 0.118650004
+     },
+     "v": {
+      "mean": -0.3542713779,
+      "sd": 0.04852078828
+     },
+     "u": {
+      "mean": 0.8572522637,
+      "sd": 0.09823126009
+     },
+     "x^3": {
+      "mean": -0.198582031,
+      "sd": 0.02569144916
+     },
+     "1": {
+      "mean": 0.2248495554,
+      "sd": 0.06847380659
+     }
+    },
+    "noise_sd": 4.419161314,
+    "verdict": "unresolved",
+    "reasons": [
+     "stopped without a decision (budget-exhausted)",
+     "leading structure probability 0.623 < 0.95",
+     "possible change under investigation (P(change) = 0.375)"
+    ],
+    "falsification": null,
+    "independent": "inconclusive",
+    "independent_detail": {
+     "method": "leave-experiments-out cross-validation, least squares, squared loss",
+     "outcome": "inconclusive",
+     "comparisons": [
+      {
+       "neighbour": 1,
+       "kind": "reduced",
+       "z": 3.381772102,
+       "p": 0.0003600993327,
+       "ok": true
+      },
+      {
+       "neighbour": 2,
+       "kind": "reduced",
+       "z": 1.285999351,
+       "p": 0.09922164401,
+       "ok": false
+      },
+      {
+       "neighbour": 3,
+       "kind": "extended",
+       "z": 0.5335975343,
+       "p": 0.7031899927,
+       "ok": true
+      },
+      {
+       "neighbour": 4,
+       "kind": "extended",
+       "z": 2.38935983,
+       "p": 0.9915611185,
+       "ok": true
+      },
+      {
+       "neighbour": 5,
+       "kind": "extended",
+       "z": 2.919530887,
+       "p": 0.9982472067,
+       "ok": true
+      },
+      {
+       "neighbour": 6,
+       "kind": "extended",
+       "z": 2.257404584,
+       "p": 0.9880085972,
+       "ok": true
+      },
+      {
+       "neighbour": 7,
+       "kind": "extended",
+       "z": 1.809057968,
+       "p": 0.964779001,
+       "ok": true
+      }
+     ],
+     "rows": 4200,
+     "folds": 8,
+     "neighbours": [
+      "{x, v, u, 1}",
+      "{x, v, u, x^3}",
+      "{x, v, u, x^3, 1, x^2}",
+      "{x, v, u, x^3, 1, x^2*v}",
+      "{x, v, u, x^3, 1, v*|v|}",
+      "{x, v, u, x^3, 1, x*u}",
+      "{x, v, u, x^3, 1, v^3}"
+     ]
+    },
+    "reproduced": true,
+    "change_claim": null,
+    "blockers": [
+     "leading structure probability 0.623 < 0.95",
+     "possible change under investigation (P(change) = 0.375)"
+    ],
+    "memory_state": "absent",
+    "challenges": 0,
+    "robust": false,
+    "candidate_terms": []
+   },
+   "digest": "sha256:7235b85be079478fb35403493101fc25fb15308d13cfaa1e742053657d2219c4",
+   "counters": {
+    "hypotheses_evaluated": 1152,
+    "planning_simulations": 14,
+    "analyses": 15
+   },
+   "escalation": {
+    "request_id": "1c18a7c0bbaed1b4",
+    "kind": "budget-extension",
+    "mission": "M5-noise-limited",
+    "reason": "the experiment budget ended before the stopping rule was met; the best remaining design was still expected to yield 0.334 nats",
+    "requested": {
+     "experiments": 8
+    },
+    "evidence": {
+     "blockers": [
+      "leading structure probability 0.623 < 0.95",
+      "possible change under investigation (P(change) = 0.375)"
+     ]
+    },
+    "grantable": true,
+    "cap": 8
+   },
+   "memory_state": "absent",
+   "view": {
+    "experiments": [
+     {
+      "index": 1,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 1.4062,
+       "frequency": 0.8704,
+       "x0": -0.76
+      },
+      "reason": "maximizes expected information: 0.000 nats about 4 competing explanations + 6.481 nats about their coefficients; candidate origin: pool",
+      "utility": 6.481228738,
+      "predicted": null,
+      "predicted_under": "{x, v, u}",
+      "observed": 1.483152634,
+      "surprise": null,
+      "within_90": null,
+      "information_realized": 0.1090791665,
+      "leading_after": [
+       "x",
+       "v",
+       "u"
+      ],
+      "p_after": 0.6414462209
+     },
+     {
+      "index": 2,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 1.5,
+       "frequency": 1.5257,
+       "x0": 0.0
+      },
+      "reason": "maximizes expected information: 0.780 nats about 4 competing explanations + 2.694 nats about their coefficients; candidate origin: estimated resonance",
+      "utility": 3.473857193,
+      "predicted": [
+       0.8445986388,
+       5.322806899
+      ],
+      "predicted_under": "{x, v, u}",
+      "observed": 1.813803503,
+      "surprise": -0.7889367854,
+      "within_90": true,
+      "information_realized": 0.3101333212,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_after": 0.8266050029
+     },
+     {
+      "index": 3,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 1.4531,
+       "frequency": 1.3049,
+       "x0": -0.504
+      },
+      "reason": "maximizes expected information: 0.255 nats about 4 competing explanations + 0.910 nats about their coefficients; candidate origin: pool",
+      "utility": 1.164495416,
+      "predicted": [
+       0.8191554188,
+       1.931631631
+      ],
+      "predicted_under": "{x, v, u, x^3}",
+      "observed": 1.173448703,
+      "surprise": -0.4299875066,
+      "within_90": true,
+      "information_realized": -0.115251026,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_after": 0.7847157429
+     },
+     {
+      "index": 4,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 1.4531,
+       "frequency": 1.3049,
+       "x0": -0.504
+      },
+      "reason": "maximizes expected information: 0.068 nats about 4 competing explanations + 0.686 nats about their coefficients; candidate origin: pool",
+      "utility": 0.7540216795,
+      "predicted": [
+       0.8142524466,
+       1.794442765
+      ],
+      "predicted_under": "{x, v, u, x^3}",
+      "observed": 1.377023753,
+      "surprise": -0.9977245522,
+      "within_90": true,
+      "information_realized": -0.09272938566,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_after": 0.7841151852
+     },
+     {
+      "index": 5,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 1.5,
+       "frequency": 1.2749,
+       "x0": 0.0
+      },
+      "reason": "maximizes expected information: 0.094 nats about 4 competing explanations + 0.576 nats about their coefficients; candidate origin: estimated resonance",
+      "utility": 0.6699221341,
+      "predicted": [
+       0.6221851785,
+       1.824152949
+      ],
+      "predicted_under": "{x, v, u, x^3}",
+      "observed": 0.7153792034,
+      "surprise": 2.222947036,
+      "within_90": true,
+      "information_realized": -0.2951386011,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_after": 0.7957080784
+     },
+     {
+      "index": 6,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 1.4531,
+       "frequency": 1.3049,
+       "x0": -0.504
+      },
+      "reason": "maximizes expected information: 0.525 nats about 4 competing explanations + 0.528 nats about their coefficients; candidate origin: pool",
+      "utility": 1.05301434,
+      "predicted": [
+       0.7673634456,
+       1.686931243
+      ],
+      "predicted_under": "{x, v, u, x^3}",
+      "observed": 1.156347448,
+      "surprise": -1.80110021,
+      "within_90": true,
+      "information_realized": -0.1824083163,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3",
+       "1"
+      ],
+      "p_after": 0.5216486943
+     },
+     {
+      "index": 7,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 1.5,
+       "frequency": 1.2749,
+       "x0": 0.0
+      },
+      "reason": "maximizes expected information: 0.317 nats about 4 competing explanations + 0.416 nats about their coefficients; candidate origin: replication (change sentinel)",
+      "utility": 0.7332105963,
+      "predicted": [
+       0.6598443286,
+       1.526100483
+      ],
+      "predicted_under": "{x, v, u, x^3, 1}",
+      "observed": 1.172061697,
+      "surprise": 1.228603134,
+      "within_90": true,
+      "information_realized": 0.07560169826,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3",
+       "1"
+      ],
+      "p_after": 0.6197841907
+     },
+     {
+      "index": 8,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 1.5,
+       "frequency": 1.2749,
+       "x0": 0.0
+      },
+      "reason": "maximizes expected information: 0.377 nats about 4 competing explanations + 0.371 nats about their coefficients; candidate origin: replication (change sentinel)",
+      "utility": 0.7484092584,
+      "predicted": [
+       0.8842587637,
+       1.56728694
+      ],
+      "predicted_under": "{x, v, u, x^3, 1}",
+      "observed": 1.046001304,
+      "surprise": -0.725846243,
+      "within_90": true,
+      "information_realized": 0.2463294265,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3",
+       "1"
+      ],
+      "p_after": 0.8742564739
+     },
+     {
+      "index": 9,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 1.5,
+       "frequency": 1.3205,
+       "x0": 1.0
+      },
+      "reason": "maximizes expected information: 0.179 nats about 4 competing explanations + 0.301 nats about their coefficients; candidate origin: estimated resonance, displaced",
+      "utility": 0.4800431926,
+      "predicted": [
+       0.8025400705,
+       1.69654968
+      ],
+      "predicted_under": "{x, v, u, x^3, 1}",
+      "observed": 1.179920784,
+      "surprise": -1.271479464,
+      "within_90": true,
+      "information_realized": 0.119183691,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3",
+       "1"
+      ],
+      "p_after": 0.927953076
+     },
+     {
+      "index": 10,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 1.5,
+       "frequency": 1.2749,
+       "x0": 0.0
+      },
+      "reason": "maximizes expected information: 0.035 nats about 4 competing explanations + 0.295 nats about their coefficients; candidate origin: replication (change sentinel)",
+      "utility": 0.3302968635,
+      "predicted": [
+       0.7319890591,
+       1.411825234
+      ],
+      "predicted_under": "{x, v, u, x^3, 1}",
+      "observed": 1.163874405,
+      "surprise": 1.046455143,
+      "within_90": true,
+      "information_realized": -0.2588138001,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3",
+       "1"
+      ],
+      "p_after": 0.7150355195
+     },
+     {
+      "index": 11,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 1.4062,
+       "frequency": 0.8704,
+       "x0": -0.76
+      },
+      "reason": "maximizes expected information: 0.182 nats about 4 competing explanations + 0.196 nats about their coefficients; candidate origin: pool",
+      "utility": 0.3781657855,
+      "predicted": [
+       0.5926669685,
+       1.110278084
+      ],
+      "predicted_under": "{x, v, u, x^3, 1} with change at experiment 3 (shift v)",
+      "observed": 1.086304344,
+      "surprise": 1.305701042,
+      "within_90": true,
+      "information_realized": -0.06036207736,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3",
+       "1"
+      ],
+      "p_after": 0.6413963167
+     },
+     {
+      "index": 12,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 1.5,
+       "frequency": 1.3552,
+       "x0": 0.0
+      },
+      "reason": "maximizes expected information: 0.101 nats about 4 competing explanations + 0.273 nats about their coefficients; candidate origin: estimated resonance",
+      "utility": 0.3741041959,
+      "predicted": [
+       0.8084229515,
+       1.449415624
+      ],
+      "predicted_under": "{x, v, u, x^3, 1} with change at experiment 3 (shift v)",
+      "observed": 1.900507317,
+      "surprise": 0.03062671896,
+      "within_90": false,
+      "information_realized": -0.05861594111,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3",
+       "1"
+      ],
+      "p_after": 0.6539788412
+     },
+     {
+      "index": 13,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 1.5,
+       "frequency": 1.3552,
+       "x0": 0.0
+      },
+      "reason": "maximizes expected information: 0.000 nats about 4 competing explanations + 0.315 nats about their coefficients; candidate origin: replication (change sentinel)",
+      "utility": 0.3151246068,
+      "predicted": [
+       1.006512229,
+       1.750426296
+      ],
+      "predicted_under": "{x, v, u, x^3, 1}",
+      "observed": 0.8627452715,
+      "surprise": -1.162328444,
+      "within_90": false,
+      "information_realized": 0.02469218342,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3",
+       "1"
+      ],
+      "p_after": 0.6490836613
+     },
+     {
+      "index": 14,
+      "purpose": "explore",
+      "design": {
+       "amplitude": 1.3125,
+       "frequency": 1.5222,
+       "x0": -0.12
+      },
+      "reason": "maximizes expected information: 0.125 nats about 4 competing explanations + 0.209 nats about their coefficients; candidate origin: pool",
+      "utility": 0.3337959258,
+      "predicted": [
+       0.8416584007,
+       1.811129298
+      ],
+      "predicted_under": "{x, v, u, x^3, 1}",
+      "observed": 1.895315368,
+      "surprise": -0.4250715293,
+      "within_90": false,
+      "information_realized": -0.01606794602,
+      "leading_after": [
+       "x",
+       "v",
+       "u",
+       "x^3",
+       "1"
+      ],
+      "p_after": 0.6225265106
+     }
+    ],
+    "analyses": [
+     {
+      "after": 0,
+      "structure": [
+       "x",
+       "v",
+       "u"
+      ],
+      "p_structure": 0.5625,
+      "p_change": 0.0,
+      "blockers": [
+       "fewer than 2 experiments",
+       "leading structure probability 0.562 < 0.95"
+      ],
+      "information": null
+     },
+     {
+      "after": 1,
+      "structure": [
+       "x",
+       "v",
+       "u"
+      ],
+      "p_structure": 0.6414462209,
+      "p_change": 0.0,
+      "blockers": [
+       "fewer than 2 experiments",
+       "leading structure probability 0.641 < 0.95"
+      ],
+      "information": 0.1090791665
+     },
+     {
+      "after": 2,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_structure": 0.8266050029,
+      "p_change": 0.02307561259,
+      "blockers": [
+       "leading structure probability 0.827 < 0.95"
+      ],
+      "information": 0.3101333212
+     },
+     {
+      "after": 3,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_structure": 0.7847157429,
+      "p_change": 0.06570069882,
+      "blockers": [
+       "leading structure probability 0.785 < 0.95"
+      ],
+      "information": -0.115251026
+     },
+     {
+      "after": 4,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_structure": 0.7841151852,
+      "p_change": 0.1266973685,
+      "blockers": [
+       "leading structure probability 0.784 < 0.95"
+      ],
+      "information": -0.09272938566
+     },
+     {
+      "after": 5,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3"
+      ],
+      "p_structure": 0.7957080784,
+      "p_change": 0.5719141006,
+      "blockers": [
+       "leading structure probability 0.796 < 0.95",
+       "possible change under investigation (P(change) = 0.572)"
+      ],
+      "information": -0.2951386011
+     },
+     {
+      "after": 6,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3",
+       "1"
+      ],
+      "p_structure": 0.5216486943,
+      "p_change": 0.5571812302,
+      "blockers": [
+       "leading structure probability 0.522 < 0.95",
+       "possible change under investigation (P(change) = 0.557)"
+      ],
+      "information": -0.1824083163
+     },
+     {
+      "after": 7,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3",
+       "1"
+      ],
+      "p_structure": 0.6197841907,
+      "p_change": 0.3552323893,
+      "blockers": [
+       "leading structure probability 0.620 < 0.95",
+       "possible change under investigation (P(change) = 0.355)"
+      ],
+      "information": 0.07560169826
+     },
+     {
+      "after": 8,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3",
+       "1"
+      ],
+      "p_structure": 0.8742564739,
+      "p_change": 0.4638189051,
+      "blockers": [
+       "leading structure probability 0.874 < 0.95",
+       "possible change under investigation (P(change) = 0.464)"
+      ],
+      "information": 0.2463294265
+     },
+     {
+      "after": 9,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3",
+       "1"
+      ],
+      "p_structure": 0.927953076,
+      "p_change": 0.4668041048,
+      "blockers": [
+       "leading structure probability 0.928 < 0.95",
+       "possible change under investigation (P(change) = 0.467)"
+      ],
+      "information": 0.119183691
+     },
+     {
+      "after": 10,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3",
+       "1"
+      ],
+      "p_structure": 0.7150355195,
+      "p_change": 0.699427198,
+      "blockers": [
+       "leading structure probability 0.715 < 0.95",
+       "possible change under investigation (P(change) = 0.699)"
+      ],
+      "information": -0.2588138001
+     },
+     {
+      "after": 11,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3",
+       "1"
+      ],
+      "p_structure": 0.6413963167,
+      "p_change": 0.693325761,
+      "blockers": [
+       "leading structure probability 0.641 < 0.95",
+       "possible change under investigation (P(change) = 0.693)"
+      ],
+      "information": -0.06036207736
+     },
+     {
+      "after": 12,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3",
+       "1"
+      ],
+      "p_structure": 0.6539788412,
+      "p_change": 0.4344528793,
+      "blockers": [
+       "leading structure probability 0.654 < 0.95",
+       "possible change under investigation (P(change) = 0.434)"
+      ],
+      "information": -0.05861594111
+     },
+     {
+      "after": 13,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3",
+       "1"
+      ],
+      "p_structure": 0.6490836613,
+      "p_change": 0.3695282663,
+      "blockers": [
+       "leading structure probability 0.649 < 0.95",
+       "possible change under investigation (P(change) = 0.370)"
+      ],
+      "information": 0.02469218342
+     },
+     {
+      "after": 14,
+      "structure": [
+       "x",
+       "v",
+       "u",
+       "x^3",
+       "1"
+      ],
+      "p_structure": 0.6225265106,
+      "p_change": 0.3746491635,
+      "blockers": [
+       "leading structure probability 0.623 < 0.95",
+       "possible change under investigation (P(change) = 0.375)"
+      ],
+      "information": -0.01606794602
+     }
+    ],
+    "revisions": [],
+    "challenges": []
+   }
+  }
+ ],
+ "evaluation": [
+  {
+   "mission": "M1-characterize",
+   "verdict": "supported",
+   "structure": [
+    "x",
+    "v",
+    "u",
+    "x^3"
+   ],
+   "stop": "decision-challenged",
+   "experiments": 4,
+   "truth": "f = -1.3\u00b7x -0.16\u00b7v +1\u00b7u -0.4\u00b7x^3",
+   "true_structure": [
+    "x",
+    "v",
+    "u",
+    "x^3"
+   ],
+   "structure_correct": true,
+   "true_change": null,
+   "claimed_change": null
+  },
+  {
+   "mission": "M2-hidden-change",
+   "verdict": "supported",
+   "structure": [
+    "x",
+    "v",
+    "u",
+    "1"
+   ],
+   "stop": "decision-challenged",
+   "experiments": 6,
+   "truth": "f = -0.72\u00b7x -0.2\u00b7v +0.9\u00b7u +0.25\u00b71",
+   "true_structure": [
+    "x",
+    "v",
+    "u",
+    "1"
+   ],
+   "structure_correct": true,
+   "true_change": {
+    "before_experiment": 3
+   },
+   "claimed_change": {
+    "before_experiment": 3,
+    "changed": [
+     "x"
+    ]
+   }
+  },
+  {
+   "mission": "M3-unanticipated",
+   "verdict": "supported",
+   "structure": [
+    "x",
+    "v",
+    "u",
+    "x^2*v"
+   ],
+   "stop": "decision-challenged",
+   "experiments": 5,
+   "truth": "f = -1\u00b7x -0.12\u00b7v +1.1\u00b7u -0.3\u00b7x^2*v",
+   "true_structure": [
+    "x",
+    "v",
+    "u",
+    "x^2*v"
+   ],
+   "structure_correct": true,
+   "true_change": null,
+   "claimed_change": null
+  },
+  {
+   "mission": "M4-returning",
+   "verdict": "supported",
+   "structure": [
+    "x",
+    "v",
+    "u",
+    "x^3"
+   ],
+   "stop": "decision-challenged",
+   "experiments": 6,
+   "truth": "f = -0.92\u00b7x -0.34\u00b7v +1\u00b7u -0.4\u00b7x^3",
+   "true_structure": [
+    "x",
+    "v",
+    "u",
+    "x^3"
+   ],
+   "structure_correct": true,
+   "true_change": null,
+   "claimed_change": null
+  },
+  {
+   "mission": "M5-noise-limited",
+   "verdict": "unresolved",
+   "structure": [
+    "x",
+    "v",
+    "u",
+    "x^3",
+    "1"
+   ],
+   "stop": "budget-exhausted",
+   "experiments": 14,
+   "truth": "f = -1.6\u00b7x -0.3\u00b7v +0.8\u00b7u -0.2\u00b7x^3 +0.08\u00b71",
+   "true_structure": [
+    "x",
+    "v",
+    "u",
+    "x^3",
+    "1"
+   ],
+   "structure_correct": true,
+   "true_change": null,
+   "claimed_change": null
+  }
+ ],
+ "benchmark": {
+  "summary": {
+   "closed-loop": {
+    "missions": 200,
+    "efficiency": {
+     "mean": 9.255,
+     "interval": [
+      8.66,
+      9.865125
+     ]
+    },
+    "experiments": {
+     "mean": 8.025,
+     "interval": [
+      7.515,
+      8.56
+     ]
+    },
+    "coverage90": {
+     "mean": 0.893805555557,
+     "interval": [
+      0.8919692361161377,
+      0.895616666665575
+     ]
+    },
+    "regret": {
+     "mean": 0.04957018686214654,
+     "interval": [
+      0.037228704240814196,
+      0.062576834489978
+     ]
+    },
+    "linear_regret": {
+     "mean": 0.16451377080297974,
+     "interval": [
+      0.12325614233188538,
+      0.21622656128104764
+     ]
+    },
+    "wall_s": {
+     "mean": 1.865413832725,
+     "interval": [
+      1.660059378195375,
+      2.0859373636170004
+     ]
+    },
+    "correct": {
+     "rate": 0.645,
+     "count": 129,
+     "interval": [
+      0.5765211307549043,
+      0.7080137245956883
+     ]
+    },
+    "false": {
+     "rate": 0.05,
+     "count": 10,
+     "interval": [
+      0.025,
+      0.08957814813877599
+     ]
+    },
+    "unresolved": {
+     "rate": 0.3,
+     "count": 60,
+     "interval": [
+      0.24074744682371402,
+      0.36679068372719265
+     ]
+    },
+    "confident_error": {
+     "rate": 0.205,
+     "count": 41,
+     "interval": [
+      0.15486176203836208,
+      0.26625698052422514
+     ]
+    },
+    "recovered": {
+     "rate": 0.165,
+     "count": 33,
+     "interval": [
+      0.11996855328217307,
+      0.2226578153905955
+     ]
+    },
+    "by_family": {
+     "hidden-change": {
+      "missions": 50,
+      "efficiency": 12.32,
+      "experiments": 10.56,
+      "correct": 0.48,
+      "false": 0.06,
+      "unresolved": 0.44,
+      "change_identified": 0.64,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     },
+     "stationary": {
+      "missions": 50,
+      "efficiency": 6.48,
+      "experiments": 6.08,
+      "correct": 0.84,
+      "false": 0.0,
+      "unresolved": 0.16,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     },
+     "unfamiliar": {
+      "missions": 50,
+      "efficiency": 12.12,
+      "experiments": 9.58,
+      "correct": 0.36,
+      "false": 0.14,
+      "unresolved": 0.5,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.36
+     },
+     "wrong-assumptions": {
+      "missions": 50,
+      "efficiency": 6.1,
+      "experiments": 5.88,
+      "correct": 0.9,
+      "false": 0.0,
+      "unresolved": 0.1,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     }
+    },
+    "false_alarm": {
+     "rate": 0.0,
+     "count": 0,
+     "of": 150
+    },
+    "memory": {
+     "stale_quarantined": "13/19",
+     "correct_kept": "10/10"
+    },
+    "brier_structure": 0.06391382228375526
+   },
+   "yoked": {
+    "missions": 200,
+    "efficiency": {
+     "mean": 10.395,
+     "interval": [
+      9.714875,
+      11.070125
+     ]
+    },
+    "experiments": {
+     "mean": 9.11,
+     "interval": [
+      8.524875,
+      9.7
+     ]
+    },
+    "coverage90": {
+     "mean": 0.893847222227,
+     "interval": [
+      0.8920583333394875,
+      0.8956363194468502
+     ]
+    },
+    "regret": {
+     "mean": 0.049974236741576555,
+     "interval": [
+      0.03758166614653873,
+      0.06317473899634314
+     ]
+    },
+    "linear_regret": {
+     "mean": 0.1660777905493882,
+     "interval": [
+      0.12508942499077633,
+      0.21676323403068448
+     ]
+    },
+    "wall_s": {
+     "mean": 0.471719756895,
+     "interval": [
+      0.431653107061875,
+      0.5111807367735001
+     ]
+    },
+    "correct": {
+     "rate": 0.515,
+     "count": 103,
+     "interval": [
+      0.44610849192745716,
+      0.5833261482812249
+     ]
+    },
+    "false": {
+     "rate": 0.035,
+     "count": 7,
+     "interval": [
+      0.01,
+      0.07047061152229073
+     ]
+    },
+    "unresolved": {
+     "rate": 0.445,
+     "count": 89,
+     "interval": [
+      0.3778060100295335,
+      0.5142669758719658
+     ]
+    },
+    "confident_error": {
+     "rate": 0.25,
+     "count": 50,
+     "interval": [
+      0.19508168006817497,
+      0.31434098312045833
+     ]
+    },
+    "recovered": {
+     "rate": 0.225,
+     "count": 45,
+     "interval": [
+      0.17262369715089126,
+      0.2877412323566053
+     ]
+    },
+    "by_family": {
+     "hidden-change": {
+      "missions": 50,
+      "efficiency": 13.38,
+      "experiments": 11.52,
+      "correct": 0.32,
+      "false": 0.06,
+      "unresolved": 0.6,
+      "change_identified": 0.62,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     },
+     "stationary": {
+      "missions": 50,
+      "efficiency": 7.96,
+      "experiments": 7.36,
+      "correct": 0.7,
+      "false": 0.0,
+      "unresolved": 0.3,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     },
+     "unfamiliar": {
+      "missions": 50,
+      "efficiency": 13.08,
+      "experiments": 10.84,
+      "correct": 0.26,
+      "false": 0.08,
+      "unresolved": 0.66,
+      "change_identified": 0.0,
+      "false_alarm": 0.02,
+      "discovery": 0.26
+     },
+     "wrong-assumptions": {
+      "missions": 50,
+      "efficiency": 7.16,
+      "experiments": 6.72,
+      "correct": 0.78,
+      "false": 0.0,
+      "unresolved": 0.22,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     }
+    },
+    "false_alarm": {
+     "rate": 0.006666666666666667,
+     "count": 1,
+     "of": 150
+    },
+    "memory": {
+     "stale_quarantined": "14/19",
+     "correct_kept": "10/10"
+    },
+    "brier_structure": 0.07731023662783724
+   },
+   "open-loop-optimal": {
+    "missions": 200,
+    "efficiency": {
+     "mean": 10.11,
+     "interval": [
+      9.5,
+      10.745
+     ]
+    },
+    "experiments": {
+     "mean": 8.75,
+     "interval": [
+      8.195,
+      9.33
+     ]
+    },
+    "coverage90": {
+     "mean": 0.893591666667,
+     "interval": [
+      0.8917943749971874,
+      0.8954445833343124
+     ]
+    },
+    "regret": {
+     "mean": 0.05031668527201141,
+     "interval": [
+      0.037581554893258505,
+      0.06388824265934402
+     ]
+    },
+    "linear_regret": {
+     "mean": 0.18340686776804133,
+     "interval": [
+      0.13057775790054757,
+      0.25335930545733326
+     ]
+    },
+    "wall_s": {
+     "mean": 0.529907429355,
+     "interval": [
+      0.48970687415712494,
+      0.573057757683625
+     ]
+    },
+    "correct": {
+     "rate": 0.57,
+     "count": 114,
+     "interval": [
+      0.5007048776415268,
+      0.6366567766656557
+     ]
+    },
+    "false": {
+     "rate": 0.045,
+     "count": 9,
+     "interval": [
+      0.02,
+      0.0832967040018196
+     ]
+    },
+    "unresolved": {
+     "rate": 0.37,
+     "count": 74,
+     "interval": [
+      0.30612608409859116,
+      0.4387737007594981
+     ]
+    },
+    "confident_error": {
+     "rate": 0.245,
+     "count": 49,
+     "interval": [
+      0.1905686808903718,
+      0.30904243556203415
+     ]
+    },
+    "recovered": {
+     "rate": 0.21,
+     "count": 42,
+     "interval": [
+      0.15928412069979,
+      0.2716461685990246
+     ]
+    },
+    "by_family": {
+     "hidden-change": {
+      "missions": 50,
+      "efficiency": 12.82,
+      "experiments": 10.66,
+      "correct": 0.42,
+      "false": 0.06,
+      "unresolved": 0.46,
+      "change_identified": 0.7,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     },
+     "stationary": {
+      "missions": 50,
+      "efficiency": 7.14,
+      "experiments": 6.74,
+      "correct": 0.8,
+      "false": 0.0,
+      "unresolved": 0.2,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     },
+     "unfamiliar": {
+      "missions": 50,
+      "efficiency": 13.9,
+      "experiments": 11.3,
+      "correct": 0.2,
+      "false": 0.12,
+      "unresolved": 0.68,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.2
+     },
+     "wrong-assumptions": {
+      "missions": 50,
+      "efficiency": 6.58,
+      "experiments": 6.3,
+      "correct": 0.86,
+      "false": 0.0,
+      "unresolved": 0.14,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     }
+    },
+    "false_alarm": {
+     "rate": 0.0,
+     "count": 0,
+     "of": 150
+    },
+    "memory": {
+     "stale_quarantined": "14/19",
+     "correct_kept": "10/10"
+    },
+    "brier_structure": 0.08133928376051376
+   },
+   "fixed-sweep": {
+    "missions": 200,
+    "efficiency": {
+     "mean": 13.065,
+     "interval": [
+      12.495,
+      13.655125
+     ]
+    },
+    "experiments": {
+     "mean": 11.13,
+     "interval": [
+      10.605,
+      11.65
+     ]
+    },
+    "coverage90": {
+     "mean": 0.8938055555559999,
+     "interval": [
+      0.89209152777525,
+      0.895539027780275
+     ]
+    },
+    "regret": {
+     "mean": 0.05197124372719074,
+     "interval": [
+      0.03871399615423153,
+      0.06654572031382136
+     ]
+    },
+    "linear_regret": {
+     "mean": 0.17289566169042808,
+     "interval": [
+      0.12465077570735147,
+      0.23376575809564754
+     ]
+    },
+    "wall_s": {
+     "mean": 0.539271655485,
+     "interval": [
+      0.505823200624375,
+      0.5730013793715
+     ]
+    },
+    "correct": {
+     "rate": 0.28,
+     "count": 56,
+     "interval": [
+      0.22236889773949026,
+      0.3459230458665071
+     ]
+    },
+    "false": {
+     "rate": 0.025,
+     "count": 5,
+     "interval": [
+      0.005,
+      0.05717834040664198
+     ]
+    },
+    "unresolved": {
+     "rate": 0.67,
+     "count": 134,
+     "interval": [
+      0.602166847737769,
+      0.7314257412939605
+     ]
+    },
+    "confident_error": {
+     "rate": 0.23,
+     "count": 46,
+     "interval": [
+      0.17709343259068805,
+      0.2930830436530359
+     ]
+    },
+    "recovered": {
+     "rate": 0.21,
+     "count": 42,
+     "interval": [
+      0.15928412069979,
+      0.2716461685990246
+     ]
+    },
+    "by_family": {
+     "hidden-change": {
+      "missions": 50,
+      "efficiency": 15.28,
+      "experiments": 12.42,
+      "correct": 0.12,
+      "false": 0.04,
+      "unresolved": 0.74,
+      "change_identified": 0.18,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     },
+     "stationary": {
+      "missions": 50,
+      "efficiency": 11.14,
+      "experiments": 10.02,
+      "correct": 0.44,
+      "false": 0.0,
+      "unresolved": 0.56,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     },
+     "unfamiliar": {
+      "missions": 50,
+      "efficiency": 15.6,
+      "experiments": 13.12,
+      "correct": 0.04,
+      "false": 0.06,
+      "unresolved": 0.9,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.04
+     },
+     "wrong-assumptions": {
+      "missions": 50,
+      "efficiency": 10.24,
+      "experiments": 8.96,
+      "correct": 0.52,
+      "false": 0.0,
+      "unresolved": 0.48,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     }
+    },
+    "false_alarm": {
+     "rate": 0.0,
+     "count": 0,
+     "of": 150
+    },
+    "memory": {
+     "stale_quarantined": "14/19",
+     "correct_kept": "9/10"
+    },
+    "brier_structure": 0.06514878755938751
+   },
+   "random": {
+    "missions": 200,
+    "efficiency": {
+     "mean": 12.765,
+     "interval": [
+      12.14,
+      13.39
+     ]
+    },
+    "experiments": {
+     "mean": 11.01,
+     "interval": [
+      10.47,
+      11.550125000000001
+     ]
+    },
+    "coverage90": {
+     "mean": 0.893875,
+     "interval": [
+      0.8921749305539876,
+      0.8955613888859001
+     ]
+    },
+    "regret": {
+     "mean": 0.051843286110949995,
+     "interval": [
+      0.03913186818671841,
+      0.06581583298220661
+     ]
+    },
+    "linear_regret": {
+     "mean": 0.267346783085403,
+     "interval": [
+      0.1514985224934809,
+      0.44233163037189765
+     ]
+    },
+    "wall_s": {
+     "mean": 0.52738523636,
+     "interval": [
+      0.49218124007037506,
+      0.56194587580375
+     ]
+    },
+    "correct": {
+     "rate": 0.305,
+     "count": 61,
+     "interval": [
+      0.245,
+      0.37198552097978366
+     ]
+    },
+    "false": {
+     "rate": 0.025,
+     "count": 5,
+     "interval": [
+      0.005,
+      0.05717834040664198
+     ]
+    },
+    "unresolved": {
+     "rate": 0.66,
+     "count": 132,
+     "interval": [
+      0.5918849552683626,
+      0.7220845402909121
+     ]
+    },
+    "confident_error": {
+     "rate": 0.25,
+     "count": 50,
+     "interval": [
+      0.19508168006817497,
+      0.31434098312045833
+     ]
+    },
+    "recovered": {
+     "rate": 0.225,
+     "count": 45,
+     "interval": [
+      0.17262369715089126,
+      0.2877412323566053
+     ]
+    },
+    "by_family": {
+     "hidden-change": {
+      "missions": 50,
+      "efficiency": 15.0,
+      "experiments": 12.74,
+      "correct": 0.14,
+      "false": 0.02,
+      "unresolved": 0.8,
+      "change_identified": 0.38,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     },
+     "stationary": {
+      "missions": 50,
+      "efficiency": 11.36,
+      "experiments": 10.2,
+      "correct": 0.42,
+      "false": 0.0,
+      "unresolved": 0.58,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     },
+     "unfamiliar": {
+      "missions": 50,
+      "efficiency": 15.38,
+      "experiments": 12.76,
+      "correct": 0.06,
+      "false": 0.08,
+      "unresolved": 0.86,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.06
+     },
+     "wrong-assumptions": {
+      "missions": 50,
+      "efficiency": 9.32,
+      "experiments": 8.34,
+      "correct": 0.6,
+      "false": 0.0,
+      "unresolved": 0.4,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     }
+    },
+    "false_alarm": {
+     "rate": 0.0,
+     "count": 0,
+     "of": 150
+    },
+    "memory": {
+     "stale_quarantined": "13/19",
+     "correct_kept": "10/10"
+    },
+    "brier_structure": 0.09575535034781271
+   },
+   "legacy-atlas": {
+    "missions": 200,
+    "efficiency": {
+     "mean": 13.255,
+     "interval": [
+      12.62,
+      13.9
+     ]
+    },
+    "experiments": {
+     "mean": 11.67,
+     "interval": [
+      10.89,
+      12.455
+     ]
+    },
+    "coverage90": {
+     "mean": 0.90378611111,
+     "interval": [
+      0.9014915277726875,
+      0.9059445138903623
+     ]
+    },
+    "regret": {
+     "mean": 0.05468169309233859,
+     "interval": [
+      0.03543263102548859,
+      0.08390427999830997
+     ]
+    },
+    "linear_regret": {
+     "mean": 0.31685112586470665,
+     "interval": [
+      0.1479079946986332,
+      0.6112672707820823
+     ]
+    },
+    "wall_s": {
+     "mean": 0.49891435868499995,
+     "interval": [
+      0.46215942456962494,
+      0.535701900531625
+     ]
+    },
+    "correct": {
+     "rate": 0.295,
+     "count": 59,
+     "interval": [
+      0.23613943856849148,
+      0.36158714524618774
+     ]
+    },
+    "false": {
+     "rate": 0.11,
+     "count": 22,
+     "interval": [
+      0.07377244460125303,
+      0.1609269099730149
+     ]
+    },
+    "unresolved": {
+     "rate": 0.495,
+     "count": 99,
+     "interval": [
+      0.4264584535990475,
+      0.565
+     ]
+    },
+    "confident_error": {
+     "rate": 0.37,
+     "count": 74,
+     "interval": [
+      0.30612608409859116,
+      0.4387737007594981
+     ]
+    },
+    "recovered": {
+     "rate": 0.26,
+     "count": 52,
+     "interval": [
+      0.20413830063574687,
+      0.32490745602534116
+     ]
+    },
+    "by_family": {
+     "hidden-change": {
+      "missions": 50,
+      "efficiency": 15.72,
+      "experiments": 13.24,
+      "correct": 0.02,
+      "false": 0.0,
+      "unresolved": 0.58,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     },
+     "stationary": {
+      "missions": 50,
+      "efficiency": 11.04,
+      "experiments": 11.04,
+      "correct": 0.56,
+      "false": 0.0,
+      "unresolved": 0.44,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     },
+     "unfamiliar": {
+      "missions": 50,
+      "efficiency": 16.0,
+      "experiments": 12.14,
+      "correct": 0.0,
+      "false": 0.44,
+      "unresolved": 0.56,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     },
+     "wrong-assumptions": {
+      "missions": 50,
+      "efficiency": 10.26,
+      "experiments": 10.26,
+      "correct": 0.6,
+      "false": 0.0,
+      "unresolved": 0.4,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     }
+    },
+    "false_alarm": {
+     "rate": 0.0,
+     "count": 0,
+     "of": 151
+    },
+    "memory": {
+     "stale_quarantined": "11/19",
+     "correct_kept": "10/10"
+    },
+    "brier_structure": 0.24334319571353735
+   },
+   "closed-loop-no-critic": {
+    "missions": 200,
+    "efficiency": {
+     "mean": 10.415,
+     "interval": [
+      9.914874999999999,
+      10.94
+     ]
+    },
+    "experiments": {
+     "mean": 9.025,
+     "interval": [
+      8.545,
+      9.520125
+     ]
+    },
+    "coverage90": {
+     "mean": 0.9037166666664999,
+     "interval": [
+      0.9015972222234251,
+      0.9057501388908749
+     ]
+    },
+    "regret": {
+     "mean": 0.0431794188818816,
+     "interval": [
+      0.032792193784753496,
+      0.05543428966965984
+     ]
+    },
+    "linear_regret": {
+     "mean": 0.16766545251698475,
+     "interval": [
+      0.12492610211008143,
+      0.2235308127965878
+     ]
+    },
+    "wall_s": {
+     "mean": 1.7861316235549998,
+     "interval": [
+      1.615807129073875,
+      1.968518983431125
+     ]
+    },
+    "correct": {
+     "rate": 0.545,
+     "count": 109,
+     "interval": [
+      0.47578611372488105,
+      0.6125178069011651
+     ]
+    },
+    "false": {
+     "rate": 0.045,
+     "count": 9,
+     "interval": [
+      0.02,
+      0.0832967040018196
+     ]
+    },
+    "unresolved": {
+     "rate": 0.405,
+     "count": 81,
+     "interval": [
+      0.3393777128250677,
+      0.47420289918661307
+     ]
+    },
+    "confident_error": {
+     "rate": 0.33,
+     "count": 66,
+     "interval": [
+      0.26857425870603957,
+      0.39783315226223115
+     ]
+    },
+    "recovered": {
+     "rate": 0.295,
+     "count": 59,
+     "interval": [
+      0.23613943856849148,
+      0.36158714524618774
+     ]
+    },
+    "by_family": {
+     "hidden-change": {
+      "missions": 50,
+      "efficiency": 12.32,
+      "experiments": 10.56,
+      "correct": 0.48,
+      "false": 0.06,
+      "unresolved": 0.44,
+      "change_identified": 0.64,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     },
+     "stationary": {
+      "missions": 50,
+      "efficiency": 6.48,
+      "experiments": 6.08,
+      "correct": 0.84,
+      "false": 0.0,
+      "unresolved": 0.16,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     },
+     "unfamiliar": {
+      "missions": 50,
+      "efficiency": 16.0,
+      "experiments": 12.88,
+      "correct": 0.0,
+      "false": 0.12,
+      "unresolved": 0.88,
+      "change_identified": 0.0,
+      "false_alarm": 0.2,
+      "discovery": 0.0
+     },
+     "wrong-assumptions": {
+      "missions": 50,
+      "efficiency": 6.86,
+      "experiments": 6.58,
+      "correct": 0.86,
+      "false": 0.0,
+      "unresolved": 0.14,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     }
+    },
+    "false_alarm": {
+     "rate": 0.06666666666666667,
+     "count": 10,
+     "of": 150
+    },
+    "memory": {
+     "stale_quarantined": "13/19",
+     "correct_kept": "10/10"
+    },
+    "brier_structure": 0.23576927787769694
+   },
+   "closed-loop-no-challenge": {
+    "missions": 200,
+    "efficiency": {
+     "mean": 6.155,
+     "interval": [
+      5.48,
+      6.860125000000001
+     ]
+    },
+    "experiments": {
+     "mean": 4.275,
+     "interval": [
+      3.71,
+      4.845
+     ]
+    },
+    "coverage90": {
+     "mean": 0.895694444444,
+     "interval": [
+      0.8939110416635998,
+      0.8974974305543999
+     ]
+    },
+    "regret": {
+     "mean": 0.04549831026614206,
+     "interval": [
+      0.03512194418333035,
+      0.05564918765261502
+     ]
+    },
+    "linear_regret": {
+     "mean": 0.16926610265285266,
+     "interval": [
+      0.13208059848300405,
+      0.2141466621024547
+     ]
+    },
+    "wall_s": {
+     "mean": 0.8760505704650001,
+     "interval": [
+      0.6951667913721251,
+      1.073969486668875
+     ]
+    },
+    "correct": {
+     "rate": 0.74,
+     "count": 148,
+     "interval": [
+      0.6750925439746589,
+      0.7958616993642531
+     ]
+    },
+    "false": {
+     "rate": 0.11,
+     "count": 22,
+     "interval": [
+      0.07,
+      0.1609269099730149
+     ]
+    },
+    "unresolved": {
+     "rate": 0.12,
+     "count": 24,
+     "interval": [
+      0.08,
+      0.17234252098296743
+     ]
+    },
+    "confident_error": {
+     "rate": 0.185,
+     "count": 37,
+     "interval": [
+      0.13730192800616042,
+      0.2445706276115175
+     ]
+    },
+    "recovered": {
+     "rate": 0.085,
+     "count": 17,
+     "interval": [
+      0.05,
+      0.13189587071565567
+     ]
+    },
+    "by_family": {
+     "hidden-change": {
+      "missions": 50,
+      "efficiency": 8.22,
+      "experiments": 5.24,
+      "correct": 0.62,
+      "false": 0.1,
+      "unresolved": 0.16,
+      "change_identified": 0.3,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     },
+     "stationary": {
+      "missions": 50,
+      "efficiency": 3.42,
+      "experiments": 2.86,
+      "correct": 0.92,
+      "false": 0.04,
+      "unresolved": 0.04,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     },
+     "unfamiliar": {
+      "missions": 50,
+      "efficiency": 10.42,
+      "experiments": 6.72,
+      "correct": 0.44,
+      "false": 0.28,
+      "unresolved": 0.28,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.44
+     },
+     "wrong-assumptions": {
+      "missions": 50,
+      "efficiency": 2.56,
+      "experiments": 2.28,
+      "correct": 0.98,
+      "false": 0.02,
+      "unresolved": 0.0,
+      "change_identified": 0.0,
+      "false_alarm": 0.0,
+      "discovery": 0.0
+     }
+    },
+    "false_alarm": {
+     "rate": 0.0,
+     "count": 0,
+     "of": 170
+    },
+    "memory": {
+     "stale_quarantined": "11/19",
+     "correct_kept": "10/10"
+    },
+    "brier_structure": 0.10480395917522678
+   }
+  },
+  "hypotheses": {
+   "alpha_family": 0.05,
+   "alpha_each": 0.0071428571428571435,
+   "H1": {
+    "versus": "yoked",
+    "difference": -1.14,
+    "interval": [
+     -1.845,
+     -0.45
+    ],
+    "n": 200,
+    "verdict": "supported"
+   },
+   "H2": {
+    "parts": [
+     {
+      "versus": "open-loop-optimal",
+      "difference": -0.855,
+      "interval": [
+       -1.645,
+       -0.095
+      ],
+      "n": 200,
+      "verdict": "supported"
+     },
+     {
+      "versus": "fixed-sweep",
+      "difference": -3.81,
+      "interval": [
+       -4.775,
+       -2.875
+      ],
+      "n": 200,
+      "verdict": "supported"
+     },
+     {
+      "versus": "random",
+      "difference": -3.51,
+      "interval": [
+       -4.486446428571429,
+       -2.555
+      ],
+      "n": 200,
+      "verdict": "supported"
+     },
+     {
+      "versus": "legacy-atlas",
+      "difference": -4.0,
+      "interval": [
+       -5.192892857142858,
+       -2.7285535714285745
+      ],
+      "n": 200,
+      "verdict": "supported"
+     }
+    ],
+    "verdict": "supported"
+   },
+   "H3": {
+    "rate": 0.05,
+    "count": 10,
+    "interval": [
+     0.015,
+     0.10936743104402794
+    ],
+    "verdict": "unresolved"
+   },
+   "H4": {
+    "versus": "fixed-sweep",
+    "difference": 0.46,
+    "interval": [
+     0.28,
+     0.64
+    ],
+    "n": 50,
+    "closed_loop_rate": 0.64,
+    "fixed_sweep_rate": 0.18,
+    "verdict": "supported"
+   },
+   "H5": {
+    "versus": "fixed-sweep",
+    "difference": 0.32,
+    "interval": [
+     0.16,
+     0.5
+    ],
+    "n": 50,
+    "closed_loop_rate": 0.36,
+    "fixed_sweep_rate": 0.04,
+    "verdict": "supported"
+   },
+   "H6": {
+    "mean": 0.893805555557,
+    "interval": [
+     0.8912932043666802,
+     0.8962527777788679
+    ],
+    "verdict": "supported"
+   },
+   "H7": {
+    "difference": -0.11494358394083322,
+    "interval": [
+     -0.18778585051093866,
+     -0.062464900143213355
+    ],
+    "closed_loop_regret": 0.04957018686214654,
+    "linear_regret": 0.16451377080297974,
+    "verdict": "supported"
+   },
+   "problems_per_family": 50
+  },
+  "reproduction": {
+   "missions": 64,
+   "identical": 64,
+   "all_identical": true,
+   "wall_s": 16.765895285000624
+  }
+ },
+ "pending_escalations": [
+  {
+   "ref": "sha256:4d1cd26f6ed30abc7ab75838d9b12f0b8027576fdd2bcc220f7dc1c3f591e5b2",
+   "cap": 8,
+   "evidence": {
+    "blockers": [
+     "leading structure probability 0.623 < 0.95",
+     "possible change under investigation (P(change) = 0.375)"
+    ]
+   },
+   "grantable": true,
+   "kind": "budget-extension",
+   "mission": "M5-noise-limited",
+   "reason": "the experiment budget ended before the stopping rule was met; the best remaining design was still expected to yield 0.334 nats",
+   "request_id": "1c18a7c0bbaed1b4",
+   "requested": {
+    "experiments": 8
+   }
+  }
+ ],
+ "preregistration": "sha256:f070910723bad579b137154fc2b46425412681c4c737e7c7e467f2ec7ea4f48d"
+}

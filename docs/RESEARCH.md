@@ -205,6 +205,19 @@ loop's own designs from a different problem: same design distribution,
 dependence on this problem's observations removed. It is the direct test of
 whether observation-dependent decisions matter.
 
+## Recorded result
+
+On 200 held-out problems (preregistered, pushed before the run) the
+closed loop reached correct conclusions with fewer experiments than the yoked
+control (H1, −1.14 [−1.85, −0.45]) and than every conventional design (H2),
+identified hidden changes (H4) and unanticipated terms (H5) more often than a
+fixed sweep, was calibrated on unseen conditions (H6) and predicted them
+better than a linear model (H7). **H3 is unresolved:** 5.0 % false conclusions
+(adjusted interval 1.5–10.9 %), concentrated in the held-out-only term `v^3`,
+which it never identified, and in changes at the edges of a mission. The
+preregistration had predicted H1 unresolved. Details, failures and provenance:
+[demonstration/research/](demonstration/research/).
+
 ## Development record: where the design was wrong
 
 The configuration was tuned on the development split only. Problems found and
@@ -245,3 +258,10 @@ fixed on the way, in order:
   possible to score only because the apparatus is simulated.
 * The in-process instrument is not a sandbox; the research loop never executes
   model text or code.
+* The posterior is conditional on the working hypothesis set. An
+  unanticipated term the score test never proposes is never considered, so a
+  conclusion can be confidently wrong (the held-out `v^3` failures); the
+  charter's cap of two admitted terms can let a near-collinear rival crowd out
+  the true term. Raising the cap, testing every grammar term in the
+  independent check without Bonferroni dilution, or reporting the posterior's
+  conditionality in the claim itself are untested options.

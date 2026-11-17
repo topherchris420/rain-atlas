@@ -65,10 +65,23 @@ def answer(bench: dict | None) -> dict:
     summary = ("Supported: " + "; ".join(supported) + ". " if supported else "") + (
         "Not established: " + "; ".join(other) + "." if other else ""
     )
+    conditions = []
+    if h["H3"]["verdict"] != "supported":
+        conditions.append(
+            f"safety (H3) is {h['H3']['verdict']}: {h['H3']['count']} false conclusions "
+            f"({h['H3']['rate']:.1%}, adjusted interval {h['H3']['interval'][0]:.1%}–{h['H3']['interval'][1]:.1%}) "
+            "against a 5 % bound"
+        )
+    if h["H6"]["verdict"] != "supported":
+        conditions.append(f"calibration (H6) is {h['H6']['verdict']}")
+    if conditions:
+        summary += " Conditions: " + "; ".join(conditions) + "."
+    summary += " Bounded to the simulated oscillator family, the approved design space and the stated priors."
     return {
         "verdict": verdict,
         "parts": parts,
         "summary": summary.strip(),
+        "conditions": conditions,
         "safety": {"H3": h["H3"]["verdict"], "H6": h["H6"]["verdict"]},
     }
 
@@ -152,7 +165,7 @@ def mission_view(result: Any) -> dict:
 
 
 def svg_mission(view: dict, title: str) -> str:
-    W, H = 760, 300
+    W, H = 760, 322
     left, right, top = 52, 16, 24
     plot_w = W - left - right
     exps = view["experiments"]
@@ -169,7 +182,12 @@ def svg_mission(view: dict, title: str) -> str:
         out.append(
             f'<line x1="{left}" x2="{W - right}" y1="{y:.1f}" y2="{y:.1f}" class="grid{" dec" if v == 0.95 else ""}"/>'
         )
-        out.append(f'<text x="{left - 6}" y="{y + 4:.1f}" class="tick" text-anchor="end">{v:g}</text>')
+        if v == 0.95:
+            out.append(
+                f'<text x="{W - right}" y="{y - 4:.1f}" class="tick" text-anchor="end">decision level 0.95</text>'
+            )
+        else:
+            out.append(f'<text x="{left - 6}" y="{y + 4:.1f}" class="tick" text-anchor="end">{v:g}</text>')
     pts_s, pts_c = [], []
     for a in view["analyses"]:
         if a["after"] == 0:
@@ -232,7 +250,7 @@ def svg_arms(summary: dict) -> str:
         f'<svg viewBox="0 0 {W} {H}" role="img" aria-label="censored experiments to a correct conclusion by arm" class="fig">'
     ]
     out.append(
-        f'<text x="{left}" y="14" class="axis">censored experiments to a correct conclusion (lower is better), 95% interval</text>'
+        '<text x="16" y="14" class="axis">censored experiments to a correct conclusion · lower is better · 95% interval</text>'
     )
     for k, a in enumerate(arms):
         y = 34 + k * row
@@ -271,7 +289,8 @@ def markdown(
     w = L.append
     w(f"# {charter['title']}\n")
     w(f"> **Question.** {charter['question']}\n")
-    w(f"**Answer: {ans['verdict'].upper()}.** {ans['summary']}\n")
+    qualifier = " (with conditions)" if ans.get("conditions") else ""
+    w(f"**Answer: {ans['verdict'].upper()}{qualifier}.** {ans['summary']}\n")
     if ans["parts"]:
         w("| Part of the question | Preregistered test | Verdict |\n|---|---|---|")
         for p in ans["parts"]:
@@ -500,7 +519,43 @@ def unknowns(missions: list[dict], bench: dict | None) -> str:
             f"missions within {16} experiments, and made {cl['false']['count']} false conclusions "
             f"({cl['false']['rate']:.1%})."
         )
-        missed = sum(r["missed_change"] for r in bench["results"] if r["arm"] == "closed-loop")
+        rows = [r for r in bench["results"] if r["arm"] == "closed-loop"]
+        false = [r for r in rows if r["false"]]
+        by_family: dict[str, list[str]] = {}
+        for r in false:
+            by_family.setdefault(r["family"], []).append(r["variant"])
+        for fam, variants in sorted(by_family.items()):
+            total = sum(1 for r in rows if r["family"] == fam)
+            items.append(
+                f"- False conclusions in the {fam} family: {len(variants)}/{total} "
+                f"({'; '.join(sorted(set(variants)))})."
+            )
+        terms: dict[str, dict[str, int]] = {}
+        for r in rows:
+            if r["family"] == "unfamiliar":
+                term = r["variant"].split(" + ")[-1]
+                outcome = "correct" if r["correct"] else "false" if r["false"] else "unresolved"
+                terms.setdefault(term, {"correct": 0, "false": 0, "unresolved": 0})[outcome] += 1
+        if terms:
+            items.append(
+                "- Unanticipated terms, closed loop: "
+                + "; ".join(
+                    f"`{t}` {c['correct']} correct, {c['false']} false, {c['unresolved']} unresolved"
+                    for t, c in sorted(terms.items())
+                )
+                + ". A term that the score test never proposes is never in the working set, so the posterior "
+                "(conditional on that set) can be confidently wrong; near-collinear terms can also crowd it out "
+                "under the charter's cap of two admitted terms."
+            )
+        stale = [r for r in rows if r["memory_stale"]]
+        kept = [r for r in stale if r["memory_state"] != "quarantined"]
+        if stale:
+            items.append(
+                f"- Stale memories not quarantined: {len(kept)}/{len(stale)} "
+                f"({sum(r['memory_state'] == 'confirmed' for r in kept)} wrongly marked confirmed); "
+                f"{sum(r['correct'] for r in kept)} of those missions still reached the correct conclusion."
+            )
+        missed = sum(r["missed_change"] for r in rows)
         items.append(
             f"- Changes that went undetected but were not claimed absent (incomplete conclusions): {missed}."
         )
@@ -558,7 +613,7 @@ def dossier(
     w('<p class="eyebrow">R.A.I.N. ATLAS · autonomous investigation · offline record</p>')
     w(f'<h1>{e(charter["title"])}</h1><p class="q">{e(charter["question"])}</p>')
     w(
-        f'<div class="card"><p><b>Answer:</b> <span class="v {ans["verdict"]}">{ans["verdict"]}</span> {e(ans["summary"])}</p>'
+        f'<div class="card"><p><b>Answer:</b> <span class="v {ans["verdict"]}">{ans["verdict"]}{" · with conditions" if ans.get("conditions") else ""}</span> {e(ans["summary"])}</p>'
     )
     if ans["parts"]:
         w("<table><tr><th>Part of the question</th><th>Test</th><th>Verdict</th></tr>")
