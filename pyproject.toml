@@ -30,11 +30,42 @@ dev = [
 ]
 
 [build-system]
-requires = ["uv_build>=0.9,<0.13"]
-build-backend = "uv_build"
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
 
-[tool.uv.build-backend]
-module-name = "rain_atlas"
+# The wheel must carry the built-in skill catalog: an installed `atlas` has no
+# repository checkout to read `skills/` from. The catalog keeps its repository
+# location (documentation links, generator scripts and recorded content hashes
+# refer to it) and is mapped to `rain_atlas/builtin_skills` inside the wheel.
+[tool.hatch.build.targets.wheel]
+only-include = ["src/rain_atlas", "skills"]
+exclude = ["**/__pycache__", "**/*.pyc"]
+# Editable (development) installs put src/ on sys.path; a checkout then reads
+# the catalog from <repo>/skills directly.
+dev-mode-dirs = ["src"]
+
+[tool.hatch.build.targets.wheel.sources]
+"src" = ""
+"skills" = "rain_atlas/builtin_skills"
+
+[tool.hatch.build.targets.sdist]
+only-include = [
+    "src",
+    "skills",
+    "tests",
+    "docs",
+    "scripts",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "NOTICE.md",
+    "SECURITY.md",
+    "RESPONSIBLE_AI.md",
+    "CONTRIBUTING.md",
+    "CODE_OF_CONDUCT.md",
+    "uv.lock",
+]
+exclude = ["**/__pycache__", "**/*.pyc", "tests/web/node_modules"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -32,8 +32,19 @@ class RegistryError(RuntimeError):
 
 
 def default_builtin_root() -> Path:
+    """Where the built-in skill catalog lives.
+
+    ``$ATLAS_BUILTIN_SKILLS`` wins; an installed wheel carries the catalog as
+    ``rain_atlas/builtin_skills``; a source checkout reads ``<repo>/skills``.
+    """
+
     env = os.environ.get("ATLAS_BUILTIN_SKILLS")
-    return Path(env) if env else Path(__file__).resolve().parents[3] / "skills"
+    if env:
+        return Path(env)
+    packaged = Path(__file__).resolve().parents[1] / "builtin_skills"
+    if packaged.is_dir():
+        return packaged
+    return Path(__file__).resolve().parents[3] / "skills"
 
 
 def default_home() -> Path:

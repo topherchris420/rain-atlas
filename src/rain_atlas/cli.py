@@ -19,9 +19,18 @@ def _print_json(value) -> None:
 def _registry(args):
     from .skills.registry import Registry  # noqa: PLC0415
 
-    return Registry(
+    registry = Registry(
         home=Path(args.home) if args.home else None, builtin_root=Path(args.builtin) if args.builtin else None
     )
+    if not registry.builtin_root.is_dir():
+        # Never fail silently with an empty catalog: an installation without
+        # the built-in skills cannot run any experiment.
+        print(
+            f"warning: built-in skill catalog not found at {registry.builtin_root}; "
+            "reinstall rain-atlas or set ATLAS_BUILTIN_SKILLS",
+            file=sys.stderr,
+        )
+    return registry
 
 
 def cmd_skills_list(args) -> int:

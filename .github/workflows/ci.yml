@@ -35,6 +35,22 @@ jobs:
           name: tests-${{ matrix.os }}-${{ matrix.python }}
           path: test-results.xml
 
+  package:
+    # Build the sdist and wheel, install the wheel into a clean environment and
+    # run the CLI outside the checkout, where packaging omissions surface.
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - run: uv run --no-project python scripts/check_package.py
+
   acceptance:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
