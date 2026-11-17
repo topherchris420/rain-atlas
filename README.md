@@ -18,6 +18,54 @@ R.A.I.N. ATLAS is an **open-source, local-first research workbench** from [Vers3
 *This is a screenshot of the actual offline observatory, not a product mockup. The [recorded demonstration](docs/demonstration/) is a standalone HTML review snapshot: clone or download the repository, then open `docs/demonstration/index.html` locally.*
 
 
+## REA: reconstructed capabilities, unified
+
+Vers3Dynamics applies **Recursive Engineering & Analysis (REA)** to
+reference systems: investigate an authorized reference, reconstruct selected
+capabilities independently, verify against recorded behavior, then integrate
+what survives. Nine Y Combinator–funded systems were investigated this way
+and their useful capabilities were rebuilt as eight independently tested
+modules inside this repository — no reference source is included or copied.
+
+| Reconstructed capability | Reference investigated | Module |
+| --- | --- | --- |
+| Scientific memory (extraction, retrieval, history, contradictions) | Mem0 | `rain_atlas.memory` |
+| Execution tracing, spans, scores, eval datasets | Langfuse | `rain_atlas.observability` |
+| Research missions, approvals, supervision | Omnara, Maxxwell | `rain_atlas.mission` |
+| Protocol compilation with safety constraints | Infera | `rain_atlas.protocol` |
+| Stateful simulation twin with fault injection | Arga Labs | `rain_atlas.simulation` |
+| Local inference providers (Ollama, llama.cpp, mock) | RunAnywhere | `rain_atlas.inference` |
+| Local-first versioned knowledge with conflict resolution | Epicenter | `rain_atlas.knowledge` |
+| Authorized web retrieval with provenance | Browser Use | `rain_atlas.browser` |
+
+For Mem0 the reference SDK itself runs locally in a differential
+conformance suite (12 passing comparisons against mem0ai 2.2.1). Every
+investigation is a validated evidence package with enforced
+OBSERVED / COMPUTED / INFERRED / UNKNOWN classifications.
+
+**Run the integrated demonstrations:**
+
+```bash
+# One scientific mission through every module (proposal → protocol →
+# approval → experiments → evaluation → replication → ledger):
+uv run atlas rain slice --root atlas-data/rain-slice
+uv run atlas ledger verify atlas-data/rain-slice/ledger
+
+# The central scientific experiment: does combining reconstructed
+# capabilities beat simpler baseline architectures?
+uv run atlas rain central --root atlas-data/rain-central
+uv run atlas ledger verify atlas-data/rain-central/ledger
+
+# Inspect the nine recorded investigations:
+uv run atlas rea list
+uv run atlas rea show T01-mem0
+```
+
+The central experiment compares adaptive selection with persistent memory
+against the same architecture without memory, a fixed grid and random
+selection, under preregistered hypotheses. See [docs/REA.md](docs/REA.md)
+for the recorded outcome, the evidence rules and the limitations.
+
 ## ATLAS Physical Scientist
 
 **A hypothesis is only useful if reality is allowed to reject it.** This extension introduces a reproducible *software* loop for competing resonance models: preregister a predicted response, select a discriminating frequency, preserve an observation, score the mismatch, and retain failed revisions. It reuses the original evidence ledger and offline observatory.
@@ -301,7 +349,7 @@ To contribute a method, follow the [skill authoring guide](docs/SKILL_AUTHORING.
 
 ## What is implemented, and what is not
 
-**Version 0.1.0 is unreleased.** ATLAS currently includes the numerical experiments above, a 30-skill catalog, evidence search and recovery, an offline observatory, local proposal registration/approval, export integrations, and BLACK GLASS static firmware analysis.
+**Version 0.1.0 is unreleased.** ATLAS currently includes the numerical experiments above, a 30-skill catalog, evidence search and recovery, an offline observatory, local proposal registration/approval, export integrations, BLACK GLASS static firmware analysis, and the REA replication framework with eight reconstructed-capability modules and the unified `atlas rain` demonstrations.
 
 **Validation snapshot:** the [November 5, 2026 Linux record](docs/VALIDATION.md) reports **235 passing tests and one platform-specific skip** on each of Python 3.11 and 3.12, including the slow acceptance tests. It also documents cross-platform agreement and defects found through validation. These are historical recorded results, **not a claim that every subsequent commit has been retested**. See [GitHub Actions](https://github.com/topherchris420/rain-atlas/actions) for the current hosted workflow state; hosted CI was account-blocked at the time of the published validation.
 

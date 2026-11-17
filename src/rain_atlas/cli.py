@@ -613,6 +613,89 @@ def cmd_firmware_evolution(args) -> int:
     return 0
 
 
+def cmd_rea_list(args) -> int:
+    from .rea.investigations import TARGET_ORDER, investigation  # noqa: PLC0415
+
+    if getattr(args, "json", False):
+        payload = [investigation(t).to_dict() for t in TARGET_ORDER]
+        _print_json(payload)
+        return 0
+    for target_id in TARGET_ORDER:
+        inv = investigation(target_id)
+        replicas = (
+            ", ".join(f"{r.replica_id}[{r.integration_status}]" for r in inv.replicas) or "no replica yet"
+        )
+        print(f"{target_id:<18} {inv.manifest.name:<16} {inv.confidence:<8} {replicas}")
+    return 0
+
+
+def cmd_rea_show(args) -> int:
+    from .rea.investigations import investigation  # noqa: PLC0415
+    from .rea.package import EvidencePackage  # noqa: PLC0415
+
+    inv = investigation(args.target)
+    if getattr(args, "json", False):
+        _print_json(inv.to_dict())
+        return 0
+    print(EvidencePackage.build(inv).render_markdown())
+    return 0
+
+
+def cmd_rea_export(args) -> int:
+    from .rea.investigations import TARGET_ORDER, investigation  # noqa: PLC0415
+    from .rea.package import EvidencePackage, write_package  # noqa: PLC0415
+
+    out = Path(args.out)
+    for target_id in TARGET_ORDER:
+        package = EvidencePackage.build(investigation(target_id))
+        write_package(package, out / target_id)
+        print(f"{target_id}: {out / target_id / 'package.md'}")
+    print(f"wrote {len(TARGET_ORDER)} evidence packages under {out}")
+    return 0
+
+
+def cmd_rain_slice(args) -> int:
+    from .rain import run_vertical_slice  # noqa: PLC0415
+
+    result = run_vertical_slice(
+        Path(args.root),
+        seed=args.seed,
+        true_model=args.model,
+        max_experiments=args.max_experiments,
+    )
+    if getattr(args, "json", False):
+        _print_json(result.to_dict())
+        return 0 if result.ledger_verified else 1
+    print(f"mission {result.mission_id}: {result.mission_status}")
+    print(f"preferred model: {result.preferred_model} (decided={result.decided})")
+    print(f"experiments: {len(result.experiments)}  replication: {result.replication}")
+    print(f"memory: {result.memory_statistics}")
+    print(f"traces: {result.trace_count}  ledger verified: {result.ledger_verified}")
+    return 0 if result.ledger_verified else 1
+
+
+def cmd_rain_central(args) -> int:
+    from .rain import run_central_experiment  # noqa: PLC0415
+
+    result = run_central_experiment(
+        Path(args.root), programs=args.programs, missions_per_program=args.missions
+    )
+    if getattr(args, "json", False):
+        _print_json(result.to_dict())
+        return 0 if result.ledger_verified else 1
+    for name, arm in result.arms.items():
+        print(
+            f"{name:<22} experiments={arm.total_experiments:<4} "
+            f"mean/mission={arm.mean_experiments:<6} decided={arm.decided:<3} "
+            f"false={arm.false_conclusions:<2} replication={arm.replication_successes}/{arm.replications}"
+        )
+    for hypothesis_id, record in result.hypotheses.items():
+        state = "SUPPORTED" if record["passed"] else "NOT SUPPORTED"
+        print(f"{hypothesis_id}: {state}  {record['measured']}")
+    print(f"elapsed {result.elapsed_s:.2f}s  ledger verified: {result.ledger_verified}")
+    return 0 if result.ledger_verified else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="atlas",
@@ -735,6 +818,35 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--no-figures", action="store_true")
     p.add_argument("--no-bundle", action="store_true")
     p.set_defaults(func=cmd_experiment_run)
+
+    rea = sub.add_parser("rea", help="REA reference-system investigations and replicas")
+    rsub = rea.add_subparsers(dest="command", required=True)
+    p = rsub.add_parser("list", help="list the recorded investigations")
+    p.add_argument("--json", action="store_true")
+    p.set_defaults(func=cmd_rea_list)
+    p = rsub.add_parser("show", help="render one investigation's evidence package")
+    p.add_argument("target", help="target id, e.g. T01-mem0")
+    p.add_argument("--json", action="store_true")
+    p.set_defaults(func=cmd_rea_show)
+    p = rsub.add_parser("export", help="write every evidence package to a directory")
+    p.add_argument("--out", required=True)
+    p.set_defaults(func=cmd_rea_export)
+
+    rain = sub.add_parser("rain", help="unified R.A.I.N. demonstrations")
+    nsub = rain.add_subparsers(dest="command", required=True)
+    p = nsub.add_parser("slice", help="run the integrated vertical slice")
+    p.add_argument("--root", default="atlas-data/rain-slice")
+    p.add_argument("--seed", type=int, default=7)
+    p.add_argument("--model", choices=("linear", "damped"), default=None)
+    p.add_argument("--max-experiments", type=int, default=6)
+    p.add_argument("--json", action="store_true")
+    p.set_defaults(func=cmd_rain_slice)
+    p = nsub.add_parser("central", help="run the central scientific experiment")
+    p.add_argument("--root", default="atlas-data/rain-central")
+    p.add_argument("--programs", type=int, default=6)
+    p.add_argument("--missions", type=int, default=3)
+    p.add_argument("--json", action="store_true")
+    p.set_defaults(func=cmd_rain_central)
 
     ledger = sub.add_parser("ledger", help="inspect and verify evidence ledgers")
     lsub = ledger.add_subparsers(dest="command", required=True)

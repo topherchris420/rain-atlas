@@ -66,7 +66,13 @@ record comes out. Language models are optional. Every scientific number ATLAS
 reports is produced by executable code whose inputs, version, environment and
 output hashes are in an append-only ledger.
 
-Five components, each usable on its own:
+Five components, each usable on its own — plus the REA replication layer
+(`rain_atlas.rea`), which records investigations of external reference
+systems and registers independently reconstructed capability modules
+(scientific memory, observability, mission control, protocol compilation,
+simulation twins, inference providers, knowledge store, browser adapter).
+Those modules and the unified `atlas rain` demonstrations are documented in
+[REA.md](REA.md).
 
 | Component | Package | Responsibility |
 |---|---|---|

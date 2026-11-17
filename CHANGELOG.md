@@ -6,6 +6,72 @@ All notable changes are recorded here. Versions follow semantic versioning.
 
 First end-to-end slice.
 
+### Added (REA replication framework and unified R.A.I.N. architecture, 2026-11-16)
+
+- New package `rain_atlas.rea`: the Recursive Engineering & Analysis
+  framework — typed investigation manifests, evidence items with enforced
+  OBSERVED/COMPUTED/INFERRED/UNKNOWN classifications, evidence-package
+  validation and rendering, a reference-versus-replica conformance harness
+  with structural comparators (exact/keys/sequence/predicate; no arbitrary
+  similarity scores), and a replica registry with integration gates.
+- Nine recorded investigations (`rain_atlas.rea.investigations`) covering
+  Mem0, Langfuse, Browser Use, Omnara, RunAnywhere, Epicenter, Maxxwell,
+  Arga Labs and Infera, each with pinned reference commits or fetched
+  documentation, licenses, honest evidence classifications and open questions.
+  Closed-source references claim no parity; their runtime behavior is
+  recorded as unknown.
+- Eight independently implemented replicas:
+  - `rain_atlas.memory` — Scientific Memory Engine (Mem0-inspired):
+    mem0-compatible API shape (add/search/get/get_all/update/delete/
+    delete_all/history) with deterministic rule-based inference, scope
+    filters, append-only supersession history and recorded contradictions.
+  - `rain_atlas.observability` — observability engine (Langfuse-inspired):
+    traces with hierarchical SPAN/GENERATION/EVENT/TOOL observations,
+    levels, usage/cost rollups, scores, eval datasets and run comparisons;
+    exports into the evidence ledger.
+  - `rain_atlas.mission` — Research Mission Controller (Omnara/Maxxwell-
+    inspired): persistent task state machine, delegation, approval gates
+    that pause agents, bounded retries, supervision (cancel/takeover),
+    generation labeling (scripted/model/human) on every transition.
+  - `rain_atlas.protocol` — Scientific Protocol Compiler (Infera-inspired):
+    hypotheses compile to validated specs with lexicon bounds, simulated
+    instruments only, ordered steps and preregistered acceptance; physical
+    actuation is forbidden by construction.
+  - `rain_atlas.simulation` — stateful service twin (Arga-inspired):
+    deterministic instrument twin with hidden ground truth, scenario
+    seeding, snapshot/reset/replay, fault injection and an evidence log.
+  - `rain_atlas.inference` — local inference abstraction (RunAnywhere-
+    inspired): provider interface, deterministic MockProvider, optional
+    Ollama/llama.cpp HTTP providers, model discovery, schema-validated
+    structured outputs.
+  - `rain_atlas.knowledge` — local-first knowledge store (Epicenter-
+    inspired): versioned documents, append-only history, portable
+    export/import, explicit conflict resolution retaining both branches.
+  - `rain_atlas.browser` — research browser adapter (Browser Use-inspired):
+    structured page observations with provenance (content hash, fetch time)
+    and content verification; stdlib-only, offline-testable.
+- Differential conformance against the real reference: twelve tests run the
+  mem0ai 2.2.1 SDK locally (in-memory qdrant, deterministic fake embedder,
+  `infer=False`) and the replica through identical scenarios, comparing
+  documented behavioral invariants. All twelve pass; the module skips when
+  the reference SDK is not installed.
+- Unified R.A.I.N. package `rain_atlas.rain`:
+  - `atlas rain slice` runs the integrated vertical slice — hypothesis
+    proposal (model-labeled), protocol compilation, approval gate,
+    twin-based experiments with memory recall, preregistered evaluation,
+    held-out replication by a skeptic agent, ledger export.
+  - `atlas rain central` runs the central scientific experiment comparing
+    four arms (adaptive+memory, adaptive no-memory, grid, random) over
+    programs of sequential missions with held-out replications; preregistered
+    hypotheses H1–H3 are evaluated with claims, challenges and verdicts in
+    the ledger. Recorded outcome: all three held (68% experiment reduction
+    from persistent memory; no false conclusions; adaptive arms below grid
+    and random), bounded to the synthetic discrimination problem.
+- New CLI group `atlas rea {list,show,export}`; documentation in
+  `docs/REA.md`.
+- 153 new tests across six test modules plus the optional 12-test
+  differential reference suite (skips when the reference SDK is absent).
+
 ### Added (held-out spectral calibration)
 
 - `atlas benchmark --protocol spectral-calibration` compares a white-noise
