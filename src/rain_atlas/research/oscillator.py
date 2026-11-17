@@ -71,7 +71,9 @@ SPLITS = ("dev", "held-out", "demo")
 UNANTICIPATED = {"dev": ("x^2*v", "v*|v|"), "held-out": ("x*u", "x^2", "v^3"), "demo": ("x^2*v", "x*u")}
 STIFFNESS = {"dev": (0.6, 2.0), "held-out": (0.5, 2.6), "demo": (0.6, 2.0)}
 NOISE_LEVELS = (0.15, 0.3, 0.5)
-SPLIT_SEEDS = {"dev": 7_310_001, "held-out": 9_920_417, "demo": 4_100_023}
+# The held-out seed was replaced (formerly 9_920_417) after integration tests touched two problems per
+# family under the old seed; no result has been seen under the current one before the preregistered run.
+SPLIT_SEEDS = {"dev": 7_310_001, "held-out": 5_380_771, "demo": 4_100_023}
 
 
 def features(x: np.ndarray, v: np.ndarray, u: np.ndarray) -> np.ndarray:

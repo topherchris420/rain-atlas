@@ -301,7 +301,7 @@ def load(path: Path) -> dict:
 
 
 def save(charter: dict, path: Path) -> None:
-    Path(path).write_text(json.dumps(check(charter), indent=2) + "\n", encoding="utf-8")
+    Path(path).write_text(json.dumps(check(charter), indent=2) + "\n", encoding="utf-8", newline="\n")
 
 
 def space_of(charter: dict) -> dict:

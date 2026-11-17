@@ -45,6 +45,12 @@ REQUIRED = {
         "author",
     ),
     "verdict": ("experiment", "target", "verdict", "reasons", "evidence", "author"),
+    # Autonomous research (rain_atlas.research): the human-approved scope,
+    # answers to escalations, the loop's own requests, and its step-by-step record.
+    "charter": ("title", "question", "charter", "digest", "created_by"),
+    "authorization": ("charter", "decision", "scope", "operator", "attestation", "identity_verified"),
+    "escalation": ("charter", "mission", "request", "author"),
+    "research": ("experiment", "mission", "event", "author"),
 }
 
 
@@ -145,7 +151,53 @@ def record_problems(ledger: "Ledger", entry: "Entry", record: dict, seq_of: dict
         for ref in _refs(record["evidence"]):
             earlier(ref, "evidence")
 
-    if kind in {"claim", "challenge", "note", "report", "revision", "reproduction", "verdict"}:
+    if kind == "charter":
+        if record["digest"] != sha256_bytes(canonical_bytes(record["charter"])):
+            problems.append("charter digest does not match the charter")
+
+    if kind in {"authorization", "escalation"}:
+        charter = earlier(record["charter"], "charter")
+        if charter is not None and "digest" not in charter:
+            problems.append("charter reference is not a charter record")
+
+    if kind == "authorization":
+        if record["identity_verified"] is not False or record["attestation"] != "local-operator":
+            problems.append(
+                "authorizations must be attestation 'local-operator' with identity_verified false"
+            )
+        if record["decision"] not in ("approve", "deny"):
+            problems.append("authorization decision must be approve or deny")
+        if record.get("request"):
+            request = earlier(record["request"], "escalation request")
+            if request is not None and "request" not in request:
+                problems.append("authorization request reference is not an escalation")
+
+    if (
+        kind == "preregistration"
+        and isinstance(record.get("design"), dict)
+        and record["design"].get("charter")
+    ):
+        charter_ref = record["design"]["charter"]
+        approved = any(
+            r.get("charter") == charter_ref and r.get("decision") == "approve" and r.get("scope") == "charter"
+            for e in ledger.entries("authorization")
+            if e.object in seq_of
+            for r in [ledger.get_json(e.object)]
+        )
+        if not approved:
+            problems.append("preregistration cites a charter with no earlier approving authorization")
+
+    if kind in {
+        "claim",
+        "challenge",
+        "note",
+        "report",
+        "revision",
+        "reproduction",
+        "verdict",
+        "research",
+        "escalation",
+    }:
         author = record["author"]
         if (
             not isinstance(author, dict)

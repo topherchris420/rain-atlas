@@ -690,6 +690,196 @@ def cmd_rain_central(args) -> int:
     return 0 if result.ledger_verified else 1
 
 
+# -- autonomous research ----------------------------------------------------------
+
+
+def _research_paths(args):
+    root = Path(args.root)
+    return root, root / "charter.json"
+
+
+def cmd_research_init(args) -> int:
+    from .research import charter as charter_mod  # noqa: PLC0415
+
+    root, path = _research_paths(args)
+    root.mkdir(parents=True, exist_ok=True)
+    if path.exists() and not args.force:
+        print(f"{path} exists; edit it, or pass --force to overwrite it with the default charter")
+        return 1
+    overrides = {}
+    if args.problems is not None:
+        overrides["budgets.benchmark_problems_per_family"] = args.problems
+    if args.ollama_model:
+        overrides["environment.model_provider"] = {
+            "kind": "ollama",
+            "url": args.ollama_url,
+            "model": args.ollama_model,
+        }
+    charter_mod.save(charter_mod.default_charter(**overrides), path)
+    print(f"wrote {path}")
+    print("review the question, design space, methods, budgets and environment, then approve it with:")
+    print(f"  atlas research approve --root {root} --operator YOUR-NAME")
+    return 0
+
+
+def cmd_research_approve(args) -> int:
+    from .ledger.store import Ledger  # noqa: PLC0415
+    from .research import charter as charter_mod  # noqa: PLC0415
+    from .research.investigation import approve_charter, record_charter  # noqa: PLC0415
+
+    root, path = _research_paths(args)
+    charter = charter_mod.load(Path(args.charter) if args.charter else path)
+    ledger = Ledger(root / "ledger")
+    ref = record_charter(ledger, charter, created_by={"role": "operator", "generation": "human"})
+    approve_charter(ledger, ref, operator=args.operator, generation="human", comment=args.comment or "")
+    print(
+        f"charter {charter_mod.digest(charter)[:23]} approved by {args.operator} (local attestation, not an identity proof)"
+    )
+    print(f"next: atlas research run --root {root}")
+    return 0
+
+
+def _print_investigation(result: dict) -> None:
+    print(f"preregistration {result['preregistration'][:23]}")
+    for m in result["missions"]:
+        print(f"  {m['mission']:<20} {m['verdict']:<12} {m['stop']:<20} {m['experiments']} experiments")
+    if result["benchmark"]:
+        print("  held-out benchmark: " + "  ".join(f"{k}={v}" for k, v in result["benchmark"].items()))
+    a = result["answer"]
+    print(f"answer: {a['verdict'].upper()} — {a['summary']}")
+    for p in result["pending_escalations"]:
+        print(f"  escalation pending: {p['request_id']} ({p['kind']}, {p['mission']}): {p['reason']}")
+    for name, path in result["reports"].items():
+        print(f"  {name}: {path}")
+    print(f"ledger problems: {len(result['ledger_problems'])}  elapsed {result['elapsed_s']:.1f}s")
+
+
+def cmd_research_run(args) -> int:
+    from .research.investigation import investigate  # noqa: PLC0415
+
+    result = investigate(
+        Path(args.root),
+        per_family=args.problems,
+        workers=args.workers,
+        progress=lambda m: print(f".. {m}", flush=True),
+    )
+    if getattr(args, "json", False):
+        _print_json(result)
+    else:
+        _print_investigation(result)
+    return 0 if not result["ledger_problems"] else 1
+
+
+def cmd_research_demo(args) -> int:
+    from .ledger.store import Ledger  # noqa: PLC0415
+    from .research import charter as charter_mod  # noqa: PLC0415
+    from .research.investigation import approve_charter, investigate, record_charter  # noqa: PLC0415
+
+    root, path = _research_paths(args)
+    root.mkdir(parents=True, exist_ok=True)
+    overrides = {}
+    if args.problems is not None:
+        overrides["budgets.benchmark_problems_per_family"] = args.problems
+    if not path.exists():
+        charter_mod.save(charter_mod.default_charter(**overrides), path)
+    charter = charter_mod.load(path)
+    ledger = Ledger(root / "ledger")
+    ref = record_charter(ledger, charter, created_by={"role": "operator", "generation": "scripted"})
+    approve_charter(
+        ledger,
+        ref,
+        operator="demo-operator-proxy",
+        generation="scripted",
+        comment="a scripted proxy approved the default charter for this demonstration; "
+        "it is not a human attestation",
+    )
+    print("demonstration: the charter was approved by a scripted proxy, labeled as such in the ledger")
+    result = investigate(root, workers=args.workers, progress=lambda m: print(f".. {m}", flush=True))
+    _print_investigation(result)
+    return 0 if not result["ledger_problems"] else 1
+
+
+def cmd_research_status(args) -> int:
+    from .ledger.store import Ledger  # noqa: PLC0415
+    from .research.investigation import approved_charter, pending_escalations  # noqa: PLC0415
+    from .research.journal import mission_events  # noqa: PLC0415
+
+    ledger = Ledger(Path(args.root) / "ledger")
+    problems = ledger.verify()
+    print(
+        f"ledger: {len(list(ledger.entries()))} records, {'verifies' if not problems else 'PROBLEMS: ' + problems[0]}"
+    )
+    try:
+        ref, charter = approved_charter(ledger)
+        print(f"charter approved: {charter['title']}")
+    except RuntimeError as exc:
+        print(f"charter: {exc}")
+        return 1
+    missions = sorted({r["mission"] for _, r in ledger.records("research")})
+    for m in missions:
+        events = mission_events(ledger, m)
+        stop = next((e for e in reversed(events) if e["event"] == "stop"), None)
+        state = (
+            f"stopped ({stop['reason']}, {stop['experiments']} experiments)"
+            if stop
+            else f"in progress ({len(events)} events)"
+        )
+        print(f"  {m:<20} {state}")
+    bench = list(ledger.records("verdict"))
+    labels = {r.get("label"): r["verdict"] for _, r in bench if r.get("label")}
+    if labels:
+        print("  verdicts: " + "  ".join(f"{k}={v}" for k, v in sorted(labels.items()) if k.startswith("H")))
+    for p in pending_escalations(ledger):
+        print(f"  escalation pending: {p['request_id']} ({p['kind']}, {p['mission']}): {p['reason']}")
+    return 0 if not problems else 1
+
+
+def cmd_research_authorize(args) -> int:
+    from .ledger.store import Ledger  # noqa: PLC0415
+    from .research.investigation import authorize  # noqa: PLC0415
+
+    ledger = Ledger(Path(args.root) / "ledger")
+    decision = "deny" if args.deny else "approve"
+    authorize(
+        ledger,
+        args.request,
+        operator=args.operator,
+        decision=decision,
+        experiments=args.experiments,
+        comment=args.comment or "",
+    )
+    print(f"recorded {decision} of {args.request} by {args.operator} (local attestation)")
+    if decision == "approve":
+        print(f"continue with: atlas research resume --root {args.root}")
+    return 0
+
+
+def cmd_research_benchmark(args) -> int:
+    from .research.benchmark import evaluate, run_benchmark, summarize  # noqa: PLC0415
+
+    results = run_benchmark(
+        args.split, args.problems, workers=args.workers, out=Path(args.root) if args.root else None
+    )
+    summary = summarize(results)
+    hyps = evaluate(results)
+    if args.json:
+        _print_json({"summary": summary, "hypotheses": hyps})
+        return 0
+    print(f"{'arm':<26} {'censored':>8} {'used':>6} {'correct':>8} {'false':>6} {'unresolved':>10}")
+    for arm, e in summary.items():
+        print(
+            f"{arm:<26} {e['efficiency']['mean']:>8.2f} {e['experiments']['mean']:>6.2f} "
+            f"{e['correct']['rate']:>8.2f} {e['false']['rate']:>6.3f} {e['unresolved']['rate']:>10.2f}"
+        )
+    for hid in ("H1", "H2", "H3", "H4", "H5", "H6", "H7"):
+        print(f"{hid}: {hyps[hid]['verdict']}")
+    if args.split != "held-out":
+        print(
+            "note: development-split results tune the system; they are not evidence for the preregistered claims"
+        )
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="atlas",
@@ -836,6 +1026,61 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--missions", type=int, help="missions per program (v2 default 4, v1 default 3)")
     p.add_argument("--json", action="store_true")
     p.set_defaults(func=cmd_rain_central)
+
+    research = sub.add_parser(
+        "research", help="autonomous, evidence-driven research within an approved charter"
+    )
+    rsub = research.add_subparsers(dest="command", required=True)
+    p = rsub.add_parser("init", help="write the default research charter for review")
+    p.add_argument("--root", default="atlas-data/research")
+    p.add_argument("--problems", type=int, help="held-out benchmark problems per family (default 50)")
+    p.add_argument("--ollama-model", help="allow a local Ollama model as advisor (never as evidence)")
+    p.add_argument("--ollama-url", default="http://localhost:11434")
+    p.add_argument("--force", action="store_true")
+    p.set_defaults(func=cmd_research_init)
+    p = rsub.add_parser("approve", help="record the operator's approval of the charter")
+    p.add_argument("--root", default="atlas-data/research")
+    p.add_argument("--charter", help="charter file (default ROOT/charter.json)")
+    p.add_argument("--operator", required=True)
+    p.add_argument("--comment")
+    p.set_defaults(func=cmd_research_approve)
+    for name, helptext in (
+        ("run", "run the approved investigation"),
+        ("resume", "resume an interrupted or authorized investigation (verified replay)"),
+    ):
+        p = rsub.add_parser(name, help=helptext)
+        p.add_argument("--root", default="atlas-data/research")
+        p.add_argument(
+            "--problems", type=int, help="override the charter's benchmark size (must match a resume)"
+        )
+        p.add_argument("--workers", type=int)
+        p.add_argument("--json", action="store_true")
+        p.set_defaults(func=cmd_research_run)
+    p = rsub.add_parser("demo", help="default charter, scripted-proxy approval (labeled), full investigation")
+    p.add_argument("--root", default="atlas-data/research")
+    p.add_argument("--problems", type=int, help="held-out benchmark problems per family (default 50)")
+    p.add_argument("--workers", type=int)
+    p.set_defaults(func=cmd_research_demo)
+    p = rsub.add_parser("status", help="missions, verdicts and pending escalations")
+    p.add_argument("--root", default="atlas-data/research")
+    p.set_defaults(func=cmd_research_status)
+    p = rsub.add_parser("authorize", help="answer an escalation request (local operator attestation)")
+    p.add_argument("--root", default="atlas-data/research")
+    p.add_argument("--request", required=True)
+    p.add_argument("--operator", required=True)
+    p.add_argument("--experiments", type=int, help="experiments to add (at most the charter's cap)")
+    p.add_argument("--deny", action="store_true")
+    p.add_argument("--comment")
+    p.set_defaults(func=cmd_research_authorize)
+    p = rsub.add_parser(
+        "benchmark", help="run the benchmark on a split without a ledger (dev split for tuning)"
+    )
+    p.add_argument("--split", choices=("dev", "held-out"), default="dev")
+    p.add_argument("--problems", type=int, default=20)
+    p.add_argument("--workers", type=int)
+    p.add_argument("--root", help="directory for resumable results")
+    p.add_argument("--json", action="store_true")
+    p.set_defaults(func=cmd_research_benchmark)
 
     ledger = sub.add_parser("ledger", help="inspect and verify evidence ledgers")
     lsub = ledger.add_subparsers(dest="command", required=True)

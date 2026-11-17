@@ -85,6 +85,7 @@ ALPHA = 0.05
 FAMILY_SIZE = 7
 BOOTSTRAP_SEED = 20261117
 REPRODUCTION_PROBLEMS = 2  # per family, every arm, run twice
+MIN_PROBLEMS_PER_FAMILY = 10  # below this no hypothesis may be supported or contradicted
 
 HYPOTHESES = {
     "H1": "Observation dependence: on held-out problems the closed loop reaches correct conclusions with fewer "
@@ -335,7 +336,7 @@ def run_benchmark(
     def sink(row: dict) -> None:
         row["config"] = digest
         if path is not None:
-            with path.open("a", encoding="utf-8") as fh:
+            with path.open("a", encoding="utf-8", newline="\n") as fh:
                 fh.write(json.dumps(row, sort_keys=True) + "\n")
                 fh.flush()
                 os.fsync(fh.fileno())
@@ -501,6 +502,19 @@ def evaluate(results: list[dict]) -> dict:
         "linear_regret": float(_table(results, "closed-loop", "linear_regret").mean()),
         "verdict": three_valued(interval, lambda v: v < 0),
     }
+    smallest = min(families.count(f) for f in set(families))
+    out["problems_per_family"] = smallest
+    if smallest < MIN_PROBLEMS_PER_FAMILY:
+        # Percentile bootstrap intervals are overconfident on a handful of problems.
+        for hid in HYPOTHESES:
+            if out[hid]["verdict"] != "unresolved":
+                out[hid]["verdict_at_this_size"] = out[hid]["verdict"]
+                out[hid]["verdict"] = "unresolved"
+            out[hid]["note"] = (
+                f"fewer than {MIN_PROBLEMS_PER_FAMILY} problems per family: verdicts are not drawn"
+            )
+            for part in out[hid].get("parts", []):
+                part["verdict"] = "unresolved"
     return out
 
 

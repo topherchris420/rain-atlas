@@ -822,7 +822,9 @@ class ResearchEngine:
                 "arm": self.arm,
                 "config": self.config.to_dict(),
                 "design_space": {k: list(v) for k, v in self.space.items()},
-                "budget": self.guard.experiment_budget(),
+                "budget": int(
+                    self.charter["budgets"]["experiments_per_mission"]
+                ),  # base; extensions are authorizations
                 "grammar": list(self.guard.grammar_terms()),
                 "prior": self.default_prior.to_dict(),
                 "memory": self.memory.to_dict() if self.memory else None,
