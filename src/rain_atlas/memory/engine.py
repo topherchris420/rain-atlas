@@ -399,10 +399,15 @@ class ScientificMemory:
         return {"id": record.id, "memory": record.content, "event": "DELETE"}
 
     def delete_all(self, *, filters: dict[str, Any] | None = None) -> dict:
+        from .search import metadata_filter_matches
+
         scope = self._scope_from_filters(filters)
+        remaining = {key: value for key, value in (filters or {}).items() if key not in SCOPES}
         removed = 0
         for record in self.store.active_records():
-            if all(record.scope.get(key) == value for key, value in scope.items()):
+            if all(
+                record.scope.get(key) == value for key, value in scope.items()
+            ) and metadata_filter_matches(record.metadata, remaining):
                 record.status = "deleted"
                 record.updated_at = _now(self._clock)
                 self.store.replace(record)

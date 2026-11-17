@@ -259,7 +259,8 @@ def run_vertical_slice(
             coupling=HELD_OUT, coherence=response["coherence"], replicates=models.replicates
         )
         preferred = state["verdict"]["preferred_model"]
-        replicated = models.preferred_model(observations + [held_out]) == preferred
+        # Replication is judged on the held-out evidence alone, not pooled data.
+        replicated = models.preferred_model([held_out]) == preferred
         outcome = {
             "held_out_condition": HELD_OUT,
             "coherence": held_out.coherence,
@@ -344,7 +345,14 @@ def run_vertical_slice(
         },
     )
     experiment_ref = next(ledger.entries("preregistration")).object
-    trace.trace.output = verdict
+    replication_result = next(
+        (t.result for t in mission.tasks.values() if t.name == "replicate-held-out"), None
+    )
+    trace.trace.output = {
+        **verdict,
+        "observations": [obs.to_dict() for obs in state["observations"]],
+        "replication": replication_result or {},
+    }
     tracer.export_to_ledger(
         ledger, experiment=experiment_ref, author={"role": "engineer", "generation": "scripted"}
     )

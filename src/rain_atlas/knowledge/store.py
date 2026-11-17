@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 import json
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
@@ -104,7 +105,7 @@ class KnowledgeStore:
             self.documents[document_id] = document
         version = DocumentVersion(
             version=len(document.versions) + 1,
-            content=dict(content),
+            content=copy.deepcopy(dict(content)),
             author=author,
             timestamp_ms=timestamp_ms,
         )
@@ -157,21 +158,40 @@ class KnowledgeStore:
         """
 
         merged = Document(id=left.id, kind=left.kind or right.kind)
-        seen: set[str] = set()
-        for version in sorted([*left.versions, *right.versions], key=lambda v: (v.version, v.hash)):
-            if version.hash in seen:
+        # Revisions are identified by (version, hash), not content alone, so
+        # reverted content (A -> B -> A) keeps every revision.
+        seen: set[tuple[int, str]] = set()
+        for version in [*left.versions, *right.versions]:
+            key = (version.version, version.hash)
+            if key in seen:
                 continue
-            seen.add(version.hash)
+            seen.add(key)
             merged.versions.append(version)
-        merged.versions.sort(key=lambda v: (v.version, v.hash))
         left_current = left.current.hash if left.current else ""
         right_current = right.current.hash if right.current else ""
-        if left_current and right_current and left_current != right_current:
+        divergent = bool(left_current and right_current and left_current != right_current)
+        # Order by version; on ties keep the incoming (right) branch last so it
+        # becomes current, matching the recorded resolution.
+        right_keys = {(v.version, v.hash) for v in right.versions}
+        merged.versions.sort(key=lambda v: (v.version, (v.version, v.hash) in right_keys, v.hash))
+        if divergent and merged.current and merged.current.hash != right_current:
+            # Right's head has a lower version: append it as an explicit resolution revision.
+            head = right.current
+            assert head is not None
+            merged.versions.append(
+                DocumentVersion(
+                    version=merged.versions[-1].version + 1,
+                    content=copy.deepcopy(head.content),
+                    author=head.author,
+                    timestamp_ms=head.timestamp_ms,
+                )
+            )
+        if divergent:
             self.resolutions.append(
                 Resolution(
                     document_id=left.id,
-                    strategy="keep-right" if right_current else "keep-left",
-                    chosen_hash=right_current or left_current,
+                    strategy="keep-right",
+                    chosen_hash=merged.current.hash if merged.current else right_current,
                     note="divergent histories imported; both versions retained",
                 )
             )

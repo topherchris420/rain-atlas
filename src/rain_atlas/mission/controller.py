@@ -172,6 +172,8 @@ class MissionController:
         approval = mission.approvals[approval_id]
         if approval.is_resolved:
             raise ValueError(f"approval {approval_id} is already resolved")
+        if mission.tasks[approval.task_id].status in TaskStatus.TERMINAL:
+            raise ValueError(f"task {approval.task_id} is terminal; approval no longer applies")
         if resolution not in approval.options:
             raise ValueError(f"resolution {resolution!r} must be one of {approval.options}")
         approval.resolution = resolution
@@ -246,6 +248,27 @@ class MissionController:
         task = self._next_task(mission)
         if task is not None:
             agent = self._pick_agent(mission, task)
+            if task.requires_approval and not any(
+                a.task_id == task.id for a in mission.approvals.values()
+            ):
+                # Controller-owned gate: never rely on the agent to ask.
+                approval_id = sha256_bytes(
+                    canonical_bytes(["approval", mission.id, task.id, "controller-gate"])
+                )[:16]
+                mission.approvals[approval_id] = ApprovalRequest(
+                    id=approval_id,
+                    task_id=task.id,
+                    question=f"Approve execution of task {task.name!r}?",
+                )
+                self._transition(
+                    mission,
+                    task,
+                    TaskStatus.AWAITING_APPROVAL,
+                    actor="controller",
+                    generation="scripted",
+                    reason="task requires approval",
+                )
+                return True
             self._transition(
                 mission,
                 task,
@@ -271,6 +294,7 @@ class MissionController:
         try:
             result = agent.execute(task, mission)
         except ApprovalPause as pause:
+            task.attempts -= 1  # a pause is not a failed attempt
             if task.status != TaskStatus.AWAITING_APPROVAL:
                 self._transition(
                     mission,
@@ -336,6 +360,12 @@ class MissionController:
         task = mission.tasks[task_id]
         if task.status in TaskStatus.TERMINAL:
             raise ValueError(f"task {task_id} is already {task.status}")
+        for approval in mission.approvals.values():
+            if approval.task_id == task_id and not approval.is_resolved:
+                approval.resolution = "reject"
+                approval.resolved_by = actor
+                approval.resolved_at_ms = self._clock()
+                approval.comment = "invalidated by cancellation"
         self._transition(
             mission,
             task,

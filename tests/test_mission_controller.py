@@ -149,7 +149,7 @@ class TestApprovals:
         mission.agents["careful"] = AgentHandle(
             agent_id="careful", role="scientist", generation="model", execute=careful
         )
-        task = mission.submit("careful-task", requires_approval=True)
+        task = mission.submit("careful-task")
         status = controller.run(mission)
         assert status == MissionStatus.BLOCKED
         assert task.status == TaskStatus.AWAITING_APPROVAL
@@ -165,6 +165,31 @@ class TestApprovals:
         generations = {t.generation for t in task.transitions}
         assert "human" in generations
         assert "model" in generations  # agent reasoning stays model-labeled
+
+    def test_requires_approval_is_enforced_by_controller(self, controller):
+        mission = controller.create_mission("gated")
+        agent, calls = counter_agent()
+        mission.agents[agent.agent_id] = agent
+        task = mission.submit("gated-task", requires_approval=True)
+        assert controller.run(mission) == MissionStatus.BLOCKED
+        assert calls == []  # never invoked before approval
+        approval = controller.pending_approvals(mission)[0]
+        controller.resolve_approval(mission, approval.id, resolution="approve", resolved_by="op")
+        assert controller.run(mission) == MissionStatus.COMPLETE
+        assert task.attempts == 1
+
+    def test_cancel_invalidates_pending_approval(self, controller):
+        mission = controller.create_mission("cancelled")
+        agent, calls = counter_agent()
+        mission.agents[agent.agent_id] = agent
+        task = mission.submit("gated-task", requires_approval=True)
+        controller.run(mission)
+        approval = controller.pending_approvals(mission)[0]
+        controller.cancel(mission, task.id)
+        with pytest.raises(ValueError):
+            controller.resolve_approval(mission, approval.id, resolution="approve", resolved_by="op")
+        controller.run(mission)
+        assert calls == [] and task.status == TaskStatus.CANCELLED
 
     def test_rejection_cancels_task(self, controller):
         mission = controller.create_mission("rejected")

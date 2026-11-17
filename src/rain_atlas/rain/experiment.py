@@ -255,9 +255,10 @@ def run_central_experiment(
             )
             response = replication_twin.run_experiment(HELD_OUT, replicates=REPLICATES)
             held_out = Observation(coupling=HELD_OUT, coherence=response["coherence"], replicates=REPLICATES)
-            preferred = _preferred(program_observations + [held_out])
+            # Independent replication: held-out evidence alone vs the original verdict.
+            replication_consistent = _preferred([held_out]) == _preferred(program_observations)
             outcomes[arm].replications += 1
-            if preferred == _preferred(program_observations):
+            if replication_consistent:
                 outcomes[arm].replication_successes += 1
             program_records.append(
                 {
@@ -265,7 +266,9 @@ def run_central_experiment(
                     "program": program,
                     "true_model": true_model,
                     "experiments": program_experiments,
-                    "replication_consistent": preferred == _preferred(program_observations),
+                    "observations": [obs.to_dict() for obs in program_observations],
+                    "held_out": held_out.to_dict(),
+                    "replication_consistent": replication_consistent,
                 }
             )
 
