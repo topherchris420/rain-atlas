@@ -10,10 +10,13 @@ release (wheel, sdist, `SHA256SUMS`, CycloneDX SBOM) and on PyPI as
 
 ### Release engineering
 
-- Tag-triggered release workflow (`.github/workflows/release.yml`). It
-  refuses a tag that differs from the package version or lacks release
-  notes, runs the installed-wheel check, builds once, attaches the
-  distributions, checksums and SBOM to a GitHub release, and uploads to PyPI
+- Release workflow (`.github/workflows/release.yml`), started by a
+  `vX.Y.Z` tag or run manually on `main` with the version. A manual run
+  creates the tag on the commit it built. The workflow refuses a version
+  that differs from the package version or lacks release notes, refuses an
+  existing tag and manual runs from other branches, and runs the
+  installed-wheel check. It builds once, attaches the distributions,
+  checksums and SBOM to a GitHub release, and only then uploads to PyPI
   through trusted publishing (no stored token).
 - PyPI metadata: project URLs, keywords and classifiers for the tested
   platforms and Python versions. The long description is the README with its

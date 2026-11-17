@@ -146,7 +146,7 @@ atlas skills test
 
 The [GitHub release](https://github.com/topherchris420/rain-atlas/releases/tag/v0.1.0) also carries the wheel, the sdist, `SHA256SUMS` and a CycloneDX SBOM. `uv run python scripts/check_package.py` builds the sdist and wheel from a checkout, checks their metadata as PyPI will, installs the wheel into a clean environment and runs the CLI from an unrelated directory. CI runs it on Linux and Windows.
 
-Releases are cut by pushing a `vX.Y.Z` tag that matches the package version and has notes in `docs/releases/`. The release workflow builds, checks and publishes to GitHub and PyPI.
+To cut a release, either push a `vX.Y.Z` tag, or run the **release** workflow on `main` from the Actions tab with the version; a manual run creates the tag itself. Either way the version must match the package version and have notes in `docs/releases/`. The workflow builds and checks the package, publishes the GitHub release, and only then uploads to PyPI.
 
 ## BLACK GLASS: firmware intelligence
 
