@@ -8,9 +8,11 @@ serialized with an OS-level lock file, mirroring the ledger's approach.
 
 from __future__ import annotations
 
+import contextlib
 import json
 import os
 import tempfile
+import time
 from pathlib import Path
 from typing import Iterator
 
@@ -105,6 +107,40 @@ class MemoryStore:
         _atomic_write(
             state_path, canonical_bytes({"sequence": self._sequence, "version": self.STATE_VERSION})
         )
+
+    @contextlib.contextmanager
+    def transaction(self, timeout_s: float = 30.0) -> Iterator[None]:
+        """Serialize a full read-modify-write across instances and processes.
+
+        Acquires a directory lock file, reloads committed state so changes
+        made by other writers are not overwritten, then flushes on success.
+        """
+
+        if self.root is None:
+            yield
+            return
+        self.root.mkdir(parents=True, exist_ok=True)
+        lock_path = self.root / ".lock"
+        deadline = time.monotonic() + timeout_s
+        while True:
+            try:
+                fd = os.open(str(lock_path), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+                break
+            except FileExistsError:
+                if time.monotonic() > deadline:
+                    raise MemoryStoreError(f"timed out waiting for lock {lock_path}") from None
+                time.sleep(0.01)
+        try:
+            self._records = {}
+            self._events = []
+            self._contradictions = []
+            self._sequence = 0
+            self._load()
+            yield
+            self.flush()
+        finally:
+            os.close(fd)
+            os.unlink(lock_path)
 
     # -- records -------------------------------------------------------------
 

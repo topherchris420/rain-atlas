@@ -202,6 +202,16 @@ class TestPersistence:
         assert len(all_records) == 2  # superseded history is preserved
         assert len(reopened.contradictions()) == 0 or reopened.contradictions()
 
+    def test_two_open_instances_do_not_lose_writes(self, tmp_path):
+        root = tmp_path / "shared"
+        a = ScientificMemory(root=root, clock=FIXED_CLOCK)
+        b = ScientificMemory(root=root, clock=FIXED_CLOCK)
+        a.add("alpha finding", user_id="u1", infer=False)
+        b.add("beta finding", user_id="u1", infer=False)
+        reopened = ScientificMemory(root=root, clock=FIXED_CLOCK)
+        contents = {r["memory"] for r in reopened.get_all(filters={"user_id": "u1"})["results"]}
+        assert contents == {"alpha finding", "beta finding"}
+
     def test_deterministic_ids_across_instances(self, tmp_path):
         a = ScientificMemory(root=tmp_path / "a", clock=FIXED_CLOCK)
         b = ScientificMemory(root=tmp_path / "b", clock=FIXED_CLOCK)

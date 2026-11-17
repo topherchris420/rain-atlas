@@ -41,7 +41,7 @@ HELD_OUT = 0.85
 LEXICON = {
     "coupling strength": {
         "symbol": "k",
-        "range": [0.0, 1.0],
+        "range": [0.1, 1.0],
         "default_points": 10,
         "instrument": "oscillator-bench",
     }
@@ -184,13 +184,19 @@ def run_vertical_slice(
                 m, task, "Execute the compiled protocol on the simulated oscillator twin?"
             )
         # ApprovalPause raised above; execution resumes here after approval.
+        # Execute only the conditions declared by the approved protocol.
+        spec = state["protocol"]
+        if spec is None:
+            raise RuntimeError("no compiled protocol; refusing to execute")
+        set_step = next(s for s in spec.steps if s.action == "set-variable")
+        protocol_grid = [round(float(v), 6) for v in set_step.parameters["values"]]
         attempts = 0
         dropped = 0
         fault_budget = 3 * max_experiments
         while len(state["observations"]) < max_experiments and attempts < fault_budget:
             attempts += 1
             observations = recall_observations() if use_memory else state["observations"]
-            condition = policy.next_condition(GRID, observations or state["observations"])
+            condition = policy.next_condition(protocol_grid, observations or state["observations"])
             if condition is None:
                 break
             try:

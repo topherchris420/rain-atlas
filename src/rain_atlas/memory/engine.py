@@ -88,12 +88,13 @@ class ScientificMemory:
         """
 
         scope = self._scope_from(user_id=user_id, agent_id=agent_id, run_id=run_id)
-        if not infer:
-            return self._add_raw(messages, scope, metadata)
-        results = []
-        for statement in extract_statements(messages):
-            results.append(self._add_statement(statement, scope, metadata))
-        return {"results": results}
+        with self.store.transaction():
+            if not infer:
+                return self._add_raw(messages, scope, metadata)
+            results = []
+            for statement in extract_statements(messages):
+                results.append(self._add_statement(statement, scope, metadata))
+            return {"results": results}
 
     def _add_raw(
         self,
@@ -351,6 +352,18 @@ class ScientificMemory:
     def update(self, memory_id: str, data: str) -> dict:
         """Explicit update: supersede content, preserve history."""
 
+        with self.store.transaction():
+            return self._update(memory_id, data)
+
+    def delete(self, memory_id: str) -> dict:
+        with self.store.transaction():
+            return self._delete(memory_id)
+
+    def delete_all(self, *, filters: dict[str, Any] | None = None) -> dict:
+        with self.store.transaction():
+            return self._delete_all(filters=filters)
+
+    def _update(self, memory_id: str, data: str) -> dict:
         record = self.store.get(memory_id)
         if record is None:
             raise KeyError(f"memory {memory_id} does not exist")
@@ -379,7 +392,7 @@ class ScientificMemory:
         self.store.flush()
         return {"id": replacement.id, "memory": data, "event": "UPDATE"}
 
-    def delete(self, memory_id: str) -> dict:
+    def _delete(self, memory_id: str) -> dict:
         record = self.store.get(memory_id)
         if record is None:
             raise KeyError(f"memory {memory_id} does not exist")
@@ -398,7 +411,7 @@ class ScientificMemory:
         self.store.flush()
         return {"id": record.id, "memory": record.content, "event": "DELETE"}
 
-    def delete_all(self, *, filters: dict[str, Any] | None = None) -> dict:
+    def _delete_all(self, *, filters: dict[str, Any] | None = None) -> dict:
         from .search import metadata_filter_matches
 
         scope = self._scope_from_filters(filters)
