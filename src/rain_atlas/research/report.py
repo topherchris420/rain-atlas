@@ -184,7 +184,7 @@ def svg_mission(view: dict, title: str) -> str:
         )
         if v == 0.95:
             out.append(
-                f'<text x="{W - right}" y="{y - 4:.1f}" class="tick" text-anchor="end">decision level 0.95</text>'
+                f'<text x="{W - right}" y="{y + 12:.1f}" class="tick" text-anchor="end">decision level 0.95</text>'
             )
         else:
             out.append(f'<text x="{left - 6}" y="{y + 4:.1f}" class="tick" text-anchor="end">{v:g}</text>')
