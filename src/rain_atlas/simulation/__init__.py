@@ -1,12 +1,7 @@
-"""Simulation and Environment Engine: an Arga Labs-inspired replica.
+"""Simulation and Environment Engine: stateful scientific twins.
 
-Target: Arga Labs (closed source; behavior reconstructed from public
-documentation), reconstructed by Recursive Engineering & Analysis.
-See ``rain_atlas.rea.investigations.arga`` for the recorded evidence.
-
-The reference provides *stateful digital twins* of external services with
-deterministic scenario seeding, fault simulation and evidence capture. This
-replica provides the same concepts for scientific instruments:
+Stateful digital twins with deterministic scenario seeding, fault injection
+and evidence capture, applied to scientific instruments:
 
 * :class:`ServiceTwin` -- a stateful, in-process twin of a scientific
   instrument (an oscillator bench). It owns hidden ground-truth state (which

@@ -1,11 +1,7 @@
-"""Scientific Observability Engine: a Langfuse-inspired replica.
+"""Scientific Observability Engine.
 
-Target: Langfuse (MIT core), reconstructed by Recursive Engineering & Analysis.
-See ``rain_atlas.rea.investigations.langfuse`` for the recorded investigation.
-
-The reference system's core data model -- traces, hierarchical observations
-(spans, generations, events, tools, evaluators), usage/cost details,
-latency and scores -- is reconstructed with three deliberate deviations:
+Traces, hierarchical observations (spans, generations, events, tools,
+evaluators), usage/cost details, latency and scores:
 
 * everything is local-first JSON; no server or ingestion API is required;
 * timing comes from an injectable monotonic clock, so traces are exactly

@@ -1,10 +1,6 @@
-"""Local Inference Engine: a RunAnywhere-inspired replica.
+"""Local Inference Engine: replaceable model providers.
 
-Target: RunAnywhere (runanywhere-sdks repository), reconstructed by
-Recursive Engineering & Analysis without reusing its source.
-See ``rain_atlas.rea.investigations.runanywhere`` for the recorded evidence.
-
-Reconstructed capabilities:
+Capabilities:
 
 * replaceable model providers behind one interface
   (:class:`InferenceProvider`);

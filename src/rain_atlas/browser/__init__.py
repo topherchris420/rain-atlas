@@ -1,12 +1,7 @@
-"""Research Browser Adapter: a Browser Use-inspired replica.
+"""Research Browser Adapter: authorized retrieval with provenance.
 
-Target: Browser Use (MIT), reconstructed by Recursive Engineering & Analysis.
-See ``rain_atlas.rea.investigations.browser_use`` for the recorded evidence.
-
-The reference drives a real browser through an LLM agent loop with DOM
-observation, structured action APIs, and verification. This replica keeps
-the concepts that matter for authorized scientific retrieval and drops the
-model dependency:
+Structured observation, action verification and provenance capture without
+a model dependency:
 
 * :class:`BrowserSession` -- fetch a URL and observe it as a *structured*
   page state (title, text, links) instead of raw HTML;

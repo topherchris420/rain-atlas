@@ -1,4 +1,4 @@
-"""Tests for protocol, simulation, inference and knowledge replicas."""
+"""Tests for the protocol, simulation, inference, knowledge and browser modules."""
 
 from __future__ import annotations
 

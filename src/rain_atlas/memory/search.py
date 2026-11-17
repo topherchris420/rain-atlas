@@ -1,15 +1,14 @@
 """Deterministic lexical retrieval for the memory engine.
 
-The reference SDK ranks memories by embedding-vector similarity and supports
-rerankers. This replica ranks by a transparent BM25-style lexical score so
-retrieval is exactly reproducible offline. Scores live in ``[0, 1]``:
+Ranking is a transparent BM25-style lexical score so retrieval is exactly
+reproducible offline. Scores live in ``[0, 1]``:
 
 * 1.0 -- identical normalized content;
 * otherwise, the average of query-term coverage and idf-weighted overlap.
 
-Filters mirror the reference's entity scoping (``user_id`` / ``agent_id`` /
-``run_id``) plus a practical subset of its metadata operators
-(``eq``, ``ne``, ``in``, ``contains``, ``icontains``).
+Filters provide entity scoping (``user_id`` / ``agent_id`` / ``run_id``)
+plus metadata operators (``eq``, ``ne``, ``in``, ``contains``,
+``icontains``).
 """
 
 from __future__ import annotations
@@ -90,6 +89,44 @@ def metadata_filter_matches(metadata: dict[str, Any], filters: dict[str, Any]) -
         elif condition != value:
             return False
     return True
+
+
+def okapi_bm25(
+    query: str,
+    records: list[MemoryRecord],
+    *,
+    k1: float = 1.5,
+    b: float = 0.75,
+) -> dict[str, float]:
+    """Raw Okapi BM25 scores for *query* over *records*, keyed by record id.
+
+    Standard Okapi formulation feeding the vendored sigmoid normalization
+    and additive hybrid ranking (``rain_atlas.memory.vendor.mem0``).
+    """
+
+    import math
+    from collections import Counter
+
+    if not records:
+        return {}
+    docs = {record.id: tokenize(record.content) for record in records}
+    doc_lengths = {doc_id: len(tokens) for doc_id, tokens in docs.items()}
+    avgdl = sum(doc_lengths.values()) / len(docs)
+    n_docs = len(docs)
+    query_terms = set(tokenize(query))
+    scores: dict[str, float] = {}
+    for doc_id, tokens in docs.items():
+        tf = Counter(tokens)
+        score = 0.0
+        for term in query_terms:
+            df = sum(1 for other in docs.values() if term in other)
+            if df == 0 or tf[term] == 0:
+                continue
+            idf = math.log(1.0 + (n_docs - df + 0.5) / (df + 0.5))
+            denom = tf[term] + k1 * (1.0 - b + b * (doc_lengths[doc_id] / max(avgdl, 1e-9)))
+            score += idf * tf[term] * (k1 + 1.0) / denom
+        scores[doc_id] = score
+    return scores
 
 
 class LexicalIndex:

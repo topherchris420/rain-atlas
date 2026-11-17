@@ -1,4 +1,4 @@
-"""Tests for the Research Mission Controller (Omnara/Maxxwell-inspired replica)."""
+"""Tests for the Research Mission Controller."""
 
 from __future__ import annotations
 

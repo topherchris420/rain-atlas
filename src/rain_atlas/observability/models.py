@@ -1,4 +1,4 @@
-"""Trace and observation models (Langfuse data-model replica)."""
+"""Trace and observation models."""
 
 from __future__ import annotations
 

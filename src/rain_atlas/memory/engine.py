@@ -1,8 +1,8 @@
 """The :class:`ScientificMemory` engine.
 
-Implements the reference API surface (``add``, ``search``, ``get``,
-``get_all``, ``update``, ``delete``, ``delete_all``, ``history``) with
-deterministic rule-based inference and append-only history.
+``add``, ``search``, ``get``, ``get_all``, ``update``, ``delete``,
+``delete_all`` and ``history`` with deterministic rule-based inference and
+append-only history.
 """
 
 from __future__ import annotations
@@ -31,14 +31,27 @@ def _now(clock) -> str:
 
 
 class ScientificMemory:
-    """Persistent scientific memory with a mem0-compatible API shape."""
+    """Persistent scientific memory with a familiar SDK-shaped API."""
 
     def __init__(
         self,
         root: Path | None = None,
         *,
         clock: Any | None = None,
+        ranking: str = "hybrid",
     ) -> None:
+        """*ranking* selects the retrieval scoring path:
+
+        * ``"hybrid"`` (default) -- the vendored Apache-2.0 scoring
+          (``rain_atlas.memory.vendor.mem0``): lexical scores gate at
+          *threshold*, raw Okapi BM25 is sigmoid-normalized and both are
+          combined additively exactly as the reference ranks hybrid results;
+        * ``"lexical"`` -- the deterministic local coverage/overlap score.
+        """
+
+        if ranking not in ("hybrid", "lexical"):
+            raise ValueError(f"unknown ranking {ranking!r}; expected 'hybrid' or 'lexical'")
+        self.ranking = ranking
         self.store = MemoryStore(root)
         self._clock = clock or (lambda: time.time())
         self._sequence_offset = 0
@@ -312,19 +325,52 @@ class ScientificMemory:
         top_k: int = 20,
         threshold: float = 0.1,
     ) -> dict:
-        """Semantic-style retrieval: ``{"results": [{"id", "memory", "score"}]}``."""
+        """Retrieval: ``{"results": [{"id", "memory", "score"}]}``.
+
+        With ``ranking="hybrid"`` (default) the vendored Apache-2.0 scoring
+        combines the lexical score with sigmoid-normalized Okapi BM25
+        (see ``rain_atlas.memory.vendor.mem0``).
+        """
 
         scope = self._scope_from_filters(filters)
         remaining = {key: value for key, value in (filters or {}).items() if key not in SCOPES}
-        index = LexicalIndex(
-            [
-                record
-                for record in self.store.active_records()
-                if all(record.scope.get(key) == value for key, value in scope.items())
-            ]
+        records = [
+            record
+            for record in self.store.active_records()
+            if all(record.scope.get(key) == value for key, value in scope.items())
+        ]
+        index = LexicalIndex(records)
+        if self.ranking == "lexical":
+            scored = index.search(query, scope=scope, top_k=top_k, threshold=threshold, filters=remaining)
+            return {"results": [item.public_view() for item in scored]}
+
+        # Hybrid path: vendored Apache-2.0 scoring (see vendor/mem0).
+        from .search import okapi_bm25
+        from .vendor.mem0 import get_bm25_params, normalize_bm25, score_and_rank
+
+        scored = index.search(
+            query, scope=scope, top_k=max(len(records), top_k), threshold=threshold, filters=remaining
         )
-        scored = index.search(query, scope=scope, top_k=top_k, threshold=threshold, filters=remaining)
-        return {"results": [item.public_view() for item in scored]}
+        if not scored:
+            return {"results": []}
+        raw_bm25 = okapi_bm25(query, [item.record for item in scored])
+        midpoint, steepness = get_bm25_params(query)
+        bm25_scores = {
+            item.record.id: normalize_bm25(raw_bm25.get(item.record.id, 0.0), midpoint, steepness)
+            for item in scored
+        }
+        semantic_results = [
+            {"id": item.record.id, "score": item.score, "payload": item.record.public_view()}
+            for item in scored
+        ]
+        ranked = score_and_rank(semantic_results, bm25_scores, {}, threshold, top_k)
+        results = []
+        for entry in ranked:
+            payload = entry.get("payload") or {}
+            payload = {key: value for key, value in payload.items() if key != "score"}
+            payload["score"] = entry["score"]
+            results.append(payload)
+        return {"results": results}
 
     def get(self, memory_id: str) -> dict:
         record = self.store.get(memory_id)

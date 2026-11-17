@@ -258,7 +258,6 @@ def run_vertical_slice(
     # -- agent 5: skeptic (independent replication on held-out condition) ----
 
     def replicate(task: Any, m: Mission) -> Any:
-        observations = state["observations"]
         fresh_twin = ServiceTwin(Scenario(seed=seed + 500_000, true_model=true_model))
         response = fresh_twin.run_experiment(HELD_OUT, replicates=models.replicates)
         held_out = Observation(

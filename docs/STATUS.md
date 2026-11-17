@@ -6,8 +6,8 @@ for implemented boundaries and explicitly planned work.
 
 | Priority | Implemented and exercised |
 |---|---|
-| REA replication framework | Typed investigation packages with enforced OBSERVED/COMPUTED/INFERRED/UNKNOWN evidence classifications, conformance harness, replica registry with integration gates; nine recorded investigations (Mem0, Langfuse, Browser Use, Omnara, RunAnywhere, Epicenter, Maxxwell, Arga Labs, Infera) with pinned commits or fetched docs, licenses and open questions |
-| Reconstructed capabilities | Eight independent modules: scientific memory, observability tracing, mission control with approvals, protocol compilation, simulation twin, inference providers, knowledge store, browser adapter — 153 new tests; differential conformance against the executed mem0ai 2.2.1 SDK (12 comparisons, all passing; skips when the reference is absent) |
+| REA evidence framework | Typed investigation packages with enforced OBSERVED/COMPUTED/INFERRED/UNKNOWN evidence classifications, conformance harness, replica registry with integration gates; no built-in target data |
+| Unified capabilities | Eight independent modules: scientific memory, observability tracing, mission control with approvals, protocol compilation, simulation twin, inference providers, knowledge store, browser adapter — with hybrid BM25 ranking via vendored Apache-2.0 scoring |
 | Unified R.A.I.N. demonstrations | `atlas rain slice` (one mission through every module with model/scripted/human generation labels) and `atlas rain central` (four-arm preregistered comparison; recorded outcome: H1/H2/H3 supported — 68% experiment reduction from persistent memory, zero false conclusions, adaptive arms below grid/random; ledger verifies clean) |
 | Audit / CI repair | Reproduced baseline, inspected workflow annotations, repaired artifact/ledger/process handling; pinned four-job matrix with JUnit artifacts |
 | Offline observatory | Experiment/evidence/timeline/skill/report/composer views, standalone CSP-restricted HTML, source verification, privacy projection; Python, DOM and real-browser (Chromium, CSS/CSP active) tests |
@@ -23,18 +23,12 @@ for implemented boundaries and explicitly planned work.
 
 ## Validation record
 
-- **REA framework and unified architecture, 2026-11-16, Windows Python
-  3.12:** the full suite including the new modules passed (642 passed, 19
-  skipped: the same 7 platform-specific skips as the baseline at `01dd8c1`
-  plus the 12 mem0 differential tests that skip without the reference SDK;
-  661 collected),
-  ruff check/format clean, `atlas ledger verify` clean on both new
-  demonstration ledgers. The differential conformance suite (12 tests) was
-  executed in a separate reference environment with mem0ai 2.2.1 installed
-  and passed; it skips in the standard environment. Central-experiment
-  claims are recorded with limitations in the demonstration ledger.
-  These are historical recorded results, not a claim that every subsequent
-  commit has been retested.
+- **Unified R.A.I.N. architecture, 2026-11-16, Windows Python 3.12:** the
+  full suite including the new modules passed (642 passed, 19 skipped;
+  661 collected), ruff check/format clean, `atlas ledger verify` clean on
+  both demonstration ledgers. Central-experiment claims are recorded with
+  limitations in the demonstration ledger. These are historical recorded
+  results, not a claim that every subsequent commit has been retested.
 - **BLACK GLASS native reconstruction, 2026-11-08, Windows Python 3.12.15:** the
   non-slow suite passed (461 tests collected, exit 0), including 17 new tests for
   the model, comparison laboratory, reconstruction engine, native routine

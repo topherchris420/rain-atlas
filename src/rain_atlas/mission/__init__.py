@@ -1,10 +1,6 @@
-"""Research Mission Controller: an Omnara/Maxxwell-inspired replica.
+"""Research Mission Controller: persistent agent orchestration.
 
-Target: Omnara (Apache-2.0) and Maxxwell by Rindler, reconstructed by
-Recursive Engineering & Analysis. See ``rain_atlas.rea.investigations.omnara``
-and ``rain_atlas.rea.investigations.maxxwell`` for the recorded evidence.
-
-Reconstructed capabilities:
+Capabilities:
 
 * persistent tasks with an explicit state machine
   (``pending → running → awaiting_approval → … → completed``);
@@ -17,8 +13,7 @@ Reconstructed capabilities:
 * observability hooks: every transition is traced;
 * memory hooks: findings are written to scientific memory.
 
-Deviations from the references are recorded in the investigation packages:
-this controller is single-process and deterministic by design, and it does
+The controller is single-process and deterministic by design; it does
 not manage OS processes, remote machines or third-party runtimes.
 """
 

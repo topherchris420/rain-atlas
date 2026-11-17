@@ -26,20 +26,15 @@ R.A.I.N. ATLAS is an **open-source, local-first research workbench** from [Vers3
 uv run atlas rain slice --root atlas-data/rain-slice
 uv run atlas ledger verify atlas-data/rain-slice/ledger
 
-# The central scientific experiment: does combining reconstructed
-# capabilities beat simpler baseline architectures?
+# The central scientific experiment: does combining these capabilities
+# beat simpler baseline architectures?
 uv run atlas rain central --root atlas-data/rain-central
 uv run atlas ledger verify atlas-data/rain-central/ledger
-
-# Inspect the nine recorded investigations:
-uv run atlas rea list
-uv run atlas rea show T01-mem0
 ```
 
 The central experiment compares adaptive selection with persistent memory
 against the same architecture without memory, a fixed grid and random
-selection, under preregistered hypotheses. See [docs/REA.md](docs/REA.md)
-for the recorded outcome, the evidence rules and the limitations.
+selection, under preregistered hypotheses.
 
 ## ATLAS Physical Scientist
 

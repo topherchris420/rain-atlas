@@ -1,7 +1,8 @@
 """Recursive Engineering & Analysis (REA) replication framework.
 
-Vers3Dynamics research method for investigating reference systems and
-independently reconstructing selected capabilities.
+Reusable evidence framework: typed manifests, enforced evidence
+classifications, conformance harnesses and replica registries for
+recording rigorous capability investigations.
 
 The framework is deliberately small and dependency-free. It provides:
 
@@ -13,8 +14,6 @@ The framework is deliberately small and dependency-free. It provides:
   harness with structural comparators.
 * :mod:`rain_atlas.rea.registry` -- replica registration and integration
   readiness gates.
-* :mod:`rain_atlas.rea.investigations` -- the recorded investigations of the
-  nine Y Combinator research targets.
 """
 
 from .classification import (
