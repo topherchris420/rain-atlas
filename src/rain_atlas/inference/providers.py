@@ -114,9 +114,17 @@ class MockProvider(InferenceProvider):
 class _HttpJsonProvider(InferenceProvider):
     """Shared HTTP behavior for local OpenAI-compatible endpoints."""
 
+    MAX_RESPONSE_BYTES = 16 * 1024 * 1024
+
     def __init__(self, base_url: str, *, timeout_s: float = 10.0) -> None:
         self.base_url = base_url.rstrip("/")
         self.timeout_s = timeout_s
+
+    def _read_json(self, response: Any) -> Any:
+        body = response.read(self.MAX_RESPONSE_BYTES + 1)
+        if len(body) > self.MAX_RESPONSE_BYTES:
+            raise ValueError(f"response exceeds {self.MAX_RESPONSE_BYTES} bytes")
+        return json.loads(body.decode("utf-8"))
 
     def _post(self, path: str, payload: dict[str, Any]) -> dict[str, Any]:
         request = urllib.request.Request(
@@ -127,14 +135,14 @@ class _HttpJsonProvider(InferenceProvider):
         )
         try:
             with urllib.request.urlopen(request, timeout=self.timeout_s) as response:
-                return json.loads(response.read().decode("utf-8"))
+                return self._read_json(response)
         except (urllib.error.URLError, OSError, ValueError) as exc:
             raise ProviderError(f"{self.name} at {self.base_url} unavailable: {exc}") from exc
 
     def _get(self, path: str) -> Any:
         try:
             with urllib.request.urlopen(self.base_url + path, timeout=self.timeout_s) as response:
-                return json.loads(response.read().decode("utf-8"))
+                return self._read_json(response)
         except (urllib.error.URLError, OSError, ValueError) as exc:
             raise ProviderError(f"{self.name} at {self.base_url} unavailable: {exc}") from exc
 
