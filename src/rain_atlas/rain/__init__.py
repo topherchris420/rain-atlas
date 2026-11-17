@@ -3,13 +3,13 @@
 This package connects the independently reconstructed replicas into one
 scientific intelligence loop::
 
-    hypothesis proposal (inference replica, model or scripted)
-        → protocol compilation (Infera replica)
-        → simulation twin (Arga replica)
-        → agent coordination with approvals (Omnara/Maxxwell replica)
-        → observability traces (Langfuse replica)
-        → scientific memory (Mem0 replica)
-        → local-first knowledge (Epicenter replica)
+    hypothesis proposal (inference provider, model or scripted)
+        → protocol compilation
+        → simulation twin
+        → agent coordination with approvals
+        → observability traces
+        → scientific memory
+        → local-first knowledge
         → evaluation and replication
         → ATLAS evidence ledger
 """

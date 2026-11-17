@@ -1,15 +1,14 @@
 """Deterministic lexical retrieval for the memory engine.
 
-The reference SDK ranks memories by embedding-vector similarity and supports
-rerankers. This replica ranks by a transparent BM25-style lexical score so
-retrieval is exactly reproducible offline. Scores live in ``[0, 1]``:
+Ranking is a transparent BM25-style lexical score so retrieval is exactly
+reproducible offline. Scores live in ``[0, 1]``:
 
 * 1.0 -- identical normalized content;
 * otherwise, the average of query-term coverage and idf-weighted overlap.
 
-Filters mirror the reference's entity scoping (``user_id`` / ``agent_id`` /
-``run_id``) plus a practical subset of its metadata operators
-(``eq``, ``ne``, ``in``, ``contains``, ``icontains``).
+Filters provide entity scoping (``user_id`` / ``agent_id`` / ``run_id``)
+plus metadata operators (``eq``, ``ne``, ``in``, ``contains``,
+``icontains``).
 """
 
 from __future__ import annotations
@@ -101,9 +100,8 @@ def okapi_bm25(
 ) -> dict[str, float]:
     """Raw Okapi BM25 scores for *query* over *records*, keyed by record id.
 
-    The reference computes raw BM25 inside its vector store (via fastembed);
-    this is the standard Okapi formulation feeding the vendored Mem0 sigmoid
-    normalization and additive hybrid ranking (``rain_atlas.memory.vendor.mem0``).
+    Standard Okapi formulation feeding the vendored sigmoid normalization
+    and additive hybrid ranking (``rain_atlas.memory.vendor.mem0``).
     """
 
     import math

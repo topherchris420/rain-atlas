@@ -6,55 +6,49 @@ All notable changes are recorded here. Versions follow semantic versioning.
 
 First end-to-end slice.
 
-### Added (REA replication framework and unified R.A.I.N. architecture, 2026-11-16)
+### Added (unified R.A.I.N. architecture, 2026-11-16)
 
-- New package `rain_atlas.rea`: the Recursive Engineering & Analysis
-  framework — typed investigation manifests, evidence items with enforced
+- Eight new capability modules:
+  - `rain_atlas.memory` — Scientific Memory Engine: persistent research
+    memory with a familiar SDK-shaped API (add/search/get/get_all/update/
+    delete/delete_all/history), deterministic rule-based inference, scope
+    filters, append-only supersession history, recorded contradictions and
+    hybrid BM25 ranking.
+  - `rain_atlas.observability` — observability engine: traces with
+    hierarchical SPAN/GENERATION/EVENT/TOOL observations, levels,
+    usage/cost rollups, scores, eval datasets and run comparisons; exports
+    into the evidence ledger.
+  - `rain_atlas.mission` — Research Mission Controller: persistent task
+    state machine, delegation, approval gates that pause agents, bounded
+    retries, supervision (cancel/takeover), and generation labeling
+    (scripted/model/human) on every transition.
+  - `rain_atlas.protocol` — Scientific Protocol Compiler: hypotheses
+    compile to validated specs with lexicon bounds, simulated instruments
+    only, ordered steps and preregistered acceptance; physical actuation is
+    forbidden by construction.
+  - `rain_atlas.simulation` — stateful service twin: deterministic
+    instrument twin with hidden ground truth, scenario seeding,
+    snapshot/reset/replay, fault injection and an evidence log.
+  - `rain_atlas.inference` — local inference abstraction: provider
+    interface, deterministic MockProvider, optional Ollama/llama.cpp HTTP
+    providers, model discovery, schema-validated structured outputs.
+  - `rain_atlas.knowledge` — local-first knowledge store: versioned
+    documents, append-only history, portable export/import, explicit
+    conflict resolution retaining both branches.
+  - `rain_atlas.browser` — research browser adapter: structured page
+    observations with provenance (content hash, fetch time) and content
+    verification; stdlib-only, offline-testable.
+- New package `rain_atlas.rea`: a reusable evidence framework — typed
+  investigation manifests, evidence items with enforced
   OBSERVED/COMPUTED/INFERRED/UNKNOWN classifications, evidence-package
-  validation and rendering, a reference-versus-replica conformance harness
-  with structural comparators (exact/keys/sequence/predicate; no arbitrary
-  similarity scores), and a replica registry with integration gates.
-- Nine recorded investigations (`rain_atlas.rea.investigations`) covering
-  Mem0, Langfuse, Browser Use, Omnara, RunAnywhere, Epicenter, Maxxwell,
-  Arga Labs and Infera, each with pinned reference commits or fetched
-  documentation, licenses, honest evidence classifications and open questions.
-  Closed-source references claim no parity; their runtime behavior is
-  recorded as unknown.
-- Eight independently implemented replicas:
-  - `rain_atlas.memory` — Scientific Memory Engine (Mem0-inspired):
-    mem0-compatible API shape (add/search/get/get_all/update/delete/
-    delete_all/history) with deterministic rule-based inference, scope
-    filters, append-only supersession history and recorded contradictions.
-  - `rain_atlas.observability` — observability engine (Langfuse-inspired):
-    traces with hierarchical SPAN/GENERATION/EVENT/TOOL observations,
-    levels, usage/cost rollups, scores, eval datasets and run comparisons;
-    exports into the evidence ledger.
-  - `rain_atlas.mission` — Research Mission Controller (Omnara/Maxxwell-
-    inspired): persistent task state machine, delegation, approval gates
-    that pause agents, bounded retries, supervision (cancel/takeover),
-    generation labeling (scripted/model/human) on every transition.
-  - `rain_atlas.protocol` — Scientific Protocol Compiler (Infera-inspired):
-    hypotheses compile to validated specs with lexicon bounds, simulated
-    instruments only, ordered steps and preregistered acceptance; physical
-    actuation is forbidden by construction.
-  - `rain_atlas.simulation` — stateful service twin (Arga-inspired):
-    deterministic instrument twin with hidden ground truth, scenario
-    seeding, snapshot/reset/replay, fault injection and an evidence log.
-  - `rain_atlas.inference` — local inference abstraction (RunAnywhere-
-    inspired): provider interface, deterministic MockProvider, optional
-    Ollama/llama.cpp HTTP providers, model discovery, schema-validated
-    structured outputs.
-  - `rain_atlas.knowledge` — local-first knowledge store (Epicenter-
-    inspired): versioned documents, append-only history, portable
-    export/import, explicit conflict resolution retaining both branches.
-  - `rain_atlas.browser` — research browser adapter (Browser Use-inspired):
-    structured page observations with provenance (content hash, fetch time)
-    and content verification; stdlib-only, offline-testable.
-- Differential conformance against the real reference: twelve tests run the
-  mem0ai 2.2.1 SDK locally (in-memory qdrant, deterministic fake embedder,
-  `infer=False`) and the replica through identical scenarios, comparing
-  documented behavioral invariants. All twelve pass; the module skips when
-  the reference SDK is not installed.
+  validation and rendering, a conformance harness with structural
+  comparators (exact/keys/sequence/predicate; no arbitrary similarity
+  scores), and a replica registry with integration gates.
+- Vendored retrieval scoring (Apache-2.0, license-preserving, in
+  `rain_atlas.memory.vendor.mem0` with attribution and LICENSE kept in the
+  vendor directory): the memory engine's default `ranking="hybrid"` path
+  runs standard Okapi BM25 through sigmoid normalization and additive
+  hybrid ranking.
 - Unified R.A.I.N. package `rain_atlas.rain`:
   - `atlas rain slice` runs the integrated vertical slice — hypothesis
     proposal (model-labeled), protocol compilation, approval gate,
@@ -67,33 +61,6 @@ First end-to-end slice.
     the ledger. Recorded outcome: all three held (68% experiment reduction
     from persistent memory; no false conclusions; adaptive arms below grid
     and random), bounded to the synthetic discrimination problem.
-- New CLI group `atlas rea {list,show,export}`; documentation in
-  `docs/REA.md`.
-- Tool-derived evidence from the morluto/rea reverse-engineering tool
-  (2026-11-17): `inspect_python_pyc` runs against the installed mem0ai 2.2.1
-  bytecode, the langfuse 5.2.0 SDK bytecode and the browser-use reference
-  compiled at its pinned commit produced pinned-digest OBSERVED evidence items
-  (T01 `mem0-obs-5`, T02 `lf-obs-4`, T03 `bu-obs-3`) corroborating the
-  recorded API surfaces at matching line numbers, plus one tool-derived
-  conformance record; a regression test pins the tool citations and digests.
-- Commercial-product evidence (2026-11-17): every investigation now records
-  what the company actually sells per its YC company page or launch
-  materials — including significant updates: Langfuse was acquired by
-  ClickHouse (Jan 2026), RunAnywhere now sells Wally (fast inference for
-  open frontier models), Rindler sells both Maxxwell (multi-agent IDE with
-  an orchestrator over workers) and a website-to-API product, and Browser
-  Use's commercial product is Browser Use Cloud — with each replica's scope
-  boundaries stated explicitly; a regression test enforces the recording.
-- Vendored Mem0 retrieval scoring (Apache-2.0, license-preserving, in
-  `rain_atlas.memory.vendor.mem0`): the memory engine's default
-  `ranking="hybrid"` path now runs standard Okapi BM25 through the
-  reference's own sigmoid normalization and additive hybrid ranking; a
-  differential test in the reference environment verifies the vendored
-  functions match the installed mem0ai 2.2.1 outputs (explain-detail key
-  names differ between the pinned commit and the release; ranking scores and
-  order are identical — recorded as a deviation).
-- 177 new tests across seven test modules plus the optional 13-test
-  differential reference suite (skips when the reference SDK is absent).
 
 ### Added (held-out spectral calibration)
 

@@ -10,10 +10,10 @@ explicitly vendored, attributed modules below**.
 |---|---|---|
 | `src/rain_atlas/memory/vendor/mem0/` | Mem0 `mem0/utils/scoring.py` and `lemmatization.py` at commit `f1791da86d469249c9b002f62644d58a1eb96a0` | Apache-2.0 |
 
-The vendored Mem0 retrieval-scoring utilities (BM25 sigmoid normalization and
-additive hybrid ranking) preserve the upstream license file and NOTICE inside
-the vendor directory; adaptations are limited to import paths and the optional
-spaCy loader, and are documented in `docs/REA.md`.
+The vendored retrieval-scoring utilities (BM25 sigmoid normalization and
+additive hybrid ranking) preserve the upstream license file and NOTICE
+inside the vendor directory; adaptations are limited to import paths and the
+optional spaCy loader.
 
 ## Independence
 
@@ -23,18 +23,12 @@ Mission, OSTI, or any national laboratory. Design lessons from the public
 Genesis Skills repository and from the open Agent Skills format are described
 in `docs/REFERENCES.md`; no code was taken from them.
 
-## Reference systems investigated under REA
+## REA evidence framework
 
-The Recursive Engineering & Analysis program (`rain_atlas.rea`,
-[docs/REA.md](docs/REA.md)) investigates reference systems and implements
-independent replicas of selected capabilities. No reference source code,
-assets, branding or prompts are included, copied or vendored in this
-repository. Mem0 (Apache-2.0), Langfuse (MIT core), Browser Use (MIT),
-Omnara (Apache-2.0), RunAnywhere, Epicenter (AGPL-3.0-or-later),
-Maxxwell, Arga Labs and Infera are independent projects of their respective
-owners; their names appear only to identify what was investigated. The
-optional differential conformance suite executes the separately installed
-mem0ai package (Apache-2.0) when present and skips otherwise.
+The Recursive Engineering & Analysis framework (`rain_atlas.rea`) records
+rigorous capability investigations with enforced OBSERVED / COMPUTED /
+INFERRED / UNKNOWN evidence classifications. It carries no built-in
+target data; investigation packages are constructed by users.
 
 ## Formats and specifications
 

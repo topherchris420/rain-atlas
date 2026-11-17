@@ -1,4 +1,9 @@
-"""Tests for the REA replication framework and the nine investigation packages."""
+"""Tests for the REA replication framework.
+
+The framework (manifests, evidence classifications, packages, conformance
+harness, registry) is exercised with constructed fixtures; it carries no
+built-in target data.
+"""
 
 from __future__ import annotations
 
@@ -18,8 +23,42 @@ from rain_atlas.rea import (
     registry_problems,
     validate_classification,
 )
-from rain_atlas.rea.investigations import TARGET_ORDER, all_investigations, investigation
 from rain_atlas.rea.models import EvidenceItem, Investigation, ReplicaSpec, TargetManifest
+
+
+def demo_investigation() -> Investigation:
+    """A sound, reusable investigation used across the tests."""
+
+    return Investigation(
+        manifest=TargetManifest(
+            target_id="T00-demo",
+            name="Demo",
+            organization="DemoOrg",
+            reference_commit="abc123",
+            license="MIT",
+        ),
+        observed_functionality=[
+            EvidenceItem(
+                id="t1",
+                classification="OBSERVED",
+                statement="the thing works",
+                sources=["repo/file.py:1"],
+            )
+        ],
+        replicas=[
+            ReplicaSpec(
+                replica_id="R00",
+                target_id="T00-demo",
+                module="rain_atlas.demomod",
+                integration_status="integrated",
+                features=[],
+            )
+        ],
+        conformance=[
+            # added by callers that need a passed case
+        ],
+        confidence="low",
+    )
 
 
 class TestClassification:
@@ -49,47 +88,17 @@ class TestClassification:
 
 
 class TestEvidencePackage:
-    def _minimal_investigation(self) -> Investigation:
-        return Investigation(
-            manifest=TargetManifest(
-                target_id="T00-test",
-                name="Test",
-                organization="TestOrg",
-                reference_commit="abc123",
-                license="MIT",
-            ),
-            observed_functionality=[
-                EvidenceItem(
-                    id="t1",
-                    classification="OBSERVED",
-                    statement="the thing works",
-                    sources=["repo/file.py:1"],
-                )
-            ],
-            replicas=[
-                ReplicaSpec(
-                    replica_id="R00",
-                    target_id="T00-test",
-                    module="rain_atlas.testmod",
-                    integration_status="integrated",
-                    features=[],
-                )
-            ],
-            conformance=[],
-            confidence="low",
-        )
-
     def test_valid_package_builds_and_serializes(self):
-        package = EvidencePackage.build(self._minimal_investigation())
+        package = EvidencePackage.build(demo_investigation())
         payload = json.loads(package.to_bytes().decode("utf-8"))
-        assert payload["investigation"]["manifest"]["target_id"] == "T00-test"
-        assert package.render_markdown().startswith("# REA investigation: Test")
+        assert payload["investigation"]["manifest"]["target_id"] == "T00-demo"
+        assert package.render_markdown().startswith("# REA investigation: Demo")
         digest_a = package.digest()
-        digest_b = EvidencePackage.build(self._minimal_investigation()).digest()
+        digest_b = EvidencePackage.build(demo_investigation()).digest()
         assert digest_a == digest_b
 
     def test_inferred_as_observed_is_rejected(self):
-        inv = self._minimal_investigation()
+        inv = demo_investigation()
         inv.observed_functionality.append(
             EvidenceItem(
                 id="t2",
@@ -102,21 +111,46 @@ class TestEvidencePackage:
         assert any("derives from" in p for p in package_problems(inv))
 
     def test_duplicate_evidence_ids_rejected(self):
-        inv = self._minimal_investigation()
+        inv = demo_investigation()
         inv.observed_functionality.append(
-            EvidenceItem(
-                id="t1",
-                classification="OBSERVED",
-                statement="duplicate",
-                sources=["docs"],
-            )
+            EvidenceItem(id="t1", classification="OBSERVED", statement="dup", sources=["docs"])
         )
         assert any("duplicate" in p for p in package_problems(inv))
 
     def test_integrated_with_deviations_requires_gate(self):
-        inv = self._minimal_investigation()
+        inv = demo_investigation()
         inv.replicas[0].deviations = ["known deviation"]
         assert any("gated" in p for p in package_problems(inv))
+
+    def test_derives_from_unknown_evidence_rejected(self):
+        inv = demo_investigation()
+        inv.observed_functionality.append(
+            EvidenceItem(
+                id="t3",
+                classification="INFERRED",
+                statement="derived",
+                sources=["docs"],
+                derives_from=["no-such-item"],
+            )
+        )
+        assert any("unknown evidence" in p for p in package_problems(inv))
+
+    def test_verified_features_require_tests_and_conformance(self):
+        inv = demo_investigation()
+        inv.replicas[0].features = [ReplicaSpec(replica_id="R00", target_id="T00-demo", module="m").features]
+        from rain_atlas.rea.models import Feature
+
+        inv.replicas[0].features = [Feature(name="f1", description="d", status="verified", test_names=["t"])]
+        problems = package_problems(inv)
+        assert any("no recorded conformance" in p for p in problems)
+
+    def test_write_package(self, tmp_path):
+        package = EvidencePackage.build(demo_investigation())
+        from rain_atlas.rea.package import write_package
+
+        path = write_package(package, tmp_path / "out")
+        assert path.exists()
+        assert (tmp_path / "out" / "package.md").exists()
 
 
 class TestConformanceHarness:
@@ -146,6 +180,16 @@ class TestConformanceHarness:
         failed, details = comparator.compare([{"e": "ADD"}], [{"e": "ADD"}, {"e": "DELETE"}])
         assert not failed and "length" in details
 
+    def test_predicate_comparator(self):
+        comparator = Comparator(strategy="predicate", predicate=lambda a, b: a > b)
+        passed, _ = comparator.compare(2, 1)
+        assert passed
+
+    def test_unknown_strategy(self):
+        comparator = Comparator(strategy="nonsense")
+        passed, details = comparator.compare(1, 1)
+        assert not passed and "unknown comparator" in details
+
     def test_harness_records_failures_and_errors(self):
         harness = ConformanceHarness(reference_label="doc")
         failing = ConformanceCase(
@@ -169,132 +213,34 @@ class TestConformanceHarness:
 
 class TestRegistry:
     def test_registry_validates_on_register(self):
-        inv = Investigation(
-            manifest=TargetManifest(target_id="T9", name="N", organization="O"),
-        )
         registry = ReplicaRegistry()
-        registry.register(inv)  # registers the placeholder no-replica entry
+        registry.register(demo_investigation())
         assert registry_problems(registry) == []
 
     def test_registering_invalid_investigation_raises(self):
         inv = Investigation(
             manifest=TargetManifest(target_id="T1", name="A", organization="O"),
-            observed_functionality=[
-                EvidenceItem(id="x", classification="INFERRED", statement="s")  # no derivation
-            ],
+            observed_functionality=[EvidenceItem(id="x", classification="INFERRED", statement="s")],
         )
         registry = ReplicaRegistry()
         with pytest.raises(ValueError, match="does not validate"):
             registry.register(inv)
 
+    def test_registry_lookup_and_projection(self):
+        registry = ReplicaRegistry()
+        registry.register(demo_investigation())
+        entry = registry.get("R00")
+        assert entry is not None and entry.replica.module == "rain_atlas.demomod"
+        assert registry.by_target("T00-demo")
+        assert registry.integrated()
+        summary = registry.to_dict()
+        assert "R00" in summary and summary["R00"]["integration_status"] == "integrated"
 
-class TestNineInvestigations:
-    def test_all_nine_targets_present(self):
-        assert len(TARGET_ORDER) == 9
-        assert TARGET_ORDER[0] == "T01-mem0"
-        assert TARGET_ORDER[-1] == "T09-infera"
-
-    @pytest.mark.parametrize("target_id", TARGET_ORDER)
-    def test_every_package_validates(self, target_id):
-        inv = investigation(target_id)
-        problems = package_problems(inv)
-        assert problems == [], f"{target_id}: {problems}"
-
-    @pytest.mark.parametrize("target_id", TARGET_ORDER)
-    def test_every_package_builds_and_round_trips(self, target_id):
-        package = EvidencePackage.build(investigation(target_id))
+    def test_round_trip_through_json(self):
+        package = EvidencePackage.build(demo_investigation())
         payload = json.loads(package.to_bytes().decode("utf-8"))
         restored = Investigation.from_dict(payload["investigation"])
         assert package_problems(restored) == []
-
-    def test_no_inferred_statement_is_presented_as_observed(self):
-        for inv in all_investigations():
-            for item in inv.all_evidence():
-                if item.classification == "OBSERVED":
-                    assert item.sources, f"{inv.manifest.target_id}/{item.id} cites no source"
-
-    def test_closed_source_targets_are_honest(self):
-        for target_id in ("T07-maxxwell", "T08-arga-labs", "T09-infera"):
-            inv = investigation(target_id)
-            assert inv.manifest.reference_commit == ""
-            assert any(
-                "UNKNOWN" in q or "not executed" in q or "UNKNOWN" in q.lower() for q in inv.open_questions
-            ), f"{target_id} must record what remains unverified"
-
-    def test_reference_commits_recorded_for_open_source_targets(self):
-        for target_id in (
-            "T01-mem0",
-            "T02-langfuse",
-            "T03-browser-use",
-            "T04-omnara",
-            "T05-runanywhere",
-            "T06-epicenter",
-        ):
-            inv = investigation(target_id)
-            assert inv.manifest.reference_commit, f"{target_id} lacks a pinned commit"
-
-    def test_mem0_differential_conformance_recorded(self):
-        inv = investigation("T01-mem0")
-        cases = {c.case: c for c in inv.conformance}
-        assert cases["mem0/add-event-shape"].status == "passed"
-        assert "mem0ai 2.2.1" in cases["mem0/add-event-shape"].reference
-
-    @pytest.mark.parametrize(
-        "target_id,evidence_id",
-        [
-            ("T01-mem0", "mem0-obs-5"),
-            ("T02-langfuse", "lf-obs-4"),
-            ("T03-browser-use", "bu-obs-3"),
-        ],
-    )
-    def test_tool_derived_evidence_pinned(self, target_id, evidence_id):
-        """morluto/rea tool-derived observations carry pinned artifact digests."""
-        inv = investigation(target_id)
-        item = inv.evidence_by_id(evidence_id)
-        assert item is not None, f"{target_id} lacks {evidence_id}"
-        assert item.classification == "OBSERVED"
-        assert any("morluto/rea" in source for source in item.sources), (
-            f"{evidence_id} must cite the REA tool as its source"
-        )
-        assert item.artifact_hashes, f"{evidence_id} must pin artifact digests"
-        for digest in item.artifact_hashes.values():
-            assert digest.startswith("sha256:") and len(digest) == 71
-
-    def test_registry_registers_all_nine(self):
         registry = ReplicaRegistry()
-        for inv in all_investigations():
-            registry.register(inv)
+        registry.register(restored)
         assert registry_problems(registry) == []
-        integrated = registry.integrated()
-        assert len(integrated) >= 9  # every target has at least one replica
-        summary = registry.to_dict()
-        assert "R01-scientific-memory" in summary
-        # One module may reconstruct capabilities from multiple references.
-        assert (
-            registry.by_target("T04-omnara")[0].replica.module
-            == registry.by_target("T07-maxxwell")[0].replica.module
-            == "rain_atlas.mission"
-        )
-
-    def test_unknown_target_rejected(self):
-        with pytest.raises(KeyError):
-            investigation("T99-nope")
-
-    @pytest.mark.parametrize("target_id", TARGET_ORDER)
-    def test_commercial_product_recorded(self, target_id):
-        """Every investigation records what the startup actually sells.
-
-        The commercial product (per the YC company page or the company's
-        own launch materials, fetched 2026-11-17) is OBSERVED evidence
-        with its source pinned, and states explicitly what part of the sold
-        product is beyond the replica's scope.
-        """
-        inv = investigation(target_id)
-        commercial = [item for item in inv.all_evidence() if "sells (per" in item.statement]
-        assert commercial, f"{target_id} must record what the company sells"
-        item = commercial[0]
-        assert item.classification == "OBSERVED"
-        assert any("ycombinator.com" in source or "infera.bio" in source for source in item.sources), (
-            f"{item.id} must cite the YC company page or launch materials"
-        )
-        assert "beyond this replica" in item.statement or "open scope" in item.statement

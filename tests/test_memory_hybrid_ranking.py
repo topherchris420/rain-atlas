@@ -1,9 +1,9 @@
-"""Hybrid ranking tests: vendored Mem0 Apache-2.0 scoring in the engine.
+"""Hybrid ranking tests: vendored Apache-2.0 scoring in the engine.
 
-The vendored module (rain_atlas.memory.vendor.mem0) is the reference's own
-scoring code; these tests verify it behaves as documented (sigmoid bounds,
-query-length parameter tiers, threshold gating, adaptive max_possible divisor)
-and that the engine's hybrid search path ranks and gates correctly.
+Verifies the vendored scoring (rain_atlas.memory.vendor.mem0) behaves as
+documented (sigmoid bounds, query-length parameter tiers, threshold gating,
+adaptive max_possible divisor) and that the engine's hybrid search path
+ranks and gates correctly.
 """
 
 from __future__ import annotations

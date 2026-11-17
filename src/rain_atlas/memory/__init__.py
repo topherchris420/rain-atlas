@@ -1,9 +1,7 @@
-"""Scientific Memory Engine: a Mem0-inspired replica for research context.
+"""Scientific Memory Engine: persistent research context.
 
-Target: Mem0 (Apache-2.0), reconstructed by Recursive Engineering & Analysis.
-See ``rain_atlas.rea.investigations.mem0`` for the recorded investigation.
-
-Reference API shape (v1.1+ of the reference SDK)::
+A local-first memory layer for scientific work, with a familiar
+SDK-shaped API::
 
     add(messages, *, user_id, agent_id, run_id, metadata, infer=True)
         -> {"results": [{"id", "memory", "event": "ADD"|"UPDATE"|"DELETE"|"NONE"}]}
@@ -16,13 +14,13 @@ Reference API shape (v1.1+ of the reference SDK)::
     delete_all(*, filters)
     history(memory_id) -> [{"memory_id", "prev_value", "new_value", "event", ...}]
 
-Deliberate deviations (all recorded in the investigation package):
+Design choices:
 
-* fact extraction is rule-based and deterministic, not model-driven;
-* memory ids are content-derived (reproducible), not random UUIDs;
-* every memory is content-hashed with SHA-256, not MD5;
-* scoping accepts one of ``user_id``/``agent_id``/``run_id`` exactly like the
-  reference, but adds a scientific ``kind`` and contradiction records.
+* fact extraction is rule-based and deterministic (no model required);
+* memory ids are content-derived, so runs are reproducible;
+* every memory is content-hashed with SHA-256;
+* scoping accepts one of ``user_id``/``agent_id``/``run_id``;
+* scientific ``kind`` labels and contradiction records are first-class.
 
 Scientific memory preserves research decisions, prior experimental results,
 rejected hypotheses and evidence-backed corrections. Contradictions are

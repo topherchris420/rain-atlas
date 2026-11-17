@@ -1,10 +1,6 @@
-"""Local-First Knowledge Store: an Epicenter-inspired replica.
+"""Local-First Knowledge Store.
 
-Target: Epicenter (AGPL-3.0-or-later), reconstructed *without* reusing its
-source. See ``rain_atlas.rea.investigations.epicenter`` for the recorded
-evidence and licensing rationale.
-
-Reconstructed capabilities:
+Capabilities:
 
 * local-first storage: every document is a file under the user's control;
 * append-only version history per document (nothing is silently overwritten);

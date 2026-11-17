@@ -1,8 +1,8 @@
 """The :class:`ScientificMemory` engine.
 
-Implements the reference API surface (``add``, ``search``, ``get``,
-``get_all``, ``update``, ``delete``, ``delete_all``, ``history``) with
-deterministic rule-based inference and append-only history.
+``add``, ``search``, ``get``, ``get_all``, ``update``, ``delete``,
+``delete_all`` and ``history`` with deterministic rule-based inference and
+append-only history.
 """
 
 from __future__ import annotations
@@ -31,7 +31,7 @@ def _now(clock) -> str:
 
 
 class ScientificMemory:
-    """Persistent scientific memory with a mem0-compatible API shape."""
+    """Persistent scientific memory with a familiar SDK-shaped API."""
 
     def __init__(
         self,
@@ -42,7 +42,7 @@ class ScientificMemory:
     ) -> None:
         """*ranking* selects the retrieval scoring path:
 
-        * ``"hybrid"`` (default) -- the vendored Mem0 Apache-2.0 scoring
+        * ``"hybrid"`` (default) -- the vendored Apache-2.0 scoring
           (``rain_atlas.memory.vendor.mem0``): lexical scores gate at
           *threshold*, raw Okapi BM25 is sigmoid-normalized and both are
           combined additively exactly as the reference ranks hybrid results;
@@ -327,9 +327,9 @@ class ScientificMemory:
     ) -> dict:
         """Retrieval: ``{"results": [{"id", "memory", "score"}]}``.
 
-        With ``ranking="hybrid"`` (default) the vendored Mem0 Apache-2.0
-        scoring combines the lexical score with sigmoid-normalized Okapi
-        BM25 exactly as the reference ranks hybrid results.
+        With ``ranking="hybrid"`` (default) the vendored Apache-2.0 scoring
+        combines the lexical score with sigmoid-normalized Okapi BM25
+        (see ``rain_atlas.memory.vendor.mem0``).
         """
 
         scope = self._scope_from_filters(filters)
@@ -344,7 +344,7 @@ class ScientificMemory:
             scored = index.search(query, scope=scope, top_k=top_k, threshold=threshold, filters=remaining)
             return {"results": [item.public_view() for item in scored]}
 
-        # Hybrid path: vendored Mem0 scoring (Apache-2.0, see vendor/mem0).
+        # Hybrid path: vendored Apache-2.0 scoring (see vendor/mem0).
         from .search import okapi_bm25
         from .vendor.mem0 import get_bm25_params, normalize_bm25, score_and_rank
 

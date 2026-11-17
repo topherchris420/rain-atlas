@@ -1,9 +1,7 @@
-"""Tests for the Scientific Memory Engine (Mem0-inspired replica).
+"""Tests for the Scientific Memory Engine.
 
-Behavioral invariants mirror the reference SDK's documented semantics:
-event results (ADD/UPDATE/DELETE/NONE), scope filters requiring entity ids,
-search result shape, and append-only history. See
-``rain_atlas.rea.investigations.mem0`` for the reference evidence.
+Behavioral invariants: event results (ADD/UPDATE/DELETE/NONE), scope
+filters requiring entity ids, search result shape, and append-only history.
 """
 
 from __future__ import annotations

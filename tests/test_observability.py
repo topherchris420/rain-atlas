@@ -1,4 +1,4 @@
-"""Tests for the Scientific Observability Engine (Langfuse-inspired replica)."""
+"""Tests for the Scientific Observability Engine."""
 
 from __future__ import annotations
 
