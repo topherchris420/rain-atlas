@@ -332,6 +332,7 @@ class ScientificMemory:
         (see ``rain_atlas.memory.vendor.mem0``).
         """
 
+        self.store.refresh()
         scope = self._scope_from_filters(filters)
         remaining = {key: value for key, value in (filters or {}).items() if key not in SCOPES}
         records = [
@@ -373,12 +374,14 @@ class ScientificMemory:
         return {"results": results}
 
     def get(self, memory_id: str) -> dict:
+        self.store.refresh()
         record = self.store.get(memory_id)
         if record is None:
             raise KeyError(f"memory {memory_id} does not exist")
         return record.public_view()
 
     def get_all(self, *, filters: dict[str, Any] | None = None, limit: int | None = None) -> dict:
+        self.store.refresh()
         scope = self._scope_from_filters(filters)
         remaining = {key: value for key, value in (filters or {}).items() if key not in SCOPES}
         from .search import metadata_filter_matches
@@ -486,12 +489,15 @@ class ScientificMemory:
     def history(self, memory_id: str) -> list[dict]:
         """Change history for one memory: ADD/UPDATE/DELETE events in order."""
 
+        self.store.refresh()
         return [event.to_dict() for event in self.store.history(memory_id)]
 
     def contradictions(self) -> list[dict]:
+        self.store.refresh()
         return [c.to_dict() for c in self.store.contradictions()]
 
     def statistics(self) -> dict:
+        self.store.refresh()
         records = list(self.store.iter_records())
         return {
             "total": len(records),
@@ -499,5 +505,5 @@ class ScientificMemory:
             "superseded": sum(1 for r in records if r.status == "superseded"),
             "deleted": sum(1 for r in records if r.status == "deleted"),
             "contradictions": len(self.store.contradictions()),
-            "events": len(self.store.all_events()),
+            "events": self.store.event_count(),
         }

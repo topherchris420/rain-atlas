@@ -1,22 +1,37 @@
 """Local-first persistence for the scientific memory engine.
 
-A :class:`MemoryStore` is a directory of canonical JSON documents plus a
-JSONL history log. Writes are atomic (temp file + replace). The store is
-local-first: no service, no database, no network. Concurrent writers are
-serialized with an OS-level lock file, mirroring the ledger's approach.
+Layout under the store root::
+
+    memories.json   committed snapshot: records, contradictions, sequence and
+                    the number of committed history events (the commit point)
+    history.jsonl   append-only change history, one event per line
+    memories.lock   OS advisory writer lock
+
+A write transaction appends its new events to ``history.jsonl`` (``fsync``),
+then atomically replaces ``memories.json``. The snapshot is the single commit
+point: events past its recorded count are an uncommitted tail from an
+interrupted writer, ignored on load and discarded by the next commit. A
+crashed writer therefore leaves either the old or the new state, never a mix,
+and its OS lock is released by the operating system.
+
+Each transaction reloads committed state under the lock (so it never
+overwrites another writer), writes the snapshot once (not once per change)
+and appends only the history it produced. Readers reload when the snapshot
+on disk changed, so instances in other processes observe committed writes.
+
+Stores written by the first layout (``memories.json`` as a bare list plus
+``contradictions.json`` and ``state.json``) load transparently and are
+migrated on their next commit.
 """
 
 from __future__ import annotations
 
 import contextlib
 import json
-import os
-import tempfile
-import time
 from pathlib import Path
 from typing import Iterator
 
-from ..canonical import canonical_bytes
+from ..fileio import append_durably, atomic_write, exclusive_lock
 from .models import Contradiction, MemoryEvent, MemoryRecord
 
 
@@ -24,123 +39,207 @@ class MemoryStoreError(RuntimeError):
     pass
 
 
-def _atomic_write(path: Path, data: bytes) -> None:
-    fd, tmp_name = tempfile.mkstemp(dir=str(path.parent), prefix=path.name, suffix=".tmp")
-    try:
-        with os.fdopen(fd, "wb") as handle:
-            handle.write(data)
-        os.replace(tmp_name, path)
-    finally:
-        if os.path.exists(tmp_name):
-            os.unlink(tmp_name)
+def _event_line(event: MemoryEvent) -> bytes:
+    return json.dumps(event.to_dict(), sort_keys=True, separators=(",", ":")).encode("utf-8") + b"\n"
 
 
 class MemoryStore:
-    """Directory-backed store: ``memories.json``, ``history.jsonl``, ``contradictions.json``."""
+    """Directory-backed store with a single atomic commit point per transaction."""
 
-    STATE_VERSION = 1
+    STATE_VERSION = 2
+    SNAPSHOT = "memories.json"
+    HISTORY = "history.jsonl"
+    LOCK = "memories.lock"
+    LEGACY_FILES = ("contradictions.json", "state.json")
 
     def __init__(self, root: Path | None = None) -> None:
         self.root = Path(root) if root is not None else None
         self._records: dict[str, MemoryRecord] = {}
-        self._events: list[MemoryEvent] = []
         self._contradictions: list[Contradiction] = []
         self._sequence = 0
+        # History: the committed prefix of history.jsonl (parsed lazily -- only
+        # history queries need it) plus events not yet committed.
+        self._committed: list[MemoryEvent] | None = []
+        self._committed_count = 0
+        self._pending: list[MemoryEvent] = []
+        self._history_clean = True  # False: history has an uncommitted or legacy tail
+        self._legacy = False
+        self._stamp: tuple[int, int] | None = None  # (mtime_ns, size) of the loaded snapshot
+        self._depth = 0  # transaction nesting depth
         if self.root is not None:
             self._load()
 
     # -- persistence ---------------------------------------------------------
 
-    def _paths(self) -> tuple[Path, Path, Path, Path]:
+    def _path(self, name: str) -> Path:
         assert self.root is not None
-        return (
-            self.root / "memories.json",
-            self.root / "history.jsonl",
-            self.root / "contradictions.json",
-            self.root / "state.json",
-        )
+        return self.root / name
+
+    def _snapshot_stamp(self) -> tuple[int, int] | None:
+        try:
+            info = self._path(self.SNAPSHOT).stat()
+        except FileNotFoundError:
+            return None
+        return (info.st_mtime_ns, info.st_size)
+
+    def _reset(self) -> None:
+        self._records = {}
+        self._contradictions = []
+        self._sequence = 0
+        self._committed = []
+        self._committed_count = 0
+        self._pending = []
+        self._history_clean = True
+        self._legacy = False
 
     def _load(self) -> None:
-        memories_path, history_path, contradictions_path, state_path = self._paths()
-        if not memories_path.exists():
+        self._reset()
+        stamp = self._snapshot_stamp()
+        self._stamp = stamp
+        if stamp is None:
             return
+        history_path = self._path(self.HISTORY)
         try:
-            payload = json.loads(memories_path.read_text(encoding="utf-8"))
-            for item in payload:
-                record = MemoryRecord.from_dict(item)
-                self._records[record.id] = record
-            self._events = [
-                MemoryEvent.from_dict(json.loads(line))
-                for line in history_path.read_text(encoding="utf-8").splitlines()
-                if line.strip()
-            ]
-            self._contradictions = [
-                Contradiction.from_dict(item)
-                for item in json.loads(contradictions_path.read_text(encoding="utf-8"))
-            ]
-            self._sequence = json.loads(state_path.read_text(encoding="utf-8"))["sequence"]
-        except (OSError, ValueError, KeyError) as exc:
+            payload = json.loads(self._path(self.SNAPSHOT).read_text(encoding="utf-8"))
+            history = history_path.read_bytes() if history_path.exists() else b""
+            if isinstance(payload, list):  # first layout: migrate on the next commit
+                self._legacy = True
+                records = payload
+                contradictions = json.loads(self._path("contradictions.json").read_text(encoding="utf-8"))
+                self._sequence = int(
+                    json.loads(self._path("state.json").read_text(encoding="utf-8"))["sequence"]
+                )
+                self._committed = [
+                    MemoryEvent.from_dict(json.loads(line)) for line in history.splitlines() if line.strip()
+                ]
+                self._committed_count = len(self._committed)
+                self._history_clean = False
+            else:
+                if payload.get("version") != self.STATE_VERSION:
+                    raise ValueError(f"unsupported memory store version {payload.get('version')!r}")
+                records = payload["records"]
+                contradictions = payload["contradictions"]
+                self._sequence = int(payload["sequence"])
+                count = int(payload["events"])
+                complete_lines = history.count(b"\n")
+                if complete_lines < count:
+                    raise ValueError(f"history has {complete_lines} events but the snapshot commits {count}")
+                self._committed = None  # parsed on first history query
+                self._committed_count = count
+                self._history_clean = complete_lines == count and (not history or history.endswith(b"\n"))
+            self._records = {
+                record.id: record for record in (MemoryRecord.from_dict(item) for item in records)
+            }
+            self._contradictions = [Contradiction.from_dict(item) for item in contradictions]
+        except (OSError, ValueError, KeyError, TypeError) as exc:
             raise MemoryStoreError(f"memory store at {self.root} is unreadable: {exc}") from exc
 
-    def flush(self) -> None:
-        """Persist current state; a no-op for in-memory stores."""
+    def _committed_events(self) -> list[MemoryEvent]:
+        if self._committed is None:
+            try:
+                lines = self._path(self.HISTORY).read_bytes().splitlines()[: self._committed_count]
+                events = [MemoryEvent.from_dict(json.loads(line)) for line in lines]
+            except (OSError, ValueError, KeyError, TypeError) as exc:
+                raise MemoryStoreError(f"memory history at {self.root} is unreadable: {exc}") from exc
+            if len(events) != self._committed_count:
+                raise MemoryStoreError(f"memory history at {self.root} lost committed events")
+            self._committed = events
+        return self._committed
 
-        if self.root is None:
+    def refresh(self) -> None:
+        """Reload committed state if another writer changed it (no-op mid-transaction)."""
+
+        if self.root is not None and self._depth == 0 and self._snapshot_stamp() != self._stamp:
+            self._load()
+
+    def flush(self) -> None:
+        """Persist current state.
+
+        Inside a transaction this is deferred to the transaction's single
+        commit; outside one it commits immediately under the writer lock.
+        """
+
+        if self.root is None or self._depth:
             return
+        with self._locked():
+            self._commit()
+
+    def _locked(self):
+        assert self.root is not None
+        return exclusive_lock(self._path(self.LOCK), error=MemoryStoreError)
+
+    def _commit(self) -> None:
+        assert self.root is not None
         self.root.mkdir(parents=True, exist_ok=True)
-        memories_path, history_path, contradictions_path, state_path = self._paths()
-        _atomic_write(
-            memories_path,
-            canonical_bytes([record.to_dict() for record in self.iter_records()]),
+        history_path = self._path(self.HISTORY)
+        if self._history_clean:
+            if self._pending:
+                append_durably(history_path, b"".join(_event_line(event) for event in self._pending))
+        else:  # discard an uncommitted tail (or migrate) by rewriting the committed history
+            events = [*self._committed_events(), *self._pending]
+            atomic_write(history_path, b"".join(_event_line(event) for event in events))
+        total = self._committed_count + len(self._pending)
+        snapshot = {
+            "version": self.STATE_VERSION,
+            "sequence": self._sequence,
+            "events": total,
+            "records": [record.to_dict() for record in self.iter_records()],
+            "contradictions": [c.to_dict() for c in self._contradictions],
+        }
+        atomic_write(
+            self._path(self.SNAPSHOT),
+            json.dumps(
+                snapshot, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False
+            ).encode("utf-8"),
         )
-        _atomic_write(
-            history_path,
-            "\n".join(
-                json.dumps(event.to_dict(), sort_keys=True, separators=(",", ":")) for event in self._events
-            ).encode("utf-8")
-            + (b"\n" if self._events else b""),
-        )
-        _atomic_write(
-            contradictions_path,
-            canonical_bytes([c.to_dict() for c in self._contradictions]),
-        )
-        _atomic_write(
-            state_path, canonical_bytes({"sequence": self._sequence, "version": self.STATE_VERSION})
-        )
+        if self._legacy:
+            for name in self.LEGACY_FILES:
+                self._path(name).unlink(missing_ok=True)
+            self._legacy = False
+        if self._committed is not None:
+            self._committed.extend(self._pending)
+        self._committed_count = total
+        self._pending = []
+        self._history_clean = True
+        self._stamp = self._snapshot_stamp()
 
     @contextlib.contextmanager
     def transaction(self, timeout_s: float = 30.0) -> Iterator[None]:
         """Serialize a full read-modify-write across instances and processes.
 
-        Acquires a directory lock file, reloads committed state so changes
-        made by other writers are not overwritten, then flushes on success.
+        Takes the writer lock, reloads committed state (another writer may
+        have committed since this instance last read), and commits once on
+        success. On an exception the
+        in-memory state is rolled back to the last committed state and
+        nothing is written. Nested transactions join the outermost one.
         """
 
+        if self._depth:
+            self._depth += 1
+            try:
+                yield
+            finally:
+                self._depth -= 1
+            return
         if self.root is None:
-            yield
+            self._depth = 1
+            try:
+                yield
+            finally:
+                self._depth = 0
             return
         self.root.mkdir(parents=True, exist_ok=True)
-        lock_path = self.root / ".lock"
-        deadline = time.monotonic() + timeout_s
-        while True:
-            try:
-                fd = os.open(str(lock_path), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
-                break
-            except FileExistsError:
-                if time.monotonic() > deadline:
-                    raise MemoryStoreError(f"timed out waiting for lock {lock_path}") from None
-                time.sleep(0.01)
-        try:
-            self._records = {}
-            self._events = []
-            self._contradictions = []
-            self._sequence = 0
+        with exclusive_lock(self._path(self.LOCK), timeout_s=timeout_s, error=MemoryStoreError):
             self._load()
-            yield
-            self.flush()
-        finally:
-            os.close(fd)
-            os.unlink(lock_path)
+            self._depth = 1
+            try:
+                yield
+            except BaseException:
+                self._depth = 0
+                self._load()
+                raise
+            self._depth = 0
+            self._commit()
 
     # -- records -------------------------------------------------------------
 
@@ -177,13 +276,16 @@ class MemoryStore:
     # -- events --------------------------------------------------------------
 
     def append_event(self, event: MemoryEvent) -> None:
-        self._events.append(event)
+        self._pending.append(event)
+
+    def event_count(self) -> int:
+        return self._committed_count + len(self._pending)
 
     def history(self, memory_id: str) -> list[MemoryEvent]:
-        return [event for event in self._events if event.memory_id == memory_id]
+        return [event for event in self.all_events() if event.memory_id == memory_id]
 
     def all_events(self) -> list[MemoryEvent]:
-        return list(self._events)
+        return [*self._committed_events(), *self._pending]
 
     # -- contradictions ------------------------------------------------------
 
