@@ -8,7 +8,7 @@ R.A.I.N. ATLAS is an **open-source, local-first research workbench** from [Vers3
 
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-3776ab?logo=python&logoColor=white)](pyproject.toml)
 [![MIT license](https://img.shields.io/badge/License-MIT-0b5d63)](LICENSE)
-[![Release status](https://img.shields.io/badge/Release-v0.1%20unreleased-555555)](CHANGELOG.md)
+[![Release v0.1.0](https://img.shields.io/badge/Release-v0.1.0-0b5d63)](https://github.com/topherchris420/rain-atlas/releases/tag/v0.1.0)
 [![CI](https://github.com/topherchris420/rain-atlas/actions/workflows/ci.yml/badge.svg)](https://github.com/topherchris420/rain-atlas/actions)
 
 **[Explore Physical Scientist](#atlas-physical-scientist)** · **[Run an experiment](#run-your-first-experiment)** · **[Investigate firmware](#black-glass-firmware-intelligence)** · **[Inspect recorded evidence](#recorded-experiments)** · **[Browse the methods](#31-executable-scientific-skills)** · **[Understand the limits](#what-is-implemented-and-what-is-not)**
@@ -137,15 +137,16 @@ Open **`atlas-data/sync-001/observatory/index.html`** in your browser. The viewe
 
 ### Install as a package
 
-ATLAS is not published to PyPI. To use the `atlas` command outside a checkout, build the wheel and install it. The wheel carries the built-in skill catalog and every data file it needs:
+To use the `atlas` command without a checkout, install the released package. The wheel carries the built-in skill catalog and every data file it needs:
 
 ```sh
-uv build
-uv tool install dist/rain_atlas-0.1.0-py3-none-any.whl   # or: pip install dist/rain_atlas-0.1.0-py3-none-any.whl
+pip install rain-atlas          # or: uv tool install rain-atlas
 atlas skills test
 ```
 
-`uv run python scripts/check_package.py` builds the sdist and wheel, installs the wheel into a clean environment and runs the CLI from an unrelated directory. CI runs it on Linux and Windows.
+The [GitHub release](https://github.com/topherchris420/rain-atlas/releases/tag/v0.1.0) also carries the wheel, the sdist, `SHA256SUMS` and a CycloneDX SBOM. `uv run python scripts/check_package.py` builds the sdist and wheel from a checkout, checks their metadata as PyPI will, installs the wheel into a clean environment and runs the CLI from an unrelated directory. CI runs it on Linux and Windows.
+
+Releases are cut by pushing a `vX.Y.Z` tag that matches the package version and has notes in `docs/releases/`. The release workflow builds, checks and publishes to GitHub and PyPI.
 
 ## BLACK GLASS: firmware intelligence
 
@@ -343,7 +344,7 @@ To contribute a method, follow the [skill authoring guide](docs/SKILL_AUTHORING.
 
 ## What is implemented, and what is not
 
-**Version 0.1.0 is unreleased.** ATLAS currently includes the numerical experiments above, a 31-skill catalog, evidence search and recovery, an offline observatory, local proposal registration/approval, export integrations, BLACK GLASS static firmware analysis, and the REA replication framework with eight reconstructed-capability modules and the unified `atlas rain` demonstrations.
+**Version 0.1.0 was released on November 17, 2026** ([release notes](docs/releases/v0.1.0.md)). It includes the numerical experiments above, a 31-skill catalog, evidence search and recovery, an offline observatory, local proposal registration/approval, export integrations, BLACK GLASS static firmware analysis, and the REA replication framework with eight reconstructed-capability modules and the unified `atlas rain` demonstrations.
 
 **Validation snapshot:** the [November 17, 2026 Linux record](docs/STATUS.md#validation-record) reports **674 passing tests and two platform-specific skips** on Python 3.12, including the slow acceptance tests, plus an installed-wheel run outside the checkout. The [November 5 record](docs/VALIDATION.md) documents cross-platform agreement and defects found through validation. These are historical recorded results, **not a claim that every subsequent commit has been retested**. See [GitHub Actions](https://github.com/topherchris420/rain-atlas/actions) for the current hosted workflow state. The first hosted run on record (November 17) passed every job on Linux and Windows with Python 3.11 and 3.12, including the installed-wheel check; earlier runs were blocked at the account level.
 

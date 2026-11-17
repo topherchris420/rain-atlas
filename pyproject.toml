@@ -2,7 +2,7 @@
 name = "rain-atlas"
 version = "0.1.0"
 description = "R.A.I.N. ATLAS: a local-first scientific instrument with executable skills, bounded execution and an append-only evidence ledger."
-readme = "README.md"
+dynamic = ["readme"]  # README.md with links made absolute for PyPI (see fancy-pypi-readme below)
 license = "MIT"
 license-files = ["LICENSE"]
 authors = [{ name = "Vers3Dynamics" }]
@@ -12,11 +12,26 @@ dependencies = [
     "scipy>=1.13",
     "matplotlib>=3.9",
 ]
+keywords = ["reproducibility", "preregistration", "evidence ledger", "scientific computing", "astrodynamics", "firmware analysis"]
 classifiers = [
-    "Programming Language :: Python :: 3",
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
     "Intended Audience :: Science/Research",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Physics",
 ]
+
+[project.urls]
+Homepage = "https://github.com/topherchris420/rain-atlas"
+Documentation = "https://github.com/topherchris420/rain-atlas/tree/main/docs"
+Changelog = "https://github.com/topherchris420/rain-atlas/blob/main/CHANGELOG.md"
+Issues = "https://github.com/topherchris420/rain-atlas/issues"
 
 [project.scripts]
 atlas = "rain_atlas.cli:main"
@@ -30,8 +45,25 @@ dev = [
 ]
 
 [build-system]
-requires = ["hatchling>=1.27,<2"]
+requires = ["hatchling>=1.27,<2", "hatch-fancy-pypi-readme>=24.1"]
 build-backend = "hatchling.build"
+
+# PyPI renders the README outside the repository, where its relative links
+# and images would break. Build the long description from README.md with
+# them pointed at GitHub; the repository README stays the single source.
+[tool.hatch.metadata.hooks.fancy-pypi-readme]
+content-type = "text/markdown"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+path = "README.md"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
+pattern = '!\[([^\]]*)\]\((?!https?://)([^)\s]+)\)'
+replacement = '![\1](https://raw.githubusercontent.com/topherchris420/rain-atlas/main/\2)'
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
+pattern = '\]\((?!https?://|#|mailto:)([^)\s]+)\)'
+replacement = '](https://github.com/topherchris420/rain-atlas/blob/main/\1)'
 
 # The wheel must carry the built-in skill catalog: an installed `atlas` has no
 # repository checkout to read `skills/` from. The catalog keeps its repository
