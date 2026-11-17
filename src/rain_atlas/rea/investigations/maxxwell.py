@@ -72,6 +72,32 @@ def investigation() -> Investigation:
             sources=[DOCS_URL + "concepts/morning-page, " + DOCS_URL + "guides/byok"],
             captured_at="2026-11-16",
         ),
+        EvidenceItem(
+            id="mx-obs-4",
+            classification="OBSERVED",
+            statement=(
+                "What Rindler sells (per its YC company page, fetched "
+                "2026-11-17): two products. (1) Maxxwell, 'The IDE for "
+                "Tokenmaxxers' — a desktop app for people running several "
+                "coding agents at once: every session in one window marked "
+                "working, idle or waiting-on-you, with an orchestrator on "
+                "top — 'a real coding-agent session of its own that reads "
+                "the others and reports back' — while every worker is the "
+                "user's own unmodified tool (Claude Code, Codex, Cursor "
+                "Agent) in real terminal sessions that can be attached to "
+                "and taken over at any point. (2) Rindler's launch "
+                "product: turning websites into deterministic APIs for AI "
+                "agents — sites mapped once into screens, actions and "
+                "structured outputs, served through a remote MCP endpoint "
+                "that handles popups, bot defenses and authenticated "
+                "flows. The replica reconstructs Maxxwell's fleet "
+                "supervision concepts (status, takeover, "
+                "waiting-on-you); the orchestrator-over-workers and "
+                "website-to-API products are recorded as open scope."
+            ),
+            sources=["https://www.ycombinator.com/companies/rindler (fetched 2026-11-17)"],
+            captured_at="2026-11-17",
+        ),
     ]
     interface = [
         EvidenceItem(

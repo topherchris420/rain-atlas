@@ -33,6 +33,28 @@ def investigation() -> Investigation:
     )
     observed = [
         EvidenceItem(
+            id="om-obs-3",
+            classification="OBSERVED",
+            statement=(
+                "What Omnara sells (per its YC company page): 'The "
+                "Open-Source Alternative to Claude Managed Agents' — a "
+                "model-agnostic control plane for managed agents, one API "
+                "to deploy, run and control them; self-hosted or as a "
+                "managed cloud. Bring-your-own-computer (an omnarad daemon "
+                "connects any Linux/macOS machine to the control plane), "
+                "bring-your-own-model (OpenAI Responses, Completions and "
+                "Anthropic Messages formats), sandbox providers (Blaxel, "
+                "Daytona, Unikraft), hosted-model credits, and paid "
+                "self-hosting/VPC design partnerships. The sold control "
+                "plane's machine fleet, sandbox provisioning and hosted "
+                "models are beyond this replica's in-process scope."
+            ),
+            sources=["https://www.ycombinator.com/companies/omnara (fetched 2026-11-17)"],
+            captured_at="2026-11-17",
+        ),
+    ]
+    observed = [
+        EvidenceItem(
             id="om-obs-1",
             classification="OBSERVED",
             statement=(
@@ -60,6 +82,26 @@ def investigation() -> Investigation:
                 "daemonprotocol, cronschedule) at commit " + OMNARA_COMMIT,
             ],
             captured_at="2026-11-16",
+        ),
+        EvidenceItem(
+            id="om-obs-3",
+            classification="OBSERVED",
+            statement=(
+                "What Omnara sells (per its YC company page): 'The "
+                "Open-Source Alternative to Claude Managed Agents' — a "
+                "model-agnostic control plane for managed agents, one API "
+                "to deploy, run and control them; self-hosted or as a "
+                "managed cloud. Bring-your-own-computer (an omnarad daemon "
+                "connects any Linux/macOS machine to the control plane), "
+                "bring-your-own-model (OpenAI Responses, Completions and "
+                "Anthropic Messages formats), sandbox providers (Blaxel, "
+                "Daytona, Unikraft), hosted-model credits, and paid "
+                "self-hosting/VPC design partnerships. The sold control "
+                "plane's machine fleet, sandbox provisioning and hosted "
+                "models are beyond this replica's in-process scope."
+            ),
+            sources=["https://www.ycombinator.com/companies/omnara (fetched 2026-11-17)"],
+            captured_at="2026-11-17",
         ),
     ]
     interface = [

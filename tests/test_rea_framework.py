@@ -279,3 +279,22 @@ class TestNineInvestigations:
     def test_unknown_target_rejected(self):
         with pytest.raises(KeyError):
             investigation("T99-nope")
+
+    @pytest.mark.parametrize("target_id", TARGET_ORDER)
+    def test_commercial_product_recorded(self, target_id):
+        """Every investigation records what the startup actually sells.
+
+        The commercial product (per the YC company page or the company's
+        own launch materials, fetched 2026-11-17) is OBSERVED evidence
+        with its source pinned, and states explicitly what part of the sold
+        product is beyond the replica's scope.
+        """
+        inv = investigation(target_id)
+        commercial = [item for item in inv.all_evidence() if "sells (per" in item.statement]
+        assert commercial, f"{target_id} must record what the company sells"
+        item = commercial[0]
+        assert item.classification == "OBSERVED"
+        assert any("ycombinator.com" in source or "infera.bio" in source for source in item.sources), (
+            f"{item.id} must cite the YC company page or launch materials"
+        )
+        assert "beyond this replica" in item.statement or "open scope" in item.statement

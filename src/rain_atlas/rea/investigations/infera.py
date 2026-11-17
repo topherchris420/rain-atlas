@@ -36,6 +36,30 @@ def investigation() -> Investigation:
     )
     observed = [
         EvidenceItem(
+            id="inf-obs-2",
+            classification="OBSERVED",
+            statement=(
+                "What Infera sells (per its public site and YC launch): "
+                "Project IO, 'Our protocol compiler. Describe a workflow "
+                "in plain English' — converting workflows to instrument "
+                "instructions, verifying them on digital twins and "
+                "supervising instruments, which execute only after human "
+                "approval; BioBase Reader takes files off instruments as "
+                "CSV or Excel; BioBase is 'a desktop research "
+                "environment where scientists direct AI agents to "
+                "investigate questions and organize data', with a "
+                "zero-data-retention option. The sold product's real "
+                "laboratory instrument integrations are beyond this "
+                "replica's scope, which reconstructs the "
+                "compile-validate-approve loop for simulated instruments."
+            ),
+            sources=[
+                "https://www.infera.bio/ (fetched 2026-11-17)",
+                "https://www.ycombinator.com/launches/Qdt-infera-control-lab-instruments-with-natural-language",
+            ],
+            captured_at="2026-11-17",
+        ),
+        EvidenceItem(
             id="inf-obs-1",
             classification="OBSERVED",
             statement=(

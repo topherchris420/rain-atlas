@@ -76,7 +76,23 @@ First end-to-end slice.
   (T01 `mem0-obs-5`, T02 `lf-obs-4`, T03 `bu-obs-3`) corroborating the
   recorded API surfaces at matching line numbers, plus one tool-derived
   conformance record; a regression test pins the tool citations and digests.
-- 156 new tests across six test modules plus the optional 12-test
+- Commercial-product evidence (2026-11-17): every investigation now records
+  what the company actually sells per its YC company page or launch
+  materials — including significant updates: Langfuse was acquired by
+  ClickHouse (Jan 2026), RunAnywhere now sells Wally (fast inference for
+  open frontier models), Rindler sells both Maxxwell (multi-agent IDE with
+  an orchestrator over workers) and a website-to-API product, and Browser
+  Use's commercial product is Browser Use Cloud — with each replica's scope
+  boundaries stated explicitly; a regression test enforces the recording.
+- Vendored Mem0 retrieval scoring (Apache-2.0, license-preserving, in
+  `rain_atlas.memory.vendor.mem0`): the memory engine's default
+  `ranking="hybrid"` path now runs standard Okapi BM25 through the
+  reference's own sigmoid normalization and additive hybrid ranking; a
+  differential test in the reference environment verifies the vendored
+  functions match the installed mem0ai 2.2.1 outputs (explain-detail key
+  names differ between the pinned commit and the release; ranking scores and
+  order are identical — recorded as a deviation).
+- 177 new tests across seven test modules plus the optional 13-test
   differential reference suite (skips when the reference SDK is absent).
 
 ### Added (held-out spectral calibration)

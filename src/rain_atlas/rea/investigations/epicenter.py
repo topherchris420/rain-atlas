@@ -37,6 +37,25 @@ def investigation() -> Investigation:
     )
     observed = [
         EvidenceItem(
+            id="ep-obs-2",
+            classification="OBSERVED",
+            statement=(
+                "What Epicenter sells (per its YC company page): 'ChatGPT's "
+                "memory feature in an open, portable format' — an ecosystem "
+                "of open-source, local-first apps that share one memory "
+                "stored as 'a single folder of plain text and SQLite', "
+                "greppable and openable in other tools (e.g. Obsidian); "
+                "Whispering (local-first speech-to-text) is the first "
+                "shipped app; MIT-licensed with a choose-your-own-model "
+                "vision. The sold product is the ecosystem itself rather "
+                "than a service; the multi-app ecosystem is beyond this "
+                "replica's scope, which reconstructs the shared local-first "
+                "memory-store capability."
+            ),
+            sources=["https://www.ycombinator.com/companies/epicenter (fetched 2026-11-17)"],
+            captured_at="2026-11-17",
+        ),
+        EvidenceItem(
             id="ep-obs-1",
             classification="OBSERVED",
             statement=(

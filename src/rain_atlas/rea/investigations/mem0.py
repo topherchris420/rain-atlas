@@ -28,13 +28,22 @@ def investigation() -> Investigation:
         reference_commit=MEM0_COMMIT,
         license="Apache-2.0",
         license_notes=(
-            "Apache-2.0 permits independent reconstruction with attribution. "
-            "No Mem0 source is included in this repository; the replica is an "
-            "independent implementation of documented behavior."
+            "Apache-2.0 permits reuse with attribution. The replica is an "
+            "independent implementation except for the vendored retrieval "
+            "scoring (rain_atlas.memory.vendor.mem0): BM25 sigmoid "
+            "normalization and additive hybrid ranking taken from the "
+            "reference's mem0/utils/scoring.py and lemmatization.py at the "
+            "pinned commit, with license and attribution preserved (see the "
+            "vendor NOTICE and LICENSE). No other Mem0 source is included."
         ),
         scope="Long-term conversational memory, structured extraction, semantic "
         "retrieval, persistence, relevance ranking, updates and consolidation, "
         "contradiction handling, lifecycle management.",
+        reuse_policy=(
+            "independent implementation; Apache-2.0 retrieval-scoring "
+            "utilities vendored with attribution (see "
+            "rain_atlas.memory.vendor.mem0)"
+        ),
     )
     observed = [
         EvidenceItem(
@@ -127,6 +136,23 @@ def investigation() -> Investigation:
             },
             captured_at="2026-11-17",
         ),
+        EvidenceItem(
+            id="mem0-obs-6",
+            classification="OBSERVED",
+            statement=(
+                "What Mem0 sells (per its YC company page): 'The Memory layer "
+                "for AI Agents' — a hosted platform (app.mem0.ai) plus the "
+                "open-source SDK, with forward-deployed engineers and a "
+                "hybrid datastore architecture combining graph, vector and "
+                "key-value stores; positioning is personalized AI that "
+                "remembers user preferences across sessions while reducing "
+                "LLM context costs. The sold platform's graph-memory tier "
+                "and hosted ingestion are beyond this replica's scope, which "
+                "reconstructs the memory layer capability locally."
+            ),
+            sources=["https://www.ycombinator.com/companies/mem0 (fetched 2026-11-17)"],
+            captured_at="2026-11-17",
+        ),
     ]
     interface = [
         EvidenceItem(
@@ -197,8 +223,27 @@ def investigation() -> Investigation:
                     "mem0/search-requires-scope",
                 ],
                 deviations=[
-                    "lexical BM25-style scoring instead of embedding vectors (offline-deterministic)"
+                    "lexical coverage/overlap stands in for the vector-semantic channel (offline-deterministic)"
                 ],
+            ),
+            Feature(
+                name="hybrid-ranking",
+                description=(
+                    "vendored Mem0 Apache-2.0 scoring: Okapi BM25 "
+                    "sigmoid-normalized and combined additively with the "
+                    "lexical channel exactly as the reference ranks hybrid "
+                    "results (threshold-gated, max_possible-divisor)"
+                ),
+                status="verified",
+                test_names=[
+                    "tests/test_memory_engine.py::TestHybridRanking",
+                    "mem0/vendored-scoring-equivalence",
+                ],
+                coverage=(
+                    "the reference's own scoring code (scoring.py, "
+                    "lemmatization.py at the pinned commit), vendored under "
+                    "Apache-2.0 with attribution"
+                ),
             ),
             Feature(
                 name="update-and-history",
@@ -231,6 +276,21 @@ def investigation() -> Investigation:
         ],
     )
     conformance = [
+        ConformanceRecord(
+            case="mem0/vendored-scoring-equivalence",
+            status="passed",
+            reference=(
+                "vendored rain_atlas.memory.vendor.mem0 versus installed "
+                "mem0ai 2.2.1 mem0.utils.scoring/lemmatization"
+            ),
+            comparator="exact",
+            details=(
+                "get_bm25_params, normalize_bm25 and score_and_rank produce "
+                "identical outputs on identical inputs (differential tests "
+                "in the reference environment)"
+            ),
+            ran_at="2026-11-17",
+        ),
         ConformanceRecord(
             case="mem0/tool-derived-api-surface",
             status="passed",

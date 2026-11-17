@@ -95,6 +95,65 @@ SCENARIOS = [
 
 
 class TestDifferentialConformance:
+    def test_vendored_scoring_matches_installed_reference(self):
+        """The vendored Apache-2.0 scoring must equal the installed reference."""
+
+        from mem0.utils.lemmatization import (  # type: ignore[import-not-found]
+            lemmatize_for_bm25 as ref_lemmatize,
+        )
+        from mem0.utils.scoring import (  # type: ignore[import-not-found]
+            get_bm25_params as ref_params,
+        )
+        from mem0.utils.scoring import (
+            normalize_bm25 as ref_normalize,
+        )
+        from mem0.utils.scoring import (
+            score_and_rank as ref_rank,
+        )
+
+        from rain_atlas.memory.vendor.mem0 import (
+            get_bm25_params,
+            lemmatize_for_bm25,
+            normalize_bm25,
+            score_and_rank,
+        )
+
+        queries = [
+            "",
+            "one",
+            "phase locking in coupled oscillators today",
+            " ".join(f"term{i}" for i in range(20)),
+        ]
+        for query in queries:
+            assert get_bm25_params(query) == ref_params(query)
+            # Without spaCy both lemmatizers fall back to the original text.
+            assert lemmatize_for_bm25(query) == ref_lemmatize(query)
+
+        for raw in (0.0, 1.5, 5.0, 7.3, 12.0, 40.0):
+            for midpoint, steepness in ((5.0, 0.7), (7.0, 0.6), (12.0, 0.5)):
+                assert normalize_bm25(raw, midpoint, steepness) == ref_normalize(raw, midpoint, steepness)
+
+        results = [
+            {"id": "a", "score": 0.9, "payload": {"k": 1}},
+            {"id": "b", "score": 0.05, "payload": {"k": 2}},
+            {"id": "c", "score": 0.5, "payload": {"k": 3}},
+        ]
+        bm25 = {"a": 0.7, "b": 0.95, "c": 0.1}
+        entity = {"c": 0.4}
+        for threshold in (0.0, 0.1, 0.6):
+            for top_k in (1, 3, 10):
+                ours = score_and_rank(results, bm25, entity, threshold, top_k)
+                theirs = ref_rank(results, bm25, entity, threshold, top_k)
+                assert ours == theirs
+                # The installed 2.2.1 release names explain-detail keys differently
+                # than the pinned repository commit the vendored copy preserves
+                # (semantic vs semantic_score, ...). Ranking scores and order
+                # must still agree; that is the behavioral contract.
+                ours_x = score_and_rank(results, bm25, entity, threshold, top_k, explain=True)
+                theirs_x = ref_rank(results, bm25, entity, threshold, top_k, explain=True)
+                assert [item["score"] for item in ours_x] == [item["score"] for item in theirs_x]
+                assert [item["id"] for item in ours_x] == [item["id"] for item in theirs_x]
+
     def test_reference_add_returns_event_results(self, reference_memory):
         result = reference_memory.add(SCENARIOS[0]["messages"], user_id="scientist-1", infer=False)
         assert "results" in result

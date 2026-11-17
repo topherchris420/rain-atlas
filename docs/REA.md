@@ -50,6 +50,27 @@ as reference-only; the Maxxwell documentation explicitly separates what
 ships today from announced direction, and the investigation records only
 the former as reference behavior.
 
+## What they actually sell
+
+Each investigation records the company's commercial product (per its YC
+company page or launch materials, fetched 2026-11-17) as OBSERVED
+evidence, and states explicitly which parts of the sold product are beyond
+the replica's scope. The reconstructions target the *sold capabilities*
+that survive local-first scientific use, not the business:
+
+| Company | What they sell (as recorded) | Replica reconstructs |
+|---|---|---|
+| Mem0 | Hosted memory platform (app.mem0.ai) + OSS SDK; graph+vector+KV hybrid datastores; $24M raised | The memory-layer capability, locally; graph tier out of scope |
+| Langfuse | Langfuse Cloud / self-host / enterprise LLM engineering platform; 50k+ companies; acquired by ClickHouse (Jan 2026) | The tracing/eval data model, in-process; hosted UI out of scope |
+| Browser Use | Browser Use Cloud: hosted web agents with proxy rotation, persistent logins, parallel browsers ($30/mo; $17M raised) | Authorized structured observation with provenance; hosted fleet out of scope |
+| Omnara | Model-agnostic agent control plane; self-host or managed cloud; BYO-computer and BYO-model | Mission task/approval/supervision semantics, in-process |
+| RunAnywhere | Wally: fastest inference for open frontier models (OpenAI-compatible API); on-device SDKs; trnRT/MetalRT engines | The OpenAI-compatible provider abstraction; serving stack out of scope |
+| Epicenter | Local-first open-source app ecosystem sharing one plain-text+SQLite memory (Whispering first app; MIT) | The shared local-first store with conflict resolution |
+| Rindler | Maxxwell (multi-agent IDE with orchestrator-on-top, takeover) + Rindler (websites as deterministic APIs over MCP) | Fleet supervision: status, waiting-on-you, takeover; orchestrator and website-API out of scope |
+| Arga Labs | Twin Runs, Scenarios, Test Runs: stateful twins of 33 services, 100k+ instances run | The stateful twin/scenario/fault concepts for instruments |
+| Infera | Project IO protocol compiler (plain English → instrument instructions, digital-twin verification, human approval) + BioBase | The compile-validate-approve loop for simulated instruments |
+
+
 ## Tool-derived evidence (morluto/rea)
 
 The morluto/rea reverse-engineering tool was executed against real reference
@@ -68,6 +89,28 @@ bytecode read-only. Digests are pinned so the analyzed artifacts are
 reproducibly identified, and a regression test
 (`test_tool_derived_evidence_pinned`) enforces that the tool-derived
 evidence items cite the tool and pin their digests.
+
+## Vendored reference code (license-permitted reuse)
+
+Where a permissive license allows it, the replicas now include proven
+reference code rather than re-implementations:
+
+* `rain_atlas.memory.vendor.mem0` — Mem0's retrieval scoring
+  (Apache-2.0, from `mem0/utils/scoring.py` and `lemmatization.py` at the
+  pinned commit): BM25 sigmoid normalization and additive hybrid ranking.
+  The memory engine's default `ranking="hybrid"` path feeds standard
+  Okapi BM25 through the vendored sigmoid and combines it with the lexical
+  channel exactly as the reference ranks hybrid results. License, NOTICE
+  and attribution are preserved in the vendor directory. A differential
+  test in the reference environment verifies the vendored functions
+  produce identical outputs to the installed mem0ai 2.2.1 (the released
+  package names explain-detail keys differently than the pinned commit;
+  ranking scores and order are identical — that deviation is recorded in
+  the investigation).
+
+This is the extent of intentional reuse: all other replicas remain
+independent implementations, and AGPL (Epicenter) and closed-source
+references remain untouched.
 
 ## Conformance evidence
 

@@ -1,7 +1,19 @@
 # Notices and attribution
 
 R.A.I.N. ATLAS is original Vers3Dynamics work released under the MIT License
-(see `LICENSE`). It contains no code copied from other projects.
+(see `LICENSE`). It contains no code copied from other projects **except the
+explicitly vendored, attributed modules below**.
+
+## Vendored code (attributed, license-preserving)
+
+| Vendored path | Origin | License |
+|---|---|---|
+| `src/rain_atlas/memory/vendor/mem0/` | Mem0 `mem0/utils/scoring.py` and `lemmatization.py` at commit `f1791da86d469249c9b002f62644d58a1eb96a0` | Apache-2.0 |
+
+The vendored Mem0 retrieval-scoring utilities (BM25 sigmoid normalization and
+additive hybrid ranking) preserve the upstream license file and NOTICE inside
+the vendor directory; adaptations are limited to import paths and the optional
+spaCy loader, and are documented in `docs/REA.md`.
 
 ## Independence
 

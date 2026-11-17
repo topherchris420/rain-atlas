@@ -38,6 +38,26 @@ def investigation() -> Investigation:
     )
     observed = [
         EvidenceItem(
+            id="ra-obs-3",
+            classification="OBSERVED",
+            statement=(
+                "What RunAnywhere sells (per its YC company page): Wally — "
+                "'the fastest inference for open frontier models', an "
+                "OpenAI-compatible API and wally CLI serving models like "
+                "GLM-5.3-Flash at 380 tok/s, hosted on their GPUs or "
+                "deployed on the customer's own (on-prem/BYOC), plus "
+                "on-device AI SDKs (runanywhere-sdks) sharing a C++ core "
+                "and open-source engines (trnRT for AWS Trainium under "
+                "Apache-2.0, MetalRT for Apple silicon, QHexRT for "
+                "Hexagon NPUs). The sold product's serving stack and "
+                "hardware kernels are beyond this replica's scope, which "
+                "reconstructs the OpenAI-compatible provider abstraction "
+                "the Wally API exposes."
+            ),
+            sources=["https://www.ycombinator.com/companies/runanywhere (fetched 2026-11-17)"],
+            captured_at="2026-11-17",
+        ),
+        EvidenceItem(
             id="ra-obs-1",
             classification="OBSERVED",
             statement=(

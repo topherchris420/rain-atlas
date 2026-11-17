@@ -102,6 +102,23 @@ def investigation() -> Investigation:
             },
             captured_at="2026-11-17",
         ),
+        EvidenceItem(
+            id="lf-obs-5",
+            classification="OBSERVED",
+            statement=(
+                "What Langfuse sells (per its YC company page): an 'Open "
+                "source LLM engineering platform' — Langfuse Cloud (EU/US "
+                "SaaS regions), self-hosting and enterprise deployments of "
+                "tracing, evals (including LLM-as-judge), prompt management, "
+                "datasets and experiments; used by 50,000+ companies "
+                "including 21 of the Fortune 50, and acquired by ClickHouse "
+                "in January 2026. The sold product's hosted UI, analytics "
+                "and prompt playground are beyond this replica's in-process "
+                "scope."
+            ),
+            sources=["https://www.ycombinator.com/companies/langfuse (fetched 2026-11-17)"],
+            captured_at="2026-11-17",
+        ),
     ]
     interface = [
         EvidenceItem(

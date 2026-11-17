@@ -83,6 +83,25 @@ def investigation() -> Investigation:
             },
             captured_at="2026-11-17",
         ),
+        EvidenceItem(
+            id="bu-obs-4",
+            classification="OBSERVED",
+            statement=(
+                "What Browser Use sells (per its YC company page): Browser "
+                "Use Cloud — a hosted web-agent product at "
+                "cloud.browser-use.com plus an API, handling proxy "
+                "rotation, persistent authenticated sessions (log in once), "
+                "and parallel browser instances, priced at $30/month and "
+                "positioned against OpenAI Operator ($17M raised; 110k+ "
+                "GitHub stars on the open-source project). The sold "
+                "product's hosted browser fleet, proxy rotation and "
+                "anti-bot handling are beyond this replica's scope, which "
+                "reconstructs authorized structured observation with "
+                "provenance."
+            ),
+            sources=["https://www.ycombinator.com/companies/browser-use (fetched 2026-11-17)"],
+            captured_at="2026-11-17",
+        ),
     ]
     interface = [
         EvidenceItem(

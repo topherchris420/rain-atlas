@@ -39,6 +39,27 @@ def investigation() -> Investigation:
     )
     observed = [
         EvidenceItem(
+            id="ar-obs-3",
+            classification="OBSERVED",
+            statement=(
+                "What Arga Labs sells (per its YC company page): "
+                "'Real-world sandboxes to test and train AI agents' — "
+                "Twin Runs that provision stateful digital twins of "
+                "third-party services (33 in the catalog at investigation "
+                "date) and return the URLs, credentials and environment "
+                "variables to use them; Scenarios that save seeded "
+                "starting state for repeatable tests; Test Runs and PR "
+                "Test Runs that exercise a URL in a browser and grade "
+                "performance; customers have run 100,000+ twin "
+                "instances. The sold product's twin catalog, hosted "
+                "infrastructure and browser test runner are beyond this "
+                "replica's scope, which reconstructs the stateful "
+                "twin/scenario/fault concepts for scientific instruments."
+            ),
+            sources=["https://www.ycombinator.com/companies/arga-labs (fetched 2026-11-17)"],
+            captured_at="2026-11-17",
+        ),
+        EvidenceItem(
             id="ar-obs-1",
             classification="OBSERVED",
             statement=(
