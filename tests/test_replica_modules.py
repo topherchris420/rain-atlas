@@ -364,3 +364,45 @@ class TestBrowserSession:
         session = BrowserSession()
         session.fetch(page)
         assert len(session.history()) == 1
+
+    def test_oversized_page_refused(self, tmp_path: Path):
+        big = tmp_path / "big.html"
+        big.write_bytes(b"<p>" + b"x" * 5000 + b"</p>")
+        with pytest.raises(BrowserError, match="observation limit"):
+            BrowserSession(max_bytes=1000).fetch(big.as_uri())
+
+    def test_http_redirect_and_charset_are_recorded(self):
+        import http.server
+        import threading
+
+        body = "<title>Café</title><p>Résumé of the experiment</p>".encode("latin-1")
+
+        class Handler(http.server.BaseHTTPRequestHandler):
+            def do_GET(self):  # noqa: N802 - stdlib API
+                if self.path == "/old":
+                    self.send_response(302)
+                    self.send_header("Location", "/new")
+                    self.end_headers()
+                    return
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=iso-8859-1")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+
+            def log_message(self, *args):
+                pass
+
+        server = http.server.HTTPServer(("127.0.0.1", 0), Handler)
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            base = f"http://127.0.0.1:{server.server_address[1]}"
+            observation = BrowserSession().fetch(base + "/old")
+        finally:
+            server.shutdown()
+            server.server_close()
+        assert observation.url == base + "/old"
+        assert observation.final_url == base + "/new"
+        assert observation.title == "Café"
+        assert "Résumé" in observation.text

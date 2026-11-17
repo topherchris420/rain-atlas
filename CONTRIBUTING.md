@@ -10,7 +10,12 @@ uv sync --locked --python 3.12 # one-command development setup
 uv run python scripts/check.py # lint, formatting, scientific API types, manifests, full tests
 uv run pytest -m "not slow"
 uv run pytest -m slow      # Phase 10 acceptance (several minutes)
+uv run python scripts/check_package.py # build sdist + wheel, install it cleanly, run the CLI outside the checkout
 ```
+
+Run the package check whenever you add a data file, a skill or anything else
+the installed package must carry. A source checkout finds files that the wheel
+may have left out.
 
 For offline viewer interaction tests (Node 24; test-only dependency):
 

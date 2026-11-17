@@ -19,9 +19,18 @@ def _print_json(value) -> None:
 def _registry(args):
     from .skills.registry import Registry  # noqa: PLC0415
 
-    return Registry(
+    registry = Registry(
         home=Path(args.home) if args.home else None, builtin_root=Path(args.builtin) if args.builtin else None
     )
+    if not registry.builtin_root.is_dir():
+        # Never fail silently with an empty catalog: an installation without
+        # the built-in skills cannot run any experiment.
+        print(
+            f"warning: built-in skill catalog not found at {registry.builtin_root}; "
+            "reinstall rain-atlas or set ATLAS_BUILTIN_SKILLS",
+            file=sys.stderr,
+        )
+    return registry
 
 
 def cmd_skills_list(args) -> int:
@@ -637,10 +646,36 @@ def cmd_rain_central(args) -> int:
     from .rain import run_central_experiment  # noqa: PLC0415
 
     result = run_central_experiment(
-        Path(args.root), programs=args.programs, missions_per_program=args.missions
+        Path(args.root), protocol=args.protocol, programs=args.programs, missions_per_program=args.missions
     )
     if getattr(args, "json", False):
         _print_json(result.to_dict())
+        return 0 if result.ledger_verified else 1
+    if args.protocol == "v2":
+        print(
+            f"protocol {result.protocol}: {result.programs_per_regime} programs per regime x "
+            f"{result.missions_per_program} missions"
+        )
+        print(
+            f"{'arm':<17} {'regime':<11} {'exp/mission':>11} {'false':>7} {'undecided':>9} {'quarantines':>11}"
+        )
+        for arm, by_regime in result.summaries.items():
+            for regime in ("stationary", "shifting"):
+                s = by_regime[regime]
+                print(
+                    f"{arm:<17} {regime:<11} {s.mean_experiments:>11.3f} "
+                    f"{s.false_conclusions / s.missions:>7.1%} {s.missions - s.decided:>9} {s.quarantines:>11}"
+                )
+        from .rain.experiment import _describe  # noqa: PLC0415
+
+        for hypothesis_id, record in result.hypotheses.items():
+            print(f"{hypothesis_id}: {record['verdict'].upper():<12} {_describe(hypothesis_id, record)}")
+        control = result.ordering_control
+        print(
+            f"ordering control: {control['identical']}/{control['missions']} missions identical "
+            "to a fixed high-to-low sweep"
+        )
+        print(f"elapsed {result.elapsed_s:.2f}s  ledger verified: {result.ledger_verified}")
         return 0 if result.ledger_verified else 1
     for name, arm in result.arms.items():
         print(
@@ -789,8 +824,16 @@ def build_parser() -> argparse.ArgumentParser:
     p.set_defaults(func=cmd_rain_slice)
     p = nsub.add_parser("central", help="run the central scientific experiment")
     p.add_argument("--root", default="atlas-data/rain-central")
-    p.add_argument("--programs", type=int, default=6)
-    p.add_argument("--missions", type=int, default=3)
+    p.add_argument(
+        "--protocol",
+        choices=("v2", "v1"),
+        default="v2",
+        help="v2: the falsifiable design (default); v1: reproduce the superseded 2026-11-16 protocol",
+    )
+    p.add_argument(
+        "--programs", type=int, help="programs per regime (v2, default 150) or per arm (v1, default 6)"
+    )
+    p.add_argument("--missions", type=int, help="missions per program (v2 default 4, v1 default 3)")
     p.add_argument("--json", action="store_true")
     p.set_defaults(func=cmd_rain_central)
 

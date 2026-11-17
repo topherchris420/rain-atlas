@@ -4,15 +4,17 @@ The scientific domain reused here is the same one ATLAS already studies:
 two coupled oscillators. The twin owns a *hidden* ground truth: which of
 two candidate coupling models generates its observations.
 
-* Model ``linear``: coupling force ``-k * (phi1 - phi2)``.
-* Model ``damped``: the same linear coupling, with an additional nonlinear
-  amplitude-dependent term ``-k * (1 - 0.25 * a^2) * (phi1 - phi2)`` where
-  ``a`` is the ensemble amplitude.
+* Model ``linear``: coherence ``1 - exp(-3 k)`` at coupling ``k``.
+* Model ``damped``: amplitude-dependent damping reduces the effective
+  coupling to ``k * (1 - 0.45 * a^2)`` with amplitude ``a = 0.5 + 0.5 k``,
+  so coherence flattens at high coupling.
 
 An agent that runs experiments on the twin is *discriminating between the
 models*: at high coupling the two models produce measurably different phase
-coherence statistics. The twin itself is deterministic given (seed,
-conditions), so experiments are exactly repeatable.
+coherence statistics. Each replicate adds Gaussian noise with standard
+deviation ``hidden_parameters["observation_sigma"]`` (default 0.06). The twin
+is deterministic given (seed, conditions), so experiments are exactly
+repeatable.
 """
 
 from __future__ import annotations
@@ -25,6 +27,7 @@ from typing import Any
 from ..canonical import canonical_bytes, sha256_bytes
 
 MODELS = ("linear", "damped")
+DEFAULT_OBSERVATION_SIGMA = 0.06
 
 
 class ObservationFault(Exception):
@@ -195,6 +198,7 @@ class ServiceTwin:
         amplitude, producing a characteristic flattening.
         """
 
+        sigma = float(self.scenario.hidden_parameters.get("observation_sigma", DEFAULT_OBSERVATION_SIGMA))
         truth = []
         for rep in range(replicates):
             rng = random.Random(f"{self.scenario.seed}:{round(coupling, 6)}:{rep}")
@@ -204,7 +208,7 @@ class ServiceTwin:
                 amplitude = 0.5 + 0.5 * coupling
                 effective = coupling * (1.0 - 0.45 * amplitude * amplitude)
                 base = 1.0 - math.exp(-3.0 * effective)
-            sample = base + rng.gauss(0.0, 0.06)
+            sample = base + rng.gauss(0.0, sigma)
             truth.append(sample)
         return sum(truth) / len(truth)
 

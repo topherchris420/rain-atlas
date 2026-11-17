@@ -79,3 +79,24 @@ def test_projection_retains_uncertainty_and_incomplete_status(tmp_path):
     assert claim["data"]["value"] is None
     assert claim["data"]["uncertainty"]["reason"] == "no truth available"
     assert not any(r["kind"] == "report" for r in result["records"])
+
+
+@pytest.mark.parametrize("demonstration", ["slice", "central-v2", "central-v1"])
+def test_rain_demonstration_ledgers_export(tmp_path, registry, demonstration):
+    """Protocol-engine runs name their method with a string, not a skill identity."""
+    from rain_atlas.rain import run_central_experiment, run_vertical_slice
+
+    root = tmp_path / "run"
+    if demonstration == "slice":
+        run_vertical_slice(root, seed=7, true_model="damped")
+    elif demonstration == "central-v2":
+        run_central_experiment(root, programs=3, resamples=100)
+    else:
+        run_central_experiment(root, protocol="v1", programs=2)
+    path = export(root / "ledger", tmp_path / "view", registry=registry)
+    html = path.read_text(encoding="utf-8")
+    data = json.loads(
+        re.search(r'<script id="atlas-data" type="application/json">(.*?)</script>', html, re.S).group(1)
+    )
+    assert any(r["kind"] == "run" for r in data["records"])
+    assert any(r["kind"] == "verdict" for r in data["records"])

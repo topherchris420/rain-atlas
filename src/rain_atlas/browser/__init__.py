@@ -43,10 +43,12 @@ class PageObservation:
     content_hash: str = ""
     verified: bool = False
     verification_note: str = ""
+    final_url: str = ""  # after redirects; the URL the content actually came from
 
     def to_dict(self) -> dict:
         return {
             "url": self.url,
+            "final_url": self.final_url or self.url,
             "title": self.title,
             "text": self.text,
             "links": list(self.links),
@@ -106,10 +108,21 @@ class _TextExtractor(HTMLParser):
 class BrowserSession:
     """A stateless, offline-capable observation adapter."""
 
-    def __init__(self, *, clock: Any | None = None, timeout_s: float = 15.0) -> None:
+    MAX_BYTES = 10 * 1024 * 1024
+
+    def __init__(
+        self, *, clock: Any | None = None, timeout_s: float = 15.0, max_bytes: int = MAX_BYTES
+    ) -> None:
         self._clock = clock or (lambda: time.time() * 1000.0)
         self._timeout_s = timeout_s
+        self._max_bytes = max_bytes
         self.observations: list[PageObservation] = []
+
+    def _bounded(self, url: str, handle: Any) -> bytes:
+        body = handle.read(self._max_bytes + 1)
+        if len(body) > self._max_bytes:
+            raise BrowserError(f"{url} exceeds the {self._max_bytes}-byte observation limit")
+        return body
 
     def fetch(
         self,
@@ -128,22 +141,29 @@ class BrowserSession:
         scheme = urlparse(url).scheme
         if scheme not in ("http", "https", "file"):
             raise BrowserError(f"unsupported URL scheme {scheme!r} for {url}")
+        charset = "utf-8"
+        final_url = url
         try:
             if scheme == "file":
                 from urllib.request import url2pathname
 
                 with open(url2pathname(urlparse(url).path), "rb") as handle:
-                    body = handle.read()
+                    body = self._bounded(url, handle)
             else:
                 request = urllib.request.Request(
                     url, headers={"User-Agent": "rain-atlas-research/0.1 (authorized fetch)"}
                 )
                 with urllib.request.urlopen(request, timeout=self._timeout_s) as response:
-                    body = response.read()
+                    body = self._bounded(url, response)
+                    final_url = response.geturl() or url
+                    charset = response.headers.get_content_charset() or "utf-8"
         except (urllib.error.URLError, OSError) as exc:
             raise BrowserError(f"fetch of {url} failed: {exc}") from exc
 
-        html = body.decode("utf-8", errors="replace")
+        try:
+            html = body.decode(charset, errors="replace")
+        except LookupError:  # unknown charset label from the server
+            html = body.decode("utf-8", errors="replace")
         extractor = _TextExtractor()
         try:
             extractor.feed(html)
@@ -151,10 +171,11 @@ class BrowserSession:
             raise BrowserError(f"could not parse page at {url}: {exc}") from exc
 
         text = " ".join(" ".join(extractor.text_parts).split())
-        base = base_url or url
+        base = base_url or final_url
         links = [{"href": urljoin(base, link["href"]), "text": link["text"]} for link in extractor.links]
         observation = PageObservation(
             url=url,
+            final_url=final_url,
             title=" ".join("".join(extractor.title_parts).split()),
             text=text,
             links=links,

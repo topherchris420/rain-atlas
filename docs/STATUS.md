@@ -1,4 +1,4 @@
-# Current workbench status — 2026-11-16
+# Current workbench status — 2026-11-17
 
 This update supersedes the historical v0.1 status retained below. The complete
 specification is **not** claimed complete. See [WORKBENCH_LIMITATIONS.md](WORKBENCH_LIMITATIONS.md)
@@ -8,10 +8,12 @@ for implemented boundaries and explicitly planned work.
 |---|---|
 | REA evidence framework | Typed investigation packages with enforced OBSERVED/COMPUTED/INFERRED/UNKNOWN evidence classifications, conformance harness, replica registry with integration gates; no built-in target data |
 | Unified capabilities | Eight independent modules: scientific memory, observability tracing, mission control with approvals, protocol compilation, simulation twin, inference providers, knowledge store, browser adapter — with hybrid BM25 ranking via vendored Apache-2.0 scoring |
-| Unified R.A.I.N. demonstrations | `atlas rain slice` (one mission through every module with model/scripted/human generation labels) and `atlas rain central` (four-arm preregistered comparison; recorded outcome: H1/H2/H3 supported — 68% experiment reduction from persistent memory, zero false conclusions, adaptive arms below grid/random; ledger verifies clean) |
+| Unified R.A.I.N. demonstrations | `atlas rain slice` (one mission through every module; preregistered before the approval gate; run, claim, skeptic verdict and report in the ledger; honest scripted/model/human labels) and `atlas rain central` protocol v2 (six arms, stationary and shifting worlds, 150 programs per regime, Bonferroni-adjusted paired bootstrap; recorded outcome: verified memory saves 26.9 % [24.3, 29.5] — H1 unresolved — with no detectable added false conclusions, H2 supported; naive memory errs in 91 % of post-change missions, H3 supported; selection advantage equals a fixed ordering. See [CENTRAL_EXPERIMENT.md](CENTRAL_EXPERIMENT.md)) |
+| Packaging | Wheel carries the 31-skill catalog and all data; `scripts/check_package.py` (CI, Linux and Windows) installs it into a clean environment and runs the CLI outside the checkout |
+| Local stores | Memory store: OS advisory locks, single atomic commit point, fsynced append-only history with torn-tail recovery, rollback, cross-process visibility, migration of the first layout; knowledge store: atomic fsynced flushes |
 | Audit / CI repair | Reproduced baseline, inspected workflow annotations, repaired artifact/ledger/process handling; pinned four-job matrix with JUnit artifacts |
 | Offline observatory | Experiment/evidence/timeline/skill/report/composer views, standalone CSP-restricted HTML, source verification, privacy projection; Python, DOM and real-browser (Chromium, CSS/CSP active) tests |
-| Resonance | STFT, Morlet CWT, PLV/order parameter, noisy Kuramoto, LMS/NLMS, FIR identification, supported thin-plate modes, multichannel cross spectra; 30 total executable skills (8 astrodynamics) |
+| Resonance | STFT, Morlet CWT, PLV/order parameter, noisy Kuramoto, LMS/NLMS, FIR identification, supported thin-plate modes, multichannel cross spectra; 31 total executable skills (8 astrodynamics) |
 | Demonstration | Two-oscillator synchronization sweep with analytical reference, new-data replication, independent phase/frequency observables, exact reproduction, reports and figures |
 | Scientific skepticism | Noise/phase-lag shifts, independent replicate intervals, Bonferroni and Holm utilities, Wilson error-rate intervals, exact-identity leakage check, preserved unknown truth |
 | Evidence | Exact engine/skill source snapshots, lockfile, dependency verification, derived SQLite search, fresh-store torn-tail recovery; no historical record changes |
@@ -23,6 +25,25 @@ for implemented boundaries and explicitly planned work.
 
 ## Validation record
 
+- **Production readiness and central experiment v2, 2026-11-17, Linux
+  CPython 3.12.3** at `d9ac38d`: full suite including slow acceptance tests
+  **674 passed, 2 skipped** (`cryptography` not installed; Windows-only job
+  object), 582 s. Changed-module suites pass on CPython 3.11 (NumPy 2.4),
+  including exact reproduction of the recorded v2 output. Ruff, format,
+  mypy and `atlas skills validate` are clean. The wheel built from the sdist
+  installs into a clean environment, lists 31 skills, passes all 32 skill
+  examples and runs the synchronization experiment and both `atlas rain`
+  demonstrations outside the checkout, with verifying ledgers. The exported
+  v2 observatory renders in Chromium with no console errors or network
+  requests. One earlier full run failed a single spectral acceptance test
+  with "engine source changed since the original run" because source files
+  were edited while it ran. That is the reproduction guard working; the
+  test passes in isolation and in the clean run above. Hosted CI (GitHub
+  Actions run 44086141151, same code) then passed all eight jobs: tests on
+  Ubuntu 24.04 and Windows Server 2022 with Python 3.11 and 3.12, the
+  installed-wheel package check on both systems, the offline viewer, and
+  acceptance (slow tests, all experiments, both `atlas rain` demonstrations
+  and their ledger verification).
 - **Unified R.A.I.N. architecture, 2026-11-16, Windows Python 3.12:** the
   full suite including the new modules passed (642 passed, 19 skipped;
   661 collected), ruff check/format clean, `atlas ledger verify` clean on

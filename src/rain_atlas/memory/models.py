@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 from dataclasses import asdict, dataclass, field
 from typing import Any
 
@@ -50,7 +51,22 @@ class MemoryRecord:
             raise ValueError(f"unknown memory kind {self.kind!r}; expected one of {KINDS}")
 
     def to_dict(self) -> dict:
-        return asdict(self)
+        # Hand-written (not dataclasses.asdict): the store serializes every
+        # record on each commit, and asdict's recursive deep copy dominated.
+        return {
+            "id": self.id,
+            "content": self.content,
+            "scope": dict(self.scope),
+            "kind": self.kind,
+            "metadata": copy.deepcopy(self.metadata),
+            "created_at": self.created_at,
+            "updated_at": self.updated_at,
+            "hash": self.hash,
+            "status": self.status,
+            "supersedes": self.supersedes,
+            "superseded_by": self.superseded_by,
+            "evidence": list(self.evidence),
+        }
 
     @classmethod
     def from_dict(cls, data: dict) -> "MemoryRecord":

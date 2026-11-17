@@ -5,8 +5,10 @@ It is an offline review projection with no execution connection. GitHub's source
 view does not run it, so download the file first. `report.md` and `summary.json`
 hold every condition, limitation and acceptance check. The PNG and SVG figures
 come from the recorded run. `benchmark.json` is the spectral stress benchmark,
-executed separately. `evidence-explorer.png` is a 2× Chromium screenshot of
-`index.html`.
+executed separately. `central-experiment-v2.json` is the recorded output of
+`atlas rain central` (protocol v2, deterministic for its base seed; wall time
+omitted), described in [../CENTRAL_EXPERIMENT.md](../CENTRAL_EXPERIMENT.md).
+`evidence-explorer.png` is a 2× Chromium screenshot of `index.html`.
 
 ![Evidence explorer: a claim traced through run, challenge, reproduction and verdict](evidence-explorer.png)
 

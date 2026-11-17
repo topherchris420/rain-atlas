@@ -17,6 +17,26 @@ def test_list_json(tmp_path, capsys):
     assert {"spectral-peaks", "pendulum-period", "bibliography-audit"} <= names
 
 
+def test_missing_catalog_is_reported_not_silent(tmp_path, capsys, monkeypatch):
+    monkeypatch.setenv("ATLAS_BUILTIN_SKILLS", str(tmp_path / "no-catalog"))
+    main(["--home", str(tmp_path / "home"), "skills", "list"])
+    assert "built-in skill catalog not found" in capsys.readouterr().err
+
+
+def test_packaged_catalog_is_preferred_over_the_checkout(tmp_path, monkeypatch):
+    import rain_atlas.skills.registry as registry
+
+    monkeypatch.delenv("ATLAS_BUILTIN_SKILLS", raising=False)
+    # Source checkout: no packaged copy, so the repository catalog is used.
+    assert registry.default_builtin_root() == BUILTIN.resolve()
+    # Installed wheel layout: rain_atlas/builtin_skills next to the package code.
+    package = tmp_path / "site-packages" / "rain_atlas"
+    (package / "skills").mkdir(parents=True)
+    (package / "builtin_skills").mkdir()
+    monkeypatch.setattr(registry, "__file__", str(package / "skills" / "registry.py"))
+    assert registry.default_builtin_root() == (package / "builtin_skills").resolve()
+
+
 def test_select_reports_missing_capability(tmp_path, capsys):
     assert main(["--home", str(tmp_path), "skills", "select", "no.such-thing"]) == 1
 

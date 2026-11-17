@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from ..canonical import canonical_bytes, sha256_bytes
+from ..fileio import atomic_write
 
 STATE_VERSION = 1
 
@@ -215,10 +216,11 @@ class KnowledgeStore:
     # -- persistence -----------------------------------------------------------
 
     def flush(self) -> None:
+        """Durably and atomically persist the store (never a torn file)."""
+
         if self.root is None:
             return
-        self.root.mkdir(parents=True, exist_ok=True)
-        (self.root / "documents.json").write_bytes(self.export_state())
+        atomic_write(self.root / "documents.json", self.export_state())
 
     def _load(self) -> None:
         self.import_state((self.root / "documents.json").read_bytes())

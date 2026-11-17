@@ -113,10 +113,14 @@ def snapshot(ledger: Ledger, registry: Registry | None = None) -> dict:
             if not source.manifest:
                 continue
             manifest = source.manifest
+            # Runs recorded by a protocol engine name their method with a plain
+            # string; only executor runs carry a skill identity to match.
             matching = [
                 r
                 for r in records
-                if r["kind"] == "run" and r["data"]["skill"].get("content_hash") == item.content_hash
+                if r["kind"] == "run"
+                and isinstance(r["data"].get("skill"), dict)
+                and r["data"]["skill"].get("content_hash") == item.content_hash
             ]
             skills.append(
                 {

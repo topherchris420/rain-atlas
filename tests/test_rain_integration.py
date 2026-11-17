@@ -97,10 +97,50 @@ class TestVerticalSlice:
         assert all(task["status"] == "completed" for task in result.tasks)
         assert len(result.approvals) == 1
         assert result.approvals[0]["resolution"] == "approve"
-        # Model generation is labeled honestly.
+        # Generation is labeled honestly: the default provider is rule-based,
+        # so nothing in the default slice claims model generation.
         generations = {t["generation"] for task in result.tasks for t in task["transitions"]}
+        assert "model" not in generations
         assert "scripted" in generations
-        assert "model" in generations
+
+    def test_model_generation_label_follows_the_provider(self, tmp_path: Path):
+        from rain_atlas.inference import MockProvider
+
+        class LanguageModelStub(MockProvider):
+            name = "stub-llm"
+            generation = "model"
+
+        result = run_vertical_slice(
+            tmp_path / "llm", seed=7, true_model="damped", provider=LanguageModelStub(["coupling strength"])
+        )
+        proposer = next(task for task in result.tasks if task["name"] == "propose-hypothesis")
+        assert {t["generation"] for t in proposer["transitions"]} & {"model"}
+
+    def test_preregistration_precedes_execution_and_evidence_is_complete(self, tmp_path: Path):
+        from rain_atlas.ledger.store import Ledger
+
+        run_vertical_slice(tmp_path / "evidence", seed=7, true_model="damped")
+        ledger = Ledger(tmp_path / "evidence" / "ledger")
+        kinds = [entry.kind for entry in ledger.entries()]
+        assert kinds[0] == "preregistration"
+        assert {"run", "dataset", "claim", "verdict", "report"} <= set(kinds)
+        verdict = ledger.get_json(next(ledger.entries("verdict")).object)
+        assert verdict["verdict"] == "supported"
+        prereg = ledger.get_json(next(ledger.entries("preregistration")).object)
+        assert prereg["design"]["hypothesis_generation"] == "scripted"
+        assert ledger.verify() == []
+
+    def test_reused_root_attaches_evidence_to_its_own_preregistration(self, tmp_path: Path):
+        from rain_atlas.ledger.store import Ledger
+
+        run_vertical_slice(tmp_path / "reused", seed=7, true_model="damped")
+        run_vertical_slice(tmp_path / "reused", seed=8, true_model="linear")
+        ledger = Ledger(tmp_path / "reused" / "ledger")
+        preregs = [entry.object for entry in ledger.entries("preregistration")]
+        reports = [ledger.get_json(entry.object) for entry in ledger.entries("report")]
+        assert len(preregs) == 2
+        assert [report["experiment"] for report in reports] == preregs
+        assert ledger.verify() == []
 
     def test_slice_is_deterministic(self, tmp_path: Path):
         a = run_vertical_slice(tmp_path / "a", seed=3, true_model="linear", clock=lambda: 1.0)
@@ -131,9 +171,24 @@ class TestVerticalSlice:
         assert first.memory_statistics["total"] > 0
 
 
-class TestCentralExperiment:
+class TestCentralExperimentV1:
+    """The superseded protocol stays exactly reproducible (see experiment_v1)."""
+
+    def test_recorded_outcome_reproduces_exactly(self, tmp_path: Path):
+        result = run_central_experiment(tmp_path / "v1", protocol="v1")
+        totals = {arm: outcome.total_experiments for arm, outcome in result.arms.items()}
+        assert totals == {"integrated-memory": 6, "integrated-no-memory": 19, "grid": 57, "random": 26}
+        assert result.hypotheses["H1"]["measured"]["reduction"] == 0.6842
+        # The flaw that motivated v2: after the first mission of each program the
+        # memory arm decided without running anything.
+        per_mission = result.arms["integrated-memory"].experiments_per_mission
+        assert per_mission == [1, 0, 0] * 6
+        assert result.ledger_verified is True
+
     def test_experiment_runs_and_verifies(self, tmp_path: Path):
-        result = run_central_experiment(tmp_path / "central", programs=4, missions_per_program=3)
+        result = run_central_experiment(
+            tmp_path / "central", protocol="v1", programs=4, missions_per_program=3
+        )
         assert set(result.arms) == {
             "integrated-memory",
             "integrated-no-memory",
@@ -149,14 +204,135 @@ class TestCentralExperiment:
         for record in result.hypotheses.values():
             assert "measured" in record and "passed" in record
 
-    def test_memory_arm_is_more_efficient(self, tmp_path: Path):
-        result = run_central_experiment(tmp_path / "central2", programs=4)
-        memory_arm = result.arms["integrated-memory"]
-        no_memory = result.arms["integrated-no-memory"]
-        # H1: this is the scientific claim under test; assert it held here.
-        assert memory_arm.total_experiments < no_memory.total_experiments
-
     def test_fresh_root_required(self, tmp_path: Path):
-        run_central_experiment(tmp_path / "once", programs=2)
+        run_central_experiment(tmp_path / "once", protocol="v1", programs=2)
         with pytest.raises(ValueError, match="fresh directory"):
-            run_central_experiment(tmp_path / "once", programs=2)
+            run_central_experiment(tmp_path / "once", protocol="v1", programs=2)
+
+
+class TestCentralExperimentV2Rules:
+    """Decision rules and memory behavior on constructed evidence."""
+
+    def test_naive_memory_can_decide_without_experiments(self):
+        from rain_atlas.rain.experiment import NAIVE, _decision
+
+        assert _decision(NAIVE, 0.0, 9.0, True) == (True, "linear")
+
+    def test_verified_memory_requires_fresh_confirmation(self):
+        from rain_atlas.rain.experiment import VERIFIED, _decision
+
+        assert _decision(VERIFIED, 0.0, 9.0, True)[0] is False  # memory alone never decides
+        assert _decision(VERIFIED, 2.9, 9.0, True)[0] is False  # below the 3-nat confirmation
+        assert _decision(VERIFIED, 3.1, 9.0, True) == (True, "linear")
+        assert _decision(VERIFIED, 3.1, 0.5, True)[0] is False  # weak memory: pooled 3.6 < 5
+        assert _decision(VERIFIED, -5.2, 0.0, False) == (True, "damped")
+
+    def test_memoryless_arms_need_five_fresh_nats(self):
+        from rain_atlas.rain.experiment import NO_MEMORY, _decision
+
+        assert _decision(NO_MEMORY, 4.9, 50.0, True)[0] is False
+        assert _decision(NO_MEMORY, -5.0, 0.0, False) == (True, "damped")
+
+    def test_worlds_are_balanced_and_shift_once(self):
+        from rain_atlas.rain.experiment import build_programs
+
+        worlds = build_programs(1, 40, 4)
+        stationary = [w for w in worlds if w.regime == "stationary"]
+        shifting = [w for w in worlds if w.regime == "shifting"]
+        assert len(stationary) == len(shifting) == 40
+        assert all(len(set(w.models)) == 1 and w.shift_at is None for w in stationary)
+        for world in shifting:
+            assert 1 <= world.shift_at <= 3
+            assert len(set(world.models[: world.shift_at])) == 1
+            assert len(set(world.models[world.shift_at :])) == 1
+            assert world.models[0] != world.models[-1]
+        assert len({seed for w in worlds for seed in w.seeds}) == 80 * 4
+
+    def test_verified_memory_quarantines_stale_evidence(self):
+        from rain_atlas.memory import ScientificMemory
+        from rain_atlas.rain.experiment import (
+            OBSERVATION_SIGMA,
+            REPLICATES,
+            VERIFIED,
+            Program,
+            _remember,
+            run_mission,
+        )
+        from rain_atlas.rain.models import CandidateModels, predict_coherence
+
+        models = CandidateModels(observation_sigma=OBSERVATION_SIGMA, replicates=REPLICATES)
+        program = Program("shifting", 0, ("linear", "damped"), 1, (11, 12))
+        memory = ScientificMemory(None, clock=lambda: 0.0)
+        # Memory holds strong, noiseless evidence for the old (linear) world.
+        stale = [
+            Observation(c, round(predict_coherence("linear", c), 6), REPLICATES) for c in (1.0, 0.9, 0.8, 0.7)
+        ]
+        _remember(memory, program.scope, stale, mission=0)
+        assert models.log_bayes_factor(stale) > 5
+
+        record = run_mission(VERIFIED, program, 1, models=models, budget=8, base_seed=3, memory=memory)
+        assert record.quarantined is True
+        assert record.experiments >= 1
+        assert not record.false_conclusion
+        statistics = memory.statistics()
+        assert statistics["deleted"] == 4  # quarantined, with history retained
+        contradictions = memory.get_all(filters={"agent_id": program.scope, "kind": "contradiction"})
+        assert len(contradictions["results"]) == 1
+
+
+class TestCentralExperimentV2:
+    def test_small_run_structure_and_ledger(self, tmp_path: Path):
+        result = run_central_experiment(tmp_path / "v2", programs=6, resamples=200)
+        assert result.protocol == "rain-central/v2"
+        assert result.ledger_verified is True
+        assert set(result.summaries) == {
+            "verified-memory",
+            "naive-memory",
+            "no-memory",
+            "grid-ascending",
+            "grid-descending",
+            "random",
+        }
+        for by_regime in result.summaries.values():
+            assert by_regime["stationary"].missions == by_regime["shifting"].missions == 24
+        assert set(result.hypotheses) == {"H1", "H2", "H3", "H4"}
+        for record in result.hypotheses.values():
+            assert record["verdict"] in {"supported", "contradicted", "unresolved"}
+        # Maximum disagreement is a fixed ordering in this problem.
+        assert result.ordering_control["all_identical"] is True
+        assert result.to_dict()["hypotheses"]["H1"]["alpha"] == 0.0125
+
+    def test_preregistration_precedes_every_result(self, tmp_path: Path):
+        from rain_atlas.ledger.store import Ledger
+
+        run_central_experiment(tmp_path / "order", programs=3, resamples=100)
+        kinds = [entry.kind for entry in Ledger(tmp_path / "order" / "ledger").entries()]
+        assert kinds[0] == "preregistration"
+        assert kinds.count("preregistration") == 1
+        assert kinds[-1] == "report"
+
+    def test_deterministic(self, tmp_path: Path):
+        a = run_central_experiment(tmp_path / "a", programs=4, resamples=100).to_dict()
+        b = run_central_experiment(tmp_path / "b", programs=4, resamples=100).to_dict()
+        a.pop("elapsed_s")
+        b.pop("elapsed_s")
+        assert a == b
+
+    def test_recorded_demonstration_reproduces_exactly(self, tmp_path: Path):
+        """docs/demonstration/central-experiment-v2.json is what the code produces."""
+
+        import json
+
+        recorded = json.loads(
+            (
+                Path(__file__).resolve().parents[1] / "docs" / "demonstration" / "central-experiment-v2.json"
+            ).read_text(encoding="utf-8")
+        )
+        fresh = json.loads(json.dumps(run_central_experiment(tmp_path / "full").to_dict()))
+        fresh.pop("elapsed_s")
+        assert fresh == recorded
+        assert recorded["hypotheses"]["H1"]["verdict"] == "unresolved"
+
+    def test_unknown_protocol_rejected(self, tmp_path: Path):
+        with pytest.raises(ValueError, match="unknown protocol"):
+            run_central_experiment(tmp_path / "x", protocol="v3")

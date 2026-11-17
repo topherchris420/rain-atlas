@@ -25,6 +25,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from ..canonical import sha256_json
 from ..inference import InferenceProvider, MockProvider
 from ..knowledge import KnowledgeStore
 from ..ledger.store import Ledger
@@ -128,7 +129,14 @@ def run_vertical_slice(
         "model-discrimination", question="Which coupling model generates the twin's observations?"
     )
     scope = memory_scope or mission.id
-    state: dict[str, Any] = {"observations": [], "hypothesis": "", "protocol": None, "verdict": None}
+    ledger = Ledger(root / "ledger")
+    state: dict[str, Any] = {
+        "observations": [],
+        "hypothesis": "",
+        "protocol": None,
+        "verdict": None,
+        "experiment": None,
+    }
 
     def recall_observations() -> list[Observation]:
         found = memory.get_all(filters={"agent_id": scope, "kind": "observation"})
@@ -158,7 +166,10 @@ def run_vertical_slice(
         task.findings = [f"proposed hypothesis via {provider.name} provider{with_memory}"]
         return {"hypothesis": generation.text, "generation": generation.to_dict()}
 
-    controller.register_agent(mission, "proposer", "principal-investigator", propose, generation="model")
+    # The label follows the provider: the default rule-based mock is scripted.
+    controller.register_agent(
+        mission, "proposer", "principal-investigator", propose, generation=provider.generation
+    )
 
     # -- agent 2: protocol compiler (deterministic, scripted) ---------------
 
@@ -170,6 +181,34 @@ def run_vertical_slice(
             replicates=models.replicates,
         )
         state["protocol"] = spec
+        # Preregister the compiled protocol and decision rule now: before the
+        # approval gate and before any observation exists.
+        state["experiment"] = ledger.append(
+            "preregistration",
+            {
+                "title": "R.A.I.N. vertical slice: model discrimination",
+                "question": m.question,
+                "hypothesis": state["hypothesis"],
+                "null_hypothesis": "neither candidate model is preferred",
+                "design": {
+                    "protocol_id": spec.protocol_id,
+                    "policy": getattr(policy, "name", "custom"),
+                    "max_experiments": max_experiments,
+                    "replicates": models.replicates,
+                    "true_model_hidden_from_agents": True,
+                    "decision_log_bayes": models.decision_log_bayes,
+                    "held_out_condition": HELD_OUT,
+                    "memory_scope": scope,
+                    "hypothesis_generation": provider.generation,
+                },
+                "acceptance": [
+                    "agents never observe the hidden model",
+                    "decision rule fixed before observations",
+                    "held-out replication agrees with the preferred model",
+                ],
+                "created_by": {"role": "protocol-engineer", "generation": "scripted"},
+            },
+        ).object
         return {"protocol_id": spec.protocol_id, "steps": len(spec.steps)}
 
     controller.register_agent(
@@ -326,33 +365,105 @@ def run_vertical_slice(
 
     # -- evidence export ------------------------------------------------------
 
-    ledger = Ledger(root / "ledger")
-    ledger.append(
-        "preregistration",
-        {
-            "title": "R.A.I.N. vertical slice: model discrimination",
-            "question": mission.question,
-            "hypothesis": state["hypothesis"],
-            "null_hypothesis": "neither candidate model is preferred",
-            "design": {
-                "policy": getattr(policy, "name", "custom"),
-                "max_experiments": max_experiments,
-                "true_model_hidden_from_agents": True,
-                "decision_log_bayes": models.decision_log_bayes,
-                "memory_scope": scope,
+    # The preregistration was appended by the protocol engineer before the
+    # approval gate; everything below is recorded after the mission.
+    experiment_ref = state["experiment"]
+    if experiment_ref is None:  # the mission failed before a protocol was compiled
+        experiment_ref = ledger.append(
+            "preregistration",
+            {
+                "title": "R.A.I.N. vertical slice: model discrimination (no protocol compiled)",
+                "question": mission.question,
+                "hypothesis": state["hypothesis"] or "none proposed",
+                "null_hypothesis": "neither candidate model is preferred",
+                "design": {"registered_after_failure": True},
+                "acceptance": [],
+                "created_by": {"role": "pi", "generation": "scripted"},
             },
-            "acceptance": [
-                "agents never observe the hidden model",
-                "decision rule fixed before observations",
-                "held-out replication agrees with the preferred model",
-            ],
-            "created_by": {"role": "pi", "generation": "scripted"},
-        },
-    )
-    experiment_ref = next(ledger.entries("preregistration")).object
+        ).object
     replication_result = next(
         (t.result for t in mission.tasks.values() if t.name == "replicate-held-out"), None
     )
+    scripted = {"generation": "scripted"}
+    for approval in mission.approvals.values():
+        ledger.append(
+            "note",
+            {
+                "experiment": experiment_ref,
+                "text": (
+                    f"approval {approval.id} for task {approval.task_id}: "
+                    f"{approval.resolution or 'unresolved'} by {approval.resolved_by or 'nobody'}"
+                    f"{' -- ' + approval.comment if approval.comment else ''}; "
+                    "a scripted proxy is not an operator attestation"
+                ),
+                "author": {"role": "mission-controller", **scripted},
+            },
+        )
+    if state["observations"]:
+        observations = [obs.to_dict() for obs in state["observations"]]
+        run_ref = ledger.append(
+            "run",
+            {
+                "run_id": f"vertical-slice-{sha256_json(observations)[7:23]}",
+                "skill": "rain-vertical-slice",
+                "status": "ok",
+                "seed": seed,
+                "inputs_hash": sha256_json({"protocol": state["protocol"].protocol_id, "seed": seed}),
+                "experiment": experiment_ref,
+                "role": "computational-scientist",
+                "metrics": {
+                    "experiments": len(observations),
+                    "log_bayes_factor": verdict["log_bayes_factor"],
+                    "decided": verdict["decided"],
+                },
+            },
+        ).object
+        ledger.append(
+            "dataset",
+            {
+                "experiment": experiment_ref,
+                "name": "vertical-slice-observations",
+                "origin": "synthetic",
+                "media_type": "application/json",
+                "object": ledger.put_json({"observations": observations, "replication": replication_result}),
+                "provenance": {"run": run_ref, "twin": twin.evidence()},
+            },
+        )
+        claim_ref = ledger.append(
+            "claim",
+            {
+                "experiment": experiment_ref,
+                "category": "COMPUTED",
+                "statement": (
+                    f"The observations prefer the {verdict['preferred_model']} model "
+                    f"(log Bayes factor {verdict['log_bayes_factor']:+.3f}, decided={verdict['decided']})"
+                ),
+                "evidence": [run_ref],
+                "author": {"role": "statistician", **scripted},
+            },
+        ).object
+        replicated = bool(replication_result and replication_result.get("verdict_replicated"))
+        outcome = "unresolved" if not verdict["decided"] else ("supported" if replicated else "contradicted")
+        ledger.append(
+            "verdict",
+            {
+                "experiment": experiment_ref,
+                "target": claim_ref,
+                "verdict": outcome,
+                "reasons": [
+                    "decision threshold not reached"
+                    if not verdict["decided"]
+                    else "decision threshold reached",
+                    f"held-out replication at coupling {HELD_OUT}: "
+                    + ("agrees" if replicated else "does not agree or did not run"),
+                ],
+                "evidence": [claim_ref],
+                "author": {"role": "scientific-skeptic", **scripted},
+            },
+        )
+        findings = [{"verdict": outcome, "claims": [claim_ref], "statement": "model discrimination"}]
+    else:
+        findings = []
     trace.trace.output = {
         **verdict,
         "observations": [obs.to_dict() for obs in state["observations"]],
@@ -360,6 +471,21 @@ def run_vertical_slice(
     }
     tracer.export_to_ledger(
         ledger, experiment=experiment_ref, author={"role": "engineer", "generation": "scripted"}
+    )
+    ledger.append(
+        "report",
+        {
+            "experiment": experiment_ref,
+            "findings": findings,
+            "limitations": [
+                "one mission on a synthetic twin with two known surrogate models",
+                f"hypothesis text from the {provider.name} provider ({provider.generation})",
+                "approval resolved by a scripted operator proxy in demonstrations",
+            ]
+            + ([] if state["observations"] else [f"no experiments ran (mission {status})"]),
+            "reproduction": f"atlas rain slice --seed {seed} --model {true_model}",
+            "author": {"role": "pi", **scripted},
+        },
     )
     knowledge.put(
         "vertical-slice",
