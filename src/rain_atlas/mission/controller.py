@@ -248,9 +248,7 @@ class MissionController:
         task = self._next_task(mission)
         if task is not None:
             agent = self._pick_agent(mission, task)
-            if task.requires_approval and not any(
-                a.task_id == task.id for a in mission.approvals.values()
-            ):
+            if task.requires_approval and not any(a.task_id == task.id for a in mission.approvals.values()):
                 # Controller-owned gate: never rely on the agent to ask.
                 approval_id = sha256_bytes(
                     canonical_bytes(["approval", mission.id, task.id, "controller-gate"])

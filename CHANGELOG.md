@@ -69,7 +69,14 @@ First end-to-end slice.
     and random), bounded to the synthetic discrimination problem.
 - New CLI group `atlas rea {list,show,export}`; documentation in
   `docs/REA.md`.
-- 153 new tests across six test modules plus the optional 12-test
+- Tool-derived evidence from the morluto/rea reverse-engineering tool
+  (2026-11-17): `inspect_python_pyc` runs against the installed mem0ai 2.2.1
+  bytecode, the langfuse 5.2.0 SDK bytecode and the browser-use reference
+  compiled at its pinned commit produced pinned-digest OBSERVED evidence items
+  (T01 `mem0-obs-5`, T02 `lf-obs-4`, T03 `bu-obs-3`) corroborating the
+  recorded API surfaces at matching line numbers, plus one tool-derived
+  conformance record; a regression test pins the tool citations and digests.
+- 156 new tests across six test modules plus the optional 12-test
   differential reference suite (skips when the reference SDK is absent).
 
 ### Added (held-out spectral calibration)

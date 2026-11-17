@@ -95,6 +95,38 @@ def investigation() -> Investigation:
             sources=["mem0/memory/main.py:1975-2005 at commit " + MEM0_COMMIT],
             captured_at="2026-11-16",
         ),
+        EvidenceItem(
+            id="mem0-obs-5",
+            classification="OBSERVED",
+            statement=(
+                "REA tool inspection (morluto/rea, 'REA CPython pyc parser') of "
+                "the installed reference SDK's compiled memory/main module (106 "
+                "code objects) confirms the API surface at matching line "
+                "numbers: Memory.add (760), get (1222), get_all (1269), "
+                "search (1393), update (1829), delete (1883), delete_all "
+                "(1904), history (1960) and _create_memory (1975), with "
+                "AsyncMemory mirrors; module names include lemmatize_for_bm25, "
+                "score_and_rank and _validate_search_params. The compiled "
+                "storage module shows SQLiteManager.add_history (150) and "
+                "get_history (227) implementing the append-only history table. "
+                "The same inspection reveals reference capabilities beyond this "
+                "replica's declared scope: entity stores (Memory.entity_store, "
+                "_upsert_entity, _compute_entity_boosts), project APIs "
+                "(Memory.project) and Memory.chat."
+            ),
+            sources=[
+                "morluto/rea inspect_python_pyc on mem0ai 2.2.1 site-packages "
+                "(CPython 3.12 bytecode, evidence ev_e7b5aae9...)",
+                "executed 2026-11-17",
+            ],
+            artifact_hashes={
+                "mem0_main_pyc": ("sha256:b7fa61864c32daf1a15a07a791a6e633a4c9ed65f05a30008bfc82c602b5f94e"),
+                "mem0_storage_pyc": (
+                    "sha256:b57fe704ef5cbd8e54ee8ce835407cad3af08e433e053f8e5437a1afa04c933b"
+                ),
+            },
+            captured_at="2026-11-17",
+        ),
     ]
     interface = [
         EvidenceItem(
@@ -199,6 +231,17 @@ def investigation() -> Investigation:
         ],
     )
     conformance = [
+        ConformanceRecord(
+            case="mem0/tool-derived-api-surface",
+            status="passed",
+            reference="morluto/rea inspect_python_pyc on mem0ai 2.2.1 bytecode",
+            comparator="predicate",
+            details=(
+                "compiled-method inventory and line numbers match the "
+                "source-derived evidence (add 760, search 1393, history 1960)"
+            ),
+            ran_at="2026-11-17",
+        ),
         ConformanceRecord(
             case="mem0/add-event-shape",
             status="passed",

@@ -56,6 +56,33 @@ def investigation() -> Investigation:
             sources=["repository tests/ and docs at commit " + BROWSER_USE_COMMIT],
             captured_at="2026-11-16",
         ),
+        EvidenceItem(
+            id="bu-obs-3",
+            classification="OBSERVED",
+            statement=(
+                "REA tool inspection (morluto/rea) of the reference source "
+                "compiled at the pinned commit (CPython 3.12 bytecode) confirms "
+                "the agent-loop surface: Agent.run/_run with a _judge method "
+                "(task-success evaluation) and telemetry capture in "
+                "agent/service.py (43 code objects), and the browser lifecycle "
+                "with CDP screenshots, tab management and download handling in "
+                "browser/browser.py (64 code objects)."
+            ),
+            sources=[
+                "morluto/rea inspect_python_pyc on the browser-use repository "
+                "compiled at commit " + BROWSER_USE_COMMIT,
+                "executed 2026-11-17",
+            ],
+            artifact_hashes={
+                "browser_use_agent_pyc": (
+                    "sha256:835789ab983faf8f86c5c7672b5dba0b724ed8205fcedd03a6460f14a08046fa"
+                ),
+                "browser_use_browser_pyc": (
+                    "sha256:66ada2730c4740822c70023ca98e59986e9d6707b44696ec1a471770802db740"
+                ),
+            },
+            captured_at="2026-11-17",
+        ),
     ]
     interface = [
         EvidenceItem(

@@ -239,6 +239,27 @@ class TestNineInvestigations:
         assert cases["mem0/add-event-shape"].status == "passed"
         assert "mem0ai 2.2.1" in cases["mem0/add-event-shape"].reference
 
+    @pytest.mark.parametrize(
+        "target_id,evidence_id",
+        [
+            ("T01-mem0", "mem0-obs-5"),
+            ("T02-langfuse", "lf-obs-4"),
+            ("T03-browser-use", "bu-obs-3"),
+        ],
+    )
+    def test_tool_derived_evidence_pinned(self, target_id, evidence_id):
+        """morluto/rea tool-derived observations carry pinned artifact digests."""
+        inv = investigation(target_id)
+        item = inv.evidence_by_id(evidence_id)
+        assert item is not None, f"{target_id} lacks {evidence_id}"
+        assert item.classification == "OBSERVED"
+        assert any("morluto/rea" in source for source in item.sources), (
+            f"{evidence_id} must cite the REA tool as its source"
+        )
+        assert item.artifact_hashes, f"{evidence_id} must pin artifact digests"
+        for digest in item.artifact_hashes.values():
+            assert digest.startswith("sha256:") and len(digest) == 71
+
     def test_registry_registers_all_nine(self):
         registry = ReplicaRegistry()
         for inv in all_investigations():

@@ -72,6 +72,36 @@ def investigation() -> Investigation:
             sources=["fern/apis/server/definition/datasets.yml, dataset-items.yml, experiments.yml"],
             captured_at="2026-11-16",
         ),
+        EvidenceItem(
+            id="lf-obs-4",
+            classification="OBSERVED",
+            statement=(
+                "REA tool inspection (morluto/rea) of the compiled Langfuse "
+                "Python SDK 5.2.0 client (98 code objects) confirms the "
+                "observation model surface: typed start_observation overloads "
+                "for span/generation/event creation, update_current_span and "
+                "update_current_generation, create_event, create_score, "
+                "score_current_span/score_current_trace, get_dataset and "
+                "create_dataset_item, run_experiment and "
+                "run_batched_evaluation, and prompt management; module names "
+                "include ObservationLevel, SpanLevel, ScoreDataType and the "
+                "LangfuseEvent/LangfuseGeneration/LangfuseSpan stateful "
+                "client classes."
+            ),
+            sources=[
+                "morluto/rea inspect_python_pyc on langfuse 5.2.0 site-packages (CPython 3.12 bytecode)",
+                "executed 2026-11-17",
+            ],
+            artifact_hashes={
+                "langfuse_client_pyc": (
+                    "sha256:fbb240100117fe0de621b83638966ff7405d7c0ff8196d9d58da4d638dd3726f"
+                ),
+                "langfuse_types_pyc": (
+                    "sha256:4652b679b5a6d6e28c58d7c6d7787ecd77903be01d690a1de2db09cc50a7575f"
+                ),
+            },
+            captured_at="2026-11-17",
+        ),
     ]
     interface = [
         EvidenceItem(

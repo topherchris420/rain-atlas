@@ -50,6 +50,25 @@ as reference-only; the Maxxwell documentation explicitly separates what
 ships today from announced direction, and the investigation records only
 the former as reference behavior.
 
+## Tool-derived evidence (morluto/rea)
+
+The morluto/rea reverse-engineering tool was executed against real reference
+artifacts to produce tool-derived OBSERVED evidence, pinned by artifact
+digests inside the investigation packages (T01 `mem0-obs-5`, T02
+`lf-obs-4`, T03 `bu-obs-3`):
+
+| Target | Artifact inspected | Tool | Key findings |
+|---|---|---|---|
+| T01 Mem0 | `memory/__pycache__/main.cpython-312.pyc` + `storage...pyc` of the installed mem0ai 2.2.1 (sha256 `b7fa6186…`, `b57fe704…`) | `inspect_python_pyc` (REA CPython pyc parser) | 106 code objects; full method inventory at matching line numbers (add 760, search 1393, history 1960, `_create_memory` 1975; `SQLiteManager.add_history` 150 / `get_history` 227); also reveals out-of-scope reference capabilities (entity stores, project APIs, chat) |
+| T02 Langfuse | `_client/__pycache__/client.cpython-312.pyc` of langfuse SDK 5.2.0 (sha256 `fbb24010…`) | `inspect_python_pyc` | 98 code objects; `start_observation` overloads, `create_event`, `create_score`, `score_current_span/trace`, dataset/experiment methods, `ObservationLevel`/`SpanLevel`/`ScoreDataType` and the `LangfuseEvent/Generation/Span` clients |
+| T03 Browser Use | `agent/…/service.cpython-312.pyc` + `browser/…/browser.cpython-312.pyc` compiled from the pinned commit (sha256 `835789ab…`, `66ada273…`) | `inspect_python_pyc` | 43 + 64 code objects; the agent loop with `_judge` success evaluation and the browser lifecycle with CDP screenshots, tabs and downloads |
+
+The pyc inspections never executed reference code; they parse compiled
+bytecode read-only. Digests are pinned so the analyzed artifacts are
+reproducibly identified, and a regression test
+(`test_tool_derived_evidence_pinned`) enforces that the tool-derived
+evidence items cite the tool and pin their digests.
+
 ## Conformance evidence
 
 ### Differential conformance (reference executed)
