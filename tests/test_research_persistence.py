@@ -257,6 +257,9 @@ class _Fake(BaseHTTPRequestHandler):
     reply = "{}"
 
     def do_POST(self):  # noqa: N802
+        # Consume the request body: on Windows, closing a socket with unread
+        # input sends a TCP reset, which the client sees instead of the reply.
+        self.rfile.read(int(self.headers.get("Content-Length", 0)))
         body = json.dumps({"response": type(self).reply, "prompt_eval_count": 3, "eval_count": 5}).encode()
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
