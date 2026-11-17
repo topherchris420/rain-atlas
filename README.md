@@ -26,15 +26,27 @@ R.A.I.N. ATLAS is an **open-source, local-first research workbench** from [Vers3
 uv run atlas rain slice --root atlas-data/rain-slice
 uv run atlas ledger verify atlas-data/rain-slice/ledger
 
-# The central scientific experiment: does combining these capabilities
-# beat simpler baseline architectures?
+# The central scientific experiment: does persistent memory make a research
+# system more efficient without making it wrong, even when the world changes?
 uv run atlas rain central --root atlas-data/rain-central
 uv run atlas ledger verify atlas-data/rain-central/ledger
 ```
 
-The central experiment compares adaptive selection with persistent memory
-against the same architecture without memory, a fixed grid and random
-selection, under preregistered hypotheses.
+The central experiment runs 1,200 missions per arm across stationary worlds and
+worlds whose hidden model changes without notice. It compares memory that
+must be confirmed by fresh evidence, memory that is trusted blindly, no
+memory, and fixed and random designs, under four preregistered hypotheses
+with Bonferroni-adjusted intervals. **Recorded outcome:** verified memory
+saves 26.9 % of experiments (interval 24.3–29.5 %, so the preregistered
+"≥25 %" claim is *unresolved*) while adding no detectable false conclusions.
+Blindly trusted memory reaches a false conclusion in 91 % of missions after
+the world changes. An ordering control shows the "adaptive" selection
+advantage is a fixed-ordering effect.
+
+The first protocol of this experiment reported a 68 % saving that its design
+guaranteed; it remains reproducible with `--protocol v1`. See
+[docs/CENTRAL_EXPERIMENT.md](docs/CENTRAL_EXPERIMENT.md) for the design, the
+full results and why v1 was superseded.
 
 ## ATLAS Physical Scientist
 
@@ -122,6 +134,18 @@ Open **`atlas-data/sync-001/observatory/index.html`** in your browser. The viewe
 | `ledger/` | Inspect source snapshots, references and the append-only scientific record. |
 
 **Use a fresh `--root` for each run.** ATLAS refuses to overwrite an existing ledger; automatic resume is not implemented. See the [end-to-end tutorial](docs/TUTORIAL.md) for trace/search, proposals, approvals, exports and recovery.
+
+### Install as a package
+
+ATLAS is not published to PyPI. To use the `atlas` command outside a checkout, build the wheel and install it. The wheel carries the built-in skill catalog and every data file it needs:
+
+```sh
+uv build
+uv tool install dist/rain_atlas-0.1.0-py3-none-any.whl   # or: pip install dist/rain_atlas-0.1.0-py3-none-any.whl
+atlas skills test
+```
+
+`uv run python scripts/check_package.py` builds the sdist and wheel, installs the wheel into a clean environment and runs the CLI from an unrelated directory. CI runs it on Linux and Windows.
 
 ## BLACK GLASS: firmware intelligence
 
@@ -319,7 +343,7 @@ To contribute a method, follow the [skill authoring guide](docs/SKILL_AUTHORING.
 
 ## What is implemented, and what is not
 
-**Version 0.1.0 is unreleased.** ATLAS currently includes the numerical experiments above, a 30-skill catalog, evidence search and recovery, an offline observatory, local proposal registration/approval, export integrations, BLACK GLASS static firmware analysis, and the REA replication framework with eight reconstructed-capability modules and the unified `atlas rain` demonstrations.
+**Version 0.1.0 is unreleased.** ATLAS currently includes the numerical experiments above, a 31-skill catalog, evidence search and recovery, an offline observatory, local proposal registration/approval, export integrations, BLACK GLASS static firmware analysis, and the REA replication framework with eight reconstructed-capability modules and the unified `atlas rain` demonstrations.
 
 **Validation snapshot:** the [November 5, 2026 Linux record](docs/VALIDATION.md) reports **235 passing tests and one platform-specific skip** on each of Python 3.11 and 3.12, including the slow acceptance tests. It also documents cross-platform agreement and defects found through validation. These are historical recorded results, **not a claim that every subsequent commit has been retested**. See [GitHub Actions](https://github.com/topherchris420/rain-atlas/actions) for the current hosted workflow state; hosted CI was account-blocked at the time of the published validation.
 

@@ -1,0 +1,438 @@
+{
+  "arms": {
+    "grid-ascending": {
+      "all": {
+        "after_shift_false": 0,
+        "after_shift_missions": 288,
+        "arm": "grid-ascending",
+        "decided": 822,
+        "experiments": 8333,
+        "false_conclusions": 0,
+        "false_rate": 0.0,
+        "false_rate_wilson95": [
+          0.0,
+          0.0032
+        ],
+        "mean_experiments": 6.9442,
+        "missions": 1200,
+        "quarantines": 0,
+        "regime": "all",
+        "undecided": 378
+      },
+      "shifting": {
+        "after_shift_false": 0,
+        "after_shift_missions": 288,
+        "arm": "grid-ascending",
+        "decided": 411,
+        "experiments": 4160,
+        "false_conclusions": 0,
+        "false_rate": 0.0,
+        "false_rate_wilson95": [
+          0.0,
+          0.0064
+        ],
+        "mean_experiments": 6.9333,
+        "missions": 600,
+        "quarantines": 0,
+        "regime": "shifting",
+        "undecided": 189
+      },
+      "stationary": {
+        "after_shift_false": 0,
+        "after_shift_missions": 0,
+        "arm": "grid-ascending",
+        "decided": 411,
+        "experiments": 4173,
+        "false_conclusions": 0,
+        "false_rate": 0.0,
+        "false_rate_wilson95": [
+          0.0,
+          0.0064
+        ],
+        "mean_experiments": 6.955,
+        "missions": 600,
+        "quarantines": 0,
+        "regime": "stationary",
+        "undecided": 189
+      }
+    },
+    "grid-descending": {
+      "all": {
+        "after_shift_false": 0,
+        "after_shift_missions": 288,
+        "arm": "grid-descending",
+        "decided": 1054,
+        "experiments": 5160,
+        "false_conclusions": 1,
+        "false_rate": 0.0008,
+        "false_rate_wilson95": [
+          0.0001,
+          0.0047
+        ],
+        "mean_experiments": 4.3,
+        "missions": 1200,
+        "quarantines": 0,
+        "regime": "all",
+        "undecided": 146
+      },
+      "shifting": {
+        "after_shift_false": 0,
+        "after_shift_missions": 288,
+        "arm": "grid-descending",
+        "decided": 520,
+        "experiments": 2555,
+        "false_conclusions": 0,
+        "false_rate": 0.0,
+        "false_rate_wilson95": [
+          0.0,
+          0.0064
+        ],
+        "mean_experiments": 4.2583,
+        "missions": 600,
+        "quarantines": 0,
+        "regime": "shifting",
+        "undecided": 80
+      },
+      "stationary": {
+        "after_shift_false": 0,
+        "after_shift_missions": 0,
+        "arm": "grid-descending",
+        "decided": 534,
+        "experiments": 2605,
+        "false_conclusions": 1,
+        "false_rate": 0.0017,
+        "false_rate_wilson95": [
+          0.0003,
+          0.0094
+        ],
+        "mean_experiments": 4.3417,
+        "missions": 600,
+        "quarantines": 0,
+        "regime": "stationary",
+        "undecided": 66
+      }
+    },
+    "naive-memory": {
+      "all": {
+        "after_shift_false": 261,
+        "after_shift_missions": 288,
+        "arm": "naive-memory",
+        "decided": 1155,
+        "experiments": 1431,
+        "false_conclusions": 261,
+        "false_rate": 0.2175,
+        "false_rate_wilson95": [
+          0.1951,
+          0.2417
+        ],
+        "mean_experiments": 1.1925,
+        "missions": 1200,
+        "quarantines": 0,
+        "regime": "all",
+        "undecided": 45
+      },
+      "shifting": {
+        "after_shift_false": 261,
+        "after_shift_missions": 288,
+        "arm": "naive-memory",
+        "decided": 572,
+        "experiments": 747,
+        "false_conclusions": 261,
+        "false_rate": 0.435,
+        "false_rate_wilson95": [
+          0.3959,
+          0.475
+        ],
+        "mean_experiments": 1.245,
+        "missions": 600,
+        "quarantines": 0,
+        "regime": "shifting",
+        "undecided": 28
+      },
+      "stationary": {
+        "after_shift_false": 0,
+        "after_shift_missions": 0,
+        "arm": "naive-memory",
+        "decided": 583,
+        "experiments": 684,
+        "false_conclusions": 0,
+        "false_rate": 0.0,
+        "false_rate_wilson95": [
+          0.0,
+          0.0064
+        ],
+        "mean_experiments": 1.14,
+        "missions": 600,
+        "quarantines": 0,
+        "regime": "stationary",
+        "undecided": 17
+      }
+    },
+    "no-memory": {
+      "all": {
+        "after_shift_false": 0,
+        "after_shift_missions": 288,
+        "arm": "no-memory",
+        "decided": 1054,
+        "experiments": 5160,
+        "false_conclusions": 1,
+        "false_rate": 0.0008,
+        "false_rate_wilson95": [
+          0.0001,
+          0.0047
+        ],
+        "mean_experiments": 4.3,
+        "missions": 1200,
+        "quarantines": 0,
+        "regime": "all",
+        "undecided": 146
+      },
+      "shifting": {
+        "after_shift_false": 0,
+        "after_shift_missions": 288,
+        "arm": "no-memory",
+        "decided": 520,
+        "experiments": 2555,
+        "false_conclusions": 0,
+        "false_rate": 0.0,
+        "false_rate_wilson95": [
+          0.0,
+          0.0064
+        ],
+        "mean_experiments": 4.2583,
+        "missions": 600,
+        "quarantines": 0,
+        "regime": "shifting",
+        "undecided": 80
+      },
+      "stationary": {
+        "after_shift_false": 0,
+        "after_shift_missions": 0,
+        "arm": "no-memory",
+        "decided": 534,
+        "experiments": 2605,
+        "false_conclusions": 1,
+        "false_rate": 0.0017,
+        "false_rate_wilson95": [
+          0.0003,
+          0.0094
+        ],
+        "mean_experiments": 4.3417,
+        "missions": 600,
+        "quarantines": 0,
+        "regime": "stationary",
+        "undecided": 66
+      }
+    },
+    "random": {
+      "all": {
+        "after_shift_false": 1,
+        "after_shift_missions": 288,
+        "arm": "random",
+        "decided": 950,
+        "experiments": 6738,
+        "false_conclusions": 1,
+        "false_rate": 0.0008,
+        "false_rate_wilson95": [
+          0.0001,
+          0.0047
+        ],
+        "mean_experiments": 5.615,
+        "missions": 1200,
+        "quarantines": 0,
+        "regime": "all",
+        "undecided": 250
+      },
+      "shifting": {
+        "after_shift_false": 1,
+        "after_shift_missions": 288,
+        "arm": "random",
+        "decided": 481,
+        "experiments": 3356,
+        "false_conclusions": 1,
+        "false_rate": 0.0017,
+        "false_rate_wilson95": [
+          0.0003,
+          0.0094
+        ],
+        "mean_experiments": 5.5933,
+        "missions": 600,
+        "quarantines": 0,
+        "regime": "shifting",
+        "undecided": 119
+      },
+      "stationary": {
+        "after_shift_false": 0,
+        "after_shift_missions": 0,
+        "arm": "random",
+        "decided": 469,
+        "experiments": 3382,
+        "false_conclusions": 0,
+        "false_rate": 0.0,
+        "false_rate_wilson95": [
+          0.0,
+          0.0064
+        ],
+        "mean_experiments": 5.6367,
+        "missions": 600,
+        "quarantines": 0,
+        "regime": "stationary",
+        "undecided": 131
+      }
+    },
+    "verified-memory": {
+      "all": {
+        "after_shift_false": 3,
+        "after_shift_missions": 288,
+        "arm": "verified-memory",
+        "decided": 1112,
+        "experiments": 4018,
+        "false_conclusions": 4,
+        "false_rate": 0.0033,
+        "false_rate_wilson95": [
+          0.0013,
+          0.0085
+        ],
+        "mean_experiments": 3.3483,
+        "missions": 1200,
+        "quarantines": 158,
+        "regime": "all",
+        "undecided": 88
+      },
+      "shifting": {
+        "after_shift_false": 3,
+        "after_shift_missions": 288,
+        "arm": "verified-memory",
+        "decided": 542,
+        "experiments": 2114,
+        "false_conclusions": 3,
+        "false_rate": 0.005,
+        "false_rate_wilson95": [
+          0.0017,
+          0.0146
+        ],
+        "mean_experiments": 3.5233,
+        "missions": 600,
+        "quarantines": 151,
+        "regime": "shifting",
+        "undecided": 58
+      },
+      "stationary": {
+        "after_shift_false": 0,
+        "after_shift_missions": 0,
+        "arm": "verified-memory",
+        "decided": 570,
+        "experiments": 1904,
+        "false_conclusions": 1,
+        "false_rate": 0.0017,
+        "false_rate_wilson95": [
+          0.0003,
+          0.0094
+        ],
+        "mean_experiments": 3.1733,
+        "missions": 600,
+        "quarantines": 7,
+        "regime": "stationary",
+        "undecided": 30
+      }
+    }
+  },
+  "hypotheses": {
+    "H1": {
+      "alpha": 0.0125,
+      "arms": [
+        "verified-memory",
+        "no-memory"
+      ],
+      "estimate": 0.2691,
+      "interval": [
+        0.2429,
+        0.2946
+      ],
+      "threshold": 0.25,
+      "verdict": "unresolved"
+    },
+    "H2": {
+      "alpha": 0.0125,
+      "arms": [
+        "verified-memory",
+        "no-memory"
+      ],
+      "estimate": 0.005,
+      "interval": [
+        -0.0059,
+        0.0189
+      ],
+      "interval_bootstrap": [
+        0.0,
+        0.0133
+      ],
+      "interval_newcombe": [
+        -0.0059,
+        0.0189
+      ],
+      "threshold": 0.05,
+      "verdict": "supported"
+    },
+    "H3": {
+      "alpha": 0.0125,
+      "arms": [
+        "naive-memory",
+        "no-memory"
+      ],
+      "estimate": 0.435,
+      "interval": [
+        0.3843,
+        0.486
+      ],
+      "interval_bootstrap": [
+        0.3883,
+        0.48
+      ],
+      "interval_newcombe": [
+        0.3843,
+        0.486
+      ],
+      "threshold": 0.05,
+      "verdict": "supported"
+    },
+    "H4": {
+      "alpha": 0.0125,
+      "arms": [
+        "no-memory",
+        "grid-ascending",
+        "random"
+      ],
+      "comparisons": {
+        "grid-ascending": {
+          "estimate": -2.6442,
+          "interval": [
+            -2.8154,
+            -2.465
+          ],
+          "verdict": "supported"
+        },
+        "random": {
+          "estimate": -1.315,
+          "interval": [
+            -1.4825,
+            -1.1487
+          ],
+          "verdict": "supported"
+        }
+      },
+      "threshold": 0.0,
+      "verdict": "supported"
+    }
+  },
+  "ledger_verified": true,
+  "missions_per_program": 4,
+  "ordering_control": {
+    "all_identical": true,
+    "identical": 1200,
+    "missions": 1200,
+    "statement": "maximum-disagreement selection versus a fixed high-to-low sweep that uses no model knowledge"
+  },
+  "programs_per_regime": 150,
+  "protocol": "rain-central/v2"
+}

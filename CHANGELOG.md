@@ -6,6 +6,50 @@ All notable changes are recorded here. Versions follow semantic versioning.
 
 First end-to-end slice.
 
+### Changed and fixed (production readiness and central experiment v2, 2026-11-17)
+
+- **Central experiment protocol v2.** Review found protocol v1's design
+  could not fail (details in [docs/CENTRAL_EXPERIMENT.md](docs/CENTRAL_EXPERIMENT.md)).
+  The world never changed, and memory replayed decisive evidence, so the
+  recorded 68 % saving was `1 − 1/3` by construction. One experiment nearly
+  always decided, no arm ever erred, and six programs were judged without
+  uncertainty. v2 adds harder observation noise, worlds whose hidden model
+  changes without notice, verified versus naive memory, an ordering control,
+  150 programs per regime, a paired bootstrap with Bonferroni-adjusted
+  intervals, and three-valued verdicts. It was preregistered in the ledger
+  and committed before its first full run.
+  **Recorded outcome:** verified memory saves 26.9 % [24.3, 29.5] of
+  experiments (H1 ≥25 %: *unresolved*) with +0.5 pp [−0.6, +1.9] false
+  conclusions after a change (H2: supported). Naive memory errs in 91 % of
+  post-change missions (H3: supported). The selection advantage (H4:
+  supported) equals a fixed high-to-low sweep on 1200/1200 missions.
+  `atlas rain central --protocol v1` still reproduces v1 exactly.
+- **Installed package works.** The wheel did not contain the built-in
+  skill catalog. An installed `atlas` listed no skills (exit 0) and every
+  experiment failed with "skill … is not available". The build now uses
+  hatchling and maps `skills/` into the wheel. The CLI warns when no catalog
+  is found. A new CI job (`scripts/check_package.py`, Linux and Windows)
+  installs the wheel into a clean environment and runs the CLI outside the
+  checkout.
+- **Memory store durability.** Writers held an `O_EXCL` marker file that a
+  crashed process never removed, which blocked every later write
+  permanently. Each add rewrote the store and the full history twice, and
+  four files were replaced independently. The store now uses OS advisory
+  locks, a single atomic commit point, an fsynced append-only history with
+  torn-tail recovery, rollback on exceptions, one commit per transaction,
+  lazy history loading and cross-process visibility. Older stores migrate
+  transparently. 800 adds take 8.5 s instead of 21.2 s.
+- **Knowledge store** flushes are atomic and fsynced (they were a plain
+  overwrite).
+- **Vertical slice.** The preregistration is written before the approval
+  gate (it was written after execution). The ledger now holds the run,
+  dataset, claim, skeptic verdict and report. Evidence is attached to its
+  own experiment when a root is reused. The default rule-based
+  `MockProvider` is labeled `scripted`, not `model`.
+- **Browser adapter and inference providers** bound response sizes,
+  record the final URL after redirects and decode pages with the declared
+  charset.
+
 ### Added (unified R.A.I.N. architecture, 2026-11-16)
 
 - Eight new capability modules:
@@ -61,6 +105,8 @@ First end-to-end slice.
     the ledger. Recorded outcome: all three held (68% experiment reduction
     from persistent memory; no false conclusions; adaptive arms below grid
     and random), bounded to the synthetic discrimination problem.
+    *Superseded 2026-11-17:* this outcome was guaranteed by the design; see
+    protocol v2 above.
 
 ### Added (held-out spectral calibration)
 

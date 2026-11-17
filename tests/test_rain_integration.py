@@ -318,6 +318,21 @@ class TestCentralExperimentV2:
         b.pop("elapsed_s")
         assert a == b
 
+    def test_recorded_demonstration_reproduces_exactly(self, tmp_path: Path):
+        """docs/demonstration/central-experiment-v2.json is what the code produces."""
+
+        import json
+
+        recorded = json.loads(
+            (
+                Path(__file__).resolve().parents[1] / "docs" / "demonstration" / "central-experiment-v2.json"
+            ).read_text(encoding="utf-8")
+        )
+        fresh = json.loads(json.dumps(run_central_experiment(tmp_path / "full").to_dict()))
+        fresh.pop("elapsed_s")
+        assert fresh == recorded
+        assert recorded["hypotheses"]["H1"]["verdict"] == "unresolved"
+
     def test_unknown_protocol_rejected(self, tmp_path: Path):
         with pytest.raises(ValueError, match="unknown protocol"):
             run_central_experiment(tmp_path / "x", protocol="v3")
