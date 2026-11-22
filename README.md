@@ -1,6 +1,6 @@
 # R.A.I.N. ATLAS
 
-**Scientific work that can be questioned, reproduced, and proved wrong.**
+**Follow a scientific claim from the experiment that produced it to the challenge that could overturn it.**
 
 **R.A.I.N.** stands for **Recursive Architecture of Intelligent Nexus**.
 
