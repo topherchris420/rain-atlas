@@ -71,14 +71,20 @@ def benchmark(seed: int = 42, repeats: int = 7) -> dict:
                 start = perf_counter()
                 method(p, m, g)
                 times[name].append(perf_counter() - start)
-        cases.append({
-            "shape": [batch, width, rank],
-            "max_absolute_error": float(np.max(np.abs(expected - actual))),
-            "median_seconds": {name: float(np.median(values)) for name, values in times.items()},
-        })
+        cases.append(
+            {
+                "shape": [batch, width, rank],
+                "max_absolute_error": float(np.max(np.abs(expected - actual))),
+                "median_seconds": {name: float(np.median(values)) for name, values in times.items()},
+            }
+        )
     return {
-        "seed": seed, "repeats": repeats, "python": platform.python_version(),
-        "platform": platform.platform(), "numpy": np.__version__, "cases": cases,
+        "seed": seed,
+        "repeats": repeats,
+        "python": platform.python_version(),
+        "platform": platform.platform(),
+        "numpy": np.__version__,
+        "cases": cases,
         "scope": "isolated synthetic kernel; not end-to-end mission speed",
     }
 
