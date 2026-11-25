@@ -225,7 +225,9 @@ class PlanningState:
     encompassing: list[tuple[float, Fit, Fit]] | None = None  # (weight, encompassing fit, contender)
 
 
-def parameter_information(fit: Fit, designs: Sequence[Design], nominal: np.ndarray) -> np.ndarray:
+def parameter_information(
+    fit: Fit, designs: Sequence[Design], nominal: np.ndarray, *, method: str = "legacy"
+) -> np.ndarray:
     """Expected information about *fit*'s coefficients from each design (nats).
 
     For a linear-Gaussian model the gain is 0.5 log det(I + V G), with V the
@@ -246,6 +248,14 @@ def parameter_information(fit: Fit, designs: Sequence[Design], nominal: np.ndarr
     phi = features(x[:, :-1], v[:, :-1], u)
     G = np.einsum("btl,btm->blm", phi, phi)
     M = fit.post_map
+    if method == "factorized":
+        from .nine_fourths import parameter_gain
+
+        return parameter_gain(fit.Vninv, M, G)
+    if method != "legacy":
+        raise ValueError("unknown parameter information method")
+    # Preserve historical replay. The legacy contraction has disconnected indices;
+    # see docs/NINE_FOURTHS.md before interpreting this recorded policy.
     Vn = np.linalg.inv(fit.Vninv)
     A = np.einsum("ij,kl,blm,nm->bin", Vn, M, G, M)  # V (M G M^T)
     k = len(Vn)
