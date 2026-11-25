@@ -32,9 +32,7 @@ def parameter_gain(precision: np.ndarray, mapping: np.ndarray, grams: np.ndarray
     base = np.linalg.cholesky(p)
     update = (m @ g) @ m.T
     updated = np.linalg.cholesky(p + update)
-    return np.log(np.diagonal(updated, axis1=-2, axis2=-1)).sum(axis=-1) - np.log(
-        np.diag(base)
-    ).sum()
+    return np.log(np.diagonal(updated, axis1=-2, axis2=-1)).sum(axis=-1) - np.log(np.diag(base)).sum()
 
 
 def reference_gain(precision: np.ndarray, mapping: np.ndarray, grams: np.ndarray) -> np.ndarray:
@@ -67,7 +65,7 @@ def benchmark(seed: int = 42, repeats: int = 7) -> dict:
         times: dict[str, list[float]] = {"reference": [], "factorized": []}
         methods = (("reference", reference_gain), ("factorized", parameter_gain))
         for i in range(repeats):
-            for name, method in (methods if i % 2 == 0 else methods[::-1]):
+            for name, method in methods if i % 2 == 0 else methods[::-1]:
                 start = perf_counter()
                 method(p, m, g)
                 times[name].append(perf_counter() - start)
