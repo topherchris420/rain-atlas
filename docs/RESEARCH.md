@@ -216,7 +216,8 @@ better than a linear model (H7). **H3 is unresolved:** 5.0 % false conclusions
 (adjusted interval 1.5–10.9 %), concentrated in the held-out-only term `v^3`,
 which it never identified, and in changes at the edges of a mission. The
 preregistration had predicted H1 unresolved. Details, failures and provenance:
-[demonstration/research/](demonstration/research/).
+[demonstration/research/](demonstration/research/). For a new fixed-sample
+follow-up, see [power planning for a false-conclusion bound](research/SAFETY_PLANNING.md).
 
 ## Development record: where the design was wrong
 
